@@ -1,0 +1,80 @@
+{
+  "loginVerificationFail": "Wrong email or password",
+  "userNotFound": "User not found",
+  "noSessionSupplied": "Session is non-existent",
+  "userHasNoMeals": "User has no meals",
+  "ratherNotSay": "Rather not say",
+  "noAllergy": "I don't have any allergies",
+  "yes": "Yes",
+  "no": "No",
+  "Normal": "Normal",
+  "Different": "Different",
+  "Breakfast": "Breakfast",
+  "Lunch": "Lunch",
+  "Dinner": "Dinner",
+  "male": "Male",
+  "female": "Female",
+
+  "//": "assistant intro conversation",
+  "assistantHi": "Hey there! I’m *Caloria* \uD83D\uDC4B",
+  "assistantIntroduce": "I can help you control your eating habits, manage your grocery shopping, create an exciting meal plan and so many other things which help you achieve a healthier lifestyle",
+
+  "assistantAskName": "Nice to meet you! \nWhat do your friends call you?",
+
+  "assistantExplainNext1": "Ok {{name}}, the first step in creating an ideal meal plan, is to calculate *BMR*",
+  "assistantExplainNext2": "BMR(Basal Metabolic Rate) is basically the amount of energy the body burns per day. So let's calculate it!",
+  "assistantAskAge": "How old are you?",
+
+  "assistantAskWeight": "How much do you **weigh**?",
+  "assistantAskHeight": "What's your **height**?",
+
+  "assistantAskGender": "Please indicate your **gender**. This is needed to accurately calculate your body energy usage",
+
+  "assistantShowBMR": "Ok, so your body spends **{{bmr}}** calories/day energy just to keep you alive (that's your BMR)",
+  "assistantExplainActivity": "now we have to take into account your daily activities which also cost energy",
+  "assistantAskActivity": "What is your **activity level**?",
+  "assistantActivityHint": "Hint:\n\n**sedentary**: sit behind a desk\n\n**lightly active**: you walk a lot\n\n**moderately active**: you jog everyday\n\n**highly active**: you go to gym\n\n**extremely active**: you spend at least 3 hours per day exercising",
+
+  "assistantExplainTDEE": "and that gives us a **TDEE** (Total Daily Energy Expenditure) of {{tdee}} calories/day, now we can modify this number to fit our fitness goals",
+  "assistantAskGoal": "What is your **fitness goal**?",
+
+  "assistantAllergy1": "Okay great, now lets talk about foods",
+  "assistantAllergy2": "Is there any food you're allergic to?",
+
+  "assistantAskDislikes": "What about some foods you just don't like? name them",
+  "assistantAskDiet": "Are you following a specific diet?",
+  "assistantAskChooseDiet": "Please choose your diet",
+
+  "assistantExplainMeals": "Alright, so far we know our target calorie burn per day, now we just have to divide it into different meals",
+  "assistantAskNormalRoutine": "Do you have a normal breakfast-launch-dinner-snack meal routine? or is it different?",
+  "assistantAskRoutine": "how many meals do you eat per day?",
+  "assistantShowExample": "For example: Breakfast at 8, snack at 11, launch at 14...",
+
+  "assistant2": "OvoFood is an appropriate solution for healthy living",
+  "assistant3": "Here, I assist you to worry less about where the food comes from, and more about how \"you\" like it to be",
+
+  "assistant4": "Now, I would like to ask you about your current routine in order to make the transition to a new eating habit go as smoothly as possible",
+  "askMealRoutine": "What do you normally eat for {{mealName}}",
+
+  "mealPlanSettings": "Set the settings",
+  "goRegister": "Alright, now let's register your account:",
+
+  "sedActivity": "Sedentary",
+  "lightActivity": "Lightly Active",
+  "modActivity": "Moderately Active",
+  "highActivity": "Highly Active",
+  "extremeActivity": "Extremely Active",
+
+  "goal_m": "maintenance",
+  "goal_mg": "moderate gain",
+  "goal_ig": "intense gain",
+  "goal_sg": "standard gain",
+  "goal_ml": "moderate loss",
+  "goal_sl": "standard loss",
+  "goal_il": "intense loss",
+
+  "assistantMoveToMealPlan": "Great! Now review the meal plan and customize it as you wish",
+  "notFound": "Not found",
+
+  "ok": "Okay!"
+}

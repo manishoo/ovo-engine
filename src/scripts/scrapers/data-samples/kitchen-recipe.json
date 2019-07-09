@@ -1,0 +1,363 @@
+[
+  {
+    "id": "266e8d2f-e8f0-408e-8221-21d5c18d715b",
+    "content_id": "R1348",
+    "difficulty": "easy",
+    "servings": 6,
+    "preparation_time": 1200,
+    "baking_time": 3000,
+    "resting_time": 0,
+    "calories": 0,
+    "fat": 0,
+    "protein": 0,
+    "carbohydrate": 0,
+    "date_created": "2018-09-25T09:49:41+0000",
+    "date_modified": "2018-11-05T15:08:25+0000",
+    "cell_image": {
+      "width": 2048,
+      "height": 1536,
+      "source": "",
+      "source_link": "",
+      "url": "https://images.kitchenstories.io/wagtailOriginalImages/R1348-photo-final.jpg"
+    },
+    "detail_image": {
+      "width": 2048,
+      "height": 1536,
+      "source": "",
+      "source_link": "",
+      "url": "https://images.kitchenstories.io/wagtailOriginalImages/R1348-photo-final.jpg"
+    },
+    "video": null,
+    "published_at": "2018-09-28T02:00:00+0000",
+    "url": "https://www.kitchenstories.com/en/recipes/hasselback-butternut-squash-with-sage-en/",
+    "short_url": "https://www.kitchenstories.com/en/recipes/hasselback-butternut-squash-with-sage-en/",
+    "ingredients_count": 8,
+    "type": "recipe",
+    "comments_count": 10,
+    "rating_count": 10,
+    "like_count": 939,
+    "rating": 0.825,
+    "cookbook_count": 673,
+    "utensils": [
+      {
+        "id": null,
+        "name": "oven"
+      },
+      {
+        "id": null,
+        "name": "cutting board"
+      },
+      {
+        "id": null,
+        "name": "knife"
+      },
+      {
+        "id": null,
+        "name": "skewer"
+      },
+      {
+        "id": null,
+        "name": "baking sheet"
+      },
+      {
+        "id": null,
+        "name": "saucepan"
+      },
+      {
+        "id": null,
+        "name": "rubber spatula"
+      },
+      {
+        "id": null,
+        "name": "pastry brush"
+      }
+    ],
+    "ingredients": [
+      {
+        "id": null,
+        "name": "butternut squash",
+        "unit": "",
+        "amount": 1,
+        "us_unit": null,
+        "us_amount": null
+      },
+      {
+        "id": null,
+        "name": "sage leaves",
+        "unit": "",
+        "amount": 20,
+        "us_unit": null,
+        "us_amount": null
+      },
+      {
+        "id": null,
+        "name": "clarified butter",
+        "unit": "g",
+        "amount": 125,
+        "us_unit": "cup",
+        "us_amount": 0.5
+      },
+      {
+        "id": null,
+        "name": "maple syrup",
+        "unit": "tbsp",
+        "amount": 1,
+        "us_unit": null,
+        "us_amount": null
+      },
+      {
+        "id": null,
+        "name": "salt",
+        "unit": "",
+        "amount": null,
+        "us_unit": null,
+        "us_amount": null
+      },
+      {
+        "id": null,
+        "name": "pepper",
+        "unit": "",
+        "amount": null,
+        "us_unit": null,
+        "us_amount": null
+      },
+      {
+        "id": null,
+        "name": "maple syrup (for serving)",
+        "unit": "",
+        "amount": null,
+        "us_unit": null,
+        "us_amount": null
+      },
+      {
+        "id": null,
+        "name": "sea salt (for serving)",
+        "unit": "",
+        "amount": null,
+        "us_unit": null,
+        "us_amount": null
+      }
+    ],
+    "howto_videos": [
+      {
+        "id": "8f6a4e70-2a14-44fd-9b00-ad453e5fcdf2",
+        "source_url": "https://vimeo.com/288340332",
+        "service": "vimeo",
+        "remote_id": "288340332",
+        "duration": 103,
+        "video_title": "How to prepare butternut squash",
+        "text": "",
+        "type": "howto",
+        "tags": [
+          "Array"
+        ],
+        "preview_image": [
+          "Object"
+        ],
+        "view_count": 15066,
+        "video_url": "https://player.vimeo.com/external/288340332.m3u8?s=1556abb087d03638594ff532fc05ae57ff1fd8d1&oauth2_token_id=925454046",
+        "slug": "how-to-prepare-butternut-squash",
+        "published_at": "2018-09-19T02:00:00+00:00",
+        "width": 1920,
+        "height": 1080
+      }
+    ],
+    "tags": [],
+    "partners": [],
+    "images_count": 4,
+    "comments": [
+      {
+        "id": "6a53675e-3e22-4861-9a9c-4f10e8c8c498",
+        "created": "2018-10-01T06:32:09+0000",
+        "original_comment": "It looks nice!",
+        "original_language_code": "en",
+        "original_location": "UA",
+        "comment": "It looks nice!",
+        "images": [
+          "Array"
+        ],
+        "author": [
+          "Object"
+        ],
+        "like_count": 6,
+        "reply_count": 1,
+        "recent_answers": []
+      },
+      {
+        "id": "7e86ce14-b68c-426c-85ba-b9eaee30a3d9",
+        "created": "2018-10-01T18:20:11+0000",
+        "original_comment": "Vorsicht beim Vermischen von Butterechmalz und Ahornsirup! Das Schmalz sollte nicht zu heiss sein :)",
+        "original_language_code": "de",
+        "original_location": "DE",
+        "comment": "Be careful when mixing butterechmalz and maple syrup! The lard should not be too hot :)",
+        "images": [
+          "Array"
+        ],
+        "author": [
+          "Object"
+        ],
+        "like_count": 3,
+        "reply_count": 1,
+        "recent_answers": []
+      },
+      {
+        "id": "2e222ab0-ebd6-4352-bfb1-784904ce0de6",
+        "created": "2018-10-05T17:44:40+0000",
+        "original_comment": "Leider hat es unseren Geschmack nicht getroffen...",
+        "original_language_code": "de",
+        "original_location": "DE",
+        "comment": "Unfortunately, it did not meet our taste ...",
+        "images": [
+          "Array"
+        ],
+        "author": [
+          "Object"
+        ],
+        "like_count": 2,
+        "reply_count": 3,
+        "recent_answers": []
+      }
+    ],
+    "images": [
+      {
+        "comment": "957d5cc8-d94c-4123-b822-e3cb8853dbad",
+        "original_location": "DE",
+        "image": "https://images.kitchenstories.io/commentImages/EB971DDB-FEFA-4A2C-88EF-F8DD8B8BC805.jpg",
+        "created": "2018-10-05T20:35:09+0000",
+        "author": [
+          "Object"
+        ]
+      },
+      {
+        "comment": "2e222ab0-ebd6-4352-bfb1-784904ce0de6",
+        "original_location": "DE",
+        "image": "https://images.kitchenstories.io/commentImages/552CE944-0529-4113-A613-D77B8DD9383F.jpg",
+        "created": "2018-10-05T17:44:40+0000",
+        "author": {
+          "id": "d3c55129-beb1-4dbd-a629-57b230749691",
+            "username": "Wiebke at Kitchen Stories",
+            "user_image": {
+              "url": "https://images.kitchenstories.io/userImages/ac83b3de-40a6-47ef-afc9-1aea1005a2b7_a2744222.jpg",
+              "height": null,
+              "width": null
+            }
+        }
+      },
+      {
+        "comment": "7e86ce14-b68c-426c-85ba-b9eaee30a3d9",
+        "original_location": "DE",
+        "image": "https://images.kitchenstories.io/commentImages/1D64507B-E7D6-4B55-920B-5FB516249AB2.jpg",
+        "created": "2018-10-01T18:20:12+0000",
+        "author": [
+          "Object"
+        ]
+      },
+      {
+        "comment": "6a53675e-3e22-4861-9a9c-4f10e8c8c498",
+        "original_location": "UA",
+        "image": "https://images.kitchenstories.io/commentImages/BC41FB3E-22F3-4422-97F7-47E5C8D16EA4.jpg",
+        "created": "2018-10-01T06:32:09+0000",
+        "author": [
+          "Object"
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "id": 999,
+        "text": "Preheat oven to 200°C/400°F. Peel butternut squash, slice in half, and remove the seeds.",
+        "headline": "",
+        "bubble_front": "Do you need to peel the butternut squash?",
+        "bubble_back": "You can also eat the butternut squash with its peel. Peeling it before slicing helps it to brown in the oven.",
+        "ingredients": [
+          "Array"
+        ],
+        "utensils": [
+          "Array"
+        ],
+        "image": [
+          "Object"
+        ],
+        "bubble_video": null
+      },
+      {
+        "id": 999,
+        "text": "To help you slice in the Hasselback style, place two skewers on either side of the butternut squash halves – this will prevent your knife from cutting all the way through. Slice thinly and repeat the process for the other half, then transfer both butternut squash halves to a baking sheet.",
+        "headline": "",
+        "bubble_front": "No skewers at home?",
+        "bubble_back": "Simply use two wooden spoons or chopsticks instead!",
+        "ingredients": [],
+        "utensils": [
+          "Array"
+        ],
+        "image": [
+          "Object"
+        ],
+        "bubble_video": null
+      },
+      {
+        "id": 999,
+        "text": "Heat the clarified butter in a saucepan and cook until browned and foamy. Add maple syrup and stir to combine. Season with salt and pepper.",
+        "headline": "",
+        "bubble_front": "Can you use regular butter instead?",
+        "bubble_back": "We suggest using clarified butter for this oven dish, since regular butter has a lower smoke point. If using regular butter, you will need to lower the oven temperature and cook the squash for longer.",
+        "ingredients": [
+          "Array"
+        ],
+        "utensils": [
+          "Array"
+        ],
+        "image": [
+          "Object"
+        ],
+        "bubble_video": null
+      },
+      {
+        "id": 999,
+        "text": "Place sage leaves between the butternut squash slices and brush both halves with some of the clarified butter mixture.",
+        "headline": "",
+        "bubble_front": "",
+        "bubble_back": "",
+        "ingredients": [
+          "Array"
+        ],
+        "utensils": [
+          "Array"
+        ],
+        "image": [
+          "Object"
+        ],
+        "bubble_video": null
+      },
+      {
+        "id": 999,
+        "text": "Bake in the oven at 200°C/400°F for approx. 50 min., or until the butternut squash is soft and browned on the edges. Baste the butternut squash with the clarified butter mixture approx. every 10 min during the baking time. Remove from the oven and serve on a large plate with a drizzle of maple syrup and some sea salt. Enjoy!",
+        "headline": "",
+        "bubble_front": "",
+        "bubble_back": "",
+        "ingredients": [
+          "Array"
+        ],
+        "utensils": [
+          "Array"
+        ],
+        "image": [
+          "Object"
+        ],
+        "bubble_video": null
+      }
+    ],
+    "testimonial": "Sweet pumpkin and earthy sage are a winning flavor combination. This recipe for a Hasselback-style butternut squash, as much a tasty side or beautiful center piece, is inspired by a recipe in Bon Appetit. Before you think it—don't be put off by the seemingly finicky slicing, we're going to guide you through it. With sage leaves neatly tucked in between the slices and basted in clarified butter and maple syrup, you've got all the earthy, woody flavor of the golden days before winter. You can leave the skin on if you like the chewy texture, but peeling it will mean the basting glaze will penetrate better and create lovely crispy edges. Enjoy!",
+    "resource_uri": "https://api.kitchenstories.io/api/recipes/266e8d2f-e8f0-408e-8221-21d5c18d715b/",
+    "title": "Hasselback butternut squash with sage",
+    "slug": "hasselback-butternut-squash-with-sage-en",
+    "testimonial_author": "Ruby",
+    "testimonial_image": {
+      "url": "https://images.kitchenstories.io/userImages/13D237C1-6310-45DC-99C7-A6F887170BE6_bd174a34.jpg",
+      "height": null,
+      "width": null
+    },
+    "testimonial_link": null,
+    "blogger_article_id": null
+  }
+]
