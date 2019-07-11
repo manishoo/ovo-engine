@@ -4,7 +4,7 @@
  */
 
 import MealRepository from 'src/dao/repositories/meal.repository'
-import {MealInput} from '~/services/api-gateway/resolvers/panel/meals.resolver'
+import {MealInput} from '~/api/panel/resolvers/meals.resolver'
 
 const DEFAULT_PAGE_SIZE = 25
 

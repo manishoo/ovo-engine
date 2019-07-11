@@ -4,11 +4,11 @@
  */
 
 import {Resolver, Arg, Ctx, Query} from 'type-graphql'
-import {checkUser, Context} from '../../utils'
-import FoodService from 'src/services/food/food.service'
-import {Food, MealItem} from 'src/dao/types'
-import {MEAL_ITEM_TYPES} from 'src/constants/enums'
-import {MealPlan} from 'src/dao/models/meal-plan.model'
+import {checkUser, Context} from '../../../services/api-gateway/utils'
+import FoodService from '~/services/food/food.service'
+import {Food, MealItem} from '~/dao/types'
+import {MEAL_ITEM_TYPES} from '~/constants/enums'
+import {MealPlan} from '~/dao/models/meal-plan.model'
 
 
 @Resolver()

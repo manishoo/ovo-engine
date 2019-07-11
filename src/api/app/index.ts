@@ -41,7 +41,7 @@ async function main() {
 	const graphQLAppServer = new ApolloServer({
 		schema: await buildSchema({
 			resolvers: [
-				__dirname + '/../../services/api-gateway/resolvers/app/*.resolver.*',
+				__dirname + '/resolvers/*.resolver.*',
 			],
 		}),
 		context: async ({req}: { req: Request }) => {

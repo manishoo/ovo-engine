@@ -4,9 +4,9 @@
  */
 
 import {Resolver, Arg, Ctx, Mutation, Query} from 'type-graphql'
-import {authenticate, authenticateBySession} from 'src/services/auth'
-import {AuthResponse} from 'src/dao/types'
-import {Operator} from 'src/dao/models/operator.model'
+import {authenticate, authenticateBySession} from '~/services/auth'
+import {AuthResponse} from '~/dao/types'
+import {Operator} from '~/dao/models/operator.model'
 import {Context} from '~/services/api-gateway/utils'
 
 

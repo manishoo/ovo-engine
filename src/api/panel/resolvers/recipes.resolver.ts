@@ -4,9 +4,9 @@
  */
 
 import {Arg, Ctx, Field, InputType, Int, ObjectType, Query, Resolver} from 'type-graphql'
-import {Recipe, RecipeInput, RecipesListResponse} from 'src/dao/models/recipe.model'
+import {Recipe, RecipeInput, RecipesListResponse} from '~/dao/models/recipe.model'
 import {Context} from '~/services/api-gateway/utils'
-import RecipeService from 'src/services/recipe.service'
+import RecipeService from '~/services/recipe.service'
 import {GraphQLUpload} from 'apollo-server-express'
 
 

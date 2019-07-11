@@ -4,11 +4,11 @@
  */
 
 import {Resolver, Arg, Ctx, Mutation, Query, FieldResolver, Root} from 'type-graphql'
-import {checkUser, Context} from '../../utils'
-import {User} from 'src/dao/models/user.model'
-import UserService from 'src/services/user.service'
-import userValidator from '../../validation/user.validator'
-import {GENDER} from 'src/constants/enums'
+import {checkUser, Context} from '../../../services/api-gateway/utils'
+import {User} from '~/dao/models/user.model'
+import UserService from '~/services/user.service'
+import userValidator from '../../../services/api-gateway/validation/user.validator'
+import {GENDER} from '~/constants/enums'
 
 
 @Resolver(of => User)

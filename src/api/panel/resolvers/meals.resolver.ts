@@ -4,9 +4,9 @@
  */
 
 import {Arg, Ctx, Field, InputType, Int, ObjectType, Query, Resolver} from 'type-graphql'
-import {MealsListResponse} from 'src/dao/types'
-import {Meal} from 'src/dao/models/meal.model'
-import MealService from 'src/services/meal.service'
+import {MealsListResponse} from '~/dao/types'
+import {Meal} from '~/dao/models/meal.model'
+import MealService from '~/services/meal.service'
 import {Context} from '~/services/api-gateway/utils'
 
 

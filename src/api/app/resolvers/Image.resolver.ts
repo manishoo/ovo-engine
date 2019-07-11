@@ -4,8 +4,8 @@
  */
 
 import {Resolver, FieldResolver, Root, ResolverInterface} from 'type-graphql'
-import {Image} from 'src/dao/types'
-import config from 'src/config'
+import {Image} from '~/dao/types'
+import config from '~/config'
 
 
 @Resolver(of => Image)
