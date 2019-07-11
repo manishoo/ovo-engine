@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {getModels as getOurModels} from '~/dao/models/foods/db.tables'
-import {main as mainConnection} from '~/dao/connections/sequelize'
-import {contentsAttribute} from '~/dao/models/foods/db'
-import {NutrientData, NutritionalData} from '~/dao/types'
+import {getModels as getOurModels} from '../src/dao/models/foods/db.tables'
+import {main as mainConnection} from '../src/dao/connections/sequelize'
+import {contentsAttribute} from '../src/dao/models/foods/db'
+import {NutrientData, NutritionalData} from '../src/dao/types'
 
 const ourModels = getOurModels(mainConnection)
 

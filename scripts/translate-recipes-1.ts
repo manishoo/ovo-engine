@@ -7,8 +7,8 @@
  * This script will fill the ingredients and instructions fields
  * of all the recipes in the database
  * */
-import {RecipeModel} from '~/dao/models/recipe.model'
-import CosmicOcean from '~/services/cosmic-ocean'
+import {RecipeModel} from '../src/dao/models/recipe.model'
+import CosmicOcean from '../src/services/cosmic-ocean'
 const ReadableFractions = require('readable-fractions')
 
 // function transformIngredients(ingredients: Ingredient[]) {

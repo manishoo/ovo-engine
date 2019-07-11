@@ -1,15 +1,14 @@
 /*
- * create-food-varieties.ts
+ * translate-subfoods.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {getModels as getOurModels} from '~/dao/models/foods/db.tables'
-import {main as mainConnection} from '~/dao/connections/sequelize'
-import {foodVarietyAttribute, translationAttribute} from '~/dao/models/foods/db'
-import {LANGUAGE_CODES} from '~/constants/enums'
-// import {Translation} from '~/dao/models'
+import {getModels as getOurModels} from '../src/dao/models/foods/db.tables'
+import {main as mainConnection} from '../src/dao/connections/sequelize'
+import {translationAttribute} from '../src/dao/models/foods/db'
+import {LANGUAGE_CODES} from '../src/constants/enums'
+import {Translation} from '../src/dao/models'
 import _ from 'lodash'
-import uuid from 'uuid/v1'
 
 const ourModels = getOurModels(mainConnection)
 
@@ -34,34 +33,32 @@ const SUBFOODS = [
 	['CalorieSlism', 'calorieslism'],
 ]
 
-const allFoodVarieties: foodVarietyAttribute[] = []
+const totalTranslations: translationAttribute[] = []
+
 
 async function main() {
-	await ourModels.Translation.destroy({
+	await Translation.destroy({
 		where: {
 			field: 'common_name'
 		}
 	})
-	await ourModels.FoodVariety.sync({force: true})
 
 	{
-		console.log('Traversing Contents...')
-		/**
-		 * Get contents 10000 at a time and if we haven't already added it's food variety, add it.
-		 * */
+		console.log('Migrating Content...')
 		let i = 0
 		const count = 10000
 		let cont = true
 		while (cont) {
-			console.log(`${i * count} round`)
+			console.log(`${i * count} created`)
 			const all = await ourModels.Content.findAll({limit: count, offset: i * count})
 			if (all.length === 0) {
 				cont = false
 			}
 			i++
 
-			const foodVarieties: foodVarietyAttribute[] = []
+			const translations: translationAttribute[] = []
 
+			// console.log('totalTranslations', totalTranslations.length)
 			for (let i = 0; i < all.length; i++) {
 				const content = all[i]
 
@@ -70,21 +67,25 @@ async function main() {
 				if (!found) console.log(`NOT FOUND FOR ${content.citation}`)
 
 				if (found && content.origFoodCommonName && content.origFoodId) {
-					const origCitationAbbr = found[1]
-
-					const hast = _.find(allFoodVarieties, p => ((p.origFoodId === content.origFoodId) && (String(p.origDb) === origCitationAbbr)))
+					const sourceType = `food_${found[1]}`
+					const hast = _.find(totalTranslations, p => ((p.sourceType === sourceType) && (String(p.sourceId) === String(content.origFoodId))))
+					// process.stdout.write(hast ? '+' : '-')
 
 					if (!hast) {
-						const fv = {
-							foodId: content.foodId,
-							origDb: origCitationAbbr,
-							origFoodId: content.origFoodId,
-							origFoodName: content.origFoodCommonName,
-							publicId: uuid(),
-							nutritionalData: {},
-						}
-						foodVarieties.push(fv)
-						allFoodVarieties.push(fv)
+						translations.push({
+							lang: LANGUAGE_CODES.en,
+							text: content.origFoodCommonName,
+							sourceId: content.origFoodId,
+							sourceType: sourceType,
+							field: 'common_name',
+						})
+						totalTranslations.push({
+							lang: LANGUAGE_CODES.en,
+							text: content.origFoodCommonName,
+							sourceId: content.origFoodId,
+							sourceType: sourceType,
+							field: 'common_name',
+						})
 					}
 				}
 			}
@@ -99,14 +100,7 @@ async function main() {
 			// 	(p.sourceType === tr.sourceType) &&
 			// 	(p.sourceId === tr.sourceId)
 			// )))
-			const savedFoodVarieties = await ourModels.FoodVariety.bulkCreate(foodVarieties)
-			await ourModels.Translation.bulkCreate(savedFoodVarieties.map(fv => ({
-				text: fv.origFoodName,
-				lang: LANGUAGE_CODES.en,
-				sourceId: String(fv.id!),
-				sourceType: 'food_variety',
-				field: 'name',
-			})))
+			await Translation.bulkCreate(translations)
 			// totalTranslations.push(...translations)
 		}
 	}

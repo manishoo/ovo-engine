@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {foodb, main as mainConnection, fndds as usdaConnection} from '~/dao/connections/sequelize'
-import {getModels as getFooDBModels} from '~/dao/models/_foodb-models/db.tables'
-import {getModels as getOurModels} from '~/dao/models/foods/db.tables'
-import {LANGUAGE_CODES} from '~/constants/enums'
+import {foodb, main as mainConnection, fndds as usdaConnection} from '../src/dao/connections/sequelize'
+import {getModels as getFooDBModels} from '../src/dao/models/_foodb-models/db.tables'
+import {getModels as getOurModels} from '../src/dao/models/foods/db.tables'
+import {LANGUAGE_CODES} from '../src/constants/enums'
 import uuid from 'uuid/v1'
-import {getModels as getUSDAModels} from '~/dao/models/_fndds-models/db.tables'
-import {foodVarietyAttribute, weightAttribute} from '~/dao/models/foods/db'
-import {weightAttribute as USDAweightAttribute} from '~/dao/models/_fndds-models/db'
+import {getModels as getUSDAModels} from '../src/dao/models/_fndds-models/db.tables'
+import {foodVarietyAttribute, weightAttribute} from '../src/dao/models/foods/db'
+import {weightAttribute as USDAweightAttribute} from '../src/dao/models/_fndds-models/db'
 import _ from 'lodash'
 
 const foodbModels = getFooDBModels(foodb)

@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import MealPlanner from '~/services/food/meal-planner'
-import {MealUnit} from '~/dao/models/user.model'
+import MealPlanner from '../src/services/food/meal-planner'
+import {MealUnit} from '../src/dao/models/user.model'
 
 function createDefaultMealDistribution(): MealUnit[] {
 	return [

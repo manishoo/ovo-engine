@@ -4,9 +4,9 @@
  */
 
 import uniqueTokens from './weight-uniqueTokens-1.json'
-import {WeightTr} from '~/dao/models'
-import {LANGUAGE_CODES} from '~/constants/enums'
-import {weightTrAttribute} from '~/dao/models/foods/db.js'
+import {WeightTr} from '../src/dao/models'
+import {LANGUAGE_CODES} from '../src/constants/enums'
+import {weightTrAttribute} from '../src/dao/models/foods/db.js'
 
 export default async function main() {
 	await WeightTr.destroy({where: {lang: LANGUAGE_CODES.fa}})

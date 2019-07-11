@@ -4,8 +4,8 @@
  */
 
 const argv = require('minimist')(process.argv.slice(2))
-import { OperatorModel } from '~/dao/models/operator.model'
-import { generateHashPassword } from '~/utils/password-manager'
+import { OperatorModel } from '../src/dao/models/operator.model'
+import { generateHashPassword } from '../src/utils/password-manager'
 
 async function main() {
 	const admin = new OperatorModel({

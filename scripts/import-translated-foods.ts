@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Food, FoodTr} from '~/dao/models'
-import FoodRepo from '~/dao/repositories/food.repository'
-import {LANGUAGE_CODES} from '~/constants/enums'
+import {Food, FoodTr} from '../src/dao/models'
+import FoodRepo from '../src/dao/repositories/food.repository'
+import {LANGUAGE_CODES} from '../src/constants/enums'
 import uniqueTokens from './uniqueTokens-2.json'
 // import {ABBRS} from '~/scripts/auto-translate-foods'
 
