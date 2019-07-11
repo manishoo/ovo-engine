@@ -8,7 +8,7 @@
  * of all the recipes in the database
  * */
 // import {RecipeModel} from '~/dao/repositories/recipe.repository'
-import CosmicOcean from '../src/services/cosmic-ocean'
+import CosmicOcean from '~/services/cosmic-ocean'
 
 const ReadableFractions = require('readable-fractions')
 

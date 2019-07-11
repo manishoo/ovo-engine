@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {fndds} from '../src/dao/connections/sequelize'
+import {fndds} from '~/dao/connections/sequelize'
 import Food, {FoodAttribute} from '~/dao/models/foods/food.model'
 import {nutrientAttribute} from '~/dao/models/foods/nutrient.model'
 import {nutrientDataAttribute} from '~/dao/models/foods/nutrient-data.model'
@@ -19,7 +19,7 @@ import {
 	nutrDefAttribute,
 	nutDataAttribute,
 	weightAttribute
-} from '../src/dao/models/_fndds-models/db'
+} from '~/dao/models/_fndds-models/db'
 import {weightAttribute as wAttr} from '~/dao/models/foods/weight.model'
 import {weightTrAttribute} from '~/dao/models/foods/weights-translation.model'
 import uuid from 'uuid/v1'

@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { RecipeModel, Recipe } from '../src/dao/models/recipe.model'
+import { RecipeModel, Recipe } from '~/dao/models/recipe.model'
 
 async function main() {
 	return new RecipeModel({

@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {getModels as getOurModels} from '../src/dao/models/foods/db.tables'
-import {main as mainConnection} from '../src/dao/connections/sequelize'
-import {translationAttribute} from '../src/dao/models/foods/db'
-import {LANGUAGE_CODES} from '../src/constants/enums'
-import {Translation} from '../src/dao/models'
+import {getModels as getOurModels} from '~/dao/models/foods/db.tables'
+import {main as mainConnection} from '~/dao/connections/sequelize'
+import {translationAttribute} from '~/dao/models/foods/db'
+import {LANGUAGE_CODES} from '~/constants/enums'
+import {Translation} from '~/dao/models'
 import _ from 'lodash'
 
 const ourModels = getOurModels(mainConnection)

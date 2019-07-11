@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Food} from '../src/dao/models'
+import {Food} from '~/dao/models'
 // import FoodRepo from '~/dao/repositories/food.repository'
 // import {LANGUAGE_CODES} from '~/constants/enums'
 

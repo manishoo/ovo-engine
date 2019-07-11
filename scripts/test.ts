@@ -5,8 +5,8 @@
 
 // import FR from '~/dao/repositories/food.repository'
 // import {LANGUAGE_CODES} from '~/constants/enums'
-import {generatePath} from '../src/services/user.service'
-import {MealPlanModel} from '../src/dao/models/meal-plan.model'
+import {generatePath} from '~/services/user.service'
+import {MealPlanModel} from '~/dao/models/meal-plan.model'
 
 async function main() {
 	const mp = await MealPlanModel.findById('5cd29e6e45e7386045e824b8')

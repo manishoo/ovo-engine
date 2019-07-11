@@ -7,7 +7,7 @@
  * This script will fill the ingredients and instructions fields
  * of all the recipes in the database
  * */
-import {Recipe, RecipeModel} from '../src/dao/models/recipe.model'
+import {Recipe, RecipeModel} from '~/dao/models/recipe.model'
 
 interface AdditionalData {
 	id: any,
