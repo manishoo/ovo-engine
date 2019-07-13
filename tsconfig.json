@@ -21,6 +21,18 @@
       ],
       "src/*": [
         "src/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+      "@dao/*": [
+        "src/dao/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@config": [
+        "src/config"
       ]
     }
   },
