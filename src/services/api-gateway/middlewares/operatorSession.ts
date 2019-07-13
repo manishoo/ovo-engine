@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import OperatorRepo from 'src/dao/repositories/operator.repository'
+import OperatorRepo from '@dao/repositories/operator.repository'
 import {Request} from 'express'
 
 export default async (req: Request) => {

@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {main} from '~/dao/connections/sequelize'
-import {getModels} from '~/dao/models/foods/db.tables'
+import {main} from '@dao/connections/sequelize'
+import {getModels} from '@dao/models/foods/db.tables'
 import {RecipeModel} from './recipe.model'
 import {HouseholdModel} from './household.model'
 import {OperatorModel} from './operator.model'

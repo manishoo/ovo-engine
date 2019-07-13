@@ -8,9 +8,9 @@ import helmet from 'helmet'
 import bodyParser from 'body-parser'
 import {ApolloServer} from 'apollo-server-express'
 import {buildSchema} from 'type-graphql'
-import applyOperatorMiddleware from '~/services/api-gateway/middlewares/operatorSession'
-import mainRouter from '~/services/api-gateway/router'
-import config from '~/config'
+import applyOperatorMiddleware from '@services/api-gateway/middlewares/operatorSession'
+import mainRouter from '@services/api-gateway/router'
+import config from '@config'
 
 global.Promise = require('bluebird')
 

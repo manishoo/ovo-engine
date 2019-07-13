@@ -3,17 +3,17 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import config from '~/config'
-import redis from '~/dao/connections/redis'
-import {User, UserModel} from '~/dao/models/user.model'
+import config from '@config'
+import redis from '@dao/connections/redis'
+import {User, UserModel} from '@dao/models/user.model'
 import {EVENT_TYPES, LANGUAGE_CODES, STATUS} from '~/constants/enums'
-import {logError} from '~/utils/logger'
+import {logError} from '@utils/logger'
 import {__} from 'i18n'
-import {MealPlan} from '~/dao/models/meal-plan.model'
-import {transformMealItem, transformMealPlan} from '~/dao/repositories/meal-plan.repository'
+import {MealPlan} from '@dao/models/meal-plan.model'
+import {transformMealItem, transformMealPlan} from '@dao/repositories/meal-plan.repository'
 import {InstanceType} from 'typegoose'
-import {RecipeModel} from '~/dao/models/recipe.model'
-import FoodRepo from '~/dao/repositories/food.repository'
+import {RecipeModel} from '@dao/models/recipe.model'
+import FoodRepo from '@dao/repositories/food.repository'
 
 async function transformSelfUser(userDocument: InstanceType<User>, lang: LANGUAGE_CODES = LANGUAGE_CODES.en) {
 	userDocument = userDocument.toObject()

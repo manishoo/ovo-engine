@@ -3,16 +3,16 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Recipe, RecipeInput, RecipeModel, RecipesListResponse} from '~/dao/models/recipe.model'
+import {Recipe, RecipeInput, RecipeModel, RecipesListResponse} from '@dao/models/recipe.model'
 import {__} from 'i18n'
-import WeightRepo from '~/dao/repositories/weight.repository'
-import FoodRepo from '~/dao/repositories/food.repository'
+import WeightRepo from '@dao/repositories/weight.repository'
+import FoodRepo from '@dao/repositories/food.repository'
 import {LANGUAGE_CODES} from '~/constants/enums'
 import {InstanceType} from 'typegoose'
 import {ObjectId} from 'bson'
-import {User} from '~/dao/models/user.model'
-import TagRepository from '~/dao/repositories/tag.repository'
-import {processUpload} from '~/utils/upload/utils'
+import {User} from '@dao/models/user.model'
+import TagRepository from '@dao/repositories/tag.repository'
+import {processUpload} from '@utils/upload/utils'
 import shortid from 'shortid'
 
 async function transformRecipe(recipe: InstanceType<Recipe>, userId?: string, full: boolean = false, lang: LANGUAGE_CODES = LANGUAGE_CODES.en): Promise<Recipe> {

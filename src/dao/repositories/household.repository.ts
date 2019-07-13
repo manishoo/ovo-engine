@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Household, HouseholdModel} from '~/dao/models/household.model'
+import {Household, HouseholdModel} from '@dao/models/household.model'
 
 export default {
 	async create(data: Household) {

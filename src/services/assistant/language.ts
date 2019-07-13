@@ -3,15 +3,15 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-// import {MealUnit} from '~/dao/models/user.model'
-// import {coreNLP, CoreNLP} from '~/dao/connections/corenlp'
+// import {MealUnit} from '@dao/models/user.model'
+// import {coreNLP, CoreNLP} from '@dao/connections/corenlp'
 // import {__} from 'i18n'
-// import {normalizeTimes} from '~/services/app/assistant/utils'
-import {Recipe} from 'src/dao/models/recipe.model'
-import {ACTIVITY, GENDER, GOALS, HEIGHT_UNITS, WEIGHT_UNITS} from 'src/constants/enums'
-import {MacroNutrientDistribution} from 'src/services/assistant/types'
-import {Food} from 'src/dao/types'
-import {Height, WeightUnit} from 'src/dao/models/user.model'
+// import {normalizeTimes} from '@services/app/assistant/utils'
+import {Recipe} from '@dao/models/recipe.model'
+import {ACTIVITY, GENDER, GOALS, HEIGHT_UNITS, WEIGHT_UNITS} from '~/constants/enums'
+import {MacroNutrientDistribution} from '@services/assistant/types'
+import {Food} from '@dao/types'
+import {Height, WeightUnit} from '@dao/models/user.model'
 
 
 export default {

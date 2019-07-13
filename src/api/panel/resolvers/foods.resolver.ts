@@ -10,11 +10,11 @@ import {
 	FoodsListResponse,
 	FoodsTranslationListResponse,
 	FoodTranslationO, WeightInput, Weight, NameAndId
-} from 'src/dao/types'
-import FoodRepo from 'src/dao/repositories/food.repository'
-import {LANGUAGE_CODES} from 'src/constants/enums'
+} from '@dao/types'
+import FoodRepo from '@dao/repositories/food.repository'
+import {LANGUAGE_CODES} from '~/constants/enums'
 import {GraphQLUpload} from 'apollo-server-express'
-import {checkUser, Context} from '~/services/api-gateway/utils'
+import {checkUser, Context} from '@services/api-gateway/utils'
 
 
 @Resolver()

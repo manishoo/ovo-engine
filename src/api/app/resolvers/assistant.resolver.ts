@@ -4,9 +4,9 @@
  */
 
 import {Resolver, Query, Arg, Ctx, Mutation, InputType, Field, Int} from 'type-graphql'
-import {Context} from '../../../services/api-gateway/utils'
-import AssistantService, {createMessage} from '~/services/assistant'
-import {MessagePayload} from '~/services/assistant/types'
+import {Context} from '@services/api-gateway/utils'
+import AssistantService, {createMessage} from '@services/assistant'
+import {MessagePayload} from '@services/assistant/types'
 
 @Resolver()
 export default class AssistantResolver {

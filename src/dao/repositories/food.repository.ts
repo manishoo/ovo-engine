@@ -4,26 +4,26 @@
  */
 
 import {FOOD_TYPES, LANGUAGE_CODES} from '~/constants/enums'
-import {Content, Food, FoodGroup, Weight, Translation, FoodVariety} from '~/dao/models'
-import {main, Sequelize} from '~/dao/connections/sequelize'
+import {Content, Food, FoodGroup, Weight, Translation, FoodVariety} from '@dao/models'
+import {main, Sequelize} from '@dao/connections/sequelize'
 import {
 	Food as FoodO,
 	FoodInput,
 	FoodTranslationO, NameAndId,
 	NutritionalData,
 	Weight as WeightType
-} from '~/dao/types'
+} from '@dao/types'
 import uuid from 'uuid/v1'
-import {processUpload} from '~/utils/upload/utils'
+import {processUpload} from '@utils/upload/utils'
 import shortid from 'shortid'
-import WeightRepository from '~/dao/repositories/weight.repository'
+import WeightRepository from '@dao/repositories/weight.repository'
 import {
 	contentsAttribute,
 	foodGroupInstance,
 	foodsInstance, foodVarietyInstance, translationInstance,
 	weightInstance,
-} from '~/dao/models/foods/db'
-import {setImageUrl} from '~/utils/imageUrlSetter'
+} from '@dao/models/foods/db'
+import {setImageUrl} from '@utils/imageUrlSetter'
 
 interface FoodFind {
 	query?: string,

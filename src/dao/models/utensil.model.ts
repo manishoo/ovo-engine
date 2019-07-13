@@ -5,8 +5,8 @@
 
 import {Typegoose, prop} from 'typegoose'
 import { Field, ObjectType } from 'type-graphql'
-import mongoose from '~/dao/connections/mongoose'
-import {Image} from '~/dao/types'
+import mongoose from '@dao/connections/mongoose'
+import {Image} from '@dao/types'
 
 @ObjectType()
 export class Utensil extends Typegoose {

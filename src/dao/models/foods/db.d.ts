@@ -5,9 +5,9 @@
 
 // tslint:disable
 import * as Sequelize from 'sequelize';
-import {FoodInstance} from '~/dao/models/foods/food.model'
-import {foodGroupTrInstance} from '~/dao/models/foods/food-group-translation.model'
-import {NutritionalData} from '~/dao/types'
+import {FoodInstance} from '@dao/models/foods/food.model'
+import {foodGroupTrInstance} from '@dao/models/foods/food-group-translation.model'
+import {NutritionalData} from '@dao/types'
 
 
 // table: compoundSubstituents

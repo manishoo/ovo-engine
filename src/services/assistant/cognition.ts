@@ -11,9 +11,9 @@ import {
 	Message,
 	MessageBackgroundInformation,
 	MessagePayload
-} from 'src/services/assistant/types'
+} from '@services/assistant/types'
 import {__} from 'i18n'
-import {createMessage} from 'src/services/assistant'
+import {createMessage} from '@services/assistant'
 import Language from './language'
 import Memory from './memory'
 import {
@@ -23,15 +23,15 @@ import {
 	generateMealPlanSettings,
 	getLastMessageData,
 	keepInMind
-} from 'src/services/assistant/utils'
-import UserService from 'src/services/user.service'
-import NutritionCalculator from 'src/services/food/nutrition-calculator'
-import Validators from 'src/services/assistant/validators'
-import {generateHashPassword} from 'src/utils/password-manager'
-import {MealUnit, User} from 'src/dao/models/user.model'
-import {logError} from 'src/utils/logger'
-import {ACTIVITY, GENDER, GOALS, LANGUAGE_CODES} from 'src/constants/enums'
-import {generateAvatarUrl} from '~/utils/generateAvatarUrl'
+} from '@services/assistant/utils'
+import UserService from '@services/user.service'
+import NutritionCalculator from '@services/food/nutrition-calculator'
+import Validators from '@services/assistant/validators'
+import {generateHashPassword} from '@utils/password-manager'
+import {MealUnit, User} from '@dao/models/user.model'
+import {logError} from '@utils/logger'
+import {ACTIVITY, GENDER, GOALS, LANGUAGE_CODES} from '~/constants/enums'
+import {generateAvatarUrl} from '@utils/generateAvatarUrl'
 
 interface Cognition {
 	recognizeContext(message: Message, backgroundInfo: MessageBackgroundInformation): Promise<CONTEXTS>

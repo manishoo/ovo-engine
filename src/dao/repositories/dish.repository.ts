@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {MealTemplate, MealTemplateModel} from '~/dao/models/meal-template.model'
+import {MealTemplate, MealTemplateModel} from '@dao/models/meal-template.model'
 
 
 export default {

@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Tag, TagModel} from '~/dao/models/tag.model'
+import {Tag, TagModel} from '@dao/models/tag.model'
 
 export default {
 	async list(): Promise<Tag[]> {

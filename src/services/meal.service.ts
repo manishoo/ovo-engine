@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import MealRepository from 'src/dao/repositories/meal.repository'
+import MealRepository from '@dao/repositories/meal.repository'
 import {MealInput} from '~/api/panel/resolvers/meals.resolver'
 
 const DEFAULT_PAGE_SIZE = 25

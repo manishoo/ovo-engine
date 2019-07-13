@@ -5,7 +5,7 @@
 
 import {Typegoose, prop, instanceMethod, InstanceType} from 'typegoose'
 import {Field, Int, ObjectType} from 'type-graphql'
-import mongoose from '~/dao/connections/mongoose'
+import mongoose from '@dao/connections/mongoose'
 import uuid from 'uuid/v1'
 import {LANGUAGE_CODES, STATUS} from '~/constants/enums'
 

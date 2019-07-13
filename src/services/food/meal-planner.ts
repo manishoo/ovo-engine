@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import MealPlanRepo from 'src/dao/repositories/meal-plan.repository'
-import {WEEKDAYS} from 'src/constants/enums'
-import {MealUnit} from 'src/dao/models/user.model'
-import {createCucumber, DAY_PERIOD, recognizeDayPeriod} from 'src/services/food/utils'
-import {Day, MealPlan} from 'src/dao/models/meal-plan.model'
-import {UserMeal} from 'src/dao/types'
+import MealPlanRepo from '@dao/repositories/meal-plan.repository'
+import {WEEKDAYS} from '~/constants/enums'
+import {MealUnit} from '@dao/models/user.model'
+import {createCucumber, DAY_PERIOD, recognizeDayPeriod} from '@services/food/utils'
+import {Day, MealPlan} from '@dao/models/meal-plan.model'
+import {UserMeal} from '@dao/types'
 
 export default {
 	generateMealPlan(mealRoutine: MealUnit[]) {

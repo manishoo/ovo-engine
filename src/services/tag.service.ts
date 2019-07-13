@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import TagRepository from 'src/dao/repositories/tag.repository'
-import {TagInput} from '~/dao/models/tag.model'
+import TagRepository from '@dao/repositories/tag.repository'
+import {TagInput} from '@dao/models/tag.model'
 import {LANGUAGE_CODES} from '~/constants/enums'
 
 

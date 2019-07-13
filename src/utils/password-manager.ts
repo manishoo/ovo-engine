@@ -4,7 +4,7 @@
  */
 
 import * as crypto from 'crypto'
-import {PersistedPassword} from '~/dao/types'
+import {PersistedPassword} from '@dao/types'
 
 const PASSWORD_LENGTH = 256
 const SALT_LENGTH = 64

@@ -5,9 +5,9 @@
 
 import {Field, ObjectType} from 'type-graphql'
 import {prop, Ref, Typegoose} from 'typegoose'
-import {User, UserSchema} from '~/dao/models/user.model'
-import mongoose from '~/dao/connections/mongoose'
-import {MealItem} from '~/dao/types'
+import {User, UserSchema} from '@dao/models/user.model'
+import mongoose from '@dao/connections/mongoose'
+import {MealItem} from '@dao/types'
 
 
 @ObjectType()

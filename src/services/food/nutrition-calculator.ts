@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import config from 'src/config'
-import {ACTIVITY, GENDER, GOALS} from 'src/constants/enums'
+import config from '@config'
+import {ACTIVITY, GENDER, GOALS} from '~/constants/enums'
 
 export default {
 	calculateBMR(

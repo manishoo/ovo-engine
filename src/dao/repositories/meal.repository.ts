@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Meal, MealModel} from '~/dao/models/meal.model'
+import {Meal, MealModel} from '@dao/models/meal.model'
 import {__} from 'i18n'
 import {MealInput} from '~/api/panel/resolvers/meals.resolver'
 import {InstanceType} from 'typegoose'

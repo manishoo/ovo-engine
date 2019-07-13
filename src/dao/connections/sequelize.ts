@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import config from '~/config'
+import config from '@config'
 import Sequelize from 'sequelize'
 
 const main = new Sequelize(config.mysql.db, config.mysql.user, config.mysql.pass, {

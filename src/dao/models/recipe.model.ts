@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Image, Video, Food, Pagination, Weight} from '~/dao/types'
+import {Image, Video, Food, Pagination, Weight} from '@dao/types'
 import {prop, Typegoose, Ref, arrayProp} from 'typegoose'
 import {ObjectType, Field, Int, InputType} from 'type-graphql'
 import {Utensil} from './utensil.model'
-import {User, UserSchema} from '~/dao/models/user.model'
-import mongoose from '~/dao/connections/mongoose'
+import {User, UserSchema} from '@dao/models/user.model'
+import mongoose from '@dao/connections/mongoose'
 import uuid from 'uuid'
 import {LANGUAGE_CODES, TAG_TYPE} from '~/constants/enums'
 import {GraphQLUpload} from 'apollo-server-express'

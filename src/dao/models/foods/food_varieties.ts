@@ -7,7 +7,7 @@
 // tslint:disable
 import * as sequelize from 'sequelize';
 import {DataTypes} from 'sequelize';
-import {foodVarietyAttribute, foodVarietyInstance} from '~/dao/models/foods/db'
+import {foodVarietyAttribute, foodVarietyInstance} from '@dao/models/foods/db'
 
 module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) {
   return sequelize.define<foodVarietyInstance, foodVarietyAttribute>('food_varieties', {

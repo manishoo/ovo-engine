@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Message, MessageBackgroundInformation} from 'src/services/assistant/types'
-import UserRepo from 'src/dao/repositories/user.repository'
-import redis from 'src/dao/connections/redis'
-import config from 'src/config'
-import {logError} from 'src/utils/logger'
-import UserService from 'src/services/user.service'
+import {Message, MessageBackgroundInformation} from '@services/assistant/types'
+import UserRepo from '@dao/repositories/user.repository'
+import redis from '@dao/connections/redis'
+import config from '@config'
+import {logError} from '@utils/logger'
+import UserService from '@services/user.service'
 
 
 interface ShortTermMemory {

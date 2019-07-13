@@ -5,7 +5,7 @@
 
 import * as sequelize from 'sequelize'
 import {DataTypes} from 'sequelize'
-import {weightAttribute, weightInstance} from '~/dao/models/foods/db'
+import {weightAttribute, weightInstance} from '@dao/models/foods/db'
 
 module.exports = function (sequelize: sequelize.Sequelize, DataTypes: DataTypes) {
 	return sequelize.define<weightInstance, weightAttribute>('weights', {
