@@ -22,7 +22,7 @@ const {panelUrl: url, panelPort: port} = config
 async function main() {
 	i18n.configure({
 		defaultLocale: 'en',
-		directory: path.join(__dirname, '/../../constants/locales'),
+		directory: path.join(__dirname, '/../../../locales'),
 		updateFiles: false,
 	})
 
