@@ -1,5 +1,5 @@
 /*
- * operatorSession.ts
+ * operator-session.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 

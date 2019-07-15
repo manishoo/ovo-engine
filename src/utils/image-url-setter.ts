@@ -1,5 +1,5 @@
 /*
- * imageUrlSetter.ts
+ * image-url-setter.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 

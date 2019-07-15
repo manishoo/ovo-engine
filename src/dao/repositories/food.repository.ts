@@ -23,7 +23,7 @@ import {
 	foodsInstance, foodVarietyInstance, translationInstance,
 	weightInstance,
 } from '@dao/models/foods/db'
-import {setImageUrl} from '@utils/imageUrlSetter'
+import {setImageUrl} from '@utils/image-url-setter'
 
 interface FoodFind {
 	query?: string,

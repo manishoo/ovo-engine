@@ -8,7 +8,7 @@ import helmet from 'helmet'
 import bodyParser from 'body-parser'
 import {ApolloServer} from 'apollo-server-express'
 import {buildSchema} from 'type-graphql'
-import applyOperatorMiddleware from '@services/api-gateway/middlewares/operatorSession'
+import applyOperatorMiddleware from '@services/api-gateway/middlewares/operator-session'
 import mainRouter from '@services/api-gateway/router'
 import config from '@config'
 

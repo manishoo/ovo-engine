@@ -15,7 +15,7 @@ import {MealPlan} from '@dao/models/meal-plan.model'
 import {Event, UserMeal} from '@dao/types'
 import moment from 'moment'
 import uuid from 'uuid/v1'
-import {generateAvatarUrl} from '@utils/generateAvatarUrl'
+import {generateAvatarUrl} from '@utils/generate-avatar-url'
 import foodService from '@services/food/food.service'
 import {ObjectID} from 'bson'
 

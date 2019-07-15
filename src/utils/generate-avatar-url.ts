@@ -1,5 +1,5 @@
 /*
- * generateAvatarUrl.ts
+ * generate-avatar-url.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
