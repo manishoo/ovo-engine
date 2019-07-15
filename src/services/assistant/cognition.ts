@@ -31,7 +31,7 @@ import {generateHashPassword} from '@utils/password-manager'
 import {MealUnit, User} from '@dao/models/user.model'
 import {logError} from '@utils/logger'
 import {ACTIVITY, GENDER, GOALS, LANGUAGE_CODES} from '~/constants/enums'
-import {generateAvatarUrl} from '@utils/generateAvatarUrl'
+import {generateAvatarUrl} from '@utils/generate-avatar-url'
 
 interface Cognition {
 	recognizeContext(message: Message, backgroundInfo: MessageBackgroundInformation): Promise<CONTEXTS>
