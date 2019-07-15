@@ -5,8 +5,8 @@
 
 import {Field, ObjectType} from 'type-graphql'
 import {prop, Typegoose} from 'typegoose'
-import {UserMeal} from '~/dao/types'
-import mongoose from '~/dao/connections/mongoose'
+import {UserMeal} from '@dao/types'
+import mongoose from '@dao/connections/mongoose'
 import {WEEKDAYS} from '~/constants/enums'
 
 

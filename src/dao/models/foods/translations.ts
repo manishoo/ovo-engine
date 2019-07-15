@@ -5,7 +5,7 @@
 
 import * as sequelize from 'sequelize'
 import {DataTypes} from 'sequelize'
-import {translationAttribute, translationInstance} from '~/dao/models/foods/db'
+import {translationAttribute, translationInstance} from '@dao/models/foods/db'
 
 module.exports = function (sequelize: sequelize.Sequelize, DataTypes: DataTypes) {
 	return sequelize.define<translationInstance, translationAttribute>('translations', {

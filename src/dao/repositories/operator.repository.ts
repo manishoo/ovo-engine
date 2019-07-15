@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Operator, OperatorModel} from '~/dao/models/operator.model'
-import redis from '~/dao/connections/redis'
-import {logError} from '~/utils/logger'
-import config from '~/config'
+import {Operator, OperatorModel} from '@dao/models/operator.model'
+import redis from '@dao/connections/redis'
+import {logError} from '@utils/logger'
+import config from '@config'
 import {STATUS} from '~/constants/enums'
 
 export default {

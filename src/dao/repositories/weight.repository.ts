@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {WeightInput, Weight as WeightType, WeightTranslationO} from '~/dao/types'
+import {WeightInput, Weight as WeightType, WeightTranslationO} from '@dao/types'
 import uuid from 'uuid/v1'
 import {LANGUAGE_CODES} from '~/constants/enums'
-import {Translation, Weight} from '~/dao/models'
+import {Translation, Weight} from '@dao/models'
 
 export default {
 	async findByPublicId(publicId: string, lang: LANGUAGE_CODES): Promise<WeightType> {

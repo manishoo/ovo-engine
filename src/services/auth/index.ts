@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import OperatorRepo from 'src/dao/repositories/operator.repository'
-import { verifyPassword } from 'src/utils/password-manager'
-import {AuthResponse} from 'src/dao/types'
+import OperatorRepo from '@dao/repositories/operator.repository'
+import { verifyPassword } from '@utils/password-manager'
+import {AuthResponse} from '@dao/types'
 
 export async function authenticate(username: string, password: string): Promise<AuthResponse> {
 	const operator = await OperatorRepo.findByUsername(username)

@@ -8,9 +8,9 @@ import helmet from 'helmet'
 import bodyParser from 'body-parser'
 import {ApolloServer} from 'apollo-server-express'
 import {buildSchema} from 'type-graphql'
-import applyOperatorMiddleware from '~/services/api-gateway/middlewares/operatorSession'
-import mainRouter from '~/services/api-gateway/router'
-import config from '~/config'
+import applyOperatorMiddleware from '@services/api-gateway/middlewares/operatorSession'
+import mainRouter from '@services/api-gateway/router'
+import config from '@config'
 
 global.Promise = require('bluebird')
 
@@ -22,7 +22,7 @@ const {panelUrl: url, panelPort: port} = config
 async function main() {
 	i18n.configure({
 		defaultLocale: 'en',
-		directory: path.join(__dirname, '/../../constants/locales'),
+		directory: path.join(__dirname, '/../../../locales'),
 		updateFiles: false,
 	})
 
@@ -41,7 +41,7 @@ async function main() {
 	const graphQLPanelServer = new ApolloServer({
 		schema: await buildSchema({
 			resolvers: [
-				__dirname + '/../../services/api-gateway/resolvers/panel/*.resolver.*',
+				__dirname + '/resolvers/*.resolver.*',
 			]
 		}),
 		context: async ({req}: { req: Request }) => {

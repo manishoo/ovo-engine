@@ -4,14 +4,14 @@
  */
 
 import {Resolver, Arg, Ctx, Query, Mutation} from 'type-graphql'
-import {checkUser, Context} from '../../utils'
-import FoodService from 'src/services/food/food.service'
-import {Recipe, RecipeInput, RecipesListResponse} from 'src/dao/models/recipe.model'
-import RecipeService from 'src/services/recipe.service'
-import {MEAL_ITEM_TYPES, TAG_TYPE} from 'src/constants/enums'
-import {MealItem} from 'src/dao/types'
-import {Tag, TagInput} from 'src/dao/models/tag.model'
-import TagService from 'src/services/tag.service'
+import {checkUser, Context} from '@services/api-gateway/utils'
+import FoodService from '@services/food/food.service'
+import {Recipe, RecipeInput, RecipesListResponse} from '@dao/models/recipe.model'
+import RecipeService from '@services/recipe.service'
+import {MEAL_ITEM_TYPES, TAG_TYPE} from '~/constants/enums'
+import {MealItem} from '@dao/types'
+import {Tag, TagInput} from '@dao/models/tag.model'
+import TagService from '@services/tag.service'
 
 
 @Resolver()

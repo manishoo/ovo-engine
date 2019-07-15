@@ -4,7 +4,7 @@
  */
 
 import request from 'request-promise'
-import config from 'src/config'
+import config from '@config'
 
 
 interface TranslatedRecipePayload {

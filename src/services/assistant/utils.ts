@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-// import {coreNLP, CoreNLP} from '~/dao/connections/corenlp'
-import {MealUnit} from 'src/dao/models/user.model'
+// import {coreNLP, CoreNLP} from '@dao/connections/corenlp'
+import {MealUnit} from '@dao/models/user.model'
 import w2n from 'words-to-numbers'
-import {Message, MessageAdditionalData} from 'src/services/assistant/types'
-import Memory from 'src/services/assistant/memory'
-import {ACTIVITY, GENDER, GOALS, LANGUAGE_CODES} from 'src/constants/enums'
+import {Message, MessageAdditionalData} from '@services/assistant/types'
+import Memory from '@services/assistant/memory'
+import {ACTIVITY, GENDER, GOALS, LANGUAGE_CODES} from '~/constants/enums'
 import {__} from 'i18n'
 
 

@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Utensil, UtensilModel} from '~/dao/models/utensil.model'
+import {Utensil, UtensilModel} from '@dao/models/utensil.model'
 
 export default {
 	async create(data: Utensil) {

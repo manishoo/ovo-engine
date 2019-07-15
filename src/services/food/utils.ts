@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {MealUnit} from '~/dao/models/user.model'
-import {UserMeal} from '~/dao/types'
+import {MealUnit} from '@dao/models/user.model'
+import {UserMeal} from '@dao/types'
 import {MEAL_ITEM_TYPES} from '~/constants/enums'
 
 export enum DAY_PERIOD {

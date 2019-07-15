@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {MealPlan, MealPlanModel} from '~/dao/models/meal-plan.model'
+import {MealPlan, MealPlanModel} from '@dao/models/meal-plan.model'
 import {LANGUAGE_CODES} from '~/constants/enums'
-import {Recipe, RecipeModel} from '~/dao/models/recipe.model'
-import FoodRepo from '~/dao/repositories/food.repository'
-import {Food, MealItem} from '~/dao/types'
+import {Recipe, RecipeModel} from '@dao/models/recipe.model'
+import FoodRepo from '@dao/repositories/food.repository'
+import {Food, MealItem} from '@dao/types'
 
 
 export default class MealPlanRepository {

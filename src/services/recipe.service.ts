@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import RecipeRepository from 'src/dao/repositories/recipe.repository'
-import {Recipe, RecipeInput} from '~/dao/models/recipe.model'
-import UserRepo from '~/dao/repositories/user.repository'
+import RecipeRepository from '@dao/repositories/recipe.repository'
+import {Recipe, RecipeInput} from '@dao/models/recipe.model'
+import UserRepo from '@dao/repositories/user.repository'
 import uuid from 'uuid/v1'
-import {processUpload} from '~/utils/upload/utils'
+import {processUpload} from '@utils/upload/utils'
 import shortid from 'shortid'
 import {LANGUAGE_CODES} from '~/constants/enums'
-import {Image} from '~/dao/types'
+import {Image} from '@dao/types'
 
 const DEFAULT_PAGE_SIZE = 25
 

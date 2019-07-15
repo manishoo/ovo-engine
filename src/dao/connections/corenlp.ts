@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-// import config from '~/config'
+// import config from '@config'
 // import CoreNLP, {Properties, Pipeline, ConnectorServer} from 'corenlp'
 //
 // const connector = new ConnectorServer({dsn: config.coreNLPAddress})

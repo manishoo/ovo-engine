@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import UserRepo from '~/dao/repositories/user.repository'
+import UserRepo from '@dao/repositories/user.repository'
 import {Request} from 'express'
-import OperatorRepo from '~/dao/repositories/operator.repository'
+import OperatorRepo from '@dao/repositories/operator.repository'
 
 export default async (req: Request) => {
 	if (!req.headers) return null

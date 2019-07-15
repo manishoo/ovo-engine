@@ -3,19 +3,19 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import RecipeRepo from 'src/dao/repositories/recipe.repository'
-import {MealPlan} from 'src/dao/models/meal-plan.model'
-import UserRepo from 'src/dao/repositories/user.repository'
-import FoodRepo from 'src/dao/repositories/food.repository'
-import {LANGUAGE_CODES, MEAL_ITEM_TYPES} from 'src/constants/enums'
-import {Recipe} from 'src/dao/models/recipe.model'
-// import FoodRepo from '~/dao/repositories/food.repository'
+import RecipeRepo from '@dao/repositories/recipe.repository'
+import {MealPlan} from '@dao/models/meal-plan.model'
+import UserRepo from '@dao/repositories/user.repository'
+import FoodRepo from '@dao/repositories/food.repository'
+import {LANGUAGE_CODES, MEAL_ITEM_TYPES} from '~/constants/enums'
+import {Recipe} from '@dao/models/recipe.model'
+// import FoodRepo from '@dao/repositories/food.repository'
 // import MealPlanner from './meal-planner'
-// import {MealItem} from '~/dao/types'
-// import {getEditDistance} from '~/utils/levenshtein'
+// import {MealItem} from '@dao/types'
+// import {getEditDistance} from '@utils/levenshtein'
 import MealPlanner from './meal-planner'
-import {Food, MealItem} from 'src/dao/types'
-import {getEditDistance} from 'src/utils/levenshtein'
+import {Food, MealItem} from '@dao/types'
+import {getEditDistance} from '@utils/levenshtein'
 
 interface MealPlanOptions {
 	name: string

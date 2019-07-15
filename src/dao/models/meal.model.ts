@@ -5,8 +5,8 @@
 
 import {Field, ObjectType} from 'type-graphql'
 import {prop, Typegoose} from 'typegoose'
-import {MealItem} from '~/dao/types'
-import mongoose from '~/dao/connections/mongoose'
+import {MealItem} from '@dao/types'
+import mongoose from '@dao/connections/mongoose'
 
 @ObjectType()
 export class Meal extends Typegoose {

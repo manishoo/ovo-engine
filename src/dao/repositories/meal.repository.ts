@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Meal, MealModel} from '~/dao/models/meal.model'
+import {Meal, MealModel} from '@dao/models/meal.model'
 import {__} from 'i18n'
-import {MealInput} from '~/services/api-gateway/resolvers/panel/meals.resolver'
+import {MealInput} from '~/api/panel/resolvers/meals.resolver'
 import {InstanceType} from 'typegoose'
 
 async function transformMeal(meal: InstanceType<Meal>): Promise<Meal> {

@@ -5,7 +5,7 @@
 
 import {Typegoose, prop} from 'typegoose'
 import {Field, InputType, ObjectType} from 'type-graphql'
-import mongoose from '~/dao/connections/mongoose'
+import mongoose from '@dao/connections/mongoose'
 import {LANGUAGE_CODES, TAG_TYPE} from '~/constants/enums'
 import {Types} from 'mongoose'
 

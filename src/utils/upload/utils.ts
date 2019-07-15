@@ -4,7 +4,7 @@
  */
 
 import fs from 'fs'
-import config from '~/config'
+import config from '@config'
 
 export const processUpload = async (upload: any, name: string, location: string) => {
 	const {createReadStream, filename, mimetype} = await upload

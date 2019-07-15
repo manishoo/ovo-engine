@@ -4,10 +4,10 @@
  */
 
 import uuid from 'uuid/v1'
-import {Message, MessageBackgroundInformation, MessagePayload} from 'src/services/assistant/types'
+import {Message, MessageBackgroundInformation, MessagePayload} from '@services/assistant/types'
 import Cognition from './cognition'
 import Memory from './memory'
-import {logError} from 'src/utils/logger'
+import {logError} from '@utils/logger'
 import {LANGUAGE_CODES} from '~/constants/enums'
 
 export function createMessage(text: string, data: any = {}, sender?: string): Message {

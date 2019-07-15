@@ -4,11 +4,11 @@
  */
 
 import {Field, ID, InputType, Int, ObjectType} from 'type-graphql'
-import {Operator} from '~/dao/models/operator.model'
+import {Operator} from '@dao/models/operator.model'
 import {LANGUAGE_CODES, MEAL_ITEM_TYPES} from '~/constants/enums'
 import {prop, Ref} from 'typegoose'
-import {UserSchema} from '~/dao/models/user.model'
-import {Meal} from '~/dao/models/meal.model'
+import {UserSchema} from '@dao/models/user.model'
+import {Meal} from '@dao/models/meal.model'
 
 
 @ObjectType()
