@@ -1,0 +1,1 @@
+The idea of loaders is to split the startup process of the service into testable modules.
