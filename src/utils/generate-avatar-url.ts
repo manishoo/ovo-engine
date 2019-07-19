@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {GENDER} from '~/constants/enums'
+import { GENDER } from '@Types/user'
 
 function getRandomFromArray(array: any[]): any {
 	return array[Math.floor(Math.random() * array.length)]

@@ -10,9 +10,17 @@ dotenv.config()
 export default {
 	appUrl: process.env.APP_URL || '127.0.0.1',
 	appPort: Number(process.env.APP_PORT),
-	get appFullAddressForExternalUse() {return `http://${this.appUrl}:${this.appPort}`},
+	get appFullAddressForExternalUse() {
+		return `http://${this.appUrl}:${this.appPort}`
+	},
 	panelUrl: process.env.PANEL_URL || '127.0.0.1',
 	panelPort: Number(process.env.PANEL_PORT),
+
+	graphQLPath: process.env.GRAPHQL_PATH || 'gql',
+
+	bodyParserLimit: '1mb',
+	bodyParserUrlEncoderLimit: '10mb',
+
 	cosmicOceanAddress: process.env.COSMIC_OCEAN_ADDRESS || 'http://localhost:8000',
 	coreNLPAddress: process.env.CORENLP_ADDRESS || 'http://localhost:9000',
 	mongodb: {

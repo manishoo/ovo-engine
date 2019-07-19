@@ -3,12 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { Message, MessageBackgroundInformation, MessagePayload } from '@Types/assistant'
+import { LANGUAGE_CODES } from '@Types/common'
+import { logError } from '@Utils/logger'
+import { Service } from 'typedi'
 import uuid from 'uuid/v1'
-import {Message, MessageBackgroundInformation, MessagePayload} from '@services/assistant/types'
 import Cognition from './cognition'
 import Memory from './memory'
-import {logError} from '@utils/logger'
-import {LANGUAGE_CODES} from '~/constants/enums'
 
 export function createMessage(text: string, data: any = {}, sender?: string): Message {
 	return {
@@ -21,13 +22,11 @@ export function createMessage(text: string, data: any = {}, sender?: string): Me
 	}
 }
 
-export interface AssistantService {
-	conversation(messagePayload: MessagePayload, lang: LANGUAGE_CODES): Promise<MessagePayload>
-}
 
-export default <AssistantService>{
-	async conversation(messagePayload, lang) {
-		let {token, userId, messages} = messagePayload
+@Service()
+export default class AssistantService {
+	async conversation(messagePayload: MessagePayload, lang: LANGUAGE_CODES): Promise<MessagePayload> {
+		let { token, userId, messages } = messagePayload
 		const message = messages[0]
 
 		if (!token) {
@@ -66,5 +65,5 @@ export default <AssistantService>{
 			token,
 			userId
 		}
-	},
+	}
 }

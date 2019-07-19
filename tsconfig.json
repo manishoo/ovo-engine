@@ -19,17 +19,29 @@
       "~/*": [
         "src/*"
       ],
-      "@services/*": [
+      "@Services/*": [
         "src/services/*"
       ],
-      "@dao/*": [
-        "src/dao/*"
+      "@Models": [
+        "src/models/index"
       ],
-      "@utils/*": [
+      "@Models/*": [
+        "src/models/*"
+      ],
+      "@Utils/*": [
         "src/utils/*"
       ],
-      "@config": [
+      "@Config": [
         "src/config"
+      ],
+      "@Config/*": [
+        "src/config/*"
+      ],
+      "@Loaders/*": [
+        "src/loaders/*"
+      ],
+      "@Types/*": [
+        "src/types/*"
       ]
     }
   },

@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Resolver, FieldResolver, Root, ResolverInterface} from 'type-graphql'
-import {Image} from '@dao/types'
-import config from '@config'
+import config from '@Config'
+import { Image } from '@Types/common'
+import { FieldResolver, Resolver, ResolverInterface, Root } from 'type-graphql'
 
 
 @Resolver(of => Image)

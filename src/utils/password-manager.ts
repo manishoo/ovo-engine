@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { PersistedPassword } from '@Types/auth'
 import * as crypto from 'crypto'
-import {PersistedPassword} from '@dao/types'
 
 const PASSWORD_LENGTH = 256
 const SALT_LENGTH = 64

@@ -3,52 +3,21 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Resolver, Arg, Ctx, Mutation, Query, FieldResolver, Root} from 'type-graphql'
-import {checkUser, Context} from '@services/api-gateway/utils'
-import {User} from '@dao/models/user.model'
-import UserService from '@services/user.service'
-import userValidator from '@services/api-gateway/validation/user.validator'
-import {GENDER} from '~/constants/enums'
+import UserService from '@Services/user/user.service'
+import { User } from '@Types/user'
+import { Arg, Ctx, Query, Resolver } from 'type-graphql'
+import { Service } from 'typedi'
+import { Context } from '../utils'
 
 
+@Service()
 @Resolver(of => User)
 export default class UserResolver {
-	@Mutation(returns => User)
-	async login(
-		@Arg('username') username: string,
-		@Arg('password') password: string,
-		@Ctx() ctx: Context
-	): Promise<User> {
-		return UserService.verifyUser(username, password)
-	}
-
-	@Mutation(returns => User)
-	async register(
-		@Arg('username') username: string,
-		@Arg('email') email: string,
-		@Arg('password') password: string,
-		@Arg('timeZone') timeZone: string,
-		@Ctx() ctx: Context,
-		@Arg('gender', {nullable: true}) gender?: GENDER,
-	): Promise<User> {
-		const validatedData = userValidator.validateRegistration({
-			username,
-			email,
-			password,
-			timeZone,
-			gender,
-		})
-		return UserService.createUser(validatedData.username, validatedData.email, validatedData.password, validatedData.timeZone, validatedData.gender)
-	}
-
-	@Query(returns => User)
-	async me(
-		@Ctx() ctx: Context,
+	constructor(
+		// service injection
+		private readonly userService: UserService
 	) {
-		checkUser(ctx)
-
-		// @ts-ignore
-		return UserService.getSelfUser(ctx.user.id)
+		// noop
 	}
 
 	@Query(returns => User)
@@ -56,18 +25,6 @@ export default class UserResolver {
 		@Arg('username') username: string,
 		@Ctx() ctx: Context,
 	) {
-		return UserService.getUser(username)
+		return this.userService.getUser(username)
 	}
-
-
-
-
-	// @FieldResolver(returns => Image)
-	// avatar(@Root() user: User) {
-	// 	if (user.avatar && user.avatar.url) return user.avatar
-	//
-	// 	return {
-	// 		url: generateAvatarUrl(user),
-	// 	}
-	// }
 }

@@ -3,53 +3,17 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-// import {MealUnit} from '@dao/models/user.model'
-// import {coreNLP, CoreNLP} from '@dao/connections/corenlp'
-// import {__} from 'i18n'
-// import {normalizeTimes} from '@services/app/assistant/utils'
-import {Recipe} from '@dao/models/recipe.model'
-import {ACTIVITY, GENDER, GOALS, HEIGHT_UNITS, WEIGHT_UNITS} from '~/constants/enums'
-import {MacroNutrientDistribution} from '@services/assistant/types'
-import {Food} from '@dao/types'
-import {Height, WeightUnit} from '@dao/models/user.model'
+import { MacroNutrientDistribution } from '@Types/assistant'
+import { Food } from '@Types/food'
+import { Recipe } from '@Types/recipe'
+import { ACTIVITY, GENDER, GOALS, Height, HEIGHT_UNITS, WEIGHT_UNITS, WeightUnit } from '@Types/user'
 
 
 export default {
-	// async extractMealRoutine(text: string): Promise<MealUnit[]> {
-	// 	const exp = '(?$mealName [{tag: /J.*/}]? [{tag: NN}]*) [{tag: IN}] (?$time [{tag: CD}] [{tag: NN}]?))'
-	// 	const expression = new CoreNLP.simple.Expression(text, exp)
-	//
-	// 	const expressions = await coreNLP.annotateTokensRegex(expression)  // similarly use pipeline.annotateTokensRegex / pipeline.annotateTregex
-	//
-	// 	const meals: MealUnit[] = []
-	// 	expressions.sentence(0).matches().map((match: any) => {
-	// 		const name = match.group('mealName').text
-	// 		const time = match.group('time').text
-	// 		//TODO handle times
-	//
-	// 		meals.push({
-	// 			name,
-	// 			time,
-	// 		})
-	// 	})
-	//
-	// 	if (meals.length == 0) {
-	// 		throw [
-	// 			__('mealExample'),
-	// 			'I didn\'t get it',
-	// 		]
-	// 	}
-	// 	return normalizeTimes(meals)
-	// },
-
 	extractNickname(text: string): string {
-		// if (!text) return null
 		return text
 	},
 	async extractAge(text: string): Promise<number> {
-		// 21
-		// twenty one
-		// twenty one years old
 		if (text.match(/\d/)) {
 			return Number(text)
 		} else {

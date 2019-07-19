@@ -3,42 +3,31 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Resolver, Arg, Ctx, Query} from 'type-graphql'
-import {checkUser, Context} from '@services/api-gateway/utils'
-import FoodService from '@services/food/food.service'
-import {Food, MealItem} from '@dao/types'
-import {MEAL_ITEM_TYPES} from '~/constants/enums'
-import {MealPlan} from '@dao/models/meal-plan.model'
+import FoodService from '@Services/food/food.service'
+import { MealItem } from '@Types/eating'
+import { MealPlan } from '@Types/meal-plan'
+import { MEAL_ITEM_TYPES } from '@Types/meals'
+import { Arg, Ctx, Query, Resolver } from 'type-graphql'
+import { checkUser, Context } from '../utils'
 
 
 @Resolver()
-export default class EatingResolver {
+export default class FoodResolver {
+	constructor(
+		// service injection
+		private readonly foodService: FoodService,
+	) {
+		// noop
+	}
+
 	@Query(returns => [MealItem])
 	async searchMealItems(
 		@Arg('q') q: string,
-		@Arg('foodTypes', type => [String], {nullable: true}) foodTypes: MEAL_ITEM_TYPES[],
+		@Arg('foodTypes', type => [String], { nullable: true }) foodTypes: MEAL_ITEM_TYPES[],
 		@Ctx() ctx: Context,
 	): Promise<MealItem[]> {
-		return FoodService.searchMealItems(q, foodTypes ? foodTypes : [MEAL_ITEM_TYPES.food, MEAL_ITEM_TYPES.recipe], ctx.lang)
+		return this.foodService.searchMealItems(q, foodTypes ? foodTypes : [MEAL_ITEM_TYPES.food, MEAL_ITEM_TYPES.recipe], ctx.lang)
 	}
-
-
-	@Query(returns => Food)
-	async getFood(
-		@Arg('id') id: string,
-		@Ctx() ctx: Context,
-	): Promise<Food> {
-		return FoodService.getFood(id)
-	}
-
-	@Query(returns => Food)
-	async getFoodVariety(
-		@Arg('id') id: string,
-		@Ctx() ctx: Context,
-	): Promise<Food> {
-		return FoodService.getFoodVariety(id)
-	}
-
 
 	@Query(returns => MealPlan)
 	async getMealPlan(
@@ -47,6 +36,6 @@ export default class EatingResolver {
 	): Promise<MealPlan> {
 		const user = checkUser(ctx)
 
-		return FoodService.getUserMealPlan(user.id, ctx.lang)
+		return this.foodService.getUserMealPlan(user.id, ctx.lang)
 	}
 }

@@ -3,13 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-// import {coreNLP, CoreNLP} from '@dao/connections/corenlp'
-import {MealUnit} from '@dao/models/user.model'
+import Memory from '@Services/assistant/memory'
+import { Message, MessageAdditionalData } from '@Types/assistant'
+import { LANGUAGE_CODES } from '@Types/common'
+import { ACTIVITY, GENDER, GOALS, MealUnit } from '@Types/user'
+import { __ } from 'i18n'
 import w2n from 'words-to-numbers'
-import {Message, MessageAdditionalData} from '@services/assistant/types'
-import Memory from '@services/assistant/memory'
-import {ACTIVITY, GENDER, GOALS, LANGUAGE_CODES} from '~/constants/enums'
-import {__} from 'i18n'
 
 
 export function validateTime(text: string): string {
@@ -19,7 +18,7 @@ export function validateTime(text: string): string {
 	} else if (text.match(/\b\d\d?:\d\d?\b/)) {
 		return text
 	} else {
-		return String(w2n(text, {fuzzy: true}))
+		return String(w2n(text, { fuzzy: true }))
 	}
 }
 
@@ -93,34 +92,34 @@ export function generateGoalOptions(lang: LANGUAGE_CODES, weight: number, height
 	const bmi = weight / ((height / 100) * (height / 100))
 	if (bmi < 18.5) { // underweight
 		return [
-			{value: GOALS.m, text: __({phrase: 'goal_m', locale: lang})},
-			{value: GOALS.mg, text: __({phrase: 'goal_mg', locale: lang})},
-			{value: GOALS.ig, text: __({phrase: 'goal_ig', locale: lang})},
-			{value: GOALS.sg, text: __({phrase: 'goal_sg', locale: lang})},
-			{value: GOALS.ml, text: __({phrase: 'goal_ml', locale: lang})},
-			{value: GOALS.sl, text: __({phrase: 'goal_sl', locale: lang})},
-			{value: GOALS.il, text: __({phrase: 'goal_il', locale: lang})},
+			{ value: GOALS.m, text: __({ phrase: 'goal_m', locale: lang }) },
+			{ value: GOALS.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+			{ value: GOALS.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
+			{ value: GOALS.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+			{ value: GOALS.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+			{ value: GOALS.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+			{ value: GOALS.il, text: __({ phrase: 'goal_il', locale: lang }) },
 		]
 	} else if (bmi >= 25) { // overweight
 		return [
-			{value: GOALS.m, text: __({phrase: 'goal_m', locale: lang})},
-			{value: GOALS.ml, text: __({phrase: 'goal_ml', locale: lang})},
-			{value: GOALS.il, text: __({phrase: 'goal_il', locale: lang})},
-			{value: GOALS.sl, text: __({phrase: 'goal_sl', locale: lang})},
-			{value: GOALS.mg, text: __({phrase: 'goal_mg', locale: lang})},
-			{value: GOALS.sg, text: __({phrase: 'goal_sg', locale: lang})},
-			{value: GOALS.ig, text: __({phrase: 'goal_ig', locale: lang})},
+			{ value: GOALS.m, text: __({ phrase: 'goal_m', locale: lang }) },
+			{ value: GOALS.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+			{ value: GOALS.il, text: __({ phrase: 'goal_il', locale: lang }) },
+			{ value: GOALS.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+			{ value: GOALS.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+			{ value: GOALS.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+			{ value: GOALS.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
 		]
 	}
 
 	return [
-		{value: GOALS.m, text: __({phrase: 'goal_m', locale: lang})},
-		{value: GOALS.mg, text: __({phrase: 'goal_mg', locale: lang})},
-		{value: GOALS.ml, text: __({phrase: 'goal_ml', locale: lang})},
-		{value: GOALS.sg, text: __({phrase: 'goal_sg', locale: lang})},
-		{value: GOALS.sl, text: __({phrase: 'goal_sl', locale: lang})},
-		{value: GOALS.ig, text: __({phrase: 'goal_ig', locale: lang})},
-		{value: GOALS.il, text: __({phrase: 'goal_il', locale: lang})},
+		{ value: GOALS.m, text: __({ phrase: 'goal_m', locale: lang }) },
+		{ value: GOALS.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+		{ value: GOALS.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+		{ value: GOALS.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+		{ value: GOALS.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+		{ value: GOALS.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
+		{ value: GOALS.il, text: __({ phrase: 'goal_il', locale: lang }) },
 	]
 }
 
@@ -130,7 +129,7 @@ export function generateActivitySelect(lang: LANGUAGE_CODES, gender: GENDER) {
 		switch (ACTIVITY[i]) {
 			case ACTIVITY.sed:
 				return {
-					text: '🛋' + __({phrase: 'sedActivity', locale: lang}),
+					text: '🛋' + __({ phrase: 'sedActivity', locale: lang }),
 					value: ACTIVITY.sed,
 				}
 			case ACTIVITY.light: {
@@ -141,7 +140,7 @@ export function generateActivitySelect(lang: LANGUAGE_CODES, gender: GENDER) {
 					emoji = '🚶‍♂️'
 				}
 				return {
-					text: `${emoji}${__({phrase: 'lightActivity', locale: lang})}`,
+					text: `${emoji}${__({ phrase: 'lightActivity', locale: lang })}`,
 					value: ACTIVITY.light,
 				}
 			}
@@ -153,7 +152,7 @@ export function generateActivitySelect(lang: LANGUAGE_CODES, gender: GENDER) {
 					emoji = '🏃‍♂️'
 				}
 				return {
-					text: `${emoji}${__({phrase: 'modActivity', locale: lang})}`,
+					text: `${emoji}${__({ phrase: 'modActivity', locale: lang })}`,
 					value: ACTIVITY.mod,
 				}
 			}
@@ -165,13 +164,13 @@ export function generateActivitySelect(lang: LANGUAGE_CODES, gender: GENDER) {
 					emoji = '🏋‍♂️'
 				}
 				return {
-					text: `${emoji}${__({phrase: 'highActivity', locale: lang})}`,
+					text: `${emoji}${__({ phrase: 'highActivity', locale: lang })}`,
 					value: ACTIVITY.high,
 				}
 			}
 			case ACTIVITY.extreme:
 				return {
-					text: '🔥' + __({phrase: 'extremeActivity', locale: lang}),
+					text: '🔥' + __({ phrase: 'extremeActivity', locale: lang }),
 					value: ACTIVITY.extreme,
 				}
 		}
@@ -185,10 +184,10 @@ export function generateGenderSelect(lang: LANGUAGE_CODES) {
 			const gender = GENDER[i]
 			switch (gender) {
 				case GENDER.female:
-					return {text: `👱‍♀️${__({locale: lang, phrase: 'female'})}`, value: 'female'}
+					return { text: `👱‍♀️${__({ locale: lang, phrase: 'female' })}`, value: 'female' }
 				case GENDER.male:
 				default:
-					return {text: `👱‍♂️${__({locale: lang, phrase: 'male'})}`, value: 'male'}
+					return { text: `👱‍♂️${__({ locale: lang, phrase: 'male' })}`, value: 'male' }
 			}
 		}),
 		// {text: __('ratherNotSay')}

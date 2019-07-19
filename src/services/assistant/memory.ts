@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import {Message, MessageBackgroundInformation} from '@services/assistant/types'
-import UserRepo from '@dao/repositories/user.repository'
-import redis from '@dao/connections/redis'
-import config from '@config'
-import {logError} from '@utils/logger'
-import UserService from '@services/user.service'
+import config from '@Config'
+import redis from '@Config/connections/redis'
+import { Message, MessageBackgroundInformation } from '@Types/assistant'
+import UserService from '@Services/user/user.service'
+import { logError } from '@Utils/logger'
+import { Container } from 'typedi'
 
 
 interface ShortTermMemory {
@@ -46,7 +46,8 @@ export default <Memory>{
 				}
 			}
 
-			const tempData = await UserService.getTempData(token)
+			const userService = Container.get(UserService)
+			const tempData = await userService.getTempData(token)
 				.catch(logError('UserService.getTempData'))
 
 			return {
@@ -56,7 +57,7 @@ export default <Memory>{
 			}
 		},
 		async recordConversation(token, messages) {
-			const {conversationHistory} = await this.recognizeTarget(token)
+			const { conversationHistory } = await this.recognizeTarget(token)
 
 			await redis.setex(`${config.constants.assistantConversationKey}:${token}`, config.times.conversationExpiration, JSON.stringify([...conversationHistory, ...messages]))
 				.catch(logError('recordConversation->redis.setex'))
@@ -86,8 +87,10 @@ export default <Memory>{
 	},
 	longTerm: {
 		async recognizeTarget(userId) {
-			const user = await UserRepo.findById(userId)
-				.catch(logError('recognizeTarget->UserRepo.findById'))
+			const userService = Container.get(UserService)
+
+			const user = await userService.findById(userId)
+				.catch(logError('recognizeTarget->userService.findById'))
 			return {
 				user,
 				tempData: null,

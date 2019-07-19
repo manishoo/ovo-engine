@@ -3,6 +3,18 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { createMessage } from '@Services/assistant'
+import {
+	generateActivitySelect,
+	generateGenderSelect,
+	generateGoalOptions,
+	generateMealPlanSettings,
+	getLastMessageData,
+	keepInMind
+} from '@Services/assistant/utils'
+import Validators from '@Services/assistant/validators'
+import NutritionCalculator from '@Services/food/utils/nutrition-calculator'
+import UserService from '@Services/user/user.service'
 import {
 	CONTEXTS,
 	EXPECTATIONS,
@@ -11,27 +23,16 @@ import {
 	Message,
 	MessageBackgroundInformation,
 	MessagePayload
-} from '@services/assistant/types'
-import {__} from 'i18n'
-import {createMessage} from '@services/assistant'
+} from '@Types/assistant'
+import { LANGUAGE_CODES } from '@Types/common'
+import { GENDER, MealUnit, User } from '@Types/user'
+import { generateAvatarUrl } from '@Utils/generate-avatar-url'
+import { logError } from '@Utils/logger'
+import { generateHashPassword } from '@Utils/password-manager'
+import { __ } from 'i18n'
+import { Container } from 'typedi'
 import Language from './language'
 import Memory from './memory'
-import {
-	generateActivitySelect,
-	generateGenderSelect,
-	generateGoalOptions,
-	generateMealPlanSettings,
-	getLastMessageData,
-	keepInMind
-} from '@services/assistant/utils'
-import UserService from '@services/user.service'
-import NutritionCalculator from '@services/food/nutrition-calculator'
-import Validators from '@services/assistant/validators'
-import {generateHashPassword} from '@utils/password-manager'
-import {MealUnit, User} from '@dao/models/user.model'
-import {logError} from '@utils/logger'
-import {ACTIVITY, GENDER, GOALS, LANGUAGE_CODES} from '~/constants/enums'
-import {generateAvatarUrl} from '@utils/generate-avatar-url'
 
 interface Cognition {
 	recognizeContext(message: Message, backgroundInfo: MessageBackgroundInformation): Promise<CONTEXTS>
@@ -258,9 +259,11 @@ export default <Cognition>{
 						case EXPECTATIONS.register: {
 							const data = message.data
 							const validatedData = Validators.validateRegistration(data)
-							const tempData = await UserService.getTempData(t)
+							const userService = Container.get(UserService)
 
-							await UserService.createNewUser(<User>{
+							const tempData = await userService.getTempData(t)
+
+							await userService.createNewUser(<User>{
 								username: validatedData.username,
 								persistedPassword: await generateHashPassword(validatedData.password),
 								email: validatedData.email,
@@ -289,7 +292,7 @@ export default <Cognition>{
 						return e.map(error => {
 							logError('Cognition->catch1')(error)
 							return [
-								createMessage(error, {...lastMessageData, error: true})
+								createMessage(error, { ...lastMessageData, error: true })
 							]
 						})
 					}
@@ -297,7 +300,7 @@ export default <Cognition>{
 					logError('Cognition->catch2')(e)
 					return [
 						// FIXME return a complete message
-						createMessage('I didn\'t get that, can you say it again?', {...lastMessageData, error: true})
+						createMessage('I didn\'t get that, can you say it again?', { ...lastMessageData, error: true })
 					]
 				}
 		}
@@ -336,18 +339,18 @@ function askNormalRoutine() {
 		createMessage(__('assistantAskNormalRoutine'), {
 			expect: EXPECTATIONS.normalRoutine,
 			type: INPUT_TYPES.select,
-			items: [{text: __('Normal')}, {text: __('Different')}]
+			items: [{ text: __('Normal') }, { text: __('Different') }]
 		})
 	]
 }
 
 function generateDefaultMealRoutine() {
 	return [
-		{name: 'Breakfast', time: '08:00', energyPercentageOfDay: 30},
-		{name: 'Snack1', time: '10:00', energyPercentageOfDay: 5},
-		{name: 'Launch', time: '14:00', energyPercentageOfDay: 40},
-		{name: 'Dinner', time: '21:00', energyPercentageOfDay: 20},
-		{name: 'Snack2', time: '17:00', energyPercentageOfDay: 5},
+		{ name: 'Breakfast', time: '08:00', energyPercentageOfDay: 30 },
+		{ name: 'Snack1', time: '10:00', energyPercentageOfDay: 5 },
+		{ name: 'Launch', time: '14:00', energyPercentageOfDay: 40 },
+		{ name: 'Dinner', time: '21:00', energyPercentageOfDay: 20 },
+		{ name: 'Snack2', time: '17:00', energyPercentageOfDay: 5 },
 	]
 }
 
@@ -375,7 +378,7 @@ function giveInfo(lang: LANGUAGE_CODES, tdee: number) {
 
 function askForName(lang: LANGUAGE_CODES) {
 	return [
-		createMessage(__({phrase: 'assistantAskName', locale: lang}), {
+		createMessage(__({ phrase: 'assistantAskName', locale: lang }), {
 			expect: EXPECTATIONS.nickname,
 		}),
 	]
@@ -383,15 +386,18 @@ function askForName(lang: LANGUAGE_CODES) {
 
 function askForAge(lang: LANGUAGE_CODES, nickname: string) {
 	return [
-		createMessage(__({phrase: 'assistantExplainNext1', locale: lang}, {name: nickname})),
-		createMessage(__({phrase: 'assistantExplainNext2', locale: lang})),
-		createMessage(__({phrase: 'assistantAskAge', locale: lang}), {expect: EXPECTATIONS.age, type: INPUT_TYPES.number}),
+		createMessage(__({ phrase: 'assistantExplainNext1', locale: lang }, { name: nickname })),
+		createMessage(__({ phrase: 'assistantExplainNext2', locale: lang })),
+		createMessage(__({ phrase: 'assistantAskAge', locale: lang }), {
+			expect: EXPECTATIONS.age,
+			type: INPUT_TYPES.number
+		}),
 	]
 }
 
 function askForWeight(lang: LANGUAGE_CODES,) {
 	return [
-		createMessage(__({phrase: 'assistantAskWeight', locale: lang}), {
+		createMessage(__({ phrase: 'assistantAskWeight', locale: lang }), {
 			expect: EXPECTATIONS.weight,
 			type: INPUT_TYPES.weight
 		})
@@ -400,7 +406,7 @@ function askForWeight(lang: LANGUAGE_CODES,) {
 
 function askForHeight(lang: LANGUAGE_CODES,) {
 	return [
-		createMessage(__({phrase: 'assistantAskHeight', locale: lang}), {
+		createMessage(__({ phrase: 'assistantAskHeight', locale: lang }), {
 			expect: EXPECTATIONS.height,
 			type: INPUT_TYPES.height,
 		})
@@ -409,7 +415,7 @@ function askForHeight(lang: LANGUAGE_CODES,) {
 
 function askForGender(lang: LANGUAGE_CODES) {
 	return [
-		createMessage(__({phrase: 'assistantAskGender', locale: lang}), {
+		createMessage(__({ phrase: 'assistantAskGender', locale: lang }), {
 			expect: EXPECTATIONS.gender,
 			type: INPUT_TYPES.select,
 			items: generateGenderSelect(lang),
@@ -419,9 +425,9 @@ function askForGender(lang: LANGUAGE_CODES) {
 
 function askForActivity(lang: LANGUAGE_CODES, bmr: number, gender: GENDER) {
 	return [
-		createMessage(__({phrase: 'assistantShowBMR', locale: lang}, {bmr: String(bmr)})),
-		createMessage(__({phrase: 'assistantExplainActivity', locale: lang})),
-		createMessage(__({phrase: 'assistantAskActivity', locale: lang}), {
+		createMessage(__({ phrase: 'assistantShowBMR', locale: lang }, { bmr: String(bmr) })),
+		createMessage(__({ phrase: 'assistantExplainActivity', locale: lang })),
+		createMessage(__({ phrase: 'assistantAskActivity', locale: lang }), {
 			expect: EXPECTATIONS.activity,
 			type: INPUT_TYPES.select,
 			items: generateActivitySelect(lang, gender)
@@ -431,8 +437,8 @@ function askForActivity(lang: LANGUAGE_CODES, bmr: number, gender: GENDER) {
 
 function askForGoal(lang: LANGUAGE_CODES, tdee: number, weight: number, height: number) {
 	return [
-		createMessage(__({phrase: 'assistantExplainTDEE', locale: lang}, {tdee: String(tdee)})),
-		createMessage(__({phrase: 'assistantAskGoal', locale: lang}), {
+		createMessage(__({ phrase: 'assistantExplainTDEE', locale: lang }, { tdee: String(tdee) })),
+		createMessage(__({ phrase: 'assistantAskGoal', locale: lang }), {
 			expect: EXPECTATIONS.goal,
 			type: INPUT_TYPES.select,
 			items: generateGoalOptions(lang, weight, height),
@@ -466,14 +472,14 @@ function askForDiet() {
 		createMessage(__('assistantAskDiet'), {
 			expect: EXPECTATIONS.diet,
 			type: INPUT_TYPES.select,
-			items: [{text: __('yes')}, {text: __('no')}]
+			items: [{ text: __('yes') }, { text: __('no') }]
 		})
 	]
 }
 
 function askForRegistration(lang: LANGUAGE_CODES,) {
 	return [
-		createMessage(__({phrase: 'goRegister', locale: lang}), {
+		createMessage(__({ phrase: 'goRegister', locale: lang }), {
 			expect: EXPECTATIONS.register,
 			type: INPUT_TYPES.form,
 		})
@@ -482,11 +488,14 @@ function askForRegistration(lang: LANGUAGE_CODES,) {
 
 function askForMealPlan(lang: LANGUAGE_CODES, targetCalories: number) {
 	return [
-		createMessage(__({phrase: 'assistantWhatHappensNext1', locale: lang})),
-		createMessage(__({phrase: 'assistantWhatHappensNext2', locale: lang}, {cal: String(Math.ceil(targetCalories))}), {
+		createMessage(__({ phrase: 'assistantWhatHappensNext1', locale: lang })),
+		createMessage(__({
+			phrase: 'assistantWhatHappensNext2',
+			locale: lang
+		}, { cal: String(Math.ceil(targetCalories)) }), {
 			expect: EXPECTATIONS.mealPlan,
 			type: INPUT_TYPES.select,
-			items: [{text: __({phrase: 'ok', locale: lang}), value: 'ok'}]
+			items: [{ text: __({ phrase: 'ok', locale: lang }), value: 'ok' }]
 		})
 	]
 }
