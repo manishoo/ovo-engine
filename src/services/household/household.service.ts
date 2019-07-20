@@ -18,14 +18,4 @@ export default class HouseholdService {
 			throw e
 		}
 	}
-
-	async findOrCreate(data: Household) {
-		const result = await HouseholdModel.findOne(data)
-		if (result) { // had result
-			return result
-		} else {
-			const newHousehold = new HouseholdModel(data)
-			return newHousehold.save()
-		}
-	}
 }

@@ -96,47 +96,6 @@ export default class RecipeService {
 		return this.listRecipesByLastId({ author: new ObjectId(userId) }, viewerUserId, lastId)
 	}
 
-	async searchRecipesByLastId(userId: string, lastId?: string): Promise<{ recipes: Recipe[], hasNext: boolean, lastId?: string }> {
-		const query: any = { author: new ObjectId(userId) }
-		if (lastId) {
-			const recipe = await RecipeModel.findById(lastId)
-			if (!recipe) throw new Error('recipe not found')
-
-			query._id = { $gt: recipe._id }
-		}
-
-		const recipes = await RecipeModel.find(query).limit(26)
-			.populate('author')
-			.exec()
-		if (!recipes) {
-			throw new Error(__('notFound'))
-		}
-
-		let hasNext = false
-		let lastRecipeId
-		if (recipes.length == 26) {
-			hasNext = true
-			recipes.pop()
-		}
-		if (recipes.length > 0) {
-			lastRecipeId = recipes[recipes.length - 1].publicId
-		}
-
-		return {
-			recipes: await Promise.all(recipes.map(r => transformRecipe(r, userId))),
-			hasNext,
-			lastId: lastRecipeId,
-		}
-	}
-
-	async findOne(query: {}): Promise<Recipe> {
-		const r = await RecipeModel.findOne(query)
-			.populate('author')
-			.exec()
-		if (!r) throw new Error(__('notFound'))
-		return transformRecipe(r)
-	}
-
 	async delete(id: string, userId?: string, operatorId?: string) {
 		if (!userId && !operatorId) throw new Error('not allowed')
 

@@ -6,7 +6,6 @@
 import { LANGUAGE_CODES } from '@Types/common'
 import { Tag, TAG_TYPE } from '@Types/tag'
 import { prop, Typegoose } from 'typegoose'
-import mongoose from '@Config/connections/mongoose'
 
 
 export class TagSchema extends Typegoose implements Tag {
@@ -26,7 +25,6 @@ export class TagSchema extends Typegoose implements Tag {
 }
 
 export const TagModel = new TagSchema().getModelForClass(TagSchema, {
-	existingMongoose: mongoose,
 	schemaOptions: {
 		timestamps: true,
 	}

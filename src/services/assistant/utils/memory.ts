@@ -5,8 +5,8 @@
 
 import config from '@Config'
 import redis from '@Config/connections/redis'
-import { Message, MessageBackgroundInformation } from '@Types/assistant'
 import UserService from '@Services/user/user.service'
+import { Message, MessageBackgroundInformation } from '@Types/assistant'
 import { logError } from '@Utils/logger'
 import { Container } from 'typedi'
 

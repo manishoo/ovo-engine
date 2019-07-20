@@ -3,7 +3,6 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { Image, Video } from '@Types/common'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
@@ -72,7 +71,6 @@ export class RecipeSchema extends Typegoose implements Recipe {
 }
 
 export const RecipeModel = new RecipeSchema().getModelForClass(RecipeSchema, {
-	existingMongoose: mongoose,
 	schemaOptions: {
 		collection: 'recipes',
 		timestamps: true,

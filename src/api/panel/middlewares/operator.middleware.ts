@@ -7,6 +7,11 @@ import OperatorService from '@Services/operator/operator.service'
 import { Request } from 'express'
 import { Container } from 'typedi'
 
+/**
+ * Check authorization header and if it had valid token
+ * check the operators and return the operator to be attached to
+ * the graphql context
+ * */
 export default async (req: Request) => {
 	if (!req.headers) return null
 	const { authorization: session } = req.headers

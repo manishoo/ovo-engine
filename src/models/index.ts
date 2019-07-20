@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { main } from '@Config/connections/sequelize'
+import sequelize from '@Config/connections/sequelize'
 import { getModels } from '@Models/foods/food-database-tables'
 
-export const models = getModels(main)
+export const models = getModels(sequelize)
 
 const {
 	CompoundSubstituent,

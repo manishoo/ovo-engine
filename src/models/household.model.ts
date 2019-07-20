@@ -3,11 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { Household, LatLng, PantryItem } from '@Types/household'
 import { User } from '@Types/user'
-import { ObjectType } from 'type-graphql'
 import { prop, Ref, Typegoose } from 'typegoose'
 
 
@@ -20,6 +18,4 @@ export class HouseholdSchema extends Typegoose implements Household {
 	pantry?: PantryItem[]
 }
 
-export const HouseholdModel = new HouseholdSchema().getModelForClass(HouseholdSchema, {
-	existingMongoose: mongoose,
-})
+export const HouseholdModel = new HouseholdSchema().getModelForClass(HouseholdSchema)

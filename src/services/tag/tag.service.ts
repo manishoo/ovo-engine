@@ -16,14 +16,14 @@ export default class TagService {
 	}
 
 	async create(data: TagInput, lang: LANGUAGE_CODES): Promise<Tag> {
-		const utensil = new TagModel({
+		const tag = new TagModel({
 			origInfo: data.info,
 			origLang: lang,
 			origTitle: data.title,
 			slug: data.slug,
 			type: data.type,
 		})
-		return utensil.save()
+		return tag.save()
 	}
 
 	async findBySlug(slug: string): Promise<Tag> {

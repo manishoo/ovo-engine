@@ -3,12 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import Memory from '@Services/assistant/memory'
 import { Message, MessageAdditionalData } from '@Types/assistant'
 import { LANGUAGE_CODES } from '@Types/common'
 import { ACTIVITY, GENDER, GOALS, MealUnit } from '@Types/user'
 import { __ } from 'i18n'
+import uuid from 'uuid/v1'
 import w2n from 'words-to-numbers'
+import Memory from './memory'
 
 
 export function validateTime(text: string): string {
@@ -48,30 +49,6 @@ export function normalizeTimes(meals: MealUnit[]) {
 
 	return meals
 }
-
-// export async function extractMeals(text: string): Promise<MealUnit[]> {
-// 	const exp = '(?$mealName [{tag: /J.*/}]? [{tag: NN}]*) [{tag: IN}] (?$time [{tag: CD}] [{tag: NN}]?))'
-// 	const expression = new CoreNLP.simple.Expression(text, exp)
-//
-// 	const expressions = await coreNLP.annotateTokensRegex(expression)  // similarly use pipeline.annotateTokensRegex / pipeline.annotateTregex
-//
-// 	const meals: MealUnit[] = []
-// 	expressions.sentence(0).matches().map(match => {
-// 		const name = match.group('mealName').text
-// 		const time = match.group('time').text
-// 		//TODO handle times
-//
-// 		meals.push({
-// 			name,
-// 			time,
-// 		})
-// 	})
-//
-// 	if (meals.length == 0) {
-// 		throw Error('no meal')
-// 	}
-// 	return normalizeTimes(meals)
-// }
 
 export function getLastMessageData(messages: Message[]) {
 	let data: MessageAdditionalData | null = null
@@ -190,16 +167,16 @@ export function generateGenderSelect(lang: LANGUAGE_CODES) {
 					return { text: `👱‍♂️${__({ locale: lang, phrase: 'male' })}`, value: 'male' }
 			}
 		}),
-		// {text: __('ratherNotSay')}
 	]
 }
 
-
-export function generateMealPlanSettings(tdee: number) {
+export function createMessage(text: string, data: any = {}, sender?: string): Message {
 	return {
-		carbs: 0.2,
-		fat: 0.3,
-		protein: 0.5,
-		tdee,
+		id: uuid(),
+		sender: sender || 'assistant',
+		text,
+		timestamp: String(Date.now()),
+		type: data.type ? data.type : 'text',
+		data, // TODO fix
 	}
 }

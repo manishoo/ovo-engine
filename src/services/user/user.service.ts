@@ -6,6 +6,7 @@
 import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
+import MealPlanService from '@Services/meal-plan/meal-plan.service'
 import { transformMealPlan } from '@Services/meal-plan/transformers/meal-plan.transformer'
 import transformSelfUser from '@Services/user/transformers/self-user.transformer'
 import transformUser from '@Services/user/transformers/user.transformer'
@@ -19,7 +20,6 @@ import { AuthenticationError } from 'apollo-server'
 import { ObjectID } from 'bson'
 import i18n, { __ } from 'i18n'
 import { Service } from 'typedi'
-import foodService from '../food/food.service'
 import { generatePath } from './utils/generate-path'
 
 
@@ -27,7 +27,7 @@ import { generatePath } from './utils/generate-path'
 export default class UserService {
 	constructor(
 		// service injection
-		private readonly foodService: foodService
+		private readonly mealPlanService: MealPlanService
 	) {
 		// noop
 	}
@@ -153,7 +153,7 @@ export default class UserService {
 		if (!user.timeZone) throw new Error('no timezone')
 		const newUser = await this.create(user)
 		// create a meal plan
-		const mp = await this.foodService.generateMealPlan(newUser._id)
+		const mp = await this.mealPlanService.generateMealPlan(newUser._id)
 		newUser.path = generatePath(mp, user.timeZone)
 
 		return this.modify(newUser._id, {

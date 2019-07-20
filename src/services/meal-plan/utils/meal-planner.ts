@@ -3,15 +3,15 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { createCucumber } from '@Services/food/utils/create-cucumber'
+import { createCucumber } from './create-cucumber'
 import { UserMeal } from '@Types/eating'
 import { Day, MealPlan, WEEKDAYS } from '@Types/meal-plan'
 import { MealUnit } from '@Types/user'
 import { Container } from 'typedi'
-import MealPlanService from '../../meal-plan/meal-plan.service'
+import MealPlanService from '../meal-plan.service'
 
-export default {
-	generateMealPlan(mealRoutine: MealUnit[]) {
+export default class MealPlanner {
+	static generateMealPlan(mealRoutine: MealUnit[]) {
 		// TODO make sure time is always correct from the source
 		// let week: { [k: string]: Day } = {}
 		let days: Day[] = []

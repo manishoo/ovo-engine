@@ -3,18 +3,6 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { createMessage } from '@Services/assistant'
-import {
-	generateActivitySelect,
-	generateGenderSelect,
-	generateGoalOptions,
-	generateMealPlanSettings,
-	getLastMessageData,
-	keepInMind
-} from '@Services/assistant/utils'
-import Validators from '@Services/assistant/validators'
-import NutritionCalculator from '@Services/food/utils/nutrition-calculator'
-import UserService from '@Services/user/user.service'
 import {
 	CONTEXTS,
 	EXPECTATIONS,
@@ -31,21 +19,27 @@ import { logError } from '@Utils/logger'
 import { generateHashPassword } from '@Utils/password-manager'
 import { __ } from 'i18n'
 import { Container } from 'typedi'
+import NutritionCalculator from '../../meal-plan/utils/nutrition-calculator'
+import UserService from '../../user/user.service'
 import Language from './language'
 import Memory from './memory'
+import {
+	createMessage,
+	generateActivitySelect,
+	generateGenderSelect,
+	generateGoalOptions,
+	getLastMessageData,
+	keepInMind
+} from './utils'
+import Validators from './validators'
 
-interface Cognition {
-	recognizeContext(message: Message, backgroundInfo: MessageBackgroundInformation): Promise<CONTEXTS>
 
-	replyToConversation(context: CONTEXTS, message: MessagePayload, backgroundInfo: MessageBackgroundInformation, lang: LANGUAGE_CODES): Promise<Message[]>
-}
-
-export default <Cognition>{
-	async recognizeContext(message, backgroundInfo) {
+export default class Cognition {
+	static async recognizeContext(message: Message, backgroundInfo: MessageBackgroundInformation): Promise<CONTEXTS> {
 		return CONTEXTS.introduction
-	},
+	}
 
-	async replyToConversation(context, messagePayload, backgroundInfo, lang) {
+	static async replyToConversation(context: CONTEXTS, messagePayload: MessagePayload, backgroundInfo: MessageBackgroundInformation, lang: LANGUAGE_CODES): Promise<Message[]> {
 		const message = messagePayload.messages[0]
 
 		const m = message ? message.text : undefined
@@ -63,7 +57,7 @@ export default <Cognition>{
 				}
 
 				const lastMessageData = getLastMessageData(backgroundInfo.conversationHistory)
-				if (!lastMessageData) return null
+				if (!lastMessageData) throw new Error('invalid message')
 
 				try {
 					if (!m) throw new Error('no message provided')
@@ -94,8 +88,8 @@ export default <Cognition>{
 							return askForGender(lang)
 						}
 						case EXPECTATIONS.gender: {
-							if (!message.data) return
-							if (!message.data.value) return
+							if (!message.data) throw new Error('invalid message')
+							if (!message.data.value) throw new Error('invalid message')
 							// if (m !== __({locale: lang, phrase: 'ratherNotSay'})) {
 							// const gender = await Language.extractGender(m)
 							// TODO VALIDATION
@@ -108,8 +102,8 @@ export default <Cognition>{
 							return askForActivity(lang, bmr, tmpData.gender)
 						}
 						case EXPECTATIONS.activity: {
-							if (!message.data) return
-							if (!message.data.value) return
+							if (!message.data) throw new Error('invalid message')
+							if (!message.data.value) throw new Error('invalid message')
 							// TODO VALIDATION
 							const activity = message.data.value
 							console.log('activity', activity)
@@ -122,140 +116,14 @@ export default <Cognition>{
 							return askForGoal(lang, tdee, Number(tempData.weight), Number(tempData.height))
 						}
 						case EXPECTATIONS.goal: {
-							if (!message.data) return
-							if (!message.data.value) return
+							if (!message.data) throw new Error('invalid message')
+							if (!message.data.value) throw new Error('invalid message')
 							// TODO VALIDATION
 							const goal = message.data.value
-							// const goal = await Language.extractGoals(m)
 							await keepInMind(t, GUEST_TEMP_FIELDS.goal, goal)
 
 							return askForRegistration(lang)
 						}
-						/*case EXPECTATIONS.allergy: {
-							const data: MessageAdditionalData = message.data || {}
-							if (data.skip) {
-								return askForDislikes()
-							} else if (Validators.validateIds(data.foods)) {
-								await keepInMind(t, GUEST_TEMP_FIELDS.allergies, data.foods)
-								return askForDislikes()
-							} else {
-								throw Error()
-							}
-						}
-						case EXPECTATIONS.dislikedFoods: {
-							const data: MessageAdditionalData = message.data || {}
-							//TODO incomplete
-							if (data.skip) {
-								return askForDiet()
-							} else if (Validators.validateIds(data.foods)) {
-								await keepInMind(t, GUEST_TEMP_FIELDS.allergies, data.foods)
-								return askForDiet()
-							} else {
-								throw Error()
-							}
-						}
-						case EXPECTATIONS.diet: {
-							/!**
-							 * The answer is either yes or no
-							 * *!/
-							if (m === __('yes')) {
-								return [
-									createMessage(__('assistantAskChooseDiet'), {
-										expect: EXPECTATIONS.chooseDiet,
-										type: INPUT_TYPES.select,
-										// @ts-ignore
-										items: Object.keys(DIETS).map((k: string) => ({text: DIETS[k]})),
-									})
-								]
-							} else if (m === __('no')) {
-								return askNormalRoutine()
-							} else {
-								throw Error()
-							}
-						}
-						case EXPECTATIONS.chooseDiet: {
-							let diet
-							Object.keys(DIETS).map((k: string) => {
-								// @ts-ignore
-								if (DIETS[k] === m) {
-									// @ts-ignore
-									diet = DIETS[k]
-								}
-							})
-							if (!diet) {
-								throw Error()
-							}
-							// const tempData = await Memory.shortTerm.getGuestTempData(t)
-							await keepInMind(t, 'diet', diet)
-
-							return askNormalRoutine()
-						}
-						case EXPECTATIONS.normalRoutine: {
-							if (m === 'Normal') {
-								const tmp = await Memory.shortTerm.getGuestTempData(t)
-								const mealRoutine = generateDefaultMealRoutine()
-								await keepInMind(t, 'mealDistribution', mealRoutine)
-								await keepInMind(t, 'meals', [])
-
-								if (!tmp.tdee) {
-									throw Error()
-								}
-								return giveInfo(tmp.tdee)
-							} else if (m === 'Different') {
-								return [
-									createMessage(__('assistantAskRoutine')),
-									createMessage(__('assistantShowExample'), {
-										expect: EXPECTATIONS.meals,
-									}),
-								]
-							} else {
-								throw Error()
-							}
-						}
-						case EXPECTATIONS.meals: { // only if said different
-							// const mealDistribution = await Language.extractMealRoutine(m)
-							const tmp = await Memory.shortTerm.getGuestTempData(t)
-							// await keepInMind(t, 'mealDistribution', mealDistribution)
-							await keepInMind(t, 'meals', [])
-
-							if (!tmp.tdee) {
-								throw Error()
-							}
-							return giveInfo(tmp.tdee)
-						}
-						case EXPECTATIONS.meal: {
-							const {foods, recipes} = await Language.extractFoods(m)
-							const tmp = await Memory.shortTerm.getGuestTempData(t)
-
-							const mealIndex = tmp['meals'].length
-							const targetMeal = tmp.mealDistribution[mealIndex]
-							tmp.meals.push({
-								mealName: targetMeal.name,
-								foods,
-								recipes,
-							})
-
-							await keepInMind(t, 'meals', tmp.meals)
-
-							// if there was still some left
-							const nextMealRoutine = tmp.mealDistribution[mealIndex + 1]
-							if (nextMealRoutine) {
-								return [
-									createMessage(__('askMealRoutine', {mealName: nextMealRoutine.name}), {
-										expect: EXPECTATIONS.meal,
-										type: INPUT_TYPES.food,
-										skip: true,
-									})
-								]
-							} else {
-								return askForMealSettings(Number(tmp.tdee))
-							}
-						}
-						case EXPECTATIONS.mealPlanSettings: {
-							const MPSettings = await Language.extractMealPlanSettings(message.data)
-							await keepInMind(t, 'mealPlanSettings', MPSettings)
-							return askForRegistration()
-						}*/
 						case EXPECTATIONS.register: {
 							const data = message.data
 							const validatedData = Validators.validateRegistration(data)
@@ -287,13 +155,13 @@ export default <Cognition>{
 							return askForMealPlan(lang, tempData.tdee)
 						}
 					}
+
+					return []
 				} catch (e) {
 					if (Array.isArray(e)) {
 						return e.map(error => {
 							logError('Cognition->catch1')(error)
-							return [
-								createMessage(error, { ...lastMessageData, error: true })
-							]
+							return createMessage(error, { ...lastMessageData, error: true })
 						})
 					}
 
@@ -330,49 +198,6 @@ function createDefaultMealDistribution(): MealUnit[] {
 			availableTime: 90,
 			cook: true,
 		}
-	]
-}
-
-function askNormalRoutine() {
-	return [
-		createMessage(__('assistantExplainMeals')),
-		createMessage(__('assistantAskNormalRoutine'), {
-			expect: EXPECTATIONS.normalRoutine,
-			type: INPUT_TYPES.select,
-			items: [{ text: __('Normal') }, { text: __('Different') }]
-		})
-	]
-}
-
-function generateDefaultMealRoutine() {
-	return [
-		{ name: 'Breakfast', time: '08:00', energyPercentageOfDay: 30 },
-		{ name: 'Snack1', time: '10:00', energyPercentageOfDay: 5 },
-		{ name: 'Launch', time: '14:00', energyPercentageOfDay: 40 },
-		{ name: 'Dinner', time: '21:00', energyPercentageOfDay: 20 },
-		{ name: 'Snack2', time: '17:00', energyPercentageOfDay: 5 },
-	]
-}
-
-function askForMealSettings(lang: LANGUAGE_CODES, tdee: number) {
-	return [
-		createMessage(__('mealPlanSettings'), {
-			expect: EXPECTATIONS.mealPlanSettings,
-			type: INPUT_TYPES.mealPlanSettings,
-			mealPlanSettings: generateMealPlanSettings(tdee)
-		}),
-	]
-}
-
-function giveInfo(lang: LANGUAGE_CODES, tdee: number) {
-	return [
-		createMessage(__('assistant2')),
-		createMessage(__('assistant3')),
-		// createMessage(__('assistant4')),
-		// createMessage(__('askMealRoutine', {mealName: mealDistribution[0].name}), {
-		// 	expect: EXPECTATIONS.meal,
-		// })
-		...askForMealSettings(lang, tdee)
 	]
 }
 
@@ -442,37 +267,6 @@ function askForGoal(lang: LANGUAGE_CODES, tdee: number, weight: number, height: 
 			expect: EXPECTATIONS.goal,
 			type: INPUT_TYPES.select,
 			items: generateGoalOptions(lang, weight, height),
-		})
-	]
-}
-
-function askForFoodAllergy() {
-	return [
-		createMessage(__('assistantAllergy1')),
-		createMessage(__('assistantAllergy2'), {
-			expect: EXPECTATIONS.allergy,
-			type: INPUT_TYPES.food,
-			skip: true,
-		})
-	]
-}
-
-function askForDislikes() {
-	return [
-		createMessage(__('assistantAskDislikes'), {
-			expect: EXPECTATIONS.dislikedFoods,
-			type: INPUT_TYPES.food,
-			skip: true,
-		})
-	]
-}
-
-function askForDiet() {
-	return [
-		createMessage(__('assistantAskDiet'), {
-			expect: EXPECTATIONS.diet,
-			type: INPUT_TYPES.select,
-			items: [{ text: __('yes') }, { text: __('no') }]
 		})
 	]
 }

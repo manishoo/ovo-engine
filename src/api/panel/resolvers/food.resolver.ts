@@ -5,13 +5,8 @@
 
 import FoodService from '@Services/food/food.service'
 import { LANGUAGE_CODES, NameAndId } from '@Types/common'
-import {
-	Food,
-	FoodInput,
-	FoodsListResponse,
-	FoodsTranslationListResponse,
-	FoodTranslationO,
-} from '@Types/food'
+import { Food, FoodInput, FoodsListResponse, FoodsTranslationListResponse, FoodTranslationO, } from '@Types/food'
+import { MEAL_ITEM_TYPES } from '@Types/meals'
 import { Weight, WeightInput } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server-express'
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
@@ -38,7 +33,7 @@ export default class FoodResolver {
 		if (!ctx.user) throw new Error('no user')
 		if (page < 1) page = 0
 
-		const data = await this.foodService.find({
+		const data = await this.foodService.listFoodVarieties({
 			limit: size,
 			offset: (page - 1) * size,
 			lang: ctx.lang,
@@ -97,12 +92,7 @@ export default class FoodResolver {
 		@Ctx() ctx: Context,
 	) {
 		checkUser(ctx)
-		return this.foodService.find({
-			query: q,
-			limit: 10,
-			offset: 0,
-			lang: ctx.lang,
-		})
+		return this.foodService.searchMealItems(q, [MEAL_ITEM_TYPES.food], ctx.lang,)
 	}
 
 	@Query(returns => Food)
@@ -112,13 +102,10 @@ export default class FoodResolver {
 	) {
 		// FIXME
 		checkUser(ctx)
-		const { foods } = await this.foodService.find({
-			limit: 1,
-			lang: ctx.lang,
-		})
+		const food = await this.foodService.getFood(id)
 
-		if (foods.length === 0) throw new Error('not found')
-		return foods[0]
+		if (food) throw new Error('not found')
+		return food
 	}
 
 	@Query(returns => [NameAndId])

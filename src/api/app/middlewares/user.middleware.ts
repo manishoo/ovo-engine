@@ -7,6 +7,11 @@ import UserService from '@Services/user/user.service'
 import { Request } from 'express'
 import { Container } from 'typedi'
 
+/**
+ * Check authorization header and if it had valid token
+ * check the users and return the user to be attached to
+ * the graphql context
+ * */
 export default async (req: Request) => {
 	if (!req.headers) return null
 	if (!req.headers.authorization) return null

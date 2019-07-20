@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { main } from '@Config/connections/sequelize'
+import main from '@Config/connections/sequelize'
 import { FoodGroupModel, FoodModel, FoodVarietyModel, TranslationModel } from '@Models'
 import { transformFoodVarietyTranslation } from '@Services/food/transformers/food-variety-translation.transformer'
 import { transformFoodVariety } from '@Services/food/transformers/food-variety.transformer'
@@ -42,7 +42,7 @@ import Sequelize, { Transaction } from 'sequelize'
 import shortid from 'shortid'
 import { Service } from 'typedi'
 import uuid from 'uuid/v1'
-import MealPlanner from './utils/meal-planner'
+import MealPlanner from '../meal-plan/utils/meal-planner'
 
 
 @Service()
@@ -56,9 +56,9 @@ export default class FoodService {
 		// noop
 	}
 
-	async find({ query, limit, offset = 0, lang, shouldIncludeNutrients = true }: FoodFind): Promise<{ foods: Food[], totalCount: number }> {
+	async listFoodVarieties({ query, limit, offset = 0, lang, shouldIncludeNutrients = true }: FoodFind): Promise<{ foods: Food[], totalCount: number }> {
 		let where: any = {
-			sourceType: 'food',
+			sourceType: 'food_variety',
 			field: 'name'
 		}
 		if (query) {
@@ -73,24 +73,6 @@ export default class FoodService {
 			where,
 			limit,
 			offset,
-
-			// include: [
-			// 	{
-			// 		model: Content,
-			// 		required: true,
-			// 		as: 'contents',
-			// 		// include: [
-			// 		// 	{
-			// 		// 		model: Food,
-			// 		// 		required: true,
-			// 		// 		as: 'food',
-			// 		// 		include: [
-			// 		// 			includeFoodGroup()
-			// 		// 		],
-			// 		// 	}
-			// 		// ],
-			// 	}
-			// ],
 		})
 
 		return {
@@ -121,17 +103,6 @@ export default class FoodService {
 					model: FoodVarietyModel,
 					required: true,
 					as: 'foodVariety',
-					// include: [
-					// 	{
-					// 		model: Food,
-					// 		required: true,
-					// 		as: 'food',
-					// 		include: [
-					// 			includeFoodGroup()
-					// 		],
-					// 	},
-					// 	includeWeights()
-					// ],
 				},
 			],
 		})
@@ -585,7 +556,6 @@ export default class FoodService {
 				}
 			}))
 			ws2 = ws2.filter(Boolean)
-
 			// @ts-ignore
 			weightsOut.push(...ws, ...ws2)
 		}
@@ -601,31 +571,7 @@ export default class FoodService {
 				description: i.name,
 				lang: <LANGUAGE_CODES>i.lang,
 			})),
-			// source: {
-			// 	name: sourceTr.name,
-			// 	description: sourceTr.description,
-			// 	lang: sourceLang
-			// },
-			// target,
-			// weights: []
-
 			weights: weightsOut,
-			// weights: food.weights ? await Promise.all(food.weights.map(async weight => {
-			// 	if (!weight.getTranslations) throw new Error('no fw tr')
-			// 	const translations = await weight.getTranslations()
-			// 	let description = ''
-			// 	const wtr = translations.find(p => p.lang === lang)
-			// 	if (wtr) {
-			// 		description = wtr.description
-			// 	}
-			// 	return {
-			// 		id: weight.wid,
-			// 		description,
-			// 		amount: weight.amount,
-			// 		gramWeight: weight.gm_wgt,
-			// 		seq: weight.seq,
-			// 	}
-			// })) : [],
 		}
 	}
 
@@ -654,56 +600,16 @@ export default class FoodService {
 		return this.findFoodVarietyByPublicId(id, LANGUAGE_CODES.en)
 	}
 
-	async generateMealPlan(userId: string): Promise<MealPlan> {
-		const user = await this.userService.findById(userId)
-		if (!user.meals) throw new Error('no meals')
-
-		const plan = await MealPlanner.generateMealPlan(user.meals)
-		// const plans = user.mealPlans ? [...user.mealPlans, plan._id] : [plan._id]
-		// console.log('==============>', p)
-		user.mealPlans = user.mealPlans ? [...user.mealPlans, plan._id] : [plan._id]
-		await this.userService.modify(userId, user)
-		// do something
-		return plan
-	}
-
-	async getUserMealPlan(userId: string, lang: LANGUAGE_CODES): Promise<MealPlan> {
-		const c = await this.userService.getUserMealPlan(userId, lang)
-		console.log('========', c)
-		return c
-	}
-
-	// async generateMealPlan(userId, options) {
-	// 	const user = await UserRepo.findById(userId)
-	// 	const plan = new MealPlan()
-	// 	plan.name = options.name
-	//
-	// 	if (user.meals.length == 0) {
-	// 		throw Error(__('userHasNoMeals'))
-	// 	}
-	//
-	// 	for (const day in WEEKDAYS) {
-	// 		// @ts-ignore
-	// 		plan[day] = {
-	// 			meals: []
-	// 		}
-	// 		for (const meal of user.meals) {
-	// 			// @ts-ignore
-	// 			plan[day].meals.push({
-	// 				...meal,
-	// 				// TODO fill food
-	// 			})
-	// 		}
-	// 	}
-	//
-	// 	return MealPlanRepo.create(plan)
-	// },
-
 	async searchMealItems(q: string, foodTypes: MEAL_ITEM_TYPES[], lang: LANGUAGE_CODES): Promise<MealItem[]> {
 		// search through foods and recipes
-		const foods = foodTypes.find(p => p === MEAL_ITEM_TYPES.food) ? await this._searchFoods(q, lang) : []
-		// FIXME handle language in recipes search
-		const recipes = foodTypes.find(p => p === MEAL_ITEM_TYPES.recipe) ? await this._searchRecipes(q) : []
+		const foods = foodTypes.find(p => p === MEAL_ITEM_TYPES.food) ? (await this.findFoodVariety({
+				query: q,
+				limit: 5,
+				lang,
+				shouldIncludeNutrients: true,
+			})
+		).foods : []
+		const recipes = foodTypes.find(p => p === MEAL_ITEM_TYPES.recipe) ? (await this.recipeService.find(5, 0, q)).recipes : []
 
 		const mealItems: MealItem[] = []
 
@@ -735,23 +641,5 @@ export default class FoodService {
 		mealItems.splice(10)
 
 		return mealItems
-	}
-
-	private async _searchFoods(q: string, lang: LANGUAGE_CODES): Promise<Food[]> {
-		// FIXME better search
-		let foods = await this.findFoodVariety({
-			query: q,
-			limit: 5,
-			lang,
-			shouldIncludeNutrients: true,
-		})
-
-		return foods.foods
-	}
-
-	private async _searchRecipes(q: string): Promise<Recipe[]> {
-		let recipes = await this.recipeService.find(5, 0, q)
-
-		return recipes.recipes
 	}
 }

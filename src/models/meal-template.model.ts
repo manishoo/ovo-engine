@@ -8,7 +8,6 @@ import { MealItem } from '@Types/eating'
 import { MealTemplate } from '@Types/meal-template'
 import { User } from '@Types/user'
 import { prop, Ref, Typegoose } from 'typegoose'
-import mongoose from '@Config/connections/mongoose'
 
 
 export class MealTemplateSchema extends Typegoose implements MealTemplate {
@@ -24,7 +23,6 @@ export class MealTemplateSchema extends Typegoose implements MealTemplate {
 }
 
 export const MealTemplateModel = new MealTemplateSchema().getModelForClass(MealTemplateSchema, {
-	existingMongoose: mongoose,
 	schemaOptions: {
 		collection: 'dishes',
 		timestamps: true,

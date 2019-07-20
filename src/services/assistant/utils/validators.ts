@@ -4,7 +4,6 @@
  */
 
 import Joi from '@hapi/joi'
-import isUUID from 'is-uuid'
 
 export default {
 	validateRegistration(data: any) {
@@ -20,16 +19,5 @@ export default {
 			throw error
 		}
 		return value
-	},
-
-	validateIds(ids?: string[]) {
-		let valid = true
-		if (!ids || ids.length === 0) return false
-		ids.map(id => {
-			if (!isUUID.v4(id)) {
-				valid = false
-			}
-		})
-		return valid
-	},
+	}
 }

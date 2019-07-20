@@ -16,7 +16,6 @@ import { STATUS } from '@Types/common'
 import { Container } from 'typedi'
 import { arrayProp, post, prop, Ref, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
-import mongoose from '@Config/connections/mongoose'
 
 
 @post<UserSchema>('save', function () {
@@ -108,7 +107,6 @@ export class UserSchema extends Typegoose implements User {
 }
 
 export const UserModel = new UserSchema().getModelForClass(UserSchema, {
-	existingMongoose: mongoose,
 	schemaOptions: {
 		collection: 'users',
 		timestamps: true,

@@ -61,9 +61,9 @@ export class Message {
 export class MessagePayload {
 	@Field(type => [Message])
 	messages: Message[]
-	@Field()
+	@Field({nullable: true})
 	token?: string
-	@Field()
+	@Field({nullable: true})
 	userId?: string
 }
 
