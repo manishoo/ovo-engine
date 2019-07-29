@@ -27,5 +27,6 @@ export class TagSchema extends Typegoose implements Tag {
 export const TagModel = new TagSchema().getModelForClass(TagSchema, {
 	schemaOptions: {
 		timestamps: true,
+		collection: 'tags',
 	}
 })

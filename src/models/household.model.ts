@@ -18,4 +18,8 @@ export class HouseholdSchema extends Typegoose implements Household {
 	pantry?: PantryItem[]
 }
 
-export const HouseholdModel = new HouseholdSchema().getModelForClass(HouseholdSchema)
+export const HouseholdModel = new HouseholdSchema().getModelForClass(HouseholdSchema, {
+	schemaOptions: {
+		collection: 'households',
+	}
+})

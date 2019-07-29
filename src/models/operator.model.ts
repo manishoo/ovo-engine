@@ -32,4 +32,8 @@ export class OperatorSchema extends Typegoose implements Operator {
 	}
 }
 
-export const OperatorModel = new OperatorSchema().getModelForClass(OperatorSchema)
+export const OperatorModel = new OperatorSchema().getModelForClass(OperatorSchema, {
+	schemaOptions: {
+		collection: 'operators',
+	}
+})
