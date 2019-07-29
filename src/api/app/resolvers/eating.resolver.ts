@@ -5,10 +5,9 @@
 
 import FoodService from '@Services/food/food.service'
 import { MealItem } from '@Types/eating'
-import { MealPlan } from '@Types/meal-plan'
 import { MEAL_ITEM_TYPES } from '@Types/meals'
 import { Arg, Ctx, Query, Resolver } from 'type-graphql'
-import { checkUser, Context } from '../utils'
+import { Context } from '../utils'
 
 
 @Resolver()
@@ -29,13 +28,13 @@ export default class FoodResolver {
 		return this.foodService.searchMealItems(q, foodTypes ? foodTypes : [MEAL_ITEM_TYPES.food, MEAL_ITEM_TYPES.recipe], ctx.lang)
 	}
 
-	@Query(returns => MealPlan)
-	async getMealPlan(
-		// @Arg('id') id: string,
-		@Ctx() ctx: Context,
-	): Promise<MealPlan> {
-		const user = checkUser(ctx)
-
-		return this.foodService.getUserMealPlan(user.id, ctx.lang)
-	}
+	// @Query(returns => MealPlan)
+	// async getMealPlan(
+	// 	// @Arg('id') id: string,
+	// 	@Ctx() ctx: Context,
+	// ): Promise<MealPlan> {
+	// 	const user = checkUser(ctx)
+	//
+	// 	return this.foodService.getUserMealPlan(user.id, ctx.lang)
+	// }
 }
