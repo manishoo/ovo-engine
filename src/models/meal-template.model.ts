@@ -24,7 +24,7 @@ export class MealTemplateSchema extends Typegoose implements MealTemplate {
 
 export const MealTemplateModel = new MealTemplateSchema().getModelForClass(MealTemplateSchema, {
 	schemaOptions: {
-		collection: 'dishes',
+		collection: 'mealTemplates',
 		timestamps: true,
 		emitIndexErrors: true,
 		validateBeforeSave: true,
