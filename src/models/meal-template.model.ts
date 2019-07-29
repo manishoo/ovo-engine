@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { MealItem } from '@Types/eating'
 import { MealTemplate } from '@Types/meal-template'
@@ -23,6 +24,7 @@ export class MealTemplateSchema extends Typegoose implements MealTemplate {
 }
 
 export const MealTemplateModel = new MealTemplateSchema().getModelForClass(MealTemplateSchema, {
+	existingMongoose: mongoose,
 	schemaOptions: {
 		collection: 'mealTemplates',
 		timestamps: true,

@@ -3,16 +3,16 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from '@Config/connections/mongoose'
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image } from '@Types/common'
+import { Image, STATUS } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import isUUID from 'is-uuid'
 import { ACTIVITY, GENDER, GOALS, Height, MealUnit, User, WeightUnit } from '@Types/user'
-import { STATUS } from '@Types/common'
+import isUUID from 'is-uuid'
 import { Container } from 'typedi'
 import { arrayProp, post, prop, Ref, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
@@ -107,6 +107,7 @@ export class UserSchema extends Typegoose implements User {
 }
 
 export const UserModel = new UserSchema().getModelForClass(UserSchema, {
+	existingMongoose: mongoose,
 	schemaOptions: {
 		collection: 'users',
 		timestamps: true,

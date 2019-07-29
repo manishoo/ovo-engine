@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from '@Config/connections/mongoose'
 import { LANGUAGE_CODES } from '@Types/common'
 import { Tag, TAG_TYPE } from '@Types/tag'
 import { prop, Typegoose } from 'typegoose'
@@ -25,6 +26,7 @@ export class TagSchema extends Typegoose implements Tag {
 }
 
 export const TagModel = new TagSchema().getModelForClass(TagSchema, {
+	existingMongoose: mongoose,
 	schemaOptions: {
 		timestamps: true,
 		collection: 'tags',
