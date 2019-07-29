@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from '@Config/connections/mongoose'
 import { PersistedPassword } from '@Types/auth'
 import { STATUS } from '@Types/common'
 import { Operator } from '@Types/operator'
@@ -33,6 +34,7 @@ export class OperatorSchema extends Typegoose implements Operator {
 }
 
 export const OperatorModel = new OperatorSchema().getModelForClass(OperatorSchema, {
+	existingMongoose: mongoose,
 	schemaOptions: {
 		collection: 'operators',
 	}

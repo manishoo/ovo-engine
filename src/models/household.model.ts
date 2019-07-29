@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { Household, LatLng, PantryItem } from '@Types/household'
 import { User } from '@Types/user'
@@ -19,6 +20,7 @@ export class HouseholdSchema extends Typegoose implements Household {
 }
 
 export const HouseholdModel = new HouseholdSchema().getModelForClass(HouseholdSchema, {
+	existingMongoose: mongoose,
 	schemaOptions: {
 		collection: 'households',
 	}
