@@ -8,6 +8,7 @@ import { LANGUAGE_CODES, NameAndId } from '@Types/common'
 import { Food, FoodInput, FoodsListResponse, FoodsTranslationListResponse, FoodTranslationO, } from '@Types/food'
 import { MEAL_ITEM_TYPES } from '@Types/meals'
 import { Weight, WeightInput } from '@Types/weight'
+import Errors from '@Utils/errors'
 import { GraphQLUpload } from 'apollo-server-express'
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
@@ -30,7 +31,6 @@ export default class FoodResolver {
 		@Ctx() ctx: Context,
 	) {
 		checkUser(ctx)
-		if (!ctx.user) throw new Error('no user')
 		if (page < 1) page = 0
 
 		const data = await this.foodService.listFoodVarieties({
@@ -63,7 +63,6 @@ export default class FoodResolver {
 	) {
 		checkUser(ctx)
 		// FIXME validate languages
-		if (!ctx.user) throw new Error('no user')
 		if (page < 1) page = 0
 
 		const data = await this.foodService.listForTranslation({
@@ -104,7 +103,7 @@ export default class FoodResolver {
 		checkUser(ctx)
 		const food = await this.foodService.getFood(id)
 
-		if (food) throw new Error('not found')
+		if (food) throw new Errors.NotFoundError('not found')
 		return food
 	}
 
@@ -122,7 +121,7 @@ export default class FoodResolver {
 		@Ctx() ctx: Context,
 	) {
 		checkUser(ctx)
-		if (!ctx.user) throw new Error('not allowed')
+		if (!ctx.user) throw new Errors.ForbiddenError('not allowed')
 		const r = await this.foodService.removeById(id)
 		return r.deleted
 	}
@@ -138,7 +137,7 @@ export default class FoodResolver {
 		@Arg('image', type => GraphQLUpload, { nullable: true }) image?: any,
 	) {
 		checkUser(ctx)
-		if (translations.length < 1) throw new Error('no translations')
+		if (translations.length < 1) throw new Errors.ValidationError('no translations')
 
 		return this.foodService.updateFood(id, ctx.lang, translations, weights.map(w => <Weight>w), fgid, isVerified, image)
 	}

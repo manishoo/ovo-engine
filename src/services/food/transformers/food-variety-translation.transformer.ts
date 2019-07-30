@@ -7,6 +7,7 @@ import { LANGUAGE_CODES } from '@Types/common'
 import { Food } from '@Types/food'
 import { translationInstance } from '@Types/food-database'
 import { Weight } from '@Types/weight'
+import Errors from '@Utils/errors'
 
 export async function transformFoodVarietyTranslation(translation: translationInstance, lang: LANGUAGE_CODES, withNutrients: boolean, withWeights: boolean): Promise<Food> {
 	const foodVariety = translation.foodVariety
@@ -16,7 +17,7 @@ export async function transformFoodVarietyTranslation(translation: translationIn
 	if (withWeights && foodVariety.weights) {
 		weights = foodVariety.weights.map(w => {
 			const foundTr = w.translations.find(p => p.lang === lang)
-			if (!foundTr) throw new Error('no weight found') //FIXME better
+			if (!foundTr) throw new Errors.ValidationError('no weight found') //FIXME better
 
 			return {
 				description: foundTr.text,

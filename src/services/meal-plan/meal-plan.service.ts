@@ -8,6 +8,7 @@ import UserService from '@Services/user/user.service'
 import { LANGUAGE_CODES } from '@Types/common'
 import { MealPlan } from '@Types/meal-plan'
 import { MealPlanModel } from '@Models/meal-plan.model'
+import Errors from '@Utils/errors'
 import { Service } from 'typedi'
 
 @Service()
@@ -31,7 +32,7 @@ export default class MealPlanService {
 
 	async generateMealPlan(userId: string): Promise<MealPlan> {
 		const user = await this.userService.findById(userId)
-		if (!user.meals) throw new Error('no meals')
+		if (!user.meals) throw new Errors.ValidationError('no meals')
 
 		const plan = await MealPlanner.generateMealPlan(user.meals)
 		user.mealPlans = user.mealPlans ? [...user.mealPlans, plan._id] : [plan._id]

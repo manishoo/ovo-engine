@@ -3,10 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LANGUAGE_CODES } from '@Types/common'
-import { includeFoodGroupTranslations } from './includes'
-import { foodGroupInstance } from '@Types/food-database'
 import { FoodGroupModel } from '@Models'
+import { LANGUAGE_CODES } from '@Types/common'
+import { foodGroupInstance } from '@Types/food-database'
+import Errors from '@Utils/errors'
+import { includeFoodGroupTranslations } from './includes'
 
 export async function getGroupName(foodGroup: foodGroupInstance, lang: LANGUAGE_CODES): Promise<{ name: string, id: string }[]> {
 	function getTranslation(fg: foodGroupInstance): string {
@@ -32,7 +33,7 @@ export async function getGroupName(foodGroup: foodGroupInstance, lang: LANGUAGE_
 		const p = await FoodGroupModel.findByPk(parent, {
 			include: [includeFoodGroupTranslations()]
 		})
-		if (!p) throw new Error('invalid food group')
+		if (!p) throw new Errors.ValidationError('invalid food group')
 
 		groupArray.push({
 			name: getTranslation(p),

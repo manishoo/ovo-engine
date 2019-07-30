@@ -13,6 +13,7 @@ import transformUser from '@Services/user/transformers/user.transformer'
 import { LANGUAGE_CODES, STATUS } from '@Types/common'
 import { MealPlan } from '@Types/meal-plan'
 import { GENDER, User } from '@Types/user'
+import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
@@ -35,7 +36,7 @@ export default class UserService {
 	async findById(id: string): Promise<User> {
 		const r = await UserModel.findById(id)
 		if (!r) {
-			throw new Error(__('notFound'))
+			throw new Errors.NotFoundError(__('notFound'))
 		}
 
 		return transformSelfUser(r)
@@ -44,7 +45,7 @@ export default class UserService {
 	async findByPublicId(publicId: string): Promise<User> {
 		const r = await UserModel.findOne({ publicId })
 		if (!r) {
-			throw new Error(__('notFound'))
+			throw new Errors.NotFoundError(__('notFound'))
 		}
 
 		// TODO Error handling
@@ -54,7 +55,7 @@ export default class UserService {
 	async findByUsername(username: string): Promise<Partial<User>> {
 		const r = await UserModel.findOne({ username })
 		if (!r) {
-			throw new Error(__('notFound'))
+			throw new Errors.NotFoundError(__('notFound'))
 		}
 
 		// TODO Error handling
@@ -64,7 +65,7 @@ export default class UserService {
 	async findOne(query: {}): Promise<User> {
 		const r = await UserModel.findOne(query)
 		if (!r) {
-			throw new Error(__('notFound'))
+			throw new Errors.NotFoundError(__('notFound'))
 		}
 		return transformSelfUser(r)
 	}
@@ -74,17 +75,17 @@ export default class UserService {
 			path: 'mealPlans'
 		}).exec()
 		if (!r) {
-			throw new Error(__('notFound'))
+			throw new Errors.NotFoundError(__('notFound'))
 		}
 
 		r = r.toObject()
 
 		if (!r) {
-			throw new Error(__('notFound'))
+			throw new Errors.NotFoundError(__('notFound'))
 		}
 
 		if (Array.isArray(r.mealPlans) && r.mealPlans.length === 0) {
-			throw new Error('no meal plan')
+			throw new Errors.ValidationError('no meal plan')
 		}
 
 		if (r.mealPlans && !Array.isArray(r.mealPlans)) {
@@ -150,7 +151,7 @@ export default class UserService {
 	}
 
 	async createNewUser(user: User): Promise<User> {
-		if (!user.timeZone) throw new Error('no timezone')
+		if (!user.timeZone) throw new Errors.ValidationError('no timezone')
 		const newUser = await this.create(user)
 		// create a meal plan
 		const mp = await this.mealPlanService.generateMealPlan(newUser._id)
