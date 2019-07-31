@@ -10,7 +10,7 @@ import { Operator } from '@Types/operator'
 import { Service } from 'typedi'
 import { OperatorModel } from '@Models/operator.model'
 import { PersistedPassword, AuthResponse } from '@Types/auth';
-import { generateHashPassword } from '~/utils/password-manager';
+import { generateHashPassword } from '@Utils/password-manager';
 
 @Service()
 export default class OperatorService {
