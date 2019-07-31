@@ -44,7 +44,7 @@ export default class Cognition {
 		const message = messagePayload.messages[0]
 
 		const m = message ? message.text : undefined
-		if (!messagePayload.token) throw new Errors.ForbiddenError('no token provided')
+		if (!messagePayload.token) throw new Errors.Forbidden('no token provided')
 		const t = messagePayload.token
 
 		switch (context) {
@@ -58,10 +58,10 @@ export default class Cognition {
 				}
 
 				const lastMessageData = getLastMessageData(backgroundInfo.conversationHistory)
-				if (!lastMessageData) throw new Errors.ValidationErrors.ValidationError('invalid message')
+				if (!lastMessageData) throw new Errors.ValidationErrors.Validation('invalid message')
 
 				try {
-					if (!m) throw new Errors.ValidationError('no message provided')
+					if (!m) throw new Errors.Validation('no message provided')
 
 					switch (lastMessageData.expect) {
 						case EXPECTATIONS.nickname: {
@@ -89,8 +89,8 @@ export default class Cognition {
 							return askForGender(lang)
 						}
 						case EXPECTATIONS.gender: {
-							if (!message.data) throw new Errors.ValidationError('invalid message')
-							if (!message.data.value) throw new Errors.ValidationError('invalid message')
+							if (!message.data) throw new Errors.Validation('invalid message')
+							if (!message.data.value) throw new Errors.Validation('invalid message')
 							// if (m !== __({locale: lang, phrase: 'ratherNotSay'})) {
 							// const gender = await Language.extractGender(m)
 							// TODO VALIDATION
@@ -103,8 +103,8 @@ export default class Cognition {
 							return askForActivity(lang, bmr, tmpData.gender)
 						}
 						case EXPECTATIONS.activity: {
-							if (!message.data) throw new Errors.ValidationError('invalid message')
-							if (!message.data.value) throw new Errors.ValidationError('invalid message')
+							if (!message.data) throw new Errors.Validation('invalid message')
+							if (!message.data.value) throw new Errors.Validation('invalid message')
 							// TODO VALIDATION
 							const activity = message.data.value
 							console.log('activity', activity)
@@ -117,8 +117,8 @@ export default class Cognition {
 							return askForGoal(lang, tdee, Number(tempData.weight), Number(tempData.height))
 						}
 						case EXPECTATIONS.goal: {
-							if (!message.data) throw new Errors.ValidationErrors.ValidationError('invalid message')
-							if (!message.data.value) throw new Errors.ValidationErrors.ValidationError('invalid message')
+							if (!message.data) throw new Errors.ValidationErrors.Validation('invalid message')
+							if (!message.data.value) throw new Errors.ValidationErrors.Validation('invalid message')
 							// TODO VALIDATION
 							const goal = message.data.value
 							await keepInMind(t, GUEST_TEMP_FIELDS.goal, goal)

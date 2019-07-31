@@ -20,11 +20,11 @@ export default class AuthService {
 
 	async authenticate(username: string, password: string): Promise<AuthResponse> {
 		const operator = await this.operatorService.findByUsername(username)
-		if (!operator) throw new Errors.AuthenticationError('wrong username or password')
+		if (!operator) throw new Errors.Authentication('wrong username or password')
 
 		const isOk = await verifyPassword(operator.persistedPassword, password)
 
-		if (!isOk) throw new Errors.AuthenticationError('wrong username or password')
+		if (!isOk) throw new Errors.Authentication('wrong username or password')
 
 		return {
 			operator,
@@ -34,7 +34,7 @@ export default class AuthService {
 
 	async authenticateBySession(session: string): Promise<AuthResponse> {
 		const operator = await this.operatorService.findBySession(session)
-		if (!operator) throw new Errors.AuthenticationError('not ok')
+		if (!operator) throw new Errors.Authentication('not ok')
 
 		return {
 			operator,

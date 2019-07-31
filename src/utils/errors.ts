@@ -37,12 +37,12 @@ class SystemError extends ApolloError {
 }
 
 const Errors = {
-	AuthenticationError: AuthenticationError,
-	ForbiddenError: ForbiddenError,
-	UserInputError: UserInputError,
-	ValidationError: ValidationError,
-	NotFoundError: NotFoundError,
-	SystemError: SystemError,
+	Authentication: AuthenticationError,
+	Forbidden: ForbiddenError,
+	UserInput: UserInputError,
+	Validation: ValidationError,
+	NotFound: NotFoundError,
+	System: SystemError,
 }
 
 export default Errors

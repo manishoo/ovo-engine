@@ -17,7 +17,7 @@ export default class MealService {
 	async findById(id: String): Promise<MealTemplate> {
 		const r = await MealTemplateModel.findById(id)
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		return r
@@ -25,7 +25,7 @@ export default class MealService {
 
 	async findOne(query: {}): Promise<MealTemplate> {
 		const r = await MealTemplateModel.findOne(query)
-		if (!r) throw new Errors.NotFoundError(__('notFound'))
+		if (!r) throw new Errors.NotFound(__('notFound'))
 
 		return r
 	}
@@ -57,7 +57,7 @@ export default class MealService {
 
 	async update(publicId: string, data: MealInput) {
 		const meal = await MealTemplateModel.findById(publicId)
-		if (!meal) throw new Errors.NotFoundError(__('notFound'))
+		if (!meal) throw new Errors.NotFound(__('notFound'))
 
 		// TODO: actually update the meal
 

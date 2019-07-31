@@ -33,7 +33,7 @@ export function generatePath(mealPlan: MealPlan, timeZone: string): Event[] {
 
 	while (numberOfDaysAdded <= 7) {
 		const day = mealPlan.days.find(p => p.dayName === daysArray[dayIndex])
-		if (!day) throw new Errors.ValidationError('no Day found')
+		if (!day) throw new Errors.Validation('no Day found')
 
 		const futureMeals: { diff: number, meal: UserMeal, datetime: any }[] = []
 

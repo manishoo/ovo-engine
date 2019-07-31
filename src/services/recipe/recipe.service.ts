@@ -34,7 +34,7 @@ export default class RecipeService {
 			.populate('author')
 			.exec()
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		return transformRecipe(r, userId, true)
@@ -45,7 +45,7 @@ export default class RecipeService {
 			.populate('author')
 			.exec()
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		return transformRecipe(r, userId, true)
@@ -54,7 +54,7 @@ export default class RecipeService {
 	async listRecipesByLastId(query: RecipesQuery, userId?: string, lastId?: string): Promise<RecipesListResponse> {
 		if (lastId) {
 			const recipe = await RecipeModel.findOne({ publicId: lastId })
-			if (!recipe) throw new Errors.NotFoundError('recipe not found')
+			if (!recipe) throw new Errors.NotFound('recipe not found')
 
 			query.createdAt = { $lt: recipe.createdAt }
 		}
@@ -71,7 +71,7 @@ export default class RecipeService {
 			.populate('author')
 			.exec()
 		if (!recipes) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		let hasNext = false
@@ -98,14 +98,14 @@ export default class RecipeService {
 	}
 
 	async delete(id: string, userId?: string, operatorId?: string) {
-		if (!userId && !operatorId) throw new Errors.ForbiddenError('not allowed')
+		if (!userId && !operatorId) throw new Errors.Forbidden('not allowed')
 
 		const query: any = { publicId: id }
 		if (userId) {
 			query.author = new ObjectId(userId)
 		}
 		const { ok } = await RecipeModel.remove(query)
-		if (!ok) throw new Errors.SystemError('something went wrong')
+		if (!ok) throw new Errors.System('something went wrong')
 		return true
 	}
 
@@ -131,7 +131,7 @@ export default class RecipeService {
 		const recipe = await RecipeModel.findOne({ publicId })
 			.populate('author')
 			.exec()
-		if (!recipe) throw new Errors.NotFoundError(__('notFound'))
+		if (!recipe) throw new Errors.NotFound(__('notFound'))
 
 		if (data.title) {
 			recipe.title = data.title
@@ -188,7 +188,7 @@ export default class RecipeService {
 		if (data.slug) {
 			const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ publicId: { $ne: publicId }, slug: data.slug })
 
-			if (foundRecipeWithTheSameSlug) throw new Errors.ValidationError('recipe with the smae slug exists')
+			if (foundRecipeWithTheSameSlug) throw new Errors.Validation('recipe with the smae slug exists')
 
 			recipe.slug = data.slug
 		}
@@ -237,7 +237,7 @@ export default class RecipeService {
 
 	async listUserRecipesByPublicId(userPublicId: string, lastId?: string, viewerUserId?: string, query?: string) {
 		const user = await this.userService.findByPublicId(userPublicId)
-		if (!user) throw new Errors.NotFoundError('User not found')
+		if (!user) throw new Errors.NotFound('User not found')
 		return this.listUserRecipesByLastId(String(user._id), lastId, viewerUserId)
 	}
 
@@ -249,7 +249,7 @@ export default class RecipeService {
 			return this.findBySlug(slug, userId)
 		}
 
-		throw new Errors.ValidationError('no slug or id provided')
+		throw new Errors.Validation('no slug or id provided')
 	}
 
 	async create(data: RecipeInput, lang: LANGUAGE_CODES, userId?: string) {
@@ -298,7 +298,7 @@ export default class RecipeService {
 				if (ingredientInput.name) {
 					name = ingredientInput.name
 				}
-				if (!name) throw new Errors.ValidationError('ingredient name not provided')
+				if (!name) throw new Errors.Validation('ingredient name not provided')
 
 				return {
 					name,
@@ -318,7 +318,7 @@ export default class RecipeService {
 			.populate('author')
 			.exec()
 
-		if (!savedRecipe) throw new Errors.SystemError('failed to create the recipe')
+		if (!savedRecipe) throw new Errors.System('failed to create the recipe')
 		return transformRecipe(savedRecipe, userId)
 	}
 

@@ -150,7 +150,7 @@ export default class FoodService {
 				// includeContentsFull(),
 			],
 		})
-		if (!food) throw new Errors.NotFoundError(`food not found. id: ${id}`)
+		if (!food) throw new Errors.NotFound(`food not found. id: ${id}`)
 
 		const contentTranslations = await TranslationModel.findAll({
 			where: {
@@ -176,7 +176,7 @@ export default class FoodService {
 
 	async findFoodByPublicId(publicId: string, lang: LANGUAGE_CODES): Promise<Food> {
 		const food = await FoodModel.findOne({ where: { publicId } })
-		if (!food) throw new Errors.NotFoundError(`food not found. publicId: ${publicId}`)
+		if (!food) throw new Errors.NotFound(`food not found. publicId: ${publicId}`)
 
 		return this.findById(food.id!, lang)
 	}
@@ -206,7 +206,7 @@ export default class FoodService {
 			],
 		})
 
-		if (!foodVariety) throw new Errors.NotFoundError('not found') // FIXME 404
+		if (!foodVariety) throw new Errors.NotFound('not found') // FIXME 404
 
 		return transformFoodVariety(foodVariety, lang)
 	}
@@ -229,7 +229,7 @@ export default class FoodService {
 		const fg = await FoodGroupModel.findOne({
 			where: { publicId: data.foodGroupId }, include: [includeFoodTranslations()]
 		})
-		if (!fg) throw new Errors.NotFoundError('food group doesn\'t exist')
+		if (!fg) throw new Errors.NotFound('food group doesn\'t exist')
 
 		/**
 		 * Create food
@@ -442,7 +442,7 @@ export default class FoodService {
 
 	async submitTranslation(id: string, toLang: LANGUAGE_CODES, name: string): Promise<{ id: any, lang: LANGUAGE_CODES, name: string }> {
 		const food = await FoodModel.findOne({ where: { publicId: id } })
-		if (!food) throw new Errors.ValidationError('invalid food')
+		if (!food) throw new Errors.Validation('invalid food')
 
 		const ftrs = await TranslationModel.findAll({ where: { sourceId: food.id, sourceType: 'food', lang: toLang } })
 
@@ -497,14 +497,14 @@ export default class FoodService {
 				includeWeights(),
 			],
 		}*/)
-		if (!food) throw new Errors.NotFoundError('not found')
+		if (!food) throw new Errors.NotFound('not found')
 
 		const tr = await Promise.all(translations.map(async (tr) => {
 			return this.submitTranslation(id, tr.lang, tr.name)
 		}))
 
 		const fg = await FoodGroupModel.findByPk(fgid)
-		if (!fg) throw new Errors.ValidationError('fg not valid')
+		if (!fg) throw new Errors.Validation('fg not valid')
 		food.foodGroupId = fg.id
 		food.isVerified = isVerified
 		let image_url
@@ -582,9 +582,9 @@ export default class FoodService {
 			include: [includeFoodGroupTranslations()]
 		})
 		return foodGroups.map(fg => {
-			if (!fg.translations) throw new Errors.NotFoundError('fg not found')
+			if (!fg.translations) throw new Errors.NotFound('fg not found')
 			const fgTr = fg.translations.find(p => p.lang === lang)
-			if (!fgTr) throw new Errors.NotFoundError('tr not found')
+			if (!fgTr) throw new Errors.NotFound('tr not found')
 
 			return {
 				id: fg.publicId,

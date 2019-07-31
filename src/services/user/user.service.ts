@@ -36,7 +36,7 @@ export default class UserService {
 	async findById(id: string): Promise<User> {
 		const r = await UserModel.findById(id)
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		return transformSelfUser(r)
@@ -45,7 +45,7 @@ export default class UserService {
 	async findByPublicId(publicId: string): Promise<User> {
 		const r = await UserModel.findOne({ publicId })
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		// TODO Error handling
@@ -55,7 +55,7 @@ export default class UserService {
 	async findByUsername(username: string): Promise<Partial<User>> {
 		const r = await UserModel.findOne({ username })
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		// TODO Error handling
@@ -65,7 +65,7 @@ export default class UserService {
 	async findOne(query: {}): Promise<User> {
 		const r = await UserModel.findOne(query)
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 		return transformSelfUser(r)
 	}
@@ -75,17 +75,17 @@ export default class UserService {
 			path: 'mealPlans'
 		}).exec()
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		r = r.toObject()
 
 		if (!r) {
-			throw new Errors.NotFoundError(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		if (Array.isArray(r.mealPlans) && r.mealPlans.length === 0) {
-			throw new Errors.ValidationError('no meal plan')
+			throw new Errors.Validation('no meal plan')
 		}
 
 		if (r.mealPlans && !Array.isArray(r.mealPlans)) {
@@ -151,7 +151,7 @@ export default class UserService {
 	}
 
 	async createNewUser(user: User): Promise<User> {
-		if (!user.timeZone) throw new Errors.ValidationError('no timezone')
+		if (!user.timeZone) throw new Errors.Validation('no timezone')
 		const newUser = await this.create(user)
 		// create a meal plan
 		const mp = await this.mealPlanService.generateMealPlan(newUser._id)

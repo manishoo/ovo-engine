@@ -19,7 +19,7 @@ export function transformMealItem(mealItem: MealItem, recipesData: Recipe[], foo
 		 * Recipe
 		 * */
 		const recipe = recipesData.find(i => i.id === mealItem.id)
-		if (!recipe) throw new Errors.ValidationError('recipe invalid')
+		if (!recipe) throw new Errors.Validation('recipe invalid')
 
 		mealItem.totalTime = recipe.timing ? recipe.timing.totalTime : undefined
 		title = recipe.title
@@ -33,7 +33,7 @@ export function transformMealItem(mealItem: MealItem, recipesData: Recipe[], foo
 		 * Food
 		 * */
 		const food = foodsData.find(f => f.id === mealItem.id) // TODO use the real stuff
-		if (!food) throw new Errors.ValidationError('food invalid')
+		if (!food) throw new Errors.Validation('food invalid')
 
 		title = food.name
 		mealItem.thumbnail = food.thumbnail
@@ -52,7 +52,7 @@ export function transformMealItem(mealItem: MealItem, recipesData: Recipe[], foo
 	}
 
 	if (!slug) {
-		throw new Errors.ValidationError('no slug')
+		throw new Errors.Validation('no slug')
 	}
 
 	return {

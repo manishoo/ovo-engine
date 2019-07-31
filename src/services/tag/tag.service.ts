@@ -29,7 +29,7 @@ export default class TagService {
 
 	async findBySlug(slug: string): Promise<Tag> {
 		const tag = await TagModel.findOne({ slug })
-		if (!tag) throw new Errors.NotFoundError('tag not found')
+		if (!tag) throw new Errors.NotFound('tag not found')
 
 		return tag
 	}

@@ -32,7 +32,7 @@ export default class MealPlanService {
 
 	async generateMealPlan(userId: string): Promise<MealPlan> {
 		const user = await this.userService.findById(userId)
-		if (!user.meals) throw new Errors.ValidationError('no meals')
+		if (!user.meals) throw new Errors.Validation('no meals')
 
 		const plan = await MealPlanner.generateMealPlan(user.meals)
 		user.mealPlans = user.mealPlans ? [...user.mealPlans, plan._id] : [plan._id]

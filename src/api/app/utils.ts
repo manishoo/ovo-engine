@@ -19,7 +19,7 @@ export interface Context {
 }
 
 export function checkUser(ctx: Context) {
-	if (!ctx.user) throw new Errors.ForbiddenError('not allowed')
+	if (!ctx.user) throw new Errors.Forbidden('not allowed')
 
 	return ctx.user
 }

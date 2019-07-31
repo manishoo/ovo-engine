@@ -103,7 +103,7 @@ export default class FoodResolver {
 		checkUser(ctx)
 		const food = await this.foodService.getFood(id)
 
-		if (food) throw new Errors.NotFoundError('not found')
+		if (food) throw new Errors.NotFound('not found')
 		return food
 	}
 
@@ -121,7 +121,7 @@ export default class FoodResolver {
 		@Ctx() ctx: Context,
 	) {
 		checkUser(ctx)
-		if (!ctx.user) throw new Errors.ForbiddenError('not allowed')
+		if (!ctx.user) throw new Errors.Forbidden('not allowed')
 		const r = await this.foodService.removeById(id)
 		return r.deleted
 	}
@@ -137,7 +137,7 @@ export default class FoodResolver {
 		@Arg('image', type => GraphQLUpload, { nullable: true }) image?: any,
 	) {
 		checkUser(ctx)
-		if (translations.length < 1) throw new Errors.ValidationError('no translations')
+		if (translations.length < 1) throw new Errors.Validation('no translations')
 
 		return this.foodService.updateFood(id, ctx.lang, translations, weights.map(w => <Weight>w), fgid, isVerified, image)
 	}

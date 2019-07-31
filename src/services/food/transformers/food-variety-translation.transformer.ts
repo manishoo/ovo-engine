@@ -17,7 +17,7 @@ export async function transformFoodVarietyTranslation(translation: translationIn
 	if (withWeights && foodVariety.weights) {
 		weights = foodVariety.weights.map(w => {
 			const foundTr = w.translations.find(p => p.lang === lang)
-			if (!foundTr) throw new Errors.ValidationError('no weight found') //FIXME better
+			if (!foundTr) throw new Errors.Validation('no weight found') //FIXME better
 
 			return {
 				description: foundTr.text,

@@ -33,7 +33,7 @@ export async function getGroupName(foodGroup: foodGroupInstance, lang: LANGUAGE_
 		const p = await FoodGroupModel.findByPk(parent, {
 			include: [includeFoodGroupTranslations()]
 		})
-		if (!p) throw new Errors.ValidationError('invalid food group')
+		if (!p) throw new Errors.Validation('invalid food group')
 
 		groupArray.push({
 			name: getTranslation(p),

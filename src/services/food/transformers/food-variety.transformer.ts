@@ -20,7 +20,7 @@ export async function transformFoodVariety(foodVariety: foodVarietyInstance, lan
 	if (foodVariety.weights) {
 		weights = foodVariety.weights.map(w => {
 			const foundTr = w.translations.find(p => p.lang === lang)
-			if (!foundTr) throw new Errors.NotFoundError('no weight found') //FIXME better
+			if (!foundTr) throw new Errors.NotFound('no weight found') //FIXME better
 
 			return {
 				description: foundTr.text,
@@ -34,7 +34,7 @@ export async function transformFoodVariety(foodVariety: foodVarietyInstance, lan
 	}
 
 	const translation = foodVariety.translations[0]
-	if (!translation) throw new Errors.NotFoundError('translation not found')
+	if (!translation) throw new Errors.NotFound('translation not found')
 
 	return {
 		id: foodVariety.publicId,

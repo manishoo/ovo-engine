@@ -13,7 +13,7 @@ import { setImageUrl } from '@Utils/image-url-setter'
 import { LANGUAGE_CODES } from '@Types/common'
 
 export async function transformFood(food: foodsInstance, lang: LANGUAGE_CODES, withNutrients: boolean, withWeights: boolean): Promise<Food> {
-	if (!food.foodGroup) throw new Errors.ValidationError('food group empty')
+	if (!food.foodGroup) throw new Errors.Validation('food group empty')
 
 	return {
 		id: food.publicId,
