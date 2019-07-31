@@ -13,12 +13,12 @@ import { OperatorModel } from '@Models/operator.model'
 @Service()
 export default class OperatorService {
 	async findByUsername(username: string): Promise<Operator | null> {
-		const o = await OperatorModel.findOne({
+		const operator = await OperatorModel.findOne({
 			username,
 		})
 
-		if (o) {
-			return o.transform()
+		if (operator) {
+			return operator.transform()
 		}
 
 		return null
