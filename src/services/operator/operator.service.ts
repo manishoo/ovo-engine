@@ -26,12 +26,10 @@ export default class OperatorService {
 	}
 
 	async addOperator(username: string, password: PersistedPassword): Promise<Operator | null> {
-		var newOperator = new OperatorModel({
-			username: username,
+		const newOperator = await OperatorModel.create({
+			username,
 			persistedPassword: password,
 		})
-
-		newOperator = await newOperator.save()
 		if(newOperator){
 			return newOperator.transform()
 		}
