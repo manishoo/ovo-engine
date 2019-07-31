@@ -5,6 +5,7 @@
 
 import { MealTemplateModel } from '@Models/meal-template.model'
 import { MealTemplate } from '@Types/meal-template'
+import Errors from '@Utils/errors'
 import { __ } from 'i18n'
 import { MealInput } from 'src/api/panel/resolvers/meal.resolver'
 import { Service } from 'typedi'
@@ -16,7 +17,7 @@ export default class MealService {
 	async findById(id: String): Promise<MealTemplate> {
 		const r = await MealTemplateModel.findById(id)
 		if (!r) {
-			throw new Error(__('notFound'))
+			throw new Errors.NotFound(__('notFound'))
 		}
 
 		return r
@@ -24,7 +25,7 @@ export default class MealService {
 
 	async findOne(query: {}): Promise<MealTemplate> {
 		const r = await MealTemplateModel.findOne(query)
-		if (!r) throw new Error(__('notFound'))
+		if (!r) throw new Errors.NotFound(__('notFound'))
 
 		return r
 	}
@@ -56,7 +57,7 @@ export default class MealService {
 
 	async update(publicId: string, data: MealInput) {
 		const meal = await MealTemplateModel.findById(publicId)
-		if (!meal) throw new Error(__('notFound'))
+		if (!meal) throw new Errors.NotFound(__('notFound'))
 
 		// TODO: actually update the meal
 

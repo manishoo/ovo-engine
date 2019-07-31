@@ -7,6 +7,7 @@ import { getGroupName } from '@Services/food/utils/get-group-name'
 import { Food } from '@Types/food'
 import { foodVarietyInstance } from '@Types/food-database'
 import { Weight } from '@Types/weight'
+import Errors from '@Utils/errors'
 import { setImageUrl } from '@Utils/image-url-setter'
 import { LANGUAGE_CODES } from '@Types/common'
 
@@ -19,7 +20,7 @@ export async function transformFoodVariety(foodVariety: foodVarietyInstance, lan
 	if (foodVariety.weights) {
 		weights = foodVariety.weights.map(w => {
 			const foundTr = w.translations.find(p => p.lang === lang)
-			if (!foundTr) throw new Error('no weight found') //FIXME better
+			if (!foundTr) throw new Errors.NotFound('no weight found') //FIXME better
 
 			return {
 				description: foundTr.text,
@@ -33,7 +34,7 @@ export async function transformFoodVariety(foodVariety: foodVarietyInstance, lan
 	}
 
 	const translation = foodVariety.translations[0]
-	if (!translation) throw new Error('translation not found')
+	if (!translation) throw new Errors.NotFound('translation not found')
 
 	return {
 		id: foodVariety.publicId,

@@ -6,6 +6,7 @@
 import { UserMeal } from '@Types/eating'
 import { Event } from '@Types/event'
 import { MealPlan, WEEKDAYS } from '@Types/meal-plan'
+import Errors from '@Utils/errors'
 import moment from 'moment'
 import uuid from 'uuid/v1'
 
@@ -32,7 +33,7 @@ export function generatePath(mealPlan: MealPlan, timeZone: string): Event[] {
 
 	while (numberOfDaysAdded <= 7) {
 		const day = mealPlan.days.find(p => p.dayName === daysArray[dayIndex])
-		if (!day) throw new Error('no Day found')
+		if (!day) throw new Errors.Validation('no Day found')
 
 		const futureMeals: { diff: number, meal: UserMeal, datetime: any }[] = []
 

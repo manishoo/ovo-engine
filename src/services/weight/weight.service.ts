@@ -6,6 +6,7 @@
 import { TranslationModel, WeightModel } from '@Models'
 import { LANGUAGE_CODES } from '@Types/common'
 import { Weight as WeightType, WeightInput, WeightTranslationO } from '@Types/weight'
+import Errors from '@Utils/errors'
 import { Service } from 'typedi'
 import uuid from 'uuid/v1'
 
@@ -24,9 +25,9 @@ export default class WeightService {
 			],
 		})
 
-		if (!w) throw new Error('no w 1')
+		if (!w) throw new Errors.NotFound('no w 1')
 
-		if (w.translations.length === 0) throw new Error('translation not founnd')
+		if (w.translations.length === 0) throw new Errors.NotFound('translation not found')
 
 		let translations: WeightTranslationO[] = []
 		let description = w.translations[0].text
@@ -60,7 +61,7 @@ export default class WeightService {
 			]
 		})
 
-		if (!w) throw new Error('no w 2')
+		if (!w) throw new Errors.NotFound('no w 2')
 
 		let translations: WeightTranslationO[] = []
 		if (w.translations) {
@@ -111,7 +112,7 @@ export default class WeightService {
 
 	async update(wid: number, data: WeightType): Promise<WeightType> {
 		const weight = await WeightModel.findByPk(wid)
-		if (!weight) throw new Error('not found')
+		if (!weight) throw new Errors.NotFound('not found')
 
 		weight.amount = data.amount
 		weight.unit = data.unit
