@@ -4,6 +4,7 @@
  */
 
 import { LANGUAGE_CODES, STATUS } from '@Types/common'
+import Errors from '@Utils/errors'
 import { Request } from 'express'
 
 export interface Context {
@@ -18,7 +19,7 @@ export interface Context {
 }
 
 export function checkUser(ctx: Context) {
-	if (!ctx.user) throw new Error('not allowed')
+	if (!ctx.user) throw new Errors.Forbidden('not allowed')
 
 	return ctx.user
 }
