@@ -39,3 +39,4 @@ export default class AuthResolver {
 		return s
 	}
 }
+

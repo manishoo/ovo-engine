@@ -4,8 +4,8 @@
  */
 
 import OperatorService from '@Services/operator/operator.service'
-import { AuthResponse } from '@Types/auth'
-import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { OperatorResponse } from '@Types/operator'
+import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
 
@@ -19,13 +19,13 @@ export default class OperatorResolver {
 		// noop
 	}
 
-	@Mutation(returns => AuthResponse)
+	@Mutation(returns => OperatorResponse)
 	async createNewOperator(
 		@Arg('username') username: string,
 		@Arg('password') password: string,
 		@Ctx() ctx: Context,
 	) {
-		const createInfo = await this.operatorService.create(username, password)
-		return createInfo
+		return await this.operatorService.create(username, password)
 	}
 }
+

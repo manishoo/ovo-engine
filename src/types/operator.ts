@@ -21,3 +21,11 @@ export class Operator {
 
 	session: string
 }
+
+@ObjectType()
+export class OperatorResponse {
+	@Field(type => Operator)
+	operator: Operator
+	@Field()
+	session: string
+}
