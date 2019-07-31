@@ -2,7 +2,6 @@ import config from '@Config'
 import expressLoader from '@Loaders/express.loader'
 import graphQLLoader from '@Loaders/graphql.loader'
 import healthCheckLoader from '@Loaders/health-check.loader'
-import mongooseLoader from '@Loaders/mongoose.loader'
 import chalk from 'chalk'
 import express, { Request } from 'express'
 import 'reflect-metadata' // needed for type-graphql
@@ -17,7 +16,6 @@ async function main() {
 
 	expressLoader({ app })
 	healthCheckLoader({ app })
-	mongooseLoader()
 	await graphQLLoader({
 		app,
 		resolverPath: __dirname + '/resolvers/*.resolver.*',
