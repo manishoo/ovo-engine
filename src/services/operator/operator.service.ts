@@ -26,14 +26,10 @@ export default class OperatorService {
 	}
 
 	async addOperator(username: string, password: PersistedPassword): Promise<Operator | null> {
-		const newOperator = await OperatorModel.create({
+		return OperatorModel.create({
 			username,
 			persistedPassword: password,
 		})
-		if(newOperator){
-			return newOperator.transform()
-		}
-		throw new Error('Problem creating operator')
 	}
 
 	async findBySession(session: string): Promise<Operator | null> {
