@@ -22,7 +22,7 @@ export default class AuthService {
 		const operator = await this.operatorService.findByUsername(username)
 		if (!operator) throw new Errors.Authentication('wrong username or password')
 
-		const isOk = await verifyPassword(operator.persistedPassword, password)
+		const validatePassword = await verifyPassword(operator.persistedPassword, password)
 
 		if (!isOk) throw new Errors.Authentication('wrong username or password')
 
