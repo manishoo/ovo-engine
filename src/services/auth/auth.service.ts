@@ -19,11 +19,11 @@ export default class AuthService {
 
 	async authenticate(username: string, password: string): Promise<AuthResponse> {
 		const operator = await this.operatorService.findByUsername(username)
-		if (!operator) throw new Error('wrong username or password')
+		if (!operator) throw new Error('Invalid username or password')
 
-		const isOk = await verifyPassword(operator.persistedPassword, password)
+		const validatePassword = await verifyPassword(operator.persistedPassword, password)
 
-		if (!isOk) throw new Error('wrong username or password')
+		if (!validatePassword) throw new Error('Invalid username or password')
 
 		return {
 			operator,

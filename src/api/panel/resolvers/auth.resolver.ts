@@ -9,6 +9,7 @@ import { AuthResponse } from '@Types/auth'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
+import { string } from 'joi';
 
 
 @Service()
@@ -27,9 +28,8 @@ export default class AuthResolver {
 		@Arg('password') password: string,
 		@Ctx() ctx: Context,
 	) {
-		const s = await this.authService.authenticate(username, password)
-		s.operator = new OperatorModel(s.operator) // TODO what the hell
-		return s
+		const loginInfo = await this.authService.authenticate(username, password)
+		return loginInfo
 	}
 
 	@Query(returns => AuthResponse)
