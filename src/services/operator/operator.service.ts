@@ -11,7 +11,7 @@ import { Service } from 'typedi'
 import { OperatorModel } from '@Models/operator.model'
 import { AuthResponse } from '@Types/auth'
 import { generateHashPassword } from '@Utils/password-manager'
-import Errors from '~/utils/errors'
+import Errors from '@Utils/errors'
 
 @Service()
 export default class OperatorService {
