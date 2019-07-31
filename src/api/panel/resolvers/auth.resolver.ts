@@ -10,7 +10,6 @@ import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
 
-
 @Service()
 @Resolver()
 export default class AuthResolver {
@@ -22,24 +21,13 @@ export default class AuthResolver {
 	}
 
 	@Mutation(returns => AuthResponse)
-	async login(
+	async loginOperator(
 		@Arg('username') username: string,
 		@Arg('password') password: string,
 		@Ctx() ctx: Context,
 	) {
 		const s = await this.authService.authenticate(username, password)
-		s.operator = new OperatorModel(s.operator) // TODO what the hell
 		return s
-	}
-
-	@Mutation(returns => AuthResponse)
-	async create(
-		@Arg('username') username: string,
-		@Arg('password') password: string,
-		@Ctx() ctx: Context,
-	) {
-		const createInfo = await this.authService.create(username, password)
-		return createInfo
 	}
 
 	@Query(returns => AuthResponse)

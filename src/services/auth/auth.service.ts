@@ -21,25 +21,11 @@ export default class AuthService {
 		const operator = await this.operatorService.findByUsername(username)
 		if (!operator) throw new Error('wrong username or password')
 
-		const isOk = await verifyPassword(operator.persistedPassword, password)
+		const validatePassword = await verifyPassword(operator.persistedPassword, password)
 
-		if (!isOk) throw new Error('wrong username or password')
+		if (!validatePassword) throw new Error('wrong username or password')
 
 		return {
-			operator,
-			session: operator.session,
-		}
-	}
-
-	async create(username: string, password: string): Promise<AuthResponse>{
-		const checkOperator = await this.operatorService.findByUsername(username)
-		if(checkOperator) throw new Error('This operator already exists')
-
-		const hashedPassword = await generateHashPassword(password)
-		const operator = await this.operatorService.addOperator(username, hashedPassword)
-		if(!operator) throw new Error('Problem creating operator')
-		
-		return{
 			operator,
 			session: operator.session,
 		}
