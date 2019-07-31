@@ -32,6 +32,16 @@ export default class AuthResolver {
 		return s
 	}
 
+	@Mutation(returns => AuthResponse)
+	async create(
+		@Arg('username') username: string,
+		@Arg('password') password: string,
+		@Ctx() ctx: Context,
+	) {
+		const createInfo = await this.authService.create(username, password)
+		return createInfo
+	}
+
 	@Query(returns => AuthResponse)
 	async me(
 		@Arg('session') session: string,

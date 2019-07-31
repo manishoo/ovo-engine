@@ -9,6 +9,7 @@ import { STATUS } from '@Types/common'
 import { Operator } from '@Types/operator'
 import { Service } from 'typedi'
 import { OperatorModel } from '@Models/operator.model'
+import { PersistedPassword } from '@Types/auth';
 
 @Service()
 export default class OperatorService {
@@ -22,6 +23,19 @@ export default class OperatorService {
 		}
 
 		return null
+	}
+
+	async addOperator(username: string, password: PersistedPassword): Promise<Operator | null> {
+		var newOperator = new OperatorModel({
+			username: username,
+			persistedPassword: password,
+		})
+
+		newOperator = await newOperator.save()
+		if(newOperator){
+			return newOperator.transform()
+		}
+		throw new Error('Problem creating operator')
 	}
 
 	async findBySession(session: string): Promise<Operator | null> {
