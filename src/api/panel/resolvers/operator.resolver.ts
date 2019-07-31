@@ -20,7 +20,7 @@ export default class OperatorResolver {
 	}
 
 	@Mutation(returns => OperatorResponse)
-	async createNewOperator(
+	async createOperator(
 		@Arg('username') username: string,
 		@Arg('password') password: string,
 		@Ctx() ctx: Context,
