@@ -6,6 +6,7 @@
 import { TagModel } from '@Models/tag.model'
 import { Tag, TagInput } from '@Types/tag'
 import { LANGUAGE_CODES } from '@Types/common'
+import Errors from '@Utils/errors'
 import { Service } from 'typedi'
 
 
@@ -28,7 +29,7 @@ export default class TagService {
 
 	async findBySlug(slug: string): Promise<Tag> {
 		const tag = await TagModel.findOne({ slug })
-		if (!tag) throw new Error('tag not found')
+		if (!tag) throw new Errors.NotFound('tag not found')
 
 		return tag
 	}
