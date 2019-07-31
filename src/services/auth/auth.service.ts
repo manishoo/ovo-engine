@@ -32,7 +32,6 @@ export default class AuthService {
 	}
 
 	async create(username: string, password: string): Promise<AuthResponse>{
-
 		const checkOperator = await this.operatorService.findByUsername(username)
 		if(checkOperator) throw new Error('This operator already exists')
 
