@@ -5,7 +5,7 @@
 
 import OperatorService from '@Services/operator/operator.service'
 import { AuthResponse } from '@Types/auth'
-import { verifyPassword, generateHashPassword } from '@Utils/password-manager'
+import { verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
 
 @Service()
