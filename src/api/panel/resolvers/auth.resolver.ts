@@ -21,7 +21,7 @@ export default class AuthResolver {
 	}
 
 	@Mutation(returns => AuthResponse)
-	async login(
+	async loginOperator(
 		@Arg('username') username: string,
 		@Arg('password') password: string,
 		@Ctx() ctx: Context,
@@ -39,3 +39,4 @@ export default class AuthResolver {
 		return s
 	}
 }
+
