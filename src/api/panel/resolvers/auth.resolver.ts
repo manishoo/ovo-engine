@@ -26,8 +26,7 @@ export default class AuthResolver {
 		@Arg('password') password: string,
 		@Ctx() ctx: Context,
 	) {
-		const s = await this.authService.authenticate(username, password)
-		return s
+		return await this.authService.authenticate(username, password)
 	}
 
 	@Query(returns => AuthResponse)

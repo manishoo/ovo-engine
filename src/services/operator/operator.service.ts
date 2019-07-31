@@ -33,14 +33,14 @@ export default class OperatorService {
 		})
 	}
 
-	async create(username: string, password: string): Promise<AuthResponse>{
+	async create(username: string, password: string): Promise<AuthResponse> {
 		const checkOperator = await this.findByUsername(username)
 		if(checkOperator) throw new Error('This operator already exists')
 
 		const hashedPassword = await generateHashPassword(password)
 		const operator = await this.addOperator(username, hashedPassword)
 		
-		return{
+		return {
 			operator,
 			session: operator.session,
 		}
