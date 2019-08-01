@@ -18,7 +18,7 @@ export default class OperatorResolver {
 	constructor(
 		// service injection
 		private readonly operatorService: OperatorService,
-		private readonly authService: AuthService
+		private readonly authService: AuthService,
 	) {
 		// noop
 	}
