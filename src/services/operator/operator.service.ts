@@ -9,6 +9,9 @@ import { STATUS } from '@Types/common'
 import { Operator } from '@Types/operator'
 import { Service } from 'typedi'
 import { OperatorModel } from '@Models/operator.model'
+import { AuthResponse } from '@Types/auth'
+import { generateHashPassword } from '@Utils/password-manager'
+import Errors from '@Utils/errors'
 
 @Service()
 export default class OperatorService {
@@ -22,6 +25,21 @@ export default class OperatorService {
 		}
 
 		return null
+	}
+
+	async create(username: string, password: string): Promise<AuthResponse> {
+		const checkOperator = await this.findByUsername(username)
+		if(checkOperator) throw new Errors.UserInput('Operator creation error', {username: 'This username already exists'})
+
+		const hashedPassword = await generateHashPassword(password)
+		const operator = await OperatorModel.create({
+			username,
+			persistedPassword: hashedPassword,
+		})
+		return {
+			operator,
+			session: operator.session,
+		}
 	}
 
 	async findBySession(session: string): Promise<Operator | null> {

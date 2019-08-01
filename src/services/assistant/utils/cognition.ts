@@ -58,7 +58,7 @@ export default class Cognition {
 				}
 
 				const lastMessageData = getLastMessageData(backgroundInfo.conversationHistory)
-				if (!lastMessageData) throw new Errors.ValidationErrors.Validation('invalid message')
+				if (!lastMessageData) throw new Errors.Validation('invalid message')
 
 				try {
 					if (!m) throw new Errors.Validation('no message provided')
@@ -117,8 +117,8 @@ export default class Cognition {
 							return askForGoal(lang, tdee, Number(tempData.weight), Number(tempData.height))
 						}
 						case EXPECTATIONS.goal: {
-							if (!message.data) throw new Errors.ValidationErrors.Validation('invalid message')
-							if (!message.data.value) throw new Errors.ValidationErrors.Validation('invalid message')
+							if (!message.data) throw new Errors.Validation('invalid message')
+							if (!message.data.value) throw new Errors.Validation('invalid message')
 							// TODO VALIDATION
 							const goal = message.data.value
 							await keepInMind(t, GUEST_TEMP_FIELDS.goal, goal)
