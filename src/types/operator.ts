@@ -17,6 +17,9 @@ export class Operator {
 	@Field()
 	status?: string
 
+	@Field()
+	role?: string
+
 	persistedPassword: PersistedPassword
 
 	session: string

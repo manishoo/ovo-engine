@@ -20,6 +20,7 @@ export enum STATUS {
 
 export enum ROLE {
 	admin = 'ADMIN',
+	operator = 'OPERATOR',
 }
 
 @ObjectType()
