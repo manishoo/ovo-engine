@@ -22,7 +22,6 @@ export class Operator {
 
 	persistedPassword: PersistedPassword
 
-	@Field({nullable: true})
 	session: string
 }
 

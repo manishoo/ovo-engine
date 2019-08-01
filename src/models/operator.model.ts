@@ -15,9 +15,9 @@ export class OperatorSchema extends Typegoose implements Operator {
 	id: string
 	@prop({ unique: true, required: true })
 	username: string
-	@prop({ required: true, select: false })
+	@prop({ required: true })
 	persistedPassword: PersistedPassword
-	@prop({ required: true, unique: true, default: uuid, select: false })
+	@prop({ required: true, unique: true, default: uuid })
 	session: string
 	@prop({ required: true, enum: STATUS, default: STATUS.active })
 	status?: string
