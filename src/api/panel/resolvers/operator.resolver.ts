@@ -34,9 +34,10 @@ export default class OperatorResolver {
 
 	@Query(returns => [Operator])
 	async listOperators(
+		@Arg('session') session: string,
 		@Ctx() ctx: Context,
 	) {
-		const checkAccess = await this.authService.authenticateBySession('session')
+		const checkAccess = await this.authService.authenticateBySession(session)
 		if(checkAccess.operator.role != ROLE.admin) throw new Errors.Forbidden('Access Denied')
 
 		return this.operatorService.getOperatorsList()

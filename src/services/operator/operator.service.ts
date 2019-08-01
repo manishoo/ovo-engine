@@ -43,7 +43,7 @@ export default class OperatorService {
 	}
 
 	async getOperatorsList(){
-		return OperatorModel.find().select('+session')
+		return OperatorModel.find()
 	}
 
 	async findBySession(session: string): Promise<Operator | null> {
