@@ -43,8 +43,7 @@ export default class OperatorService {
 	}
 
 	async getOperatorsList(){
-		return OperatorModel.find()
-							.select('-persistedPassword -session')
+		return OperatorModel.find().select('+session')
 	}
 
 	async findBySession(session: string): Promise<Operator | null> {
