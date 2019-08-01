@@ -42,6 +42,10 @@ export default class OperatorService {
 		}
 	}
 
+	async getOperatorsList(){
+		return OperatorModel.find().select('-persistedPassword -session')
+	}
+
 	async findBySession(session: string): Promise<Operator | null> {
 		const key = `operator:session:${session}`
 		const userDataJSONString = await redis.get(key)

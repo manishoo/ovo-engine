@@ -18,6 +18,10 @@ export enum STATUS {
 	inactive = 'INACTIVE',
 }
 
+export enum ROLE {
+	admin = 'ADMIN',
+}
+
 @ObjectType()
 export class NameAndId {
 	@Field()
