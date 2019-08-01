@@ -24,7 +24,7 @@ export default class AuthService {
 
 		const validatePassword = await verifyPassword(operator.persistedPassword, password)
 
-		if (!validatePassword) throw new Error('wrong username or password')
+		if (!validatePassword) throw new Errors.UserInput('wrong username or password', {password: 'wrong password'})
 
 		return {
 			operator,

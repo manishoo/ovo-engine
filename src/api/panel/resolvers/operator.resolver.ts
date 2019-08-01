@@ -25,7 +25,7 @@ export default class OperatorResolver {
 		@Arg('password') password: string,
 		@Ctx() ctx: Context,
 	) {
-		return await this.operatorService.create(username, password)
+		return this.operatorService.create(username, password)
 	}
 }
 
