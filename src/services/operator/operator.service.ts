@@ -50,6 +50,15 @@ export default class OperatorService {
 		return operatorsList
 	}
 
+	async removeOperator(id: string): Promise<Operator | null> {
+		const removeOperator = await OperatorModel.findByIdAndRemove(id)
+		if(!removeOperator) throw new Errors.NotFound('Operator not found')
+
+		const key = `operator:session:${removeOperator.session}`
+		await redis.del(key)
+		return removeOperator
+	}
+
 	async findBySession(session: string): Promise<Operator | null> {
 		const key = `operator:session:${session}`
 		const userDataJSONString = await redis.get(key)
