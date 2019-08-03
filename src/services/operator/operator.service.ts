@@ -54,6 +54,8 @@ export default class OperatorService {
 		const removeOperator = await OperatorModel.findByIdAndRemove(id)
 		if(!removeOperator) throw new Errors.NotFound('Operator not found')
 
+		const key = `operator:session:${removeOperator.session}`
+		await redis.del(key)
 		return removeOperator
 	}
 
