@@ -6,6 +6,7 @@ import chalk from 'chalk'
 import express, { Request } from 'express'
 import 'reflect-metadata' // needed for type-graphql
 import operatorMiddleware from './middlewares/operator.middleware'
+import { authChecker } from './utils'
 
 global.Promise = require('bluebird')
 
@@ -28,6 +29,7 @@ async function main() {
 				locale: req.language,
 			}
 		},
+		authChecker,
 	})
 
 	app.listen(port, url, () => {

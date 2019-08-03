@@ -9,16 +9,17 @@ import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
 import { buildSchema } from 'type-graphql'
 import { Container } from 'typedi'
-
+import { AuthChecker } from 'type-graphql'
 const UPLOAD_MAX_FILE_SIZE = 2000000 // 1 MB
 const UPLOAD_MAX_FILES = 1
 
-export default async ({ app, resolverPath, context }: { app: express.Application, resolverPath: string, context: ContextFunction }) => {
+export default async ({ app, resolverPath, context, authChecker }: { app: express.Application, resolverPath: string, context: ContextFunction, authChecker?: AuthChecker<any> }) => {
 	/**
 	 * Configure main app graphql server
 	 * */
 	const graphQLAppServer = new ApolloServer({
 		schema: await buildSchema({
+			authChecker,
 			resolvers: [
 				resolverPath,
 			],
