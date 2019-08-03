@@ -11,7 +11,7 @@ import { Service } from 'typedi'
 import { Context, checkUser } from '../utils'
 import { ROLE } from '@Types/common'
 import mongoose from 'mongoose'
-import Errors from '~/utils/errors';
+import Errors from '@Utils/errors';
 
 @Service()
 @Resolver()
