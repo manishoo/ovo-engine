@@ -42,6 +42,10 @@ export default class OperatorService {
 		}
 	}
 
+	async getOperatorsList(){
+		return OperatorModel.find().select('-session -presistedPassword')
+	}
+
 	async findBySession(session: string): Promise<Operator | null> {
 		const key = `operator:session:${session}`
 		const userDataJSONString = await redis.get(key)
@@ -51,6 +55,7 @@ export default class OperatorService {
 			return user
 		} else {
 			const dbUser = await OperatorModel.findOne({ session, status: { $ne: STATUS.inactive } })
+			
 			if (!dbUser) {
 				return null
 			}
@@ -59,6 +64,7 @@ export default class OperatorService {
 				status: dbUser.status,
 				session,
 				username: dbUser.username,
+				role: dbUser.role,
 			}
 			redis.setex(key, config.times.sessionExpiration, JSON.stringify(user))
 			return user
