@@ -10,7 +10,8 @@ import { Arg, Ctx, Mutation, Resolver, Query, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context, checkUser } from '../utils'
 import { ROLE } from '@Types/common'
-import Errors from '~/utils/errors'
+import mongoose from 'mongoose'
+import Errors from '~/utils/errors';
 
 @Service()
 @Resolver()
@@ -39,6 +40,16 @@ export default class OperatorResolver {
 		@Ctx() ctx: Context,
 	) {
 		return this.operatorService.getOperatorsList()
+	}
+
+	@Authorized(ROLE.admin)
+	@Mutation(returns => Operator)
+	async deleteOperator(
+		@Arg('id') operatorID: string,
+		@Ctx() ctx: Context,
+	) {
+		if(!mongoose.Types.ObjectId.isValid(operatorID)) throw new Errors.UserInput('Invalid id', {id: 'Invalid id'})
+		return this.operatorService.removeOperator(operatorID)
 	}
 
 }
