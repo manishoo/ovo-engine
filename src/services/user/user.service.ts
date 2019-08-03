@@ -18,7 +18,6 @@ import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { AuthenticationError } from 'apollo-server'
-import { ObjectID } from 'bson'
 import i18n, { __ } from 'i18n'
 import { Service } from 'typedi'
 import { generatePath } from './utils/generate-path'
@@ -160,7 +159,7 @@ export default class UserService {
 		return this.modify(newUser._id, {
 			path: generatePath(mp, user.timeZone),
 			mealPlans: [
-				new ObjectID(mp._id),
+				mp._id!,
 			]
 		})
 	}

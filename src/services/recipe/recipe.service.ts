@@ -11,8 +11,8 @@ import { Image, LANGUAGE_CODES } from '@Types/common'
 import { Recipe, RecipeInput, RecipesListResponse, RecipesQuery } from '@Types/recipe'
 import Errors from '@Utils/errors'
 import { processUpload } from '@Utils/upload/utils'
-import { ObjectId } from 'bson'
 import { __ } from 'i18n'
+import * as mongoose from 'mongoose'
 import shortid from 'shortid'
 import { Service } from 'typedi'
 import uuid from 'uuid/v1'
@@ -94,7 +94,7 @@ export default class RecipeService {
 	}
 
 	async listUserRecipesByLastId(userId: string, lastId?: string, viewerUserId?: string): Promise<RecipesListResponse> {
-		return this.listRecipesByLastId({ author: new ObjectId(userId) }, viewerUserId, lastId)
+		return this.listRecipesByLastId({ author: new mongoose.Schema.Types.ObjectId(userId) }, viewerUserId, lastId)
 	}
 
 	async delete(id: string, userId?: string, operatorId?: string) {
@@ -102,7 +102,7 @@ export default class RecipeService {
 
 		const query: any = { publicId: id }
 		if (userId) {
-			query.author = new ObjectId(userId)
+			query.author = new mongoose.Schema.Types.ObjectId(userId)
 		}
 		const { ok } = await RecipeModel.remove(query)
 		if (!ok) throw new Errors.System('something went wrong')
