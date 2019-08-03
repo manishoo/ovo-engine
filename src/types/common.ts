@@ -103,3 +103,8 @@ export class Item {
 	@Field()
 	value: string
 }
+
+@ObjectType()
+export class IntlString {
+	[k: string]: string
+}
