@@ -14,7 +14,6 @@ export interface Context {
 		id: string,
 		status: STATUS,
 		lang: LANGUAGE_CODES,
-		admin: boolean,
 	},
 }
 

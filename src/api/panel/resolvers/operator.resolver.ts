@@ -6,7 +6,7 @@
 import OperatorService from '@Services/operator/operator.service'
 import AuthService from '@Services/auth/auth.service'
 import { OperatorResponse, Operator } from '@Types/operator'
-import { Arg, Ctx, Mutation, Resolver, Query } from 'type-graphql'
+import { Arg, Ctx, Mutation, Resolver, Query, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context, checkUser } from '../utils'
 import { ROLE } from '@Types/common'
@@ -23,6 +23,7 @@ export default class OperatorResolver {
 		// noop
 	}
 
+	@Authorized(ROLE.admin)
 	@Mutation(returns => OperatorResponse)
 	async createOperator(
 		@Arg('username') username: string,
@@ -32,14 +33,11 @@ export default class OperatorResolver {
 		return this.operatorService.create(username, password)
 	}
 
+	@Authorized(ROLE.admin)
 	@Query(returns => [Operator])
 	async listOperators(
-		@Arg('session') session: string,
 		@Ctx() ctx: Context,
 	) {
-		const checkAccess = await this.authService.authenticateBySession(session)
-		if(checkAccess.operator.role != ROLE.admin) throw new Errors.Forbidden('Access Denied')
-
 		return this.operatorService.getOperatorsList()
 	}
 

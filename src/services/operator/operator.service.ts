@@ -43,7 +43,11 @@ export default class OperatorService {
 	}
 
 	async getOperatorsList(){
-		return OperatorModel.find().select('-session -presistedPassword')
+		let operatorsList = await OperatorModel.find().select('-session -presistedPassword')
+		operatorsList = operatorsList.filter(operator => {
+			return operator.username != 'admin'
+		})
+		return operatorsList
 	}
 
 	async findBySession(session: string): Promise<Operator | null> {
