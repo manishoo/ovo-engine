@@ -3,15 +3,15 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
 import { Image } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import { ObjectID } from 'bson'
+import * as mongoose from 'mongoose'
 import { Field, Float, Int, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
-import { MealPlanSchema } from '@Models/meal-plan.model'
 
 
 export enum GENDER {
@@ -80,7 +80,7 @@ export class MealUnit {
 
 @ObjectType()
 export class User {
-	_id?: ObjectID
+	_id?: mongoose.Schema.Types.ObjectId
 	@Field()
 	id?: string
 	@Field()
