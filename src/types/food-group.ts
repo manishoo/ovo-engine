@@ -19,7 +19,7 @@ export class ParentFoodGroup {
 export class FoodGroup {
 	readonly _id: mongoose.Schema.Types.ObjectId
 	@Field()
-	readonly id: number
+	readonly id: string
 	@Field(type => String)
 	name: IntlString
 	@Field(type => ParentFoodGroup, { nullable: true })
