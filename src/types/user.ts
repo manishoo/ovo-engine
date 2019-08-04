@@ -9,7 +9,7 @@ import { PersistedPassword } from '@Types/auth'
 import { Image } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { Field, Float, Int, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
 

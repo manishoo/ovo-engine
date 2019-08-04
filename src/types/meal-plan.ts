@@ -4,7 +4,7 @@
  */
 
 import { UserMeal } from '@Types/eating'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { Field, ObjectType } from 'type-graphql'
 
 export enum WEEKDAYS {

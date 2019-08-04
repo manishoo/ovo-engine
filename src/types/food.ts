@@ -6,7 +6,7 @@
 import { Image, Translation, LANGUAGE_CODES, NameAndId, Pagination } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { Weight } from '@Types/weight'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
 
 

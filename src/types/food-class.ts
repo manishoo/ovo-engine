@@ -5,7 +5,7 @@
 
 import { Translation } from '@Types/common'
 import { FoodGroup } from '@Types/food-group'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { Field, ObjectType } from 'type-graphql'
 
 

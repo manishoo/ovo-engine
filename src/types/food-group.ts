@@ -4,7 +4,7 @@
  */
 
 import { Translation } from '@Types/common'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
