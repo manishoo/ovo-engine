@@ -14,11 +14,11 @@ export default class FoodService {
 		// service injection
 	) {
 		// noop
-    }
-    async listFoods(page: number, size: number): Promise<Food[]>{
-        return FoodModel.find()
-        .limit(size)
-        .skip(size * page)
-    }
-    
+	}
+
+	async listFoods(page: number, size: number): Promise<Food[]> {
+		return FoodModel.find()
+			.limit(size)
+			.skip(size * page)
+	}
 }
