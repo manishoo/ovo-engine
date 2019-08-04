@@ -8,6 +8,7 @@ import { Translation } from '@Types/common'
 import { Food, FoodContent } from '@Types/food'
 import { Weight } from '@Types/weight'
 import { prop, Typegoose } from 'typegoose'
+import { FoodClass } from '~/types/food-class';
 
 
 export class FoodSchema extends Typegoose implements Food {
@@ -21,7 +22,7 @@ export class FoodSchema extends Typegoose implements Food {
 	@prop()
 	origDb?: string
 	@prop({ required: true })
-	foodClass: any // TODO add food class
+	foodClass: FoodClass
 	@prop({ default: [], required: true })
 	contents: FoodContent[]
 	@prop({ default: [], required: true })
