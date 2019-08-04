@@ -39,10 +39,4 @@ export default class MealPlanService {
 		await this.userService.modify(userId, user)
 		return plan
 	}
-
-	async getUserMealPlan(userId: string, lang: LANGUAGE_CODES): Promise<MealPlan> {
-		const c = await this.userService.getUserMealPlan(userId, lang)
-		console.log('========', c)
-		return c
-	}
 }
