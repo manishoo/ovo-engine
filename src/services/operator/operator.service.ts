@@ -5,13 +5,13 @@
 
 import config from '@Config'
 import redis from '@Config/connections/redis'
-import { STATUS } from '@Types/common'
-import { Operator } from '@Types/operator'
-import { Service } from 'typedi'
 import { OperatorModel } from '@Models/operator.model'
 import { AuthResponse } from '@Types/auth'
-import { generateHashPassword } from '@Utils/password-manager'
+import { STATUS } from '@Types/common'
+import { Operator } from '@Types/operator'
 import Errors from '@Utils/errors'
+import { generateHashPassword } from '@Utils/password-manager'
+import { Service } from 'typedi'
 
 @Service()
 export default class OperatorService {
@@ -29,7 +29,7 @@ export default class OperatorService {
 
 	async create(username: string, password: string): Promise<AuthResponse> {
 		const checkOperator = await this.findByUsername(username)
-		if(checkOperator) throw new Errors.UserInput('Operator creation error', {username: 'This username already exists'})
+		if (checkOperator) throw new Errors.UserInput('Operator creation error', { username: 'This username already exists' })
 
 		const hashedPassword = await generateHashPassword(password)
 		const operator = await OperatorModel.create({
@@ -42,17 +42,14 @@ export default class OperatorService {
 		}
 	}
 
-	async getOperatorsList(){
-		let operatorsList = await OperatorModel.find().select('-session -presistedPassword')
-		operatorsList = operatorsList.filter(operator => {
-			return operator.username != 'admin'
-		})
-		return operatorsList
+	async getOperatorsList() {
+		return OperatorModel.find({ username: { $ne: 'admin' } })
+			.select('-session -presistedPassword')
 	}
 
 	async removeOperator(id: string): Promise<Operator | null> {
 		const removeOperator = await OperatorModel.findByIdAndRemove(id)
-		if(!removeOperator) throw new Errors.NotFound('Operator not found')
+		if (!removeOperator) throw new Errors.NotFound('Operator not found')
 
 		const key = `operator:session:${removeOperator.session}`
 		await redis.del(key)
@@ -68,7 +65,7 @@ export default class OperatorService {
 			return user
 		} else {
 			const dbUser = await OperatorModel.findOne({ session, status: { $ne: STATUS.inactive } })
-			
+
 			if (!dbUser) {
 				return null
 			}
