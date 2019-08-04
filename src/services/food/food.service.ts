@@ -16,7 +16,6 @@ export default class FoodService {
 		// noop
     }
     async listFoods(page: number, size: number): Promise<Food[]>{
-
         return FoodModel.find()
         .limit(size)
         .skip(size * page)
