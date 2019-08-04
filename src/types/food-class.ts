@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { IntlString } from '@Types/common'
+import { Translation } from '@Types/common'
 import { FoodGroup } from '@Types/food-group'
 import * as mongoose from 'mongoose'
 import { Field, ObjectType } from 'type-graphql'
@@ -32,7 +32,9 @@ export class FoodClass {
 	@Field()
 	readonly id: string
 	@Field(type => String)
-	name: IntlString
+	name: Translation[]
+	@Field(type => String, {nullable: true})
+	description?: Translation[]
 	@Field()
 	slug: string
 	@Field(type => FoodGroup)

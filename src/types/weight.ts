@@ -3,14 +3,17 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { IntlString } from '@Types/common'
+import { Translation } from '@Types/common'
+import * as mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
+import { prop } from 'typegoose'
 
 
 @ObjectType()
 export class Weight {
-	@Field()
-	id: string
+	@prop({ default: mongoose.Types.ObjectId })
+	@Field(type => String)
+	id: mongoose.Types.ObjectId
 	@Field()
 	amount: number
 	@Field()
@@ -18,7 +21,7 @@ export class Weight {
 	@Field()
 	seq: number
 	@Field(type => String)
-	name: IntlString
+	name: Translation[]
 }
 
 

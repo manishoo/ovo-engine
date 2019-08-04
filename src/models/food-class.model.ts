@@ -4,18 +4,19 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { IntlString } from '@Types/common'
+import { LANGUAGE_CODES, Translation } from '@Types/common'
 import { FOOD_CLASS_CATEGORY, FOOD_CLASS_TYPES, FoodClass, FoodClassTaxonomy } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
-import validateIntlString from '@Utils/validate-intl-string'
-import { prop, Typegoose } from 'typegoose'
+import { instanceMethod, prop, Typegoose } from 'typegoose'
 
 
 export class FoodClassSchema extends Typegoose implements FoodClass {
 	readonly _id: mongoose.Schema.Types.ObjectId
 	readonly id: string
-	@prop({ required: true, validate: validateIntlString })
-	name: IntlString
+	@prop({ required: true })
+	name: Translation[]
+	@prop()
+	description?: Translation[]
 	@prop({ required: true })
 	slug: string
 	@prop({ required: true })
@@ -36,6 +37,23 @@ export class FoodClassSchema extends Typegoose implements FoodClass {
 	ncbiTaxonomyId?: number
 	@prop()
 	taxonomies: FoodClassTaxonomy[]
+
+	@instanceMethod
+	getName(locale: LANGUAGE_CODES): string | undefined {
+		const translation = this.name.find(p => p.locale === locale)
+
+		if (!translation) return undefined
+
+		return translation.text
+	}
+
+	@instanceMethod
+	async addName(locale: LANGUAGE_CODES, text: string) {
+		this.name.push({
+			locale,
+			text,
+		})
+	}
 }
 
 export const FoodClassModel = new FoodClassSchema().getModelForClass(FoodClassSchema, {

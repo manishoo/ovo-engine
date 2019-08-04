@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { IntlString } from '@Types/common'
+import { Translation } from '@Types/common'
 import * as mongoose from 'mongoose'
 import { Field, ObjectType } from 'type-graphql'
 
@@ -12,7 +12,7 @@ export class ParentFoodGroup {
 	@Field()
 	readonly id: number
 	@Field(type => String)
-	name: IntlString
+	name: Translation[]
 }
 
 @ObjectType()
@@ -21,7 +21,7 @@ export class FoodGroup {
 	@Field()
 	readonly id: string
 	@Field(type => String)
-	name: IntlString
+	name: Translation[]
 	@Field(type => ParentFoodGroup, { nullable: true })
 	parentFoodGroup?: ParentFoodGroup | mongoose.Schema.Types.ObjectId
 }

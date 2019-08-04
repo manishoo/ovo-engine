@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Image, IntlString, LANGUAGE_CODES, NameAndId, Pagination } from '@Types/common'
+import { Image, Translation, LANGUAGE_CODES, NameAndId, Pagination } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { Weight } from '@Types/weight'
 import * as mongoose from 'mongoose'
@@ -173,7 +173,7 @@ export class FoodContent {
 	unit: string
 	citation: string
 	citationType: string
-	standardContent: string
+	standardContent: number
 }
 
 @ObjectType()
@@ -182,8 +182,8 @@ export class Food {
 	@Field()
 	readonly id: string
 	@Field(type => String)
-	name: IntlString
-	origFoodId?: number
+	name: Translation[]
+	origFoodId?: string
 	origDb?: string
 	foodClass: any // TODO add food class
 	contents: FoodContent[]

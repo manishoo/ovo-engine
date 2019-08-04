@@ -4,10 +4,9 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { IntlString } from '@Types/common'
+import { LANGUAGE_CODES, Translation } from '@Types/common'
 import { Content, CONTENT_TYPE, Synonym } from '@Types/Content'
-import validateIntlString from '@Utils/validate-intl-string'
-import { prop, Typegoose } from 'typegoose'
+import { instanceMethod, prop, Typegoose } from 'typegoose'
 
 
 export class ContentSchema extends Typegoose implements Content {
@@ -16,8 +15,8 @@ export class ContentSchema extends Typegoose implements Content {
 
 	@prop({ enum: CONTENT_TYPE, required: true })
 	type: CONTENT_TYPE
-	@prop({ required: true, validate: validateIntlString })
-	name: IntlString
+	@prop({ required: true })
+	name: Translation[]
 
 	@prop({ default: [] })
 	synonyms: Synonym[]
@@ -96,14 +95,6 @@ export class ContentSchema extends Typegoose implements Content {
 	msdsFileSize?: number
 	@prop()
 	msdsUpdatedAt?: Date
-	@prop()
-	creatorId?: number
-	@prop()
-	updaterId?: number
-	@prop()
-	createdAt?: Date
-	@prop()
-	updatedAt?: Date
 	@prop()
 	phenolexplorerId?: number
 	@prop()
@@ -232,6 +223,24 @@ export class ContentSchema extends Typegoose implements Content {
 	foodcomex?: number
 	@prop()
 	phytohubId?: string
+
+
+	@instanceMethod
+	getName(locale: LANGUAGE_CODES): string | undefined {
+		const translation = this.name.find(p => p.locale === locale)
+
+		if (!translation) return undefined
+
+		return translation.text
+	}
+
+	@instanceMethod
+	async addName(locale: LANGUAGE_CODES, text: string) {
+		this.name.push({
+			locale,
+			text,
+		})
+	}
 }
 
 

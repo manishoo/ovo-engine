@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { IntlString } from '@Types/common'
+import { Translation } from '@Types/common'
 import * as mongoose from 'mongoose'
 import { Field, ObjectType } from 'type-graphql'
 
@@ -29,7 +29,7 @@ export class Content {
 	@Field()
 	type: CONTENT_TYPE
 	@Field(type => String)
-	name: IntlString
+	name: Translation[]
 
 	origId?: number
 	synonyms: Synonym[]
@@ -70,10 +70,6 @@ export class Content {
 	msdsContentType?: string
 	msdsFileSize?: number
 	msdsUpdatedAt?: Date
-	creatorId?: number
-	updaterId?: number
-	createdAt?: Date
-	updatedAt?: Date
 	phenolexplorerId?: number
 	dfcId?: string
 	hmdbId?: string

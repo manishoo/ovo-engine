@@ -4,7 +4,7 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { IntlString } from '@Types/common'
+import { Translation } from '@Types/common'
 import { Food, FoodContent } from '@Types/food'
 import { Weight } from '@Types/weight'
 import { prop, Typegoose } from 'typegoose'
@@ -15,9 +15,9 @@ export class FoodSchema extends Typegoose implements Food {
 	readonly id: string
 
 	@prop({ required: true })
-	name: IntlString
+	name: Translation[]
 	@prop()
-	origFoodId?: number
+	origFoodId?: string
 	@prop()
 	origDb?: string
 	@prop({ required: true })
