@@ -10,13 +10,7 @@ import { FoodGroupModel } from '@Models/food-group.model'
 
 @Service()
 export default class FoodGroupService {
-	constructor(
-		// service injection
-	) {
-		// noop
-    }
-    async listFoodGroups(): Promise<FoodGroup[]>{
+    async listFoodGroups(): Promise<FoodGroup[]> {
         return FoodGroupModel.find()
     }
-    
 }
