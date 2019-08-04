@@ -4,7 +4,7 @@
  */
 
 import { Translation } from '@Types/common'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { prop } from 'typegoose'
 
