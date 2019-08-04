@@ -12,7 +12,7 @@ import { Recipe, RecipeInput, RecipesListResponse, RecipesQuery } from '@Types/r
 import Errors from '@Utils/errors'
 import { processUpload } from '@Utils/upload/utils'
 import { __ } from 'i18n'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import shortid from 'shortid'
 import { Service } from 'typedi'
 import uuid from 'uuid/v1'

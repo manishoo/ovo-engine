@@ -3,17 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Image, NameAndId, Pagination } from '@Types/common'
+import { Image, Translation, LANGUAGE_CODES, NameAndId, Pagination } from '@Types/common'
+import { Content, CONTENT_TYPE } from '@Types/content'
 import { Weight } from '@Types/weight'
+import mongoose from 'mongoose'
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
-import { LANGUAGE_CODES } from '@Types/common'
-
-
-export enum FOOD_TYPES {
-	type1 = 'Type 1',
-	type2 = 'Type 2',
-	unknown = 'Unkown',
-}
 
 
 @ObjectType()
@@ -89,30 +83,6 @@ export class Nutrient {
 	amount: number
 	@Field({ nullable: true })
 	tagname?: string
-}
-
-@ObjectType()
-export class Food {
-	@Field(type => ID)
-	id: string
-	@Field()
-	name: string
-	@Field({ nullable: true })
-	description?: string
-	@Field(type => [NameAndId], { nullable: true })
-	foodGroup?: NameAndId[]
-	@Field({ nullable: true })
-	image?: Image
-	@Field({ nullable: true })
-	thumbnail?: Image
-	@Field(type => NutritionalData)
-	nutrients?: NutritionalData
-	// @Field(type => [Nutrient])
-	// nutrients?: Nutrient[]
-	@Field(type => [Weight], { nullable: true })
-	weights?: Weight[]
-	// @Field(type => [FoodVariety])
-	// varieties: FoodVariety[]
 }
 
 
@@ -192,4 +162,31 @@ export interface FoodCreateInput {
 	refuse?: string
 	survey?: string
 	manufacturerName?: string
+}
+
+
+export class FoodContent {
+	content: mongoose.Schema.Types.ObjectId | Content
+	origContentName: string
+	origContentType: CONTENT_TYPE
+	amount: number
+	unit: string
+	citation: string
+	citationType: string
+	standardContent: number
+}
+
+@ObjectType()
+export class Food {
+	readonly _id: mongoose.Schema.Types.ObjectId
+	@Field()
+	readonly id: string
+	@Field(type => String)
+	name: Translation[]
+	origFoodId?: string
+	origDb?: string
+	foodClass: any // TODO add food class
+	contents: FoodContent[]
+	@Field(type => [Weight])
+	weights: Weight[]
 }
