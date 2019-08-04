@@ -7,9 +7,8 @@ import mongoose from '@Config/connections/mongoose'
 import { Translation } from '@Types/common'
 import { Food, FoodContent } from '@Types/food'
 import { Weight } from '@Types/weight'
-import { prop, Typegoose } from 'typegoose'
-import { FoodClass } from '@Types/food-class';
-
+import { prop, Typegoose, Ref } from 'typegoose'
+import { FoodClassSchema } from '@Models/food-class.model'
 
 export class FoodSchema extends Typegoose implements Food {
 	readonly _id: mongoose.Schema.Types.ObjectId
@@ -22,7 +21,7 @@ export class FoodSchema extends Typegoose implements Food {
 	@prop()
 	origDb?: string
 	@prop({ required: true })
-	foodClass: FoodClass
+	foodClass: Ref<FoodClassSchema>
 	@prop({ default: [], required: true })
 	contents: FoodContent[]
 	@prop({ default: [], required: true })
