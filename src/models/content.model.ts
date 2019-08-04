@@ -5,7 +5,7 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { LANGUAGE_CODES, Translation } from '@Types/common'
-import { Content, CONTENT_TYPE, Synonym } from '@Types/Content'
+import { Content, CONTENT_TYPE, Synonym } from '@Types/content'
 import { instanceMethod, prop, Typegoose } from 'typegoose'
 
 
