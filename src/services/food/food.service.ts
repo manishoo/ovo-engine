@@ -4,7 +4,6 @@
  */
 
 import { FoodModel } from '@Models/food.model'
-import UserService from '@Services/user/user.service'
 import { Food } from '@Types/food'
 import { Service } from 'typedi'
 
@@ -13,7 +12,6 @@ import { Service } from 'typedi'
 export default class FoodService {
 	constructor(
 		// service injection
-		private readonly userService: UserService,
 	) {
 		// noop
     }
@@ -22,8 +20,6 @@ export default class FoodService {
         return FoodModel.find()
         .limit(size)
         .skip(size * page)
-        .sort('-date')
-
     }
     
 }

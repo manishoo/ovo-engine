@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import FoodService from '@Services/food/utils/food.service'
+import FoodService from '@Services/food/food.service'
 import { Food } from '@Types/food'
 import { Arg, Ctx, Query, Resolver, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
@@ -19,11 +19,11 @@ export default class FoodResolver {
 	) {
 		// noop
     }
-    
+
     @Authorized(ROLE.operator)
     @Query(returns => [Food])
     async listFoods(
-        @Arg('page') page: number,
+        @Arg('page', {defaultValue: 1}) page: number,
         @Arg('size', {defaultValue: 10}) size: number,
         @Ctx() ctx: Context,
     ) {
