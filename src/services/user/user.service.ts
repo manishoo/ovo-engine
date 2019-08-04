@@ -6,8 +6,6 @@
 import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
-import MealPlanService from '@Services/meal-plan/meal-plan.service'
-import { transformMealPlan } from '@Services/meal-plan/transformers/meal-plan.transformer'
 import transformSelfUser from '@Services/user/transformers/self-user.transformer'
 import transformUser from '@Services/user/transformers/user.transformer'
 import { LANGUAGE_CODES, STATUS } from '@Types/common'
@@ -25,13 +23,6 @@ import { generatePath } from './utils/generate-path'
 
 @Service()
 export default class UserService {
-	constructor(
-		// service injection
-		private readonly mealPlanService: MealPlanService
-	) {
-		// noop
-	}
-
 	async findById(id: string): Promise<User> {
 		const r = await UserModel.findById(id)
 		if (!r) {
@@ -67,32 +58,6 @@ export default class UserService {
 			throw new Errors.NotFound(__('notFound'))
 		}
 		return transformSelfUser(r)
-	}
-
-	async getUserMealPlan(userId: string, lang: LANGUAGE_CODES): Promise<MealPlan> {
-		let r = await UserModel.findById(userId).populate({
-			path: 'mealPlans'
-		}).exec()
-		if (!r) {
-			throw new Errors.NotFound(__('notFound'))
-		}
-
-		r = r.toObject()
-
-		if (!r) {
-			throw new Errors.NotFound(__('notFound'))
-		}
-
-		if (Array.isArray(r.mealPlans) && r.mealPlans.length === 0) {
-			throw new Errors.Validation('no meal plan')
-		}
-
-		if (r.mealPlans && !Array.isArray(r.mealPlans)) {
-			return transformMealPlan(r.mealPlans, lang)
-		}
-
-		// @ts-ignore
-		return transformMealPlan(r.mealPlans[0].toObject(), lang)
 	}
 
 	async create(data: User) {
@@ -153,15 +118,7 @@ export default class UserService {
 		if (!user.timeZone) throw new Errors.Validation('no timezone')
 		const newUser = await this.create(user)
 		// create a meal plan
-		const mp = await this.mealPlanService.generateMealPlan(newUser._id)
-		newUser.path = generatePath(mp, user.timeZone)
-
-		return this.modify(newUser._id, {
-			path: generatePath(mp, user.timeZone),
-			mealPlans: [
-				mp._id!,
-			]
-		})
+		return newUser
 	}
 
 	async createUser(username: string, email: string, password: string, timeZone: string, gender?: GENDER): Promise<User> {

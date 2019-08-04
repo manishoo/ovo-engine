@@ -3,41 +3,25 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { Translation } from '@Types/common'
+import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
-import { LANGUAGE_CODES } from '@Types/common'
+import { prop } from 'typegoose'
 
-@ObjectType()
-export class WeightTranslationO {
-	@Field(type => String)
-	lang: LANGUAGE_CODES
-	@Field()
-	description: string
-}
 
 @ObjectType()
 export class Weight {
-	@Field()
-	id: string
+	@prop({ default: mongoose.Types.ObjectId })
+	@Field(type => String)
+	id: mongoose.Types.ObjectId
 	@Field()
 	amount: number
 	@Field()
 	gramWeight: number
 	@Field()
 	seq: number
-	@Field({ nullable: true })
-	description?: string
-	@Field({ nullable: true })
-	unit?: string
-	@Field(type => [WeightTranslationO], { nullable: true })
-	translations?: WeightTranslationO[]
-}
-
-@InputType()
-export class WeightTranslationI {
 	@Field(type => String)
-	lang: LANGUAGE_CODES
-	@Field()
-	description: string
+	name: Translation[]
 }
 
 
@@ -47,8 +31,8 @@ export class WeightInput {
 	id?: string
 	@Field()
 	amount: number
-	@Field(type => [WeightTranslationI])
-	translations: WeightTranslationI[]
+	// @Field(type => [WeightTranslationI])
+	// translations: WeightTranslationI[]
 	@Field()
 	seq: number
 	@Field({ nullable: true })

@@ -4,7 +4,7 @@
  */
 
 import sequelize from '@Config/connections/sequelize'
-import { getModels } from '@Models/foods/food-database-tables'
+import { getModels } from '@Models/_foods/food-database-tables'
 
 export const models = getModels(sequelize)
 

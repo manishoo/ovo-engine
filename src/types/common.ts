@@ -5,7 +5,7 @@
 
 import { UserSchema } from '@Models/user.model'
 import { Field, ObjectType } from 'type-graphql'
-import { Ref } from 'typegoose'
+import { prop, Ref, Typegoose } from 'typegoose'
 
 
 export enum LANGUAGE_CODES {
@@ -102,4 +102,11 @@ export class Item {
 	text: string
 	@Field()
 	value: string
+}
+
+export class Translation {
+	@prop({ enum: LANGUAGE_CODES, required: true })
+	locale: LANGUAGE_CODES
+	@prop({ required: true })
+	text: string
 }

@@ -3,14 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import FoodService from '@Services/food/food.service'
 import { transformRecipeUser } from '@Services/user/transformers/recipe-user.transformer'
 import WeightService from '@Services/weight/weight.service'
+import { LANGUAGE_CODES } from '@Types/common'
 import { Recipe } from '@Types/recipe'
 import { User } from '@Types/user'
 import { Container } from 'typedi'
 import { InstanceType } from 'typegoose'
-import { LANGUAGE_CODES } from '@Types/common'
 
 export async function transformRecipe(recipe: InstanceType<Recipe>, userId?: string, full: boolean = false, lang: LANGUAGE_CODES = LANGUAGE_CODES.en): Promise<Recipe> {
 	recipe = recipe.toObject()
@@ -33,14 +32,14 @@ export async function transformRecipe(recipe: InstanceType<Recipe>, userId?: str
 			ingredient.unit = 'g' // FIXME multilanguage
 		}*/
 
-			if (ingredient.foodId) {
-				const foodService = Container.get(FoodService)
-				const food = await foodService.findFoodVarietyByPublicId(ingredient.foodId, lang) // FIXME
-				if (!ingredient.name) {
-					ingredient.name = food.name
-				}
-				ingredient.thumbnail = food.image
-			}
+			// if (ingredient.foodId) {
+			// 	const foodService = Container.get(FoodService)
+			// 	const food = await foodService.findFoodVarietyByPublicId(ingredient.foodId, lang) // FIXME
+			// 	if (!ingredient.name) {
+			// 		ingredient.name = food.name
+			// 	}
+			// 	ingredient.thumbnail = food.image
+			// }
 
 			return ingredient
 		}))
