@@ -8,6 +8,8 @@ import { Content, CONTENT_TYPE } from '@Types/content'
 import { Weight } from '@Types/weight'
 import mongoose from 'mongoose'
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
+import { Ref } from 'typegoose';
+import { FoodClassSchema } from '@Models/food-class.model';
 
 
 @ObjectType()
@@ -185,7 +187,7 @@ export class Food {
 	name: Translation[]
 	origFoodId?: string
 	origDb?: string
-	foodClass: any // TODO add food class
+	foodClass: Ref<FoodClassSchema>
 	contents: FoodContent[]
 	@Field(type => [Weight])
 	weights: Weight[]
