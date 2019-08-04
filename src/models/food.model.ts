@@ -8,7 +8,7 @@ import { Translation } from '@Types/common'
 import { Food, FoodContent } from '@Types/food'
 import { Weight } from '@Types/weight'
 import { prop, Typegoose } from 'typegoose'
-import { FoodClass } from '~/types/food-class';
+import { FoodClass } from '@Types/food-class';
 
 
 export class FoodSchema extends Typegoose implements Food {
