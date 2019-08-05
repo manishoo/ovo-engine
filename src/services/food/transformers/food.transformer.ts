@@ -10,9 +10,9 @@ import { Food } from '@Types/food'
 import { foodsInstance } from '@Types/food-database'
 import Errors from '@Utils/errors'
 import { setImageUrl } from '@Utils/image-url-setter'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 
-export async function transformFood(food: foodsInstance, lang: LANGUAGE_CODES, withNutrients: boolean, withWeights: boolean): Promise<Food> {
+export async function transformFood(food: foodsInstance, lang: LanguageCode, withNutrients: boolean, withWeights: boolean): Promise<Food> {
 	if (!food.foodGroup) throw new Errors.Validation('food group empty')
 
 	return {

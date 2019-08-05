@@ -8,7 +8,7 @@ import { Food } from '@Types/food'
 import { Arg, Ctx, Query, Resolver, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
-import { ROLE } from '@Types/common';
+import { Role } from '@Types/common';
 
 @Service()
 @Resolver()
@@ -20,7 +20,7 @@ export default class FoodResolver {
 		// noop
     }
 
-    @Authorized(ROLE.operator)
+    @Authorized(Role.operator)
     @Query(returns => [Food])
     async listFoods(
         @Arg('page', {defaultValue: 1}) page: number,

@@ -4,12 +4,12 @@
  */
 
 import { FoodGroupModel } from '@Models'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import { foodGroupInstance } from '@Types/food-database'
 import Errors from '@Utils/errors'
 import { includeFoodGroupTranslations } from './includes'
 
-export async function getGroupName(foodGroup: foodGroupInstance, lang: LANGUAGE_CODES): Promise<{ name: string, id: string }[]> {
+export async function getGroupName(foodGroup: foodGroupInstance, lang: LanguageCode): Promise<{ name: string, id: string }[]> {
 	function getTranslation(fg: foodGroupInstance): string {
 		let name = ''
 		const tr = fg.translations.find(p => p.lang === lang)

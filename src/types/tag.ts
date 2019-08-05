@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import { Types } from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
@@ -41,7 +41,7 @@ export class Tag {
 	type: TAG_TYPE
 	origTitle: string
 	origInfo?: string
-	origLang: LANGUAGE_CODES
+	origLang: LanguageCode
 	createdAt?: Date
 	updatedAt?: Date
 }

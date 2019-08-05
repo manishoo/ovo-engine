@@ -7,7 +7,7 @@ import config from '@Config'
 import redis from '@Config/connections/redis'
 import { OperatorModel } from '@Models/operator.model'
 import { AuthResponse } from '@Types/auth'
-import { STATUS } from '@Types/common'
+import { Status } from '@Types/common'
 import { Operator } from '@Types/operator'
 import Errors from '@Utils/errors'
 import { generateHashPassword } from '@Utils/password-manager'
@@ -64,7 +64,7 @@ export default class OperatorService {
 			redis.expire(key, config.times.sessionExpiration)
 			return user
 		} else {
-			const dbUser = await OperatorModel.findOne({ session, status: { $ne: STATUS.inactive } })
+			const dbUser = await OperatorModel.findOne({ session, status: { $ne: Status.inactive } })
 
 			if (!dbUser) {
 				return null

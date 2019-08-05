@@ -4,7 +4,7 @@
  */
 
 import { Message, MessageAdditionalData } from '@Types/assistant'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import { ACTIVITY, GENDER, GOALS, MealUnit } from '@Types/user'
 import { __ } from 'i18n'
 import uuid from 'uuid/v1'
@@ -65,7 +65,7 @@ export function keepInMind(token: string | null | undefined, field: string, data
 	return Memory.shortTerm.storeGuestTempInfo(token, field, data)
 }
 
-export function generateGoalOptions(lang: LANGUAGE_CODES, weight: number, height: number) {
+export function generateGoalOptions(lang: LanguageCode, weight: number, height: number) {
 	const bmi = weight / ((height / 100) * (height / 100))
 	if (bmi < 18.5) { // underweight
 		return [
@@ -100,7 +100,7 @@ export function generateGoalOptions(lang: LANGUAGE_CODES, weight: number, height
 	]
 }
 
-export function generateActivitySelect(lang: LANGUAGE_CODES, gender: GENDER) {
+export function generateActivitySelect(lang: LanguageCode, gender: GENDER) {
 	return Object.keys(ACTIVITY).map((i: string) => {
 		// @ts-ignore
 		switch (ACTIVITY[i]) {
@@ -154,7 +154,7 @@ export function generateActivitySelect(lang: LANGUAGE_CODES, gender: GENDER) {
 	})
 }
 
-export function generateGenderSelect(lang: LANGUAGE_CODES) {
+export function generateGenderSelect(lang: LanguageCode) {
 	return [
 		...Object.keys(GENDER).map(i => {
 			// @ts-ignore

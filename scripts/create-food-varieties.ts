@@ -6,7 +6,7 @@
 // import {getModels as getOurModels} from '../src/types/food-database-tables'
 // import {main as mainConnection} from '../src/config/connections/sequelize'
 // import {foodVarietyAttribute, translationAttribute} from '../src/types/food-database'
-// import {LANGUAGE_CODES} from '~/constants/enums'
+// import {LanguageCode} from '~/constants/enums'
 // // import {Translation} from '~/dao/models'
 // import _ from 'lodash'
 // import uuid from 'uuid/v1'
@@ -102,7 +102,7 @@
 // 			const savedFoodVarieties = await ourModels.FoodVariety.bulkCreate(foodVarieties)
 // 			await ourModels.Translation.bulkCreate(savedFoodVarieties.map(fv => ({
 // 				text: fv.origFoodName,
-// 				lang: LANGUAGE_CODES.en,
+// 				lang: LanguageCode.en,
 // 				sourceId: String(fv.id!),
 // 				sourceType: 'food_variety',
 // 				field: 'name',

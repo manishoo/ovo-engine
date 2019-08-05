@@ -5,7 +5,7 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { PersistedPassword } from '@Types/auth'
-import { STATUS, ROLE } from '@Types/common'
+import { Status, Role } from '@Types/common'
 import { Operator } from '@Types/operator'
 import { instanceMethod, InstanceType, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
@@ -19,10 +19,10 @@ export class OperatorSchema extends Typegoose implements Operator {
 	persistedPassword: PersistedPassword
 	@prop({ required: true, unique: true, default: uuid })
 	session: string
-	@prop({ required: true, enum: STATUS, default: STATUS.active })
+	@prop({ required: true, enum: Status, default: Status.active })
 	status?: string
-	@prop({ required: true, enum: ROLE, default: ROLE.operator })
-	role?: ROLE
+	@prop({ required: true, enum: Role, default: Role.operator })
+	role?: Role
 	@instanceMethod
 	transform(this: InstanceType<Operator>) {
 		const obj = this.toObject()

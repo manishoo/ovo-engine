@@ -3,11 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { MealPlanModel } from '@Models/meal-plan.model'
 import MealPlanner from '@Services/meal-plan/utils/meal-planner'
 import UserService from '@Services/user/user.service'
-import { LANGUAGE_CODES } from '@Types/common'
 import { MealPlan } from '@Types/meal-plan'
-import { MealPlanModel } from '@Models/meal-plan.model'
 import Errors from '@Utils/errors'
 import { Service } from 'typedi'
 

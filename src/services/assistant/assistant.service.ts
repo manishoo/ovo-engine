@@ -4,7 +4,7 @@
  */
 
 import { MessageBackgroundInformation, MessagePayload } from '@Types/assistant'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import { logError } from '@Utils/logger'
 import { Service } from 'typedi'
 import uuid from 'uuid/v1'
@@ -14,7 +14,7 @@ import Memory from './utils/memory'
 
 @Service()
 export default class AssistantService {
-	async conversation(messagePayload: MessagePayload, lang: LANGUAGE_CODES): Promise<MessagePayload> {
+	async conversation(messagePayload: MessagePayload, lang: LanguageCode): Promise<MessagePayload> {
 		let { token, userId, messages } = messagePayload
 
 		// currently, use messages have only one message. So only use the first one
