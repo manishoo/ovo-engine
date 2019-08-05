@@ -15,7 +15,7 @@ export class FoodGroupSchema extends Typegoose implements FoodGroup {
 	@prop({required: true})
 	name: Translation[]
 	@prop({ ref: FoodGroupSchema })
-	parentFoodGroup?: ParentFoodGroup | Ref<mongoose.Schema.Types.ObjectId>
+	parentFoodGroup?: Ref<ParentFoodGroup>
 }
 
 export const FoodGroupModel = new FoodGroupSchema().getModelForClass(FoodGroupSchema, {
