@@ -4,15 +4,26 @@
  */
 
 import { Service } from 'typedi'
-import { FoodGroup } from '@Types/food-group'
+import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { Translation } from '@Types/common'
 
 
 @Service()
 export default class FoodGroupService {
-    async listFoodGroups(): Promise<FoodGroup[]> {
-        return FoodGroupModel.find({ parentFoodGroup: { $eq: null }})
+    async listFoodGroups(): Promise<ParentFoodGroup[]> {
+        const foodGroups = await FoodGroupModel.find()
+
+        const t = foodGroups.filter(fg => !fg.parentFoodGroup)
+            .map(rootFoodGroup => {
+                return {
+                    id: rootFoodGroup.id,
+                    name: rootFoodGroup.name,
+                    subGroups: foodGroups.filter(fg => String(fg.parentFoodGroup) === String(rootFoodGroup.id))
+                } as ParentFoodGroup
+            })
+            console.log(t)
+            return t
     }
 
     async addFoodGroup(name: Translation[], parentFoodGroup?: string): Promise<FoodGroup> {

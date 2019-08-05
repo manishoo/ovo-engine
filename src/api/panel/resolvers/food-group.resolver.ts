@@ -7,7 +7,7 @@ import { Arg, Ctx, Query, Resolver, Authorized, Mutation } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
 import { Role, TranslationInput } from '@Types/common'
-import { FoodGroup } from '@Types/food-group'
+import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
 import FoodGroupService from '@Services/food-group/food-group.service'
 
 
@@ -22,7 +22,7 @@ export default class FoodGroupResolver {
     }
 
     @Authorized(Role.operator)
-    @Query(returns => [FoodGroup])
+    @Query(returns => [ParentFoodGroup])
     async listFoodGroups(
         @Ctx() ctx: Context,
     ) {
@@ -30,7 +30,7 @@ export default class FoodGroupResolver {
      }
 
     @Authorized(Role.operator)
-    @Mutation(returns => FoodGroup)
+    @Mutation(returns => ParentFoodGroup)
     async createFoodGroup(
         @Arg('name', type => [TranslationInput]) name: TranslationInput[],
         @Arg('parentFoodGroup', type => String, {nullable: true}) parentFoodGroup?: string,
