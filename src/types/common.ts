@@ -4,7 +4,7 @@
  */
 
 import { UserSchema } from '@Models/user.model'
-import { Field, ObjectType, registerEnumType } from 'type-graphql'
+import { Field, ObjectType, registerEnumType, InputType } from 'type-graphql'
 import { prop, Ref } from 'typegoose'
 
 
@@ -12,6 +12,10 @@ export enum LanguageCode {
 	en = 'en',
 	fa = 'fa',
 }
+registerEnumType(LanguageCode, {
+	name: 'LanguageCode',
+	description: 'Language Roles'
+})
 
 export enum Status {
 	active = 'ACTIVE',
@@ -109,9 +113,20 @@ export class Item {
 	value: string
 }
 
+@ObjectType()
 export class Translation {
 	@prop({ enum: LanguageCode, required: true })
+	@Field(type => LanguageCode)
 	locale: LanguageCode
 	@prop({ required: true })
+	@Field()
+	text: string
+}
+
+@InputType()
+export class TranslationInput {
+	@Field(type => LanguageCode)
+	locale: LanguageCode
+	@Field()
 	text: string
 }
