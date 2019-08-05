@@ -22,7 +22,7 @@ export class OperatorSchema extends Typegoose implements Operator {
 	@prop({ required: true, enum: STATUS, default: STATUS.active })
 	status?: string
 	@prop({ required: true, enum: ROLE, default: ROLE.operator })
-	role?: string
+	role?: ROLE
 	@instanceMethod
 	transform(this: InstanceType<Operator>) {
 		const obj = this.toObject()

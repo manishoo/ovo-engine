@@ -4,7 +4,7 @@
  */
 
 import { UserSchema } from '@Models/user.model'
-import { Field, ObjectType } from 'type-graphql'
+import { Field, ObjectType, registerEnumType } from 'type-graphql'
 import { prop, Ref, Typegoose } from 'typegoose'
 
 
@@ -22,6 +22,10 @@ export enum ROLE {
 	admin = 'ADMIN',
 	operator = 'OPERATOR',
 }
+registerEnumType(ROLE, {
+	name: 'Role',
+	description: 'Operator Roles'
+})
 
 @ObjectType()
 export class NameAndId {
