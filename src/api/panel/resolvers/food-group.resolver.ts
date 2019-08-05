@@ -7,7 +7,7 @@ import { Arg, Ctx, Query, Resolver, Authorized, Mutation } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
 import { Role, TranslationInput } from '@Types/common'
-import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
+import { FoodGroup, FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
 import FoodGroupService from '@Services/food-group/food-group.service'
 
 
@@ -36,6 +36,15 @@ export default class FoodGroupResolver {
         @Arg('parentFoodGroup', type => String, {nullable: true}) parentFoodGroup?: string,
     ) {
         return this.foodGroupService.addFoodGroup(name, parentFoodGroup)
+     }
+
+     @Authorized(Role.operator)
+     @Mutation(returns => FoodGroup)
+     async editFoodGroup(
+        @Arg('foodGroup') foodGroup: FoodGroupInput,
+        @Ctx() ctx: Context,
+     ) {
+         return this.foodGroupService.editFoodGroup(foodGroup)
      }
 
 }

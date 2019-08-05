@@ -4,9 +4,10 @@
  */
 
 import { Service } from 'typedi'
-import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
+import { FoodGroup, FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { Translation } from '@Types/common'
+import Errors from '@Utils/errors'
 
 
 @Service()
@@ -29,5 +30,41 @@ export default class FoodGroupService {
             name,
             parentFoodGroup,
         })
+    }
+
+    async editFoodGroup(foodGroup: FoodGroupInput): Promise<ParentFoodGroup | null> {
+        const editingFoodGroup = await FoodGroupModel.findById(foodGroup.id)
+        if(!editingFoodGroup) throw new Errors.NotFound('food group not found')
+
+        const editingFoodGroupSubGroups = await FoodGroupModel.find({parentFoodGroup: foodGroup.id})
+        
+        editingFoodGroup.name = foodGroup.name
+
+        // If user deleted a subgroup
+        Promise.all(editingFoodGroupSubGroups.map(async fg => {
+            const found = foodGroup.subGroups.find(sg => sg.id === String(fg.id))
+            if (!found) {
+                await fg.remove()
+            }
+        }))
+
+        // If user added a subgroup
+        Promise.all(foodGroup.subGroups.map(async fg => {
+            const found = editingFoodGroupSubGroups.find(sg => String(sg.id) === fg.id)
+
+            if (!found) {
+                await this.addFoodGroup(fg.name, foodGroup.id)
+            }
+        }))
+
+        const foodGroupSubGroups = await FoodGroupModel.find({parentFoodGroup: foodGroup.id})
+
+        const result = await editingFoodGroup.save()
+
+        return {
+            id: result.id,
+            name: result.name,
+            subGroups: foodGroupSubGroups,
+        }
     }
 }
