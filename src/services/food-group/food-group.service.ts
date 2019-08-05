@@ -12,7 +12,7 @@ import { Translation } from '@Types/common'
 @Service()
 export default class FoodGroupService {
     async listFoodGroups(): Promise<FoodGroup[]> {
-        return FoodGroupModel.find()
+        return FoodGroupModel.find({ parentFoodGroup: { $eq: null }})
     }
 
     async addFoodGroup(name: Translation[], parentFoodGroup?: string): Promise<FoodGroup> {
