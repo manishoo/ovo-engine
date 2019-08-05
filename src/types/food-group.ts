@@ -11,7 +11,7 @@ import { Field, ObjectType } from 'type-graphql'
 export class ParentFoodGroup {
 	@Field()
 	readonly id: number
-	@Field(type => String)
+	@Field(type => [Translation])
 	name: Translation[]
 }
 
@@ -20,7 +20,7 @@ export class FoodGroup {
 	readonly _id: mongoose.Schema.Types.ObjectId
 	@Field()
 	readonly id: string
-	@Field(type => String)
+	@Field(type => [Translation])
 	name: Translation[]
 	@Field(type => ParentFoodGroup, { nullable: true })
 	parentFoodGroup?: ParentFoodGroup | mongoose.Schema.Types.ObjectId
