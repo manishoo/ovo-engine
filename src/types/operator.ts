@@ -4,6 +4,7 @@
  */
 
 import { PersistedPassword } from '@Types/auth'
+import { ROLE } from '@Types/common'
 import { Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
@@ -17,8 +18,8 @@ export class Operator {
 	@Field()
 	status?: string
 
-	@Field()
-	role?: string
+	@Field(type => ROLE)
+	role?: ROLE
 
 	persistedPassword: PersistedPassword
 
