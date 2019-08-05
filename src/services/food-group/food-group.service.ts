@@ -14,7 +14,7 @@ export default class FoodGroupService {
     async listFoodGroups(): Promise<ParentFoodGroup[]> {
         const foodGroups = await FoodGroupModel.find()
 
-        const t = foodGroups.filter(fg => !fg.parentFoodGroup)
+        return foodGroups.filter(fg => !fg.parentFoodGroup)
             .map(rootFoodGroup => {
                 return {
                     id: rootFoodGroup.id,
@@ -22,8 +22,6 @@ export default class FoodGroupService {
                     subGroups: foodGroups.filter(fg => String(fg.parentFoodGroup) === String(rootFoodGroup.id))
                 } as ParentFoodGroup
             })
-            console.log(t)
-            return t
     }
 
     async addFoodGroup(name: Translation[], parentFoodGroup?: string): Promise<FoodGroup> {
