@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Image, Translation, LANGUAGE_CODES, NameAndId, Pagination } from '@Types/common'
+import { Image, Translation, LanguageCode, NameAndId, Pagination } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { Weight } from '@Types/weight'
 import mongoose from 'mongoose'
@@ -74,7 +74,7 @@ export class FoodVariety {
 	@Field(type => [Weight], { nullable: true })
 	weights?: Weight[]
 	@Field()
-	lang?: LANGUAGE_CODES
+	lang?: LanguageCode
 }
 
 @ObjectType()
@@ -95,7 +95,7 @@ export class FoodInput {
 	@Field({ nullable: true })
 	description?: string
 	@Field()
-	lang: LANGUAGE_CODES
+	lang: LanguageCode
 }
 
 @ObjectType()
@@ -136,15 +136,15 @@ export interface FoodFind {
 	query?: string,
 	limit?: number,
 	offset?: number,
-	lang: LANGUAGE_CODES,
+	lang: LanguageCode,
 	shouldIncludeNutrients?: boolean
 }
 
 export interface FoodTranslationList {
 	limit?: number,
 	offset?: number,
-	sourceLang: LANGUAGE_CODES,
-	targetLang: LANGUAGE_CODES,
+	sourceLang: LanguageCode,
+	targetLang: LanguageCode,
 	query?: string,
 	fgid?: string,
 	isVerified?: boolean,

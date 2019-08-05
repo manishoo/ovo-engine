@@ -5,24 +5,25 @@
 
 import { UserSchema } from '@Models/user.model'
 import { Field, ObjectType, registerEnumType } from 'type-graphql'
-import { prop, Ref, Typegoose } from 'typegoose'
+import { prop, Ref } from 'typegoose'
 
 
-export enum LANGUAGE_CODES {
+export enum LanguageCode {
 	en = 'en',
 	fa = 'fa',
 }
 
-export enum STATUS {
+export enum Status {
 	active = 'ACTIVE',
 	inactive = 'INACTIVE',
 }
 
-export enum ROLE {
+export enum Role {
 	admin = 'ADMIN',
 	operator = 'OPERATOR',
 }
-registerEnumType(ROLE, {
+
+registerEnumType(Role, {
 	name: 'Role',
 	description: 'Operator Roles'
 })
@@ -109,8 +110,8 @@ export class Item {
 }
 
 export class Translation {
-	@prop({ enum: LANGUAGE_CODES, required: true })
-	locale: LANGUAGE_CODES
+	@prop({ enum: LanguageCode, required: true })
+	locale: LanguageCode
 	@prop({ required: true })
 	text: string
 }

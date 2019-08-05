@@ -3,17 +3,17 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LANGUAGE_CODES, STATUS } from '@Types/common'
+import { LanguageCode, Status } from '@Types/common'
 import Errors from '@Utils/errors'
 import { Request } from 'express'
 
 export interface Context {
 	request: Request,
-	lang: LANGUAGE_CODES,
+	lang: LanguageCode,
 	user?: {
 		id: string,
-		status: STATUS,
-		lang: LANGUAGE_CODES,
+		status: Status,
+		lang: LanguageCode,
 	},
 }
 

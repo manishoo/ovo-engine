@@ -4,14 +4,13 @@
  */
 
 import { transformRecipeUser } from '@Services/user/transformers/recipe-user.transformer'
-import WeightService from '@Services/weight/weight.service'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import { Recipe } from '@Types/recipe'
 import { User } from '@Types/user'
 import { Container } from 'typedi'
 import { InstanceType } from 'typegoose'
 
-export async function transformRecipe(recipe: InstanceType<Recipe>, userId?: string, full: boolean = false, lang: LANGUAGE_CODES = LANGUAGE_CODES.en): Promise<Recipe> {
+export async function transformRecipe(recipe: InstanceType<Recipe>, userId?: string, full: boolean = false, lang: LanguageCode = LanguageCode.en): Promise<Recipe> {
 	recipe = recipe.toObject()
 	recipe.id = recipe.publicId
 	recipe.likesCount = recipe.likes.length
@@ -25,10 +24,7 @@ export async function transformRecipe(recipe: InstanceType<Recipe>, userId?: str
 
 	if (full) {
 		recipe.ingredients = await Promise.all(recipe.ingredients.map(async ingredient => {
-			if (ingredient.weightId) { // FIXME use population
-				const weightService = Container.get(WeightService)
-				ingredient.weight = await weightService.findByPublicId(ingredient.weightId, lang)
-			}/* else {
+			/* else {
 			ingredient.unit = 'g' // FIXME multilanguage
 		}*/
 

@@ -4,9 +4,9 @@
  */
 
 import { translationInstance } from '@Types/food-database'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 
-export function getFoodTranslation(translations: translationInstance[], lang: LANGUAGE_CODES) {
+export function getFoodTranslation(translations: translationInstance[], lang: LanguageCode) {
 	let name = ''
 	let description = ''
 

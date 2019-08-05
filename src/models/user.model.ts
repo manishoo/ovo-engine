@@ -8,7 +8,7 @@ import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, STATUS } from '@Types/common'
+import { Image, Status } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { ACTIVITY, GENDER, GOALS, Height, MealUnit, User, WeightUnit } from '@Types/user'
@@ -86,7 +86,7 @@ export class UserSchema extends Typegoose implements User {
 	/**
 	 * other
 	 * */
-	@prop({ required: true, enum: STATUS, default: STATUS.active })
+	@prop({ required: true, enum: Status, default: Status.active })
 	status?: string
 	@prop({ default: [] })
 	meals?: MealUnit[]

@@ -4,7 +4,7 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { LANGUAGE_CODES, Translation } from '@Types/common'
+import { LanguageCode, Translation } from '@Types/common'
 import { FOOD_CLASS_CATEGORY, FOOD_CLASS_TYPES, FoodClass, FoodClassTaxonomy } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
 import { instanceMethod, prop, Typegoose } from 'typegoose'
@@ -39,7 +39,7 @@ export class FoodClassSchema extends Typegoose implements FoodClass {
 	taxonomies: FoodClassTaxonomy[]
 
 	@instanceMethod
-	getName(locale: LANGUAGE_CODES): string | undefined {
+	getName(locale: LanguageCode): string | undefined {
 		const translation = this.name.find(p => p.locale === locale)
 
 		if (!translation) return undefined
@@ -48,7 +48,7 @@ export class FoodClassSchema extends Typegoose implements FoodClass {
 	}
 
 	@instanceMethod
-	async addName(locale: LANGUAGE_CODES, text: string) {
+	async addName(locale: LanguageCode, text: string) {
 		this.name.push({
 			locale,
 			text,

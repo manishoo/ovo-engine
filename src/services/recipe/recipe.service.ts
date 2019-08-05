@@ -7,7 +7,7 @@ import { RecipeModel } from '@Models/recipe.model'
 import { transformRecipe } from '@Services/recipe/transformers/recipe.transformer'
 import TagService from '@Services/tag/tag.service'
 import UserService from '@Services/user/user.service'
-import { Image, LANGUAGE_CODES } from '@Types/common'
+import { Image, LanguageCode } from '@Types/common'
 import { Recipe, RecipeInput, RecipesListResponse, RecipesQuery } from '@Types/recipe'
 import Errors from '@Utils/errors'
 import { processUpload } from '@Utils/upload/utils'
@@ -127,7 +127,7 @@ export default class RecipeService {
 		}
 	}
 
-	async update(publicId: string, data: Partial<RecipeInput>, lang: LANGUAGE_CODES, userId?: string) {
+	async update(publicId: string, data: Partial<RecipeInput>, lang: LanguageCode, userId?: string) {
 		const recipe = await RecipeModel.findOne({ publicId })
 			.populate('author')
 			.exec()
@@ -252,7 +252,7 @@ export default class RecipeService {
 		throw new Errors.Validation('no slug or id provided')
 	}
 
-	async create(data: RecipeInput, lang: LANGUAGE_CODES, userId?: string) {
+	async create(data: RecipeInput, lang: LanguageCode, userId?: string) {
 		let authorObjectId
 		if (userId) {
 			const author = await this.userService.findById(userId)
@@ -329,6 +329,6 @@ export default class RecipeService {
 	async tagRecipe(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
 		return this.update(recipePublicId, {
 			tags: tagSlugs,
-		}, LANGUAGE_CODES.en, userId)
+		}, LanguageCode.en, userId)
 	}
 }

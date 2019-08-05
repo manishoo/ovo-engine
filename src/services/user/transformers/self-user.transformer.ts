@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import { User } from '@Types/user'
 import { InstanceType } from 'typegoose'
 
-export default async function transformSelfUser(userDocument: InstanceType<User>, lang: LANGUAGE_CODES = LANGUAGE_CODES.en) {
+export default async function transformSelfUser(userDocument: InstanceType<User>, lang: LanguageCode = LanguageCode.en) {
 	userDocument = userDocument.toObject()
 	userDocument.id = String(userDocument.publicId)
 	if (userDocument.path) {

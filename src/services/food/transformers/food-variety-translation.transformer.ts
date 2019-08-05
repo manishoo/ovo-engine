@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import { Food } from '@Types/food'
 import { translationInstance } from '@Types/food-database'
 import { Weight } from '@Types/weight'
 import Errors from '@Utils/errors'
 
-export async function transformFoodVarietyTranslation(translation: translationInstance, lang: LANGUAGE_CODES, withNutrients: boolean, withWeights: boolean): Promise<Food> {
+export async function transformFoodVarietyTranslation(translation: translationInstance, lang: LanguageCode, withNutrients: boolean, withWeights: boolean): Promise<Food> {
 	const foodVariety = translation.foodVariety
 	// const food = translation.foodVariety.food
 
