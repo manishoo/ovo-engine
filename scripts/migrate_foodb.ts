@@ -6,7 +6,7 @@
 // import {foodb, main as mainConnection, fndds as usdaConnection} from '../src/config/connections/sequelize'
 // import {getModels as getFooDBModels} from '../src/models/_foodb-models/db.tables'
 // import {getModels as getOurModels} from '../src/types/food-database-tables'
-// import {LANGUAGE_CODES} from '~/constants/enums'
+// import {LanguageCode} from '~/constants/enums'
 // import uuid from 'uuid/v1'
 // import {getModels as getUSDAModels} from '../src/models/_fndds-models/db.tables'
 // import {foodVarietyAttribute, weightAttribute} from '../src/types/food-database'
@@ -69,13 +69,13 @@
 // 			// // @ts-ignore
 // 			// await ourModels.FoodGroupTr.create({
 // 			// 	name,
-// 			// 	lang: LANGUAGE_CODES.en,
+// 			// 	lang: LanguageCode.en,
 // 			// 	foodGroupId: fg.id,
 // 			// })
 //
 // 			await ourModels.Translation.create({
 // 				text: name,
-// 				lang: LANGUAGE_CODES.en,
+// 				lang: LanguageCode.en,
 // 				field: 'name',
 // 				sourceType: 'food_group',
 // 				sourceId: fg.id,
@@ -114,7 +114,7 @@
 // 		const translations = [
 // 			{
 // 				text: name,
-// 				lang: LANGUAGE_CODES.en,
+// 				lang: LanguageCode.en,
 // 				field: 'name',
 // 				sourceType: 'food',
 // 				sourceId: String(foodId),
@@ -124,7 +124,7 @@
 // 		if (description) {
 // 			translations.push({
 // 				text: description,
-// 				lang: LANGUAGE_CODES.en,
+// 				lang: LanguageCode.en,
 // 				field: 'description',
 // 				sourceType: 'food',
 // 				sourceId: String(foodId),
@@ -251,7 +251,7 @@
 // 		const savedFoodVarieties = await ourModels.FoodVariety.bulkCreate(foodVarieties)
 // 		await ourModels.Translation.bulkCreate(savedFoodVarieties.map(fv => ({
 // 			text: fv.origFoodName,
-// 			lang: LANGUAGE_CODES.en,
+// 			lang: LanguageCode.en,
 // 			sourceId: String(fv.id!),
 // 			sourceType: 'food_variety',
 // 			field: 'name',
@@ -329,7 +329,7 @@
 // 	}))
 // 	const weights = await ourModels.Weight.bulkCreate(weightsToSave)
 // 	await ourModels.Translation.bulkCreate(weights.map(t => ({
-// 		lang: LANGUAGE_CODES.en,
+// 		lang: LanguageCode.en,
 // 		text: weightTrs.find(p => p.publicId === t.publicId).msreDesc,
 // 		field: 'description',
 // 		sourceId: String(t.id!),

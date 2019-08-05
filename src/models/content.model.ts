@@ -4,7 +4,7 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { LANGUAGE_CODES, Translation } from '@Types/common'
+import { LanguageCode, Translation } from '@Types/common'
 import { Content, CONTENT_TYPE, Synonym } from '@Types/content'
 import { instanceMethod, prop, Typegoose } from 'typegoose'
 
@@ -226,7 +226,7 @@ export class ContentSchema extends Typegoose implements Content {
 
 
 	@instanceMethod
-	getName(locale: LANGUAGE_CODES): string | undefined {
+	getName(locale: LanguageCode): string | undefined {
 		const translation = this.name.find(p => p.locale === locale)
 
 		if (!translation) return undefined
@@ -235,7 +235,7 @@ export class ContentSchema extends Typegoose implements Content {
 	}
 
 	@instanceMethod
-	async addName(locale: LANGUAGE_CODES, text: string) {
+	async addName(locale: LanguageCode, text: string) {
 		this.name.push({
 			locale,
 			text,

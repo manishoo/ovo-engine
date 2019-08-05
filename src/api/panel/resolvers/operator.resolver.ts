@@ -9,7 +9,7 @@ import { OperatorResponse, Operator } from '@Types/operator'
 import { Arg, Ctx, Mutation, Resolver, Query, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context, checkUser } from '../utils'
-import { ROLE } from '@Types/common'
+import { Role } from '@Types/common'
 import mongoose from 'mongoose'
 import Errors from '@Utils/errors';
 
@@ -24,7 +24,7 @@ export default class OperatorResolver {
 		// noop
 	}
 
-	@Authorized(ROLE.admin)
+	@Authorized(Role.admin)
 	@Mutation(returns => OperatorResponse)
 	async createOperator(
 		@Arg('username') username: string,
@@ -34,7 +34,7 @@ export default class OperatorResolver {
 		return this.operatorService.create(username, password)
 	}
 
-	@Authorized(ROLE.admin)
+	@Authorized(Role.admin)
 	@Query(returns => [Operator])
 	async listOperators(
 		@Ctx() ctx: Context,
@@ -42,7 +42,7 @@ export default class OperatorResolver {
 		return this.operatorService.getOperatorsList()
 	}
 
-	@Authorized(ROLE.admin)
+	@Authorized(Role.admin)
 	@Mutation(returns => Operator)
 	async deleteOperator(
 		@Arg('id') operatorID: string,

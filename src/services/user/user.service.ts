@@ -8,7 +8,7 @@ import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import transformSelfUser from '@Services/user/transformers/self-user.transformer'
 import transformUser from '@Services/user/transformers/user.transformer'
-import { LANGUAGE_CODES, STATUS } from '@Types/common'
+import { LanguageCode, Status } from '@Types/common'
 import { MealPlan } from '@Types/meal-plan'
 import { GENDER, User } from '@Types/user'
 import Errors from '@Utils/errors'
@@ -92,7 +92,7 @@ export default class UserService {
 				.catch(logError('findBySession->redis.expire'))
 			return user
 		} else {
-			const dbUser = await this.findOne({ session, status: { $ne: STATUS.inactive } })
+			const dbUser = await this.findOne({ session, status: { $ne: Status.inactive } })
 			if (!dbUser) {
 				return null
 			}

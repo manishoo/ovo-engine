@@ -9,9 +9,9 @@ import { foodVarietyInstance } from '@Types/food-database'
 import { Weight } from '@Types/weight'
 import Errors from '@Utils/errors'
 import { setImageUrl } from '@Utils/image-url-setter'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 
-export async function transformFoodVariety(foodVariety: foodVarietyInstance, lang: LANGUAGE_CODES): Promise<Food> {
+export async function transformFoodVariety(foodVariety: foodVarietyInstance, lang: LanguageCode): Promise<Food> {
 	const food = foodVariety.food
 
 	console.log('foodVariety.weights', foodVariety.weights)

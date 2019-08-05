@@ -5,7 +5,7 @@
 
 import { TagModel } from '@Models/tag.model'
 import { Tag, TagInput } from '@Types/tag'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import Errors from '@Utils/errors'
 import { Service } from 'typedi'
 
@@ -16,7 +16,7 @@ export default class TagService {
 		return TagModel.find()
 	}
 
-	async create(data: TagInput, lang: LANGUAGE_CODES): Promise<Tag> {
+	async create(data: TagInput, lang: LanguageCode): Promise<Tag> {
 		const tag = new TagModel({
 			origInfo: data.info,
 			origLang: lang,

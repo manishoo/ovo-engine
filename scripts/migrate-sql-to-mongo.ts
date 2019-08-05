@@ -15,7 +15,7 @@ import { ContentModel as mongoContentModel } from '../src/models/content.model'
 import { FoodClassModel as mongoFoodClassModel } from '../src/models/food-class.model'
 import { FoodGroupModel as mongoFoodGroupModel } from '../src/models/food-group.model'
 import { FoodModel as mongoFoodModel } from '../src/models/food.model'
-import { LANGUAGE_CODES, Translation } from '../src/types/common'
+import { LanguageCode, Translation } from '../src/types/common'
 import { Content, CONTENT_TYPE } from '../src/types/content'
 import { FoodContent } from '../src/types/food'
 import { FoodClass, FoodClassTaxonomy } from '../src/types/food-class'
@@ -65,7 +65,7 @@ const CITATIONS = [
 
 function createTranslations(name: string): Translation[] {
 	return [
-		{ locale: LANGUAGE_CODES.en, text: name }
+		{ locale: LanguageCode.en, text: name }
 	]
 }
 
@@ -279,7 +279,7 @@ async function migrateFoods() {
 						amount: Number(foodbContent.origContent),
 						citation: foodbContent.citation,
 						citationType: foodbContent.citationType,
-						origContentName: content.getName(LANGUAGE_CODES.en),
+						origContentName: content.getName(LanguageCode.en),
 						origContentType: content.type,
 						standardContent: Number(foodbContent.standardContent),
 						unit: foodbContent.origUnit,

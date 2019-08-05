@@ -12,7 +12,7 @@ import {
 	MessageBackgroundInformation,
 	MessagePayload
 } from '@Types/assistant'
-import { LANGUAGE_CODES } from '@Types/common'
+import { LanguageCode } from '@Types/common'
 import { GENDER, MealUnit, User } from '@Types/user'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
@@ -40,7 +40,7 @@ export default class Cognition {
 		return CONTEXTS.introduction
 	}
 
-	static async replyToConversation(context: CONTEXTS, messagePayload: MessagePayload, backgroundInfo: MessageBackgroundInformation, lang: LANGUAGE_CODES): Promise<Message[]> {
+	static async replyToConversation(context: CONTEXTS, messagePayload: MessagePayload, backgroundInfo: MessageBackgroundInformation, lang: LanguageCode): Promise<Message[]> {
 		const message = messagePayload.messages[0]
 
 		const m = message ? message.text : undefined
@@ -202,7 +202,7 @@ function createDefaultMealDistribution(): MealUnit[] {
 	]
 }
 
-function askForName(lang: LANGUAGE_CODES) {
+function askForName(lang: LanguageCode) {
 	return [
 		createMessage(__({ phrase: 'assistantAskName', locale: lang }), {
 			expect: EXPECTATIONS.nickname,
@@ -210,7 +210,7 @@ function askForName(lang: LANGUAGE_CODES) {
 	]
 }
 
-function askForAge(lang: LANGUAGE_CODES, nickname: string) {
+function askForAge(lang: LanguageCode, nickname: string) {
 	return [
 		createMessage(__({ phrase: 'assistantExplainNext1', locale: lang }, { name: nickname })),
 		createMessage(__({ phrase: 'assistantExplainNext2', locale: lang })),
@@ -221,7 +221,7 @@ function askForAge(lang: LANGUAGE_CODES, nickname: string) {
 	]
 }
 
-function askForWeight(lang: LANGUAGE_CODES,) {
+function askForWeight(lang: LanguageCode,) {
 	return [
 		createMessage(__({ phrase: 'assistantAskWeight', locale: lang }), {
 			expect: EXPECTATIONS.weight,
@@ -230,7 +230,7 @@ function askForWeight(lang: LANGUAGE_CODES,) {
 	]
 }
 
-function askForHeight(lang: LANGUAGE_CODES,) {
+function askForHeight(lang: LanguageCode,) {
 	return [
 		createMessage(__({ phrase: 'assistantAskHeight', locale: lang }), {
 			expect: EXPECTATIONS.height,
@@ -239,7 +239,7 @@ function askForHeight(lang: LANGUAGE_CODES,) {
 	]
 }
 
-function askForGender(lang: LANGUAGE_CODES) {
+function askForGender(lang: LanguageCode) {
 	return [
 		createMessage(__({ phrase: 'assistantAskGender', locale: lang }), {
 			expect: EXPECTATIONS.gender,
@@ -249,7 +249,7 @@ function askForGender(lang: LANGUAGE_CODES) {
 	]
 }
 
-function askForActivity(lang: LANGUAGE_CODES, bmr: number, gender: GENDER) {
+function askForActivity(lang: LanguageCode, bmr: number, gender: GENDER) {
 	return [
 		createMessage(__({ phrase: 'assistantShowBMR', locale: lang }, { bmr: String(bmr) })),
 		createMessage(__({ phrase: 'assistantExplainActivity', locale: lang })),
@@ -261,7 +261,7 @@ function askForActivity(lang: LANGUAGE_CODES, bmr: number, gender: GENDER) {
 	]
 }
 
-function askForGoal(lang: LANGUAGE_CODES, tdee: number, weight: number, height: number) {
+function askForGoal(lang: LanguageCode, tdee: number, weight: number, height: number) {
 	return [
 		createMessage(__({ phrase: 'assistantExplainTDEE', locale: lang }, { tdee: String(tdee) })),
 		createMessage(__({ phrase: 'assistantAskGoal', locale: lang }), {
@@ -272,7 +272,7 @@ function askForGoal(lang: LANGUAGE_CODES, tdee: number, weight: number, height: 
 	]
 }
 
-function askForRegistration(lang: LANGUAGE_CODES,) {
+function askForRegistration(lang: LanguageCode,) {
 	return [
 		createMessage(__({ phrase: 'goRegister', locale: lang }), {
 			expect: EXPECTATIONS.register,
@@ -281,7 +281,7 @@ function askForRegistration(lang: LANGUAGE_CODES,) {
 	]
 }
 
-function askForMealPlan(lang: LANGUAGE_CODES, targetCalories: number) {
+function askForMealPlan(lang: LanguageCode, targetCalories: number) {
 	return [
 		createMessage(__({ phrase: 'assistantWhatHappensNext1', locale: lang })),
 		createMessage(__({

@@ -6,7 +6,7 @@
 import { Arg, Ctx, Query, Resolver, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
-import { ROLE } from '@Types/common';
+import { Role } from '@Types/common';
 import { FoodGroup } from '@Types/food-group';
 import FoodGroupService from '@Services/food-group/food-group.service'
 
@@ -20,7 +20,7 @@ export default class FoodGroupResolver {
 		// noop
     }
 
-    @Authorized(ROLE.operator)
+    @Authorized(Role.operator)
     @Query(returns => [FoodGroup])
     async listFoodGroups(
         @Ctx() ctx: Context,
