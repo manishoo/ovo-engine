@@ -42,10 +42,10 @@ export default class FoodGroupService {
 
     async editFoodGroup(foodGroup: FoodGroupInput): Promise<ParentFoodGroup | null> {
         const editingFoodGroup = await FoodGroupModel.findById(foodGroup.id)
-        if(!editingFoodGroup) throw new Errors.NotFound('food group not found')
+        if (!editingFoodGroup) throw new Errors.NotFound('food group not found')
 
-        const editingFoodGroupSubGroups = await FoodGroupModel.find({parentFoodGroup: foodGroup.id})
-        
+        const editingFoodGroupSubGroups = await FoodGroupModel.find({ parentFoodGroup: foodGroup.id })
+
         editingFoodGroup.name = foodGroup.name
 
         // If user deleted a subgroup
@@ -65,7 +65,7 @@ export default class FoodGroupService {
             }
         }))
 
-        const foodGroupSubGroups = await FoodGroupModel.find({parentFoodGroup: foodGroup.id})
+        const foodGroupSubGroups = await FoodGroupModel.find({ parentFoodGroup: foodGroup.id })
 
         const result = await editingFoodGroup.save()
 

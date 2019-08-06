@@ -13,39 +13,39 @@ import { Context } from '../utils'
 @Service()
 @Resolver()
 export default class FoodGroupResolver {
-	constructor(
-		// service injection
-		private readonly foodGroupService: FoodGroupService,
-	) {
-		// noop
-	}
+    constructor(
+        // service injection
+        private readonly foodGroupService: FoodGroupService,
+    ) {
+        // noop
+    }
 
-	@Authorized(Role.operator)
-	@Query(returns => [ParentFoodGroup])
-	async listFoodGroups(
-		@Ctx() ctx: Context,
-	) {
-		return this.foodGroupService.listFoodGroups()
-	}
+    @Authorized(Role.operator)
+    @Query(returns => [ParentFoodGroup])
+    async listFoodGroups(
+        @Ctx() ctx: Context,
+    ) {
+        return this.foodGroupService.listFoodGroups()
+    }
 
-	@Authorized(Role.operator)
-	@Mutation(returns => ParentFoodGroup)
-	async createFoodGroup(
-		@Arg('name', type => [TranslationInput]) name: TranslationInput[],
-		@Arg('parentFoodGroup', type => String, { nullable: true }) parentFoodGroup?: string,
-	) {
-		return this.foodGroupService.addFoodGroup(name, parentFoodGroup)
-	}
+    @Authorized(Role.operator)
+    @Mutation(returns => ParentFoodGroup)
+    async createFoodGroup(
+        @Arg('name', type => [TranslationInput]) name: TranslationInput[],
+        @Arg('parentFoodGroup', type => String, { nullable: true }) parentFoodGroup?: string,
+    ) {
+        return this.foodGroupService.addFoodGroup(name, parentFoodGroup)
+    }
 
-	@Authorized(Role.operator)
-	@Mutation(returns => Boolean)
-	async deleteFoodGroup(
-		@Arg('id') foodGroupID: string,
-	) {
-		return this.foodGroupService.removeFoodGroup(foodGroupID)
-	}
+    @Authorized(Role.operator)
+    @Mutation(returns => Boolean)
+    async deleteFoodGroup(
+        @Arg('id') foodGroupID: string,
+    ) {
+        return this.foodGroupService.removeFoodGroup(foodGroupID)
+    }
 
-	@Authorized(Role.operator)
+    @Authorized(Role.operator)
 	@Mutation(returns => ParentFoodGroup)
 	async editFoodGroup(
 		@Arg('foodGroup') foodGroup: FoodGroupInput,
