@@ -7,7 +7,7 @@ import { Service } from 'typedi'
 import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { Translation } from '@Types/common'
-import Errors from '~/utils/errors';
+import Errors from '@Utils/errors'
 
 
 @Service()
@@ -26,15 +26,15 @@ export default class FoodGroupService {
     }
 
     async addFoodGroup(name: Translation[], parentFoodGroup?: string): Promise<FoodGroup> {
-        return FoodGroupModel.create(<FoodGroup> {
+        return FoodGroupModel.create(<FoodGroup>{
             name,
             parentFoodGroup,
         })
     }
 
-    async removeFoodGriou(foodGroupID: string): Promise<FoodGroup> {
-        const removingFoodGroup = await FoodGroupModel.findByIdAndDelete(foodGroupID)
-        if(!removingFoodGroup) throw new Errors.NotFound('food group not found')
+    async removeFoodGroup(foodGroupID: string): Promise<FoodGroup> {
+        const { removingFoodGroup } = await FoodGroupModel.remove(foodGroupID)
+        if (removingFoodGroup.deletedCount !== 0) throw new Errors.NotFound('food group not found')
 
         return removingFoodGroup
     }

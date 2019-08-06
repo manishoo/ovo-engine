@@ -43,7 +43,7 @@ export default class FoodGroupResolver {
      async deleteFoodGroup(
          @Arg('id') foodGroupID: string,
      ) {
-         return this.foodGroupService.removeFoodGriou(foodGroupID)
+         return this.foodGroupService.removeFoodGroup(foodGroupID)
      }
 
 }
