@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Translation } from '@Types/common'
+import { Translation, TranslationInput } from '@Types/common'
 import mongoose from 'mongoose'
-import { Field, ObjectType } from 'type-graphql'
+import { Field, ObjectType, InputType } from 'type-graphql'
 
 @ObjectType()
 export class ParentFoodGroup {
@@ -26,4 +26,22 @@ export class FoodGroup {
 	name: Translation[]
 
 	parentFoodGroup?: ParentFoodGroup | mongoose.Schema.Types.ObjectId
+}
+
+@InputType()
+export class FoodGroupInput {
+	@Field()
+	readonly id: string
+	@Field(type => [TranslationInput])
+	name: Translation[]
+	@Field(type => [FoodGroupInput])
+	subGroups: SubGroupInput[]
+}
+
+@InputType()
+export class SubGroupInput {
+	@Field()
+	readonly id: string
+	@Field(type => [TranslationInput])
+	name: Translation[]
 }
