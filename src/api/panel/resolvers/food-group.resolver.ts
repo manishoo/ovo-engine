@@ -38,7 +38,7 @@ export default class FoodGroupResolver {
     }
 
     @Authorized(Role.operator)
-    @Mutation(returns => Number)
+    @Mutation(returns => Boolean)
     async deleteFoodGroup(
         @Arg('id') foodGroupID: string,
     ) {

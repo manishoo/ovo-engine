@@ -33,10 +33,10 @@ export default class FoodGroupService {
         })
     }
 
-    async removeFoodGroup(foodGroupID: string): Promise<Number> {
+    async removeFoodGroup(foodGroupID: string): Promise<Boolean> {
         const { n } = await FoodGroupModel.deleteOne({ _id: new monngoose.Types.ObjectId(foodGroupID) })
         if (n === 0) throw new Errors.NotFound('food group not found')
 
-        return n
+        return n === 1 ? true : false
     }
 }
