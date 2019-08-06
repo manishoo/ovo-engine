@@ -34,7 +34,7 @@ export class FoodGroupInput {
 	readonly id: string
 	@Field(type => [TranslationInput])
 	name: Translation[]
-	@Field(type => [FoodGroupInput])
+	@Field(type => [SubGroupInput])
 	subGroups: SubGroupInput[]
 }
 
