@@ -26,9 +26,6 @@
     "outDir": "build",
 
     "paths": {
-      "~/*": [
-        "src/*"
-      ],
       "@Services/*": [
         "src/services/*"
       ],
