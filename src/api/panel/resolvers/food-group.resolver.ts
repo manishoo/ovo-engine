@@ -38,4 +38,12 @@ export default class FoodGroupResolver {
         return this.foodGroupService.addFoodGroup(name, parentFoodGroup)
      }
 
+     @Authorized(Role.operator)
+     @Mutation(returns => FoodGroup)
+     async deleteFoodGroup(
+         @Arg('id') foodGroupID: string,
+     ) {
+         return this.foodGroupService.removeFoodGriou(foodGroupID)
+     }
+
 }
