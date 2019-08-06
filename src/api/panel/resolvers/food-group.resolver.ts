@@ -45,7 +45,7 @@ export default class FoodGroupResolver {
         return this.foodGroupService.removeFoodGroup(foodGroupID)
     }
 
-    @Authorized(Role.operator)
+@Authorized(Role.operator)
 	@Mutation(returns => ParentFoodGroup)
 	async editFoodGroup(
 		@Arg('foodGroup') foodGroup: FoodGroupInput,

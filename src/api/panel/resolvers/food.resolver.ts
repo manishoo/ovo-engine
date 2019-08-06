@@ -4,7 +4,7 @@
  */
 
 import FoodService from '@Services/food/food.service'
-import { Food } from '@Types/food'
+import { Food, FoodsListResponse } from '@Types/food'
 import { Arg, Ctx, Query, Resolver, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
@@ -21,13 +21,14 @@ export default class FoodResolver {
     }
 
     @Authorized(Role.operator)
-    @Query(returns => [Food])
+    @Query(returns => FoodsListResponse)
     async listFoods(
         @Arg('page', { defaultValue: 1 }) page: number,
         @Arg('size', { defaultValue: 10 }) size: number,
         @Ctx() ctx: Context,
+        @Arg('id', {nullable: true}) foodClassID?: string,
     ) {
-        return this.foodService.listFoods(page, size)
+        return this.foodService.listFoods(page, size, foodClassID)
     }
 
 }
