@@ -3,7 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
+import { FoodModel } from '@Models/food.model'
 import { Translation } from '@Types/common'
 import { FoodGroup, FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
 import Errors from '@Utils/errors'
@@ -47,10 +49,25 @@ export default class FoodGroupService {
 	}
 
 	async removeFoodGroup(foodGroupID: string): Promise<Boolean> {
-		const { n } = await FoodGroupModel.deleteOne({ _id: new mongoose.Types.ObjectId(foodGroupID) })
-		if (n === 0) throw new Errors.NotFound('food group not found')
+		const foodGroup = await FoodGroupModel.findById(foodGroupID)
+		if (!foodGroup) throw new Errors.NotFound('food group not found')
 
-		return n === 1
+		/**
+		 * Check if this food group or its sub groups have foods associated with them
+		 * throw an error
+		 * */
+		const foodsCount = await FoodClassModel.countDocuments({'foodGroup._id': foodGroup._id})
+		if (foodsCount !== 0) throw new Errors.Validation('This food group has foods associated with it! It can\'t be removed')
+
+		/**
+		 * Check if it has subgroups, raise an error
+		 * */
+		const count = await FoodGroupModel.countDocuments({parentFoodGroup: foodGroup._id})
+		if (count !== 0) throw new Errors.Validation('This food group has subgroups. Please first delete the subgroups')
+
+		await foodGroup.remove()
+
+		return true
 	}
 
 	async editFoodGroup(foodGroup: FoodGroupInput): Promise<ParentFoodGroup | null> {
