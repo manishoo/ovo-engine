@@ -7,7 +7,7 @@ import { Service } from 'typedi'
 import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { Translation } from '@Types/common'
-import Errors from '~/utils/errors';
+import Errors from '@Utils/errors'
 
 
 @Service()
