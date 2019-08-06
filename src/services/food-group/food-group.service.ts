@@ -25,7 +25,7 @@ export default class FoodGroupService {
     }
 
     async addFoodGroup(name: Translation[], parentFoodGroup?: string): Promise<FoodGroup> {
-        return FoodGroupModel.create(<FoodGroup> {
+        return FoodGroupModel.create(<FoodGroup>{
             name,
             parentFoodGroup,
         })

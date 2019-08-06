@@ -14,11 +14,11 @@ import FoodGroupService from '@Services/food-group/food-group.service'
 @Service()
 @Resolver()
 export default class FoodGroupResolver {
-	constructor(
-		// service injection
+    constructor(
+        // service injection
         private readonly foodGroupService: FoodGroupService,
-	) {
-		// noop
+    ) {
+        // noop
     }
 
     @Authorized(Role.operator)
@@ -27,15 +27,15 @@ export default class FoodGroupResolver {
         @Ctx() ctx: Context,
     ) {
         return this.foodGroupService.listFoodGroups()
-     }
+    }
 
     @Authorized(Role.operator)
     @Mutation(returns => ParentFoodGroup)
     async createFoodGroup(
         @Arg('name', type => [TranslationInput]) name: TranslationInput[],
-        @Arg('parentFoodGroup', type => String, {nullable: true}) parentFoodGroup?: string,
+        @Arg('parentFoodGroup', type => String, { nullable: true }) parentFoodGroup?: string,
     ) {
         return this.foodGroupService.addFoodGroup(name, parentFoodGroup)
-     }
+    }
 
 }

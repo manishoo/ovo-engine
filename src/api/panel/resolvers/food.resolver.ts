@@ -13,21 +13,21 @@ import { Role } from '@Types/common';
 @Service()
 @Resolver()
 export default class FoodResolver {
-	constructor(
-		// service injection
-		private readonly foodService: FoodService
-	) {
-		// noop
+    constructor(
+        // service injection
+        private readonly foodService: FoodService
+    ) {
+        // noop
     }
 
     @Authorized(Role.operator)
     @Query(returns => [Food])
     async listFoods(
-        @Arg('page', {defaultValue: 1}) page: number,
-        @Arg('size', {defaultValue: 10}) size: number,
+        @Arg('page', { defaultValue: 1 }) page: number,
+        @Arg('size', { defaultValue: 10 }) size: number,
         @Ctx() ctx: Context,
     ) {
         return this.foodService.listFoods(page, size)
-     }
+    }
 
 }

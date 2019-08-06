@@ -48,7 +48,7 @@ export default class OperatorResolver {
 		@Arg('id') operatorID: string,
 		@Ctx() ctx: Context,
 	) {
-		if(!mongoose.Types.ObjectId.isValid(operatorID)) throw new Errors.UserInput('Invalid id', {id: 'Invalid id'})
+		if (!mongoose.Types.ObjectId.isValid(operatorID)) throw new Errors.UserInput('Invalid id', { id: 'Invalid id' })
 		return this.operatorService.removeOperator(operatorID)
 	}
 
