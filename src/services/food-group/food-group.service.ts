@@ -3,76 +3,89 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Service } from 'typedi'
-import { FoodGroup, FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { Translation } from '@Types/common'
+import { FoodGroup, FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
 import Errors from '@Utils/errors'
-import monngoose from 'mongoose'
+import mongoose from 'mongoose'
+import { Service } from 'typedi'
 
 
 @Service()
 export default class FoodGroupService {
-    async listFoodGroups(): Promise<ParentFoodGroup[]> {
-        const foodGroups = await FoodGroupModel.find()
+	async getFoodGroup(id: string): Promise<ParentFoodGroup> {
+		const foodGroup = await FoodGroupModel.findById(id)
+		if (!foodGroup) throw new Errors.NotFound('food group not found')
 
-        return foodGroups.filter(fg => !fg.parentFoodGroup)
-            .map(rootFoodGroup => {
-                return {
-                    id: rootFoodGroup.id,
-                    name: rootFoodGroup.name,
-                    subGroups: foodGroups.filter(fg => String(fg.parentFoodGroup) === String(rootFoodGroup.id))
-                } as ParentFoodGroup
-            })
-    }
+		const subGroups = await FoodGroupModel.find({ parentFoodGroup: mongoose.Types.ObjectId(id) })
 
-    async addFoodGroup(name: Translation[], parentFoodGroup?: string): Promise<FoodGroup> {
-        return FoodGroupModel.create(<FoodGroup>{
-            name,
-            parentFoodGroup,
-        })
-    }
+		return {
+			id: foodGroup.id,
+			name: foodGroup.name,
+			subGroups,
+		}
+	}
 
-    async removeFoodGroup(foodGroupID: string): Promise<Boolean> {
-        const { n } = await FoodGroupModel.deleteOne({ _id: new monngoose.Types.ObjectId(foodGroupID) })
-        if (n === 0) throw new Errors.NotFound('food group not found')
+	async listFoodGroups(): Promise<ParentFoodGroup[]> {
+		const foodGroups = await FoodGroupModel.find()
 
-        return n === 1
-    }
+		return foodGroups.filter(fg => !fg.parentFoodGroup)
+			.map(rootFoodGroup => {
+				return {
+					id: rootFoodGroup.id,
+					name: rootFoodGroup.name,
+					subGroups: foodGroups.filter(fg => String(fg.parentFoodGroup) === String(rootFoodGroup.id))
+				} as ParentFoodGroup
+			})
+	}
 
-    async editFoodGroup(foodGroup: FoodGroupInput): Promise<ParentFoodGroup | null> {
-        const editingFoodGroup = await FoodGroupModel.findById(foodGroup.id)
-        if(!editingFoodGroup) throw new Errors.NotFound('food group not found')
+	async addFoodGroup(name: Translation[], parentFoodGroup?: string): Promise<FoodGroup> {
+		return FoodGroupModel.create(<FoodGroup>{
+			name,
+			parentFoodGroup,
+		})
+	}
 
-        const editingFoodGroupSubGroups = await FoodGroupModel.find({parentFoodGroup: foodGroup.id})
-        
-        editingFoodGroup.name = foodGroup.name
+	async removeFoodGroup(foodGroupID: string): Promise<Boolean> {
+		const { n } = await FoodGroupModel.deleteOne({ _id: new mongoose.Types.ObjectId(foodGroupID) })
+		if (n === 0) throw new Errors.NotFound('food group not found')
 
-        // If user deleted a subgroup
-        Promise.all(editingFoodGroupSubGroups.map(async fg => {
-            const found = foodGroup.subGroups.find(sg => sg.id === String(fg.id))
-            if (!found) {
-                await fg.remove()
-            }
-        }))
+		return n === 1
+	}
 
-        // If user added a subgroup
-        Promise.all(foodGroup.subGroups.map(async fg => {
-            const found = editingFoodGroupSubGroups.find(sg => String(sg.id) === fg.id)
+	async editFoodGroup(foodGroup: FoodGroupInput): Promise<ParentFoodGroup | null> {
+		const editingFoodGroup = await FoodGroupModel.findById(foodGroup.id)
+		if (!editingFoodGroup) throw new Errors.NotFound('food group not found')
 
-            if (!found) {
-                await this.addFoodGroup(fg.name, foodGroup.id)
-            }
-        }))
+		const editingFoodGroupSubGroups = await FoodGroupModel.find({ parentFoodGroup: foodGroup.id })
 
-        const foodGroupSubGroups = await FoodGroupModel.find({parentFoodGroup: foodGroup.id})
+		editingFoodGroup.name = foodGroup.name
 
-        const result = await editingFoodGroup.save()
+		// If user deleted a subgroup
+		Promise.all(editingFoodGroupSubGroups.map(async fg => {
+			const found = foodGroup.subGroups.find(sg => sg.id === String(fg.id))
+			if (!found) {
+				await fg.remove()
+			}
+		}))
 
-        return {
-            id: result.id,
-            name: result.name,
-            subGroups: foodGroupSubGroups,
-        }
-    }
+		// If user added a subgroup
+		Promise.all(foodGroup.subGroups.map(async fg => {
+			const found = editingFoodGroupSubGroups.find(sg => String(sg.id) === fg.id)
+
+			if (!found) {
+				await this.addFoodGroup(fg.name, foodGroup.id)
+			}
+		}))
+
+		const foodGroupSubGroups = await FoodGroupModel.find({ parentFoodGroup: foodGroup.id })
+
+		const result = await editingFoodGroup.save()
+
+		return {
+			id: result.id,
+			name: result.name,
+			subGroups: foodGroupSubGroups,
+		}
+	}
 }
