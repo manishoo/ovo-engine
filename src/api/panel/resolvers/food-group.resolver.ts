@@ -20,13 +20,22 @@ export default class FoodGroupResolver {
         // noop
     }
 
-    @Authorized(Role.operator)
-    @Query(returns => [ParentFoodGroup])
-    async listFoodGroups(
-        @Ctx() ctx: Context,
-    ) {
-        return this.foodGroupService.listFoodGroups()
-    }
+	@Authorized(Role.operator)
+	@Query(returns => ParentFoodGroup)
+	async foodGroup(
+		@Arg('id', type => String) id: string,
+		@Ctx() ctx: Context,
+	) {
+		return this.foodGroupService.getFoodGroup(id)
+	}
+
+	@Authorized(Role.operator)
+	@Query(returns => [ParentFoodGroup])
+	async foodGroups(
+		@Ctx() ctx: Context,
+	) {
+		return this.foodGroupService.listFoodGroups()
+	}
 
     @Authorized(Role.operator)
     @Mutation(returns => ParentFoodGroup)
