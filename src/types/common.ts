@@ -14,7 +14,7 @@ export enum LanguageCode {
 }
 registerEnumType(LanguageCode, {
 	name: 'LanguageCode',
-	description: 'Language Roles'
+	description: 'Language codes'
 })
 
 export enum Status {
@@ -29,7 +29,7 @@ export enum Role {
 
 registerEnumType(Role, {
 	name: 'Role',
-	description: 'Operator Roles'
+	description: 'Operator roles'
 })
 
 @ObjectType()
