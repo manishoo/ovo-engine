@@ -25,9 +25,11 @@ export default class FoodClassResolver {
     @Authorized(Role.operator)
     @Query(returns => [FoodClass])
     async listFoodClasses(
+        @Arg('page', {defaultValue: 1}) page: number,
+        @Arg('size', {defaultValue: 10}) size: number,
         @Ctx() ctx: Context,
     ) {
-        return this.foodClassService.listFoodClasses()
+        return this.foodClassService.listFoodClasses(page, size)
     }
 
 }

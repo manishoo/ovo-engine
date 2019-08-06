@@ -11,8 +11,10 @@ import { Translation } from '@Types/common'
 
 @Service()
 export default class FoodClassService {
-    async listFoodClasses(): Promise<FoodClass[]> {
+    async listFoodClasses(page: number, size: number): Promise<FoodClass[]> {
 
         return FoodClassModel.find()
+        .limit(size)
+        .skip(size * page)
     }
 }
