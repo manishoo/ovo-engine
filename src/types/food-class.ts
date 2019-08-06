@@ -3,11 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Translation } from '@Types/common'
+import { Field, ObjectType } from 'type-graphql'
+import { Pagination, Translation } from '@Types/common'
+
 import { FoodGroup } from '@Types/food-group'
 import mongoose from 'mongoose'
-import { Field, ObjectType } from 'type-graphql'
-
+import { object } from '@hapi/joi';
 
 export enum FOOD_CLASS_TYPES {
 	type1 = 'Type 1',
@@ -31,9 +32,9 @@ export class FoodClass {
 	readonly _id: mongoose.Schema.Types.ObjectId
 	@Field()
 	readonly id: string
-	@Field(type => String)
+	@Field(type => [Translation])
 	name: Translation[]
-	@Field(type => String, {nullable: true})
+	@Field(type => [Translation], {nullable: true})
 	description?: Translation[]
 	@Field()
 	slug: string
@@ -47,4 +48,12 @@ export class FoodClass {
 	category?: FOOD_CLASS_CATEGORY
 	ncbiTaxonomyId?: number
 	taxonomies: FoodClassTaxonomy[]
+}
+
+@ObjectType()
+export class FoodClassListResponse {
+	@Field(type => [FoodClass])
+	foodClasses: FoodClass[]
+	@Field(type => Pagination)
+	pagination: Pagination
 }
