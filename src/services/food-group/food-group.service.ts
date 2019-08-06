@@ -8,6 +8,7 @@ import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { Translation } from '@Types/common'
 import Errors from '@Utils/errors'
+import monngoose from 'mongoose'
 
 
 @Service()
@@ -32,10 +33,10 @@ export default class FoodGroupService {
         })
     }
 
-    async removeFoodGroup(foodGroupID: string): Promise<FoodGroup> {
-        const { removingFoodGroup } = await FoodGroupModel.remove(foodGroupID)
-        if (removingFoodGroup.deletedCount !== 0) throw new Errors.NotFound('food group not found')
+    async removeFoodGroup(foodGroupID: string): Promise<Number> {
+        const { n } = await FoodGroupModel.deleteOne({ _id: new monngoose.Types.ObjectId(foodGroupID) })
+        if (n === 0) throw new Errors.NotFound('food group not found')
 
-        return removingFoodGroup
+        return n
     }
 }
