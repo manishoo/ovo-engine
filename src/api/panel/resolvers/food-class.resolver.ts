@@ -22,7 +22,7 @@ export default class FoodClassResolver {
 
     @Authorized(Role.operator)
     @Query(returns => FoodClassListResponse)
-    async listFoodClasses(
+    async foodClasses(
         @Arg('page', { defaultValue: 1 }) page: number,
         @Arg('size', { defaultValue: 10 }) size: number,
         @Ctx() ctx: Context,
