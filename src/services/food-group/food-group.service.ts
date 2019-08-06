@@ -53,7 +53,7 @@ export default class FoodGroupService {
 		if (!foodGroup) throw new Errors.NotFound('food group not found')
 
 		/**
-		 * Check if this food group or its sub groups have foods associated with them
+		 * Check if this food group has foods associated with them
 		 * throw an error
 		 * */
 		const foodsCount = await FoodClassModel.countDocuments({'foodGroup._id': foodGroup._id})
