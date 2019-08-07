@@ -42,7 +42,7 @@ export default class FoodClassResolver {
     @Authorized(Role.operator)
     @Mutation(returns => Boolean)
     async deleteFoodClass(
-        @Arg('foodClassId') foodClassID: string,
+        @Arg('id') foodClassID: string,
         @Ctx() ctx: Context,
     ) {
         return this.foodClassService.deleteFoodClass(foodClassID)
