@@ -7,8 +7,8 @@ import { FoodClassListResponse, FoodClass, FoodClassInput } from '@Types/food-cl
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { Service } from 'typedi'
-import mongoose, { mongo } from 'mongoose'
 import Errors from '@Utils/errors'
+import mongoose from 'mongoose'
 
 @Service()
 export default class FoodClassService {
