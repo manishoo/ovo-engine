@@ -9,6 +9,7 @@ import { FoodGroupModel } from '@Models/food-group.model'
 import { Service } from 'typedi'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
+import { FoodModel } from '@Models/food.model'
 
 @Service()
 export default class FoodClassService {
@@ -51,7 +52,8 @@ export default class FoodClassService {
 		const foodClass = await FoodClassModel.findById(mongoose.Types.ObjectId(foodClassID))
 		if (!foodClass) throw new Errors.NotFound('food class not found')
 
-		if (foodClass.foodGroup) throw new Errors.Validation('This food class has food group associated with it! It can\'t be removed')
+		const foodCount = await FoodModel.countDocuments({foodClass: foodClass._id})
+		if (foodCount !== 0) throw new Errors.Validation('This food class has food associated with it! It can\'t be removed')
 
 		await foodClass.remove()
 
