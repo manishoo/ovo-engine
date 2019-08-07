@@ -27,8 +27,9 @@ export default class FoodClassResolver {
         @Arg('size', { defaultValue: 10 }) size: number,
         @Ctx() ctx: Context,
         @Arg('foodGroupId', {nullable: true}) foodGroupID?: string,
+        @Arg('foodGroup', {nullable: true}) searchFoodGroup? :string,
     ) {
-        return this.foodClassService.listFoodClasses(page, size, foodGroupID)
+        return this.foodClassService.listFoodClasses(page, size, foodGroupID, searchFoodGroup)
     }
 
     @Authorized(Role.operator)

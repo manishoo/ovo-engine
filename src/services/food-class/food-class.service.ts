@@ -12,12 +12,17 @@ import Errors from '@Utils/errors'
 
 @Service()
 export default class FoodClassService {
-	async listFoodClasses(page: number, size: number, foodGroupID?: string): Promise<FoodClassListResponse> {
+	async listFoodClasses(page: number, size: number, foodGroupID?: string, searchFoodGroup?: string): Promise<FoodClassListResponse> {
 		let query: any = {}
-		
+
 		if (foodGroupID) {
 			query['foodGroup._id'] = foodGroupID
 		}
+		if (searchFoodGroup) {//{ "name" : { $regex: /Ghost/, $options: 'i' }
+			let reg = new RegExp(searchFoodGroup)
+			query['name.text'] = { $regex: reg, $options: 'i' }
+		}
+		console.log(query)
 		const counts = await FoodClassModel.countDocuments()
 
 		if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
@@ -25,7 +30,7 @@ export default class FoodClassService {
 
 		const foodClasses = await FoodClassModel.find(query)
 			.limit(size)
-			.skip(size * page)
+			.skip(size * (page - 1))
 
 		return {
 			foodClasses,
