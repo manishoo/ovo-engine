@@ -7,7 +7,7 @@ import { FoodClassListResponse, FoodClass, FoodClassInput } from '@Types/food-cl
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { Service } from 'typedi'
-import mongoose from 'mongoose'
+import mongoose, { mongo } from 'mongoose'
 import Errors from '@Utils/errors'
 
 @Service()
@@ -45,6 +45,17 @@ export default class FoodClassService {
 		if (!editingFoodClass) throw new Errors.NotFound('food class not found')
 
 		return editingFoodClass
+	}
+
+	async deleteFoodClass(foodClassID: string): Promise<Boolean> {
+		const foodClass = await FoodClassModel.findById(mongoose.Types.ObjectId(foodClassID))
+		if (!foodClass) throw new Errors.NotFound('food class not found')
+
+		if (foodClass.foodGroup) throw new Errors.Validation('This food class has food group associated with it! It can\'t be removed')
+
+		await foodClass.remove()
+
+		return true
 	}
 
 }

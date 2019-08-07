@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql'
+import { Arg, Authorized, Ctx, Query, Resolver, Mutation } from 'type-graphql'
 import { Context } from '../utils'
 import { FoodClassListResponse, FoodClass, FoodClassInput } from '@Types/food-class'
 import FoodClassService from '@Services/food-class/food-class.service'
@@ -37,5 +37,14 @@ export default class FoodClassResolver {
         @Ctx() ctx: Context,
     ) {
         return this.foodClassService.editFoodClass(foodClass)
+    }
+
+    @Authorized(Role.operator)
+    @Mutation(returns => Boolean)
+    async deleteFoodClass(
+        @Arg('foodClassId') foodClassID: string,
+        @Ctx() ctx: Context,
+    ) {
+        return this.foodClassService.deleteFoodClass(foodClassID)
     }
 }
