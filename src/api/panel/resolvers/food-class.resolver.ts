@@ -5,7 +5,7 @@
 
 import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql'
 import { Context } from '../utils'
-import { FoodClassListResponse } from '@Types/food-class'
+import { FoodClassListResponse, FoodClass, FoodClassInput } from '@Types/food-class'
 import FoodClassService from '@Services/food-class/food-class.service'
 import { Role } from '@Types/common'
 import { Service } from 'typedi'
@@ -30,4 +30,12 @@ export default class FoodClassResolver {
         return this.foodClassService.listFoodClasses(page, size)
     }
 
+    @Authorized(Role.operator)
+    @Query(returns => FoodClass)
+    async updateFoodClass(
+        @Arg('foodClass') foodClass: FoodClassInput,
+        @Ctx() ctx: Context,
+    ) {
+        return this.foodClassService.editFoodClass(foodClass)
+    }
 }
