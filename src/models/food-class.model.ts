@@ -15,9 +15,6 @@ class FoodGroupSchema extends Typegoose implements FoodGroup {
 	
 	@prop({required: true})
 	name: Translation[]
-
-	@prop()
-	parentFoodGroup?: ParentFoodGroup | mongoose.Schema.Types.ObjectId
 }
 
 export class FoodClassSchema extends Typegoose implements FoodClass {
