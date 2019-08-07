@@ -12,13 +12,17 @@ import Errors from '@Utils/errors'
 
 @Service()
 export default class FoodClassService {
-	async listFoodClasses(page: number, size: number): Promise<FoodClassListResponse> {
+	async listFoodClasses(page: number, size: number, category?: string): Promise<FoodClassListResponse> {
+		let query: any = {}
+		if (category) {
+			query['category'] = category
+		}
 		const counts = await FoodClassModel.countDocuments()
 
 		if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
 		if (page < 1) page = 1
 
-		const foodClasses = await FoodClassModel.find()
+		const foodClasses = await FoodClassModel.find(query)
 			.limit(size)
 			.skip(size * page)
 
