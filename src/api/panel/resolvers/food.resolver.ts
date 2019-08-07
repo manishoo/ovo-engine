@@ -4,8 +4,8 @@
  */
 
 import FoodService from '@Services/food/food.service'
-import { Food, FoodsListResponse } from '@Types/food'
-import { Arg, Ctx, Query, Resolver, Authorized } from 'type-graphql'
+import { Food, FoodsListResponse, FoodInput } from '@Types/food'
+import { Arg, Ctx, Query, Resolver, Authorized, Mutation } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
 import { Role } from '@Types/common';
@@ -26,9 +26,18 @@ export default class FoodResolver {
         @Arg('page', { defaultValue: 1 }) page: number,
         @Arg('size', { defaultValue: 10 }) size: number,
         @Ctx() ctx: Context,
-        @Arg('foodClassId', {nullable: true}) foodClassID?: string,
+        @Arg('foodClassId', { nullable: true }) foodClassID?: string,
     ) {
         return this.foodService.listFoods(page, size, foodClassID)
+    }
+
+    @Authorized(Role.operator)
+    @Mutation(returns => Food)
+    async updateFood(
+        @Arg('food') food: FoodInput,
+        @Ctx() ctx: Context,
+    ) {
+        return this.foodService.updateFood(food)
     }
 
 }

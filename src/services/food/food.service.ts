@@ -4,7 +4,7 @@
  */
 
 import { FoodModel } from '@Models/food.model'
-import { Food, FoodsListResponse } from '@Types/food'
+import { Food, FoodsListResponse, FoodInput } from '@Types/food'
 import { Service } from 'typedi'
 import mongoose from 'mongoose';
 
@@ -40,4 +40,9 @@ export default class FoodService {
 			}
 		}
 	}
+
+	async updateFood(food: FoodInput): Promise<Food> {
+		return FoodModel.updateOne({_id: food.id}, food)
+	}
+
 }

@@ -9,6 +9,7 @@ import { Service } from 'typedi'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { FoodModel } from '@Models/food.model'
+import { FoodClass, FoodClassListResponse, FoodClassInput } from '@Types/food-class'
 
 @Service()
 export default class FoodClassService {

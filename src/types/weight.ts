@@ -20,7 +20,7 @@ export class Weight {
 	gramWeight: number
 	@Field()
 	seq: number
-	@Field(type => String)
+	@Field(type => [Translation])
 	name: Translation[]
 }
 

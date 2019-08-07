@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Image, Translation, LanguageCode, NameAndId, Pagination } from '@Types/common'
+import { Image, Translation, LanguageCode, NameAndId, Pagination, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { Weight } from '@Types/weight'
 import mongoose from 'mongoose'
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose';
-import { FoodClassSchema } from '@Models/food-class.model';
+import { FoodClassSchema } from '@Models/food-class.model'
 
 
 @ObjectType()
@@ -91,7 +91,9 @@ export class Nutrient {
 @InputType()
 export class FoodInput {
 	@Field()
-	name: string
+	id: string
+	@Field(type => [TranslationInput])
+	name: Translation[]
 	@Field({ nullable: true })
 	description?: string
 	@Field()
