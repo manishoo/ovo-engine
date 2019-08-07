@@ -183,7 +183,7 @@ export class Food {
 	readonly _id: mongoose.Schema.Types.ObjectId
 	@Field()
 	readonly id: string
-	@Field(type => String)
+	@Field(type => [Translation])
 	name: Translation[]
 	origFoodId?: string
 	origDb?: string
