@@ -3,9 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodClassListResponse } from '@Types/food-class'
+import { FoodClassListResponse, FoodClass, FoodClassInput } from '@Types/food-class'
 import { FoodClassModel } from '@Models/food-class.model'
+import { FoodGroupModel } from '@Models/food-group.model'
 import { Service } from 'typedi'
+import mongoose from 'mongoose'
+import Errors from '@Utils/errors'
 
 @Service()
 export default class FoodClassService {
@@ -30,4 +33,18 @@ export default class FoodClassService {
 			}
 		}
 	}
+
+	async editFoodClass(foodClass: FoodClassInput): Promise<FoodClass> {
+		const foodGroup = await FoodGroupModel.findOne({ _id: mongoose.Types.ObjectId(foodClass.foodGroupId) })
+		if (!foodGroup) throw new Errors.NotFound('food group not found')
+
+		const editingFoodClass = await FoodClassModel.findByIdAndUpdate(mongoose.Types.ObjectId(foodClass.id), {
+			...foodClass,
+			foodGroup
+		})
+		if (!editingFoodClass) throw new Errors.NotFound('food class not found')
+
+		return editingFoodClass
+	}
+
 }

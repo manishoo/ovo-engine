@@ -6,9 +6,16 @@
 import mongoose from '@Config/connections/mongoose'
 import { LanguageCode, Translation } from '@Types/common'
 import { FOOD_CLASS_CATEGORY, FOOD_CLASS_TYPES, FoodClass, FoodClassTaxonomy } from '@Types/food-class'
-import { FoodGroup } from '@Types/food-group'
+import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
 import { instanceMethod, prop, Typegoose } from 'typegoose'
 
+class FoodGroupSchema extends Typegoose implements FoodGroup {
+	readonly _id: mongoose.Schema.Types.ObjectId
+	readonly id: string
+	
+	@prop({required: true})
+	name: Translation[]
+}
 
 export class FoodClassSchema extends Typegoose implements FoodClass {
 	readonly _id: mongoose.Schema.Types.ObjectId
@@ -20,7 +27,7 @@ export class FoodClassSchema extends Typegoose implements FoodClass {
 	@prop({ required: true })
 	slug: string
 	@prop({ required: true })
-	foodGroup: FoodGroup
+	foodGroup: FoodGroupSchema
 	@prop({ enum: FOOD_CLASS_TYPES, required: true })
 	foodType: FOOD_CLASS_TYPES
 	@prop()
