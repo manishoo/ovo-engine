@@ -33,7 +33,7 @@ export default class FoodClassResolver {
     @Authorized(Role.operator)
     @Query(returns => FoodClass)
     async foodClass(
-        @Arg('foodClassId') foodClassID: string,
+        @Arg('id') foodClassID: string,
         @Ctx() ctx: Context,
     ) {
         return this.foodClassService.getFoodClass(foodClassID)
