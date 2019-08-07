@@ -61,14 +61,6 @@ export class FoodClassInput {
 	slug: string
 	@Field(type => String)
 	foodGroupId: string
-	origId: number
-	nameScientific?: string
-	itisId?: string
-	wikipediaId?: string
-	foodType: FOOD_CLASS_TYPES
-	category?: FOOD_CLASS_CATEGORY
-	ncbiTaxonomyId?: number
-	taxonomies: FoodClassTaxonomy[]
 }
 
 @ObjectType()
