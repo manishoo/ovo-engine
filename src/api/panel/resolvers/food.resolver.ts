@@ -26,7 +26,7 @@ export default class FoodResolver {
         @Arg('page', { defaultValue: 1 }) page: number,
         @Arg('size', { defaultValue: 10 }) size: number,
         @Ctx() ctx: Context,
-        @Arg('id', {nullable: true}) foodClassID?: string,
+        @Arg('foodClassId', {nullable: true}) foodClassID?: string,
     ) {
         return this.foodService.listFoods(page, size, foodClassID)
     }
