@@ -34,6 +34,13 @@ export default class FoodClassService {
 		}
 	}
 
+	async getFoodClass(foodClassID: string): Promise<FoodClass> {
+		const foodClass = await FoodClassModel.findById(mongoose.Types.ObjectId(foodClassID))
+		if(!foodClass) throw new Errors.NotFound('food class not found')
+
+		return foodClass
+	}
+
 	async editFoodClass(foodClass: FoodClassInput): Promise<FoodClass> {
 		const foodGroup = await FoodGroupModel.findOne({ _id: mongoose.Types.ObjectId(foodClass.foodGroupId) })
 		if (!foodGroup) throw new Errors.NotFound('food group not found')
