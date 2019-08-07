@@ -5,10 +5,10 @@
 
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
-import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-class'
+import { Service } from 'typedi'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
-import { Service } from 'typedi'
+import { FoodModel } from '@Models/food.model'
 
 @Service()
 export default class FoodClassService {
@@ -61,6 +61,18 @@ export default class FoodClassService {
 		if (!editingFoodClass) throw new Errors.NotFound('food class not found')
 
 		return editingFoodClass
+	}
+
+	async deleteFoodClass(foodClassID: string): Promise<Boolean> {
+		const foodClass = await FoodClassModel.findById(mongoose.Types.ObjectId(foodClassID))
+		if (!foodClass) throw new Errors.NotFound('food class not found')
+
+		const foodCount = await FoodModel.countDocuments({foodClass: foodClass._id})
+		if (foodCount !== 0) throw new Errors.Validation('This food class has food associated with it! It can\'t be removed')
+
+		await foodClass.remove()
+
+		return true
 	}
 
 }
