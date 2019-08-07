@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodClassListResponse, FoodClass, FoodClassInput } from '@Types/food-class'
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
-import { Service } from 'typedi'
-import mongoose from 'mongoose'
+import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-class'
 import Errors from '@Utils/errors'
+import mongoose from 'mongoose'
+import { Service } from 'typedi'
 
 @Service()
 export default class FoodClassService {
@@ -22,7 +22,7 @@ export default class FoodClassService {
 			let reg = new RegExp(nameSearchQuery)
 			query['name.text'] = { $regex: reg, $options: 'i' }
 		}
-		const counts = await FoodClassModel.countDocuments()
+		const counts = await FoodClassModel.countDocuments(query)
 
 		if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
 		if (page < 1) page = 1
@@ -37,8 +37,8 @@ export default class FoodClassService {
 				page,
 				size,
 				totalCount: counts,
-				totalPages: Math.floor(counts / size),
-				hasNext: page !== Math.floor(counts / size)
+				totalPages: Math.ceil(counts / size),
+				hasNext: page !== Math.ceil(counts / size)
 			}
 		}
 	}

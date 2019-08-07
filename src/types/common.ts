@@ -91,16 +91,17 @@ export class Image {
 
 @ObjectType()
 export class Pagination {
-	@Field({ nullable: true })
-	page?: number
-	@Field({ nullable: true })
-	size?: number
+	@Field()
+	page: number
+	@Field()
+	size: number
+	@Field()
+	totalPages: number
+	@Field()
+	hasNext: boolean
+
 	@Field({ nullable: true })
 	totalCount?: number
-	@Field({ nullable: true })
-	totalPages?: number
-	@Field({ nullable: true })
-	hasNext?: boolean
 	@Field({ nullable: true })
 	lastId?: string
 }
