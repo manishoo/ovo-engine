@@ -51,7 +51,6 @@ export class FoodClass {
 
 @InputType()
 export class FoodClassInput {
-	readonly _id: mongoose.Schema.Types.ObjectId
 	@Field()
 	readonly id: string
 	@Field(type => [TranslationInput])
