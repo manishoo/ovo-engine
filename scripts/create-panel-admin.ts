@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import 'reflect-metadata'
 import { OperatorModel } from '@Models/operator.model'
 import { generateHashPassword } from '@Utils/password-manager'
-import 'reflect-metadata'
 import { Role } from '../src/types/common'
 
 const argv = require('minimist')(process.argv.slice(2))
