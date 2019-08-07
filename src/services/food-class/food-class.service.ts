@@ -12,10 +12,11 @@ import Errors from '@Utils/errors'
 
 @Service()
 export default class FoodClassService {
-	async listFoodClasses(page: number, size: number, category?: string): Promise<FoodClassListResponse> {
+	async listFoodClasses(page: number, size: number, foodGroupID?: string): Promise<FoodClassListResponse> {
 		let query: any = {}
-		if (category) {
-			query['category'] = category
+		
+		if (foodGroupID) {
+			query['foodGroup._id'] = foodGroupID
 		}
 		const counts = await FoodClassModel.countDocuments()
 
