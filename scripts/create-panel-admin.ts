@@ -4,16 +4,17 @@
  */
 
 import 'reflect-metadata'
-const argv = require('minimist')(process.argv.slice(2))
 import { OperatorModel } from '@Models/operator.model'
 import { generateHashPassword } from '@Utils/password-manager'
-import { ROLE } from '@Types/common'
+import { Role } from '../src/types/common'
+
+const argv = require('minimist')(process.argv.slice(2))
 
 async function main() {
 	const admin = new OperatorModel({
 		username: String(argv.u || 'admin'),
 		persistedPassword: await generateHashPassword(String(argv.p || '0000')),
-		role: ROLE.admin
+		role: Role.admin
 	})
 	await admin.save()
 }
