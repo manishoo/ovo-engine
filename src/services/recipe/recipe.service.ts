@@ -87,6 +87,9 @@ export default class RecipeService {
 		return {
 			recipes: await Promise.all(recipes.map(r => transformRecipe(r, userId))),
 			pagination: {
+				page: 1,
+				size: 25,
+				totalPages: 1,
 				hasNext,
 				lastId: lastRecipeId,
 			}
@@ -224,9 +227,10 @@ export default class RecipeService {
 			recipes,
 			pagination: {
 				page,
-				count: size,
+				size,
 				totalCount,
 				totalPages: Math.ceil(totalCount / size),
+				hasNext: page !== Math.ceil(totalCount / size),
 			},
 		}
 	}
