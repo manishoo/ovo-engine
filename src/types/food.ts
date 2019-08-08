@@ -185,10 +185,12 @@ export class Food {
 	readonly id: string
 	@Field(type => [Translation])
 	name: Translation[]
-	origFoodId?: string
-	origDb?: string
-	foodClass: Ref<FoodClassSchema>
-	contents: FoodContent[]
 	@Field(type => [Weight])
 	weights: Weight[]
+	@Field()
+	origDb?: string
+
+	origFoodId?: string
+	foodClass: Ref<FoodClassSchema>
+	contents: FoodContent[]
 }
