@@ -5,6 +5,8 @@ stages:
 build app image:
   stage: build
   image: docker:latest
+  only:
+    - develop
   services:
     - docker:dind
   variables:
@@ -19,6 +21,8 @@ deploy to staging:
   stage: deploy
   image: docker:latest
   when: manual
+  only:
+    - develop
   services:
     - docker:dind
   variables:
