@@ -27,7 +27,7 @@ export default class FoodService {
 			.limit(size)
 			.skip(size * (page - 1))
 
-		const counts = await FoodModel.countDocuments()
+		const counts = await FoodModel.countDocuments(query)
 
 		return {
 			foods,
@@ -35,8 +35,8 @@ export default class FoodService {
 				page,
 				size,
 				totalCount: counts,
-				totalPages: Math.floor(counts / size),
-				hasNext: page !== Math.floor(counts / size),
+				totalPages: Math.ceil(counts / size),
+				hasNext: page !== Math.ceil(counts / size),
 			}
 		}
 	}
