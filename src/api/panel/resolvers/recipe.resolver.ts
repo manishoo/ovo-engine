@@ -5,7 +5,7 @@
 
 import RecipeService from '@Services/recipe/recipe.service'
 import { Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
-import { GraphQLUpload } from 'apollo-server-express'
+import { GraphQLUpload } from 'apollo-server'
 import { Arg, Ctx, Int, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'

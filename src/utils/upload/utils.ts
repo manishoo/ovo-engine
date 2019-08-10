@@ -11,7 +11,6 @@ export const processUpload = async (upload: any, name: string, location: string)
 	const stream = createReadStream()
 	const { path } = await storeFS({ stream, filename, name, location })
 	return path.replace(`/${config.uploadUrl}`, '')
-	// return storeDB({id, filename, mimetype, path})
 }
 
 function storeFS({ stream, filename, name, location }: { stream: any, filename: string, name: string, location: string }): Promise<{ path: string }> {

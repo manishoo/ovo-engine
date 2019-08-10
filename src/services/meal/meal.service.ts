@@ -75,9 +75,10 @@ export default class MealService {
 			meals,
 			pagination: {
 				page,
-				count: size,
+				size,
 				totalCount,
 				totalPages: Math.ceil(totalCount / size),
+				hasNext: page !== Math.ceil(totalCount / size),
 			},
 		}
 	}
