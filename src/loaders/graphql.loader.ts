@@ -7,9 +7,10 @@ import config from '@Config'
 import { ContextFunction } from 'apollo-server-core'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import { buildSchema } from 'type-graphql'
+import { AuthChecker, buildSchema } from 'type-graphql'
 import { Container } from 'typedi'
-import { AuthChecker } from 'type-graphql'
+import { ErrorInterceptor } from '../api/common/middlewares/error-interceptor.middleware'
+
 const UPLOAD_MAX_FILE_SIZE = 2000000 // 1 MB
 const UPLOAD_MAX_FILES = 1
 
@@ -22,8 +23,11 @@ export default async ({ app, resolverPath, context, authChecker }: { app: expres
 			authChecker,
 			resolvers: [
 				resolverPath,
+				__dirname + '/../api/common/resolvers/*.resolver.*',
 			],
 			container: Container,
+			globalMiddlewares: [ErrorInterceptor],
+			authMode: 'null',
 		}).catch(e => console.error(e)),
 		context,
 		playground: process.env.NODE_ENV === 'development',
