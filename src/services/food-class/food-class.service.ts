@@ -108,5 +108,4 @@ export default class FoodClassService {
 		})
 		return newFoodClass.save()
 	}
-
 }
