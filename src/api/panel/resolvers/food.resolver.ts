@@ -39,4 +39,14 @@ export default class FoodResolver {
 	) {
 		return this.foodService.updateFood(food)
 	}
+
+	@Authorized(Role.operator)
+	@Mutation(returns => Food)
+	async deleteFood(
+		@Arg('id') foodID: string,
+		@Ctx() ctx: Context,
+	) {
+		return this.foodService.deleteFood(foodID)
+	}
+
 }

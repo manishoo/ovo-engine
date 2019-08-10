@@ -8,13 +8,17 @@ import { Image, Pagination, Translation, TranslationInput } from '@Types/common'
 import { FoodGroup } from '@Types/food-group'
 import { GraphQLUpload } from 'apollo-server'
 import mongoose from 'mongoose'
-import { Field, InputType, ObjectType } from 'type-graphql'
+import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 
 export enum FOOD_CLASS_TYPES {
 	type1 = 'Type 1',
 	type2 = 'Type 2',
 	unknown = 'Unknown',
 }
+registerEnumType(FOOD_CLASS_TYPES, {
+	name: 'FOOD_CLASS_TYPES',
+	description: 'Food Types'
+})
 
 export enum FOOD_CLASS_CATEGORY {
 	specific = 'specific',
@@ -57,8 +61,6 @@ export class FoodClass {
 
 @InputType()
 export class FoodClassInput {
-	@Field()
-	readonly id: string
 	@Field(type => [TranslationInput])
 	name: Translation[]
 	@Field(type => [TranslationInput], { nullable: true })
@@ -67,6 +69,8 @@ export class FoodClassInput {
 	slug: string
 	@Field(type => String)
 	foodGroupId: string
+	@Field(type => FOOD_CLASS_TYPES)
+	foodType: FOOD_CLASS_TYPES
 
 	@Field(type => GraphQLUpload, { nullable: true })
 	imageUrl?: any
