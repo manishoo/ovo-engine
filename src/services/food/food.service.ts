@@ -74,10 +74,10 @@ export default class FoodService {
 	}
 
 	async createFood(foodClassID: string, food: FoodInput): Promise<Food> {
-		if(!mongoose.Types.ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', {'foodClassId': 'invalid food class id'})
+		if (!mongoose.Types.ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
 		const foodClass = await FoodClassModel.findById(foodClassID)
-		if(!foodClass) throw new Errors.NotFound('food class not foudn')
+		if (!foodClass) throw new Errors.NotFound('food class not foudn')
 
 		let weights: WeightInput[] = []
 		food.weights.map(weight => {

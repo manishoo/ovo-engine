@@ -187,7 +187,7 @@ export class Food {
 
 @InputType()
 export class FoodInput {
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	id?: string
 	@Field(type => [TranslationInput])
 	name: Translation[]
