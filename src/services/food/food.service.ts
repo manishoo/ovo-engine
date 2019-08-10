@@ -63,4 +63,13 @@ export default class FoodService {
 		return food.save()
 	}
 
+	async deleteFood(foodID: string): Promise<Food> {
+		if(!mongoose.Types.ObjectId.isValid(foodID)) throw new Errors.UserInput('invalid food ID', {'foodID': 'invalid food ID'})
+
+		const food = await FoodModel.findByIdAndDelete(foodID)
+		if(!food) throw new Errors.NotFound('food not found')
+
+		return food
+	}
+
 }
