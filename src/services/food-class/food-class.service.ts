@@ -6,6 +6,7 @@
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { FoodModel } from '@Models/food.model'
+import UploadService from '@Services/upload/upload.service'
 import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-class'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
@@ -13,6 +14,13 @@ import { Service } from 'typedi'
 
 @Service()
 export default class FoodClassService {
+	constructor(
+		// service injection
+		private readonly uploadService: UploadService
+	) {
+		// noop
+	}
+
 	async listFoodClasses(page: number, size: number, foodGroupID?: string, nameSearchQuery?: string): Promise<FoodClassListResponse> {
 		let query: any = {}
 
@@ -51,17 +59,30 @@ export default class FoodClassService {
 		return foodClass
 	}
 
-	async editFoodClass(foodClass: FoodClassInput): Promise<FoodClass> {
-		const foodGroup = await FoodGroupModel.findOne({ _id: mongoose.Types.ObjectId(foodClass.foodGroupId) })
+	async editFoodClass(foodClassInput: FoodClassInput): Promise<FoodClass> {
+		const foodGroup = await FoodGroupModel.findOne({ _id: mongoose.Types.ObjectId(foodClassInput.foodGroupId) })
 		if (!foodGroup) throw new Errors.NotFound('food group not found')
 
-		const editingFoodClass = await FoodClassModel.findByIdAndUpdate(mongoose.Types.ObjectId(foodClass.id), {
-			...foodClass,
-			foodGroup
-		})
-		if (!editingFoodClass) throw new Errors.NotFound('food class not found')
+		const foodClass = await FoodClassModel.findById(foodClassInput.id)
+		if (!foodClass) throw new Errors.NotFound('food class not found')
 
-		return editingFoodClass
+		if (foodClassInput.imageUrl) {
+			foodClass.imageUrl = {
+				url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/foods/${foodClassInput.slug}`)
+			}
+		}
+		if (foodClassInput.thumbnailUrl) {
+			foodClass.thumbnailUrl = {
+				url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+			}
+		}
+
+		foodClass.name = foodClassInput.name
+		foodClass.foodGroup = foodGroup
+		foodClass.description = foodClassInput.description
+		foodClass.slug = foodClassInput.slug
+
+		return foodClass.save()
 	}
 
 	async deleteFoodClass(foodClassID: string): Promise<Boolean> {

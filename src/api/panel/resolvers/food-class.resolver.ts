@@ -42,7 +42,7 @@ export default class FoodClassResolver {
     }
 
     @Authorized(Role.operator)
-    @Query(returns => FoodClass)
+    @Mutation(returns => FoodClass)
     async updateFoodClass(
         @Arg('foodClass') foodClass: FoodClassInput,
         @Ctx() ctx: Context,

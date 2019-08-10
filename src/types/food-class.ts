@@ -3,11 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Field, ObjectType, InputType } from 'type-graphql'
-import { Pagination, Translation, TranslationInput } from '@Types/common'
+import { Image, Pagination, Translation, TranslationInput } from '@Types/common'
 
-import { FoodGroup, FoodGroupInput } from '@Types/food-group'
+import { FoodGroup } from '@Types/food-group'
+import { GraphQLUpload } from 'apollo-server'
 import mongoose from 'mongoose'
+import { Field, InputType, ObjectType } from 'type-graphql'
 
 export enum FOOD_CLASS_TYPES {
 	type1 = 'Type 1',
@@ -39,6 +40,11 @@ export class FoodClass {
 	slug: string
 	@Field(type => FoodGroup)
 	foodGroup: FoodGroup
+	@Field(type => Image, { nullable: true })
+	imageUrl?: Image
+	@Field(type => Image, { nullable: true })
+	thumbnailUrl?: Image
+
 	origId: number
 	nameScientific?: string
 	itisId?: string
@@ -61,6 +67,11 @@ export class FoodClassInput {
 	slug: string
 	@Field(type => String)
 	foodGroupId: string
+
+	@Field(type => GraphQLUpload, { nullable: true })
+	imageUrl?: any
+	@Field(type => GraphQLUpload, { nullable: true })
+	thumbnailUrl?: any
 }
 
 @ObjectType()
