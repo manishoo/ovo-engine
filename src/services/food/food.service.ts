@@ -61,8 +61,6 @@ export default class FoodService {
 		food.weights = weights
 
 		return food.save()
-
-
 	}
 
 }
