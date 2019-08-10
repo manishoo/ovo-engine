@@ -13,7 +13,7 @@ import { prop } from 'typegoose'
 export class Weight {
 	@prop({ default: mongoose.Types.ObjectId })
 	@Field(type => String)
-	id: mongoose.Types.ObjectId
+	id?: string
 	@Field()
 	amount: number
 	@Field()
@@ -27,7 +27,7 @@ export class Weight {
 
 @InputType()
 export class WeightInput {
-	@Field({ nullable: true })
+	@Field(type => String, { nullable: true })
 	id?: string
 	@Field()
 	amount: number

@@ -43,28 +43,24 @@ export default class FoodService {
 		}
 	}
 
-	async updateFood(food: FoodInput): Promise<Food | null> {
-		const findFood = await FoodModel.findById(food.id)
-		if(!findFood) throw new Errors.NotFound('food not found')
+	async updateFood(inputFood: FoodInput): Promise<Food | null> {
+		const food = await FoodModel.findById(inputFood.id)
+		if (!food) throw new Errors.NotFound('food not found')
 
 		let weights: WeightInput[] = []
-		food.weights.map(weight => {
-			if(weight.id){
+		inputFood.weights.map(weight => {
+			if (weight.id) {
 				weights.push(weight)
-			}else{
+			} else {
 				weight['id'] = String(new mongoose.Types.ObjectId())
 				weights.push(weight)
 			}
 		})
-		console.log(weights)
-		return FoodModel.findByIdAndUpdate(food.id, {
-			name: food.name,
-			origDb: findFood.origDb,
-			origFoodId: findFood.origFoodId,
-			foodClass: findFood.foodClass,
-			contents: findFood.contents,
-			weights: weights,
-		})
+
+		food.name = inputFood.name
+		food.weights = weights
+
+		return food.save()
 
 
 	}

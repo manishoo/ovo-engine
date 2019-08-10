@@ -174,6 +174,8 @@ export class Food {
 	readonly id: string
 	@Field(type => [Translation])
 	name: Translation[]
+	@Field(type => [Translation], { nullable: true })
+	description?: Translation[]
 	@Field(type => [Weight])
 	weights: Weight[]
 	@Field()
@@ -189,9 +191,8 @@ export class FoodInput {
 	id: string
 	@Field(type => [TranslationInput])
 	name: Translation[]
-	@Field({ nullable: true })
-	description?: string
+	@Field(type => [TranslationInput], { nullable: true })
+	description?: TranslationInput[]
 	@Field(type => [WeightInput])
 	weights: WeightInput[]
-
 }
