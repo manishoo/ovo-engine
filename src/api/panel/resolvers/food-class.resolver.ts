@@ -26,8 +26,8 @@ export default class FoodClassResolver {
         @Arg('page', { defaultValue: 1 }) page: number,
         @Arg('size', { defaultValue: 10 }) size: number,
         @Ctx() ctx: Context,
-        @Arg('foodGroupId', {nullable: true}) foodGroupID?: string,
-        @Arg('nameSearchQuery', {nullable: true}) nameSearchQuery? :string,
+        @Arg('foodGroupId', { nullable: true }) foodGroupID?: string,
+        @Arg('nameSearchQuery', { nullable: true }) nameSearchQuery?: string,
     ) {
         return this.foodClassService.listFoodClasses(page, size, foodGroupID, nameSearchQuery)
     }
@@ -44,10 +44,11 @@ export default class FoodClassResolver {
     @Authorized(Role.operator)
     @Mutation(returns => FoodClass)
     async updateFoodClass(
+        @Arg('id') foodClassId: string,
         @Arg('foodClass') foodClass: FoodClassInput,
         @Ctx() ctx: Context,
     ) {
-        return this.foodClassService.editFoodClass(foodClass)
+        return this.foodClassService.editFoodClass(foodClass, foodClassId)
     }
 
     @Authorized(Role.operator)
@@ -57,5 +58,14 @@ export default class FoodClassResolver {
         @Ctx() ctx: Context,
     ) {
         return this.foodClassService.deleteFoodClass(foodClassID)
+    }
+
+    @Authorized(Role.operator)
+    @Mutation(returns => FoodClass)
+    async createFoodClass(
+        @Arg('foodClass') foodClass: FoodClassInput,
+        @Ctx() ctx: Context,
+    ) {
+        return this.foodClassService.createFoodClass(foodClass)
     }
 }
