@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Image, Translation, LanguageCode, NameAndId, Pagination } from '@Types/common'
+import { Image, Translation, LanguageCode, NameAndId, Pagination, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
-import { Weight } from '@Types/weight'
+import { Weight, WeightInput } from '@Types/weight'
 import mongoose from 'mongoose'
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose';
-import { FoodClassSchema } from '@Models/food-class.model';
+import { FoodClassSchema } from '@Models/food-class.model'
 
 
 @ObjectType()
@@ -85,17 +85,6 @@ export class Nutrient {
 	amount: number
 	@Field({ nullable: true })
 	tagname?: string
-}
-
-
-@InputType()
-export class FoodInput {
-	@Field()
-	name: string
-	@Field({ nullable: true })
-	description?: string
-	@Field()
-	lang: LanguageCode
 }
 
 @ObjectType()
@@ -185,12 +174,25 @@ export class Food {
 	readonly id: string
 	@Field(type => [Translation])
 	name: Translation[]
+	@Field(type => [Translation], { nullable: true })
+	description?: Translation[]
 	@Field(type => [Weight])
 	weights: Weight[]
 	@Field()
 	origDb?: string
-
 	origFoodId?: string
 	foodClass: Ref<FoodClassSchema>
 	contents: FoodContent[]
+}
+
+@InputType()
+export class FoodInput {
+	@Field()
+	id: string
+	@Field(type => [TranslationInput])
+	name: Translation[]
+	@Field(type => [TranslationInput], { nullable: true })
+	description?: TranslationInput[]
+	@Field(type => [WeightInput])
+	weights: WeightInput[]
 }
