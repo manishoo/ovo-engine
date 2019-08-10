@@ -59,7 +59,7 @@ export default class FoodClassService {
 		return foodClass
 	}
 
-	async editFoodClass(foodClassInput: FoodClassInput, foodClassID: string): Promise<FoodClass> {
+	async editFoodClass(foodClassID: string, foodClassInput: FoodClassInput): Promise<FoodClass> {
 		const foodGroup = await FoodGroupModel.findOne({ _id: mongoose.Types.ObjectId(foodClassInput.foodGroupId) })
 		if (!foodGroup) throw new Errors.NotFound('food group not found')
 
@@ -98,7 +98,10 @@ export default class FoodClassService {
 	}
 
 	async createFoodClass(foodClass: FoodClassInput): Promise<FoodClass> {
+		if (!mongoose.Types.ObjectId.isValid(foodClass.foodGroupId)) throw new Errors.UserInput('invalid food group id', { 'foodGroupId': 'invalid food group id' })
 		const foodGroup = await FoodGroupModel.findById(foodClass.foodGroupId)
+		if (!foodGroup) throw new Errors.NotFound('food group not found')
+
 		let newFoodClass = new FoodClassModel({
 			...foodClass,
 			foodGroup,
