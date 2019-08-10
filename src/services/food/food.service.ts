@@ -7,6 +7,8 @@ import { FoodModel } from '@Models/food.model'
 import { Food, FoodsListResponse, FoodInput } from '@Types/food'
 import { Service } from 'typedi'
 import mongoose from 'mongoose';
+import Errors from '@Utils/errors'
+import { WeightInput } from '@Types/weight'
 
 
 @Service()
@@ -41,8 +43,30 @@ export default class FoodService {
 		}
 	}
 
-	async updateFood(food: FoodInput): Promise<Food> {
-		return FoodModel.updateOne({_id: food.id}, food)
+	async updateFood(food: FoodInput): Promise<Food | null> {
+		const findFood = await FoodModel.findById(food.id)
+		if(!findFood) throw new Errors.NotFound('food not found')
+
+		let weights: WeightInput[] = []
+		food.weights.map(weight => {
+			if(weight.id){
+				weights.push(weight)
+			}else{
+				weight['id'] = String(new mongoose.Types.ObjectId())
+				weights.push(weight)
+			}
+		})
+		console.log(weights)
+		return FoodModel.findByIdAndUpdate(food.id, {
+			name: food.name,
+			origDb: findFood.origDb,
+			origFoodId: findFood.origFoodId,
+			foodClass: findFood.foodClass,
+			contents: findFood.contents,
+			weights: weights,
+		})
+
+
 	}
 
 }

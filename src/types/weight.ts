@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Translation } from '@Types/common'
+import { Translation, TranslationInput } from '@Types/common'
 import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { prop } from 'typegoose'
@@ -31,12 +31,12 @@ export class WeightInput {
 	id?: string
 	@Field()
 	amount: number
-	// @Field(type => [WeightTranslationI])
-	// translations: WeightTranslationI[]
 	@Field()
 	seq: number
 	@Field({ nullable: true })
 	unit?: string
 	@Field()
 	gramWeight: number
+	@Field(type => [TranslationInput])
+	name: TranslationInput[]
 }

@@ -5,7 +5,7 @@
 
 import { Image, Translation, LanguageCode, NameAndId, Pagination, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
-import { Weight } from '@Types/weight'
+import { Weight, WeightInput } from '@Types/weight'
 import mongoose from 'mongoose'
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose';
@@ -85,19 +85,6 @@ export class Nutrient {
 	amount: number
 	@Field({ nullable: true })
 	tagname?: string
-}
-
-
-@InputType()
-export class FoodInput {
-	@Field()
-	id: string
-	@Field(type => [TranslationInput])
-	name: Translation[]
-	@Field({ nullable: true })
-	description?: string
-	@Field()
-	lang: LanguageCode
 }
 
 @ObjectType()
@@ -191,10 +178,20 @@ export class Food {
 	weights: Weight[]
 	@Field()
 	origDb?: string
-
 	origFoodId?: string
 	foodClass: Ref<FoodClassSchema>
 	contents: FoodContent[]
 }
 
+@InputType()
+export class FoodInput {
+	@Field()
+	id: string
+	@Field(type => [TranslationInput])
+	name: Translation[]
+	@Field({ nullable: true })
+	description?: string
+	@Field(type => [WeightInput])
+	weights: WeightInput[]
 
+}
