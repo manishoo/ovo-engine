@@ -20,16 +20,16 @@ export default class FoodResolver {
         // noop
     }
 
-	@Authorized(Role.operator)
-	@Query(returns => FoodsListResponse)
-	async foods(
-		@Arg('page', { defaultValue: 1 }) page: number,
-		@Arg('size', { defaultValue: 10 }) size: number,
-		@Ctx() ctx: Context,
-		@Arg('foodClassId', { nullable: true }) foodClassID?: string,
-	) {
-		return this.foodService.listFoods(page, size, foodClassID)
-	}
+    @Authorized(Role.operator)
+    @Query(returns => FoodsListResponse)
+    async foods(
+        @Arg('page', { defaultValue: 1 }) page: number,
+        @Arg('size', { defaultValue: 10 }) size: number,
+        @Ctx() ctx: Context,
+        @Arg('foodClassId', { nullable: true }) foodClassID?: string,
+    ) {
+        return this.foodService.listFoods(page, size, foodClassID)
+    }
 
     @Authorized(Role.operator)
     @Mutation(returns => Food)
