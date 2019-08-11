@@ -1,0 +1,44 @@
+stages:
+  - build
+  - deploy
+
+build app image:
+  stage: build
+  image: docker:latest
+  only:
+    - develop
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA .
+    - docker push registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA
+
+deploy to staging:
+  stage: deploy
+  image: docker:latest
+  when: manual
+  only:
+    - develop
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+  environment:
+    name: staging
+  before_script:
+    - apk --update add openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$STAGING_SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA
+    - docker tag registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA registry.gitlab.com/ouranos-studio/solarys:staging
+    - docker push registry.gitlab.com/ouranos-studio/solarys:staging
+    - ssh mostafa@5.9.188.245 "sh deploy-staging.sh"
