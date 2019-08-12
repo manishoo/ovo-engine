@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from 'mongoose'
 import { Sequelize } from 'sequelize'
 import shortid from 'shortid'
 import slug from 'slug'
-import mongoose from '~/config/connections/mongoose'
 import config from '../src/config'
 import { compoundsAttribute, nutrientsAttribute } from '../src/models/_foodb-models/db'
 import { getModels as getFooDBModels } from '../src/models/_foodb-models/db.tables'
@@ -175,6 +175,7 @@ async function migrateContents() {
 		console.log('Migrating Nutrient...')
 		const all = await foodbModels.nutrients.findAll()
 
+		// FIXME doesn't work!
 		await mongoContentModel.create(all.map(({ id, name }: nutrientsAttribute) => (<Partial<Content>>{
 			name: createTranslations(name),
 			type: CONTENT_TYPE.Nutrient,
@@ -249,6 +250,7 @@ async function migrateFoods() {
 		})
 
 		await mongoFoodModel.create(foodVarieties.map(caloNewfoodVariety => {
+			process.stdout.write('.')
 			const fooooooo = foodbContents.filter(i => {
 				let citation
 				const found = CITATIONS.find(i => i[1] === caloNewfoodVariety.origDb)

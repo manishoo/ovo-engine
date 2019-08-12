@@ -6,13 +6,14 @@
 import config from '@Config'
 import { Sequelize } from 'sequelize'
 
+
 export default new Sequelize(config.mysql.db, config.mysql.user, config.mysql.pass, {
-	host: config.mysql.host,
-	dialect: 'mysql',
-	logging: false,
-	pool: {
-		max: 5,
-		min: 0,
-		idle: 10000
-	},
+  host: config.mysql.host,
+  dialect: 'mysql',
+  logging: false,
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000
+  },
 })

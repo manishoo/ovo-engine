@@ -1,5 +1,5 @@
 /*
- * household.model.ts
+ * food-group.model.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
@@ -10,17 +10,17 @@ import { prop, Ref, Typegoose } from 'typegoose'
 
 
 export class FoodGroupSchema extends Typegoose implements FoodGroup {
-	readonly _id: mongoose.Schema.Types.ObjectId
-	readonly id: string
-	@prop({required: true})
-	name: Translation[]
-	@prop({ ref: FoodGroupSchema })
-	parentFoodGroup?: Ref<ParentFoodGroup>
+  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly id: string
+  @prop({ required: true })
+  name: Translation[]
+  @prop({ ref: FoodGroupSchema })
+  parentFoodGroup?: Ref<ParentFoodGroup>
 }
 
 export const FoodGroupModel = new FoodGroupSchema().getModelForClass(FoodGroupSchema, {
-	existingMongoose: mongoose,
-	schemaOptions: {
-		collection: 'foodGroups',
-	}
+  existingMongoose: mongoose,
+  schemaOptions: {
+    collection: 'foodGroups',
+  }
 })
