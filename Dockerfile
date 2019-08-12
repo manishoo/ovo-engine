@@ -8,7 +8,6 @@ COPY locales locales
 COPY package.json .
 COPY package-lock.json .
 COPY tsconfig.json .
-COPY tsconfig.json .
 COPY gulpfile.js .
 
 RUN npm install

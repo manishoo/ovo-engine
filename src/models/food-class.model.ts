@@ -9,67 +9,68 @@ import { FOOD_CLASS_CATEGORY, FOOD_CLASS_TYPES, FoodClass, FoodClassTaxonomy } f
 import { FoodGroup } from '@Types/food-group'
 import { instanceMethod, prop, Typegoose } from 'typegoose'
 
-class FoodGroupSchema extends Typegoose implements FoodGroup {
-	readonly _id: mongoose.Schema.Types.ObjectId
-	readonly id: string
 
-	@prop({ required: true })
-	name: Translation[]
+class FoodGroupSchema extends Typegoose implements FoodGroup {
+  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly id: string
+
+  @prop({ required: true })
+  name: Translation[]
 }
 
 export class FoodClassSchema extends Typegoose implements FoodClass {
-	readonly _id: mongoose.Schema.Types.ObjectId
-	readonly id: string
-	@prop({ required: true })
-	name: Translation[]
-	@prop()
-	description?: Translation[]
-	@prop({ required: true })
-	slug: string
-	@prop({ required: true })
-	foodGroup: FoodGroupSchema
-	@prop()
-	imageUrl?: Image
-	@prop()
-	thumbnailUrl?: Image
-	@prop({ enum: FOOD_CLASS_TYPES, required: true })
-	foodType: FOOD_CLASS_TYPES
-	@prop()
-	origId: number
-	@prop()
-	nameScientific?: string
-	@prop()
-	itisId?: string
-	@prop()
-	wikipediaId?: string
-	@prop({ enum: FOOD_CLASS_CATEGORY })
-	category?: FOOD_CLASS_CATEGORY
-	@prop()
-	ncbiTaxonomyId?: number
-	@prop()
-	taxonomies: FoodClassTaxonomy[]
+  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly id: string
+  @prop({ required: true })
+  name: Translation[]
+  @prop()
+  description?: Translation[]
+  @prop({ required: true })
+  slug: string
+  @prop({ required: true })
+  foodGroup: FoodGroupSchema
+  @prop()
+  imageUrl?: Image
+  @prop()
+  thumbnailUrl?: Image
+  @prop({ enum: FOOD_CLASS_TYPES, required: true })
+  foodType: FOOD_CLASS_TYPES
+  @prop()
+  origId: number
+  @prop()
+  nameScientific?: string
+  @prop()
+  itisId?: string
+  @prop()
+  wikipediaId?: string
+  @prop({ enum: FOOD_CLASS_CATEGORY })
+  category?: FOOD_CLASS_CATEGORY
+  @prop()
+  ncbiTaxonomyId?: number
+  @prop()
+  taxonomies: FoodClassTaxonomy[]
 
-	@instanceMethod
-	getName(locale: LanguageCode): string | undefined {
-		const translation = this.name.find(p => p.locale === locale)
+  @instanceMethod
+  getName(locale: LanguageCode): string | undefined {
+    const translation = this.name.find(p => p.locale === locale)
 
-		if (!translation) return undefined
+    if (!translation) return undefined
 
-		return translation.text
-	}
+    return translation.text
+  }
 
-	@instanceMethod
-	async addName(locale: LanguageCode, text: string) {
-		this.name.push({
-			locale,
-			text,
-		})
-	}
+  @instanceMethod
+  async addName(locale: LanguageCode, text: string) {
+    this.name.push({
+      locale,
+      text,
+    })
+  }
 }
 
 export const FoodClassModel = new FoodClassSchema().getModelForClass(FoodClassSchema, {
-	existingMongoose: mongoose,
-	schemaOptions: {
-		collection: 'foodClasses',
-	}
+  existingMongoose: mongoose,
+  schemaOptions: {
+    collection: 'foodClasses',
+  }
 })

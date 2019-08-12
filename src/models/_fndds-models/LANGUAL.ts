@@ -9,19 +9,20 @@ import * as sequelize from 'sequelize'
 import { DataTypes } from 'sequelize'
 import { langualAttribute, langualInstance } from './db'
 
+
 module.exports = function (sequelize: sequelize.Sequelize, DataTypes: DataTypes) {
-	return sequelize.define<langualInstance, langualAttribute>('langual', {
-		ndbNo: {
-			type: DataTypes.STRING(10),
-			allowNull: false,
-			field: 'NDB_No'
-		},
-		factor: {
-			type: DataTypes.STRING(12),
-			allowNull: false,
-			field: 'Factor'
-		}
-	}, {
-		tableName: 'LANGUAL'
-	})
+  return sequelize.define<langualInstance, langualAttribute>('langual', {
+    ndbNo: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+      field: 'NDB_No'
+    },
+    factor: {
+      type: DataTypes.STRING(12),
+      allowNull: false,
+      field: 'Factor'
+    }
+  }, {
+    tableName: 'LANGUAL'
+  })
 }
