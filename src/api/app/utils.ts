@@ -6,6 +6,7 @@
 import { LanguageCode, Status } from '@Types/common'
 import Errors from '@Utils/errors'
 import { Request } from 'express'
+import { AuthChecker } from 'type-graphql'
 
 
 export interface Context {
@@ -24,4 +25,11 @@ export function checkUser(ctx: Context) {
   return ctx.user
 }
 
-// TODO add check-auth function
+const authChecker: AuthChecker<Context> = (
+  { root, args, context, info },
+  roles,
+) => {
+  return !!context.user
+}
+
+export { authChecker }
