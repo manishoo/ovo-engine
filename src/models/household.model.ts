@@ -11,17 +11,17 @@ import { prop, Ref, Typegoose } from 'typegoose'
 
 
 export class HouseholdSchema extends Typegoose implements Household {
-	@prop({ required: true, ref: UserSchema })
-	members: Ref<UserSchema>[] | User[]
-	@prop()
-	location?: LatLng
-	@prop()
-	pantry?: PantryItem[]
+  @prop({ required: true, ref: UserSchema })
+  members: Ref<UserSchema>[] | User[]
+  @prop()
+  location?: LatLng
+  @prop()
+  pantry?: PantryItem[]
 }
 
 export const HouseholdModel = new HouseholdSchema().getModelForClass(HouseholdSchema, {
-	existingMongoose: mongoose,
-	schemaOptions: {
-		collection: 'households',
-	}
+  existingMongoose: mongoose,
+  schemaOptions: {
+    collection: 'households',
+  }
 })

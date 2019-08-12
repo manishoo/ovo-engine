@@ -13,18 +13,18 @@ import { Context } from '../utils'
 @Service()
 @Resolver(of => User)
 export default class UserResolver {
-	constructor(
-		// service injection
-		private readonly userService: UserService
-	) {
-		// noop
-	}
+  constructor(
+    // service injection
+    private readonly userService: UserService
+  ) {
+    // noop
+  }
 
-	@Query(returns => User)
-	async getUser(
-		@Arg('username') username: string,
-		@Ctx() ctx: Context,
-	) {
-		return this.userService.getUser(username)
-	}
+  @Query(returns => User)
+  async getUser(
+    @Arg('username') username: string,
+    @Ctx() ctx: Context,
+  ) {
+    return this.userService.getUser(username)
+  }
 }

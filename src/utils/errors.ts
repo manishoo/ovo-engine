@@ -4,45 +4,46 @@
  */
 
 import {
-	AuthenticationError,
-	ForbiddenError,
-	UserInputError as ApolloUserInputError,
-	ValidationError,
-	ApolloError,
+  ApolloError,
+  AuthenticationError,
+  ForbiddenError,
+  UserInputError as ApolloUserInputError,
+  ValidationError,
 } from 'apollo-server'
 
+
 enum ErrorCodes {
-	NotFound = 'NOTFOUND',
-	System = 'INTERNAL',
+  NotFound = 'NOTFOUND',
+  System = 'INTERNAL',
 }
 
 class UserInputError extends ApolloUserInputError {
-	constructor(message: string, fieldErrors: { [k: string]: string }) {
-		super(message, {
-			fieldErrors,
-		})
-	}
+  constructor(message: string, fieldErrors: { [k: string]: string }) {
+    super(message, {
+      fieldErrors,
+    })
+  }
 }
 
 class NotFoundError extends ApolloError {
-	constructor(message: string) {
-		super(message, ErrorCodes.NotFound)
-	}
+  constructor(message: string) {
+    super(message, ErrorCodes.NotFound)
+  }
 }
 
 class SystemError extends ApolloError {
-	constructor(message: string) {
-		super(message, ErrorCodes.System)
-	}
+  constructor(message: string) {
+    super(message, ErrorCodes.System)
+  }
 }
 
 const Errors = {
-	Authentication: AuthenticationError,
-	Forbidden: ForbiddenError,
-	UserInput: UserInputError,
-	Validation: ValidationError,
-	NotFound: NotFoundError,
-	System: SystemError,
+  Authentication: AuthenticationError,
+  Forbidden: ForbiddenError,
+  UserInput: UserInputError,
+  Validation: ValidationError,
+  NotFound: NotFoundError,
+  System: SystemError,
 }
 
 export default Errors

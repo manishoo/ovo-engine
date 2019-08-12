@@ -7,18 +7,21 @@ import { LanguageCode, Status } from '@Types/common'
 import Errors from '@Utils/errors'
 import { Request } from 'express'
 
+
 export interface Context {
-	request: Request,
-	lang: LanguageCode,
-	user?: {
-		id: string,
-		status: Status,
-		lang: LanguageCode,
-	},
+  request: Request,
+  lang: LanguageCode,
+  user?: {
+    id: string,
+    status: Status,
+    lang: LanguageCode,
+  },
 }
 
 export function checkUser(ctx: Context) {
-	if (!ctx.user) throw new Errors.Forbidden('not allowed')
+  if (!ctx.user) throw new Errors.Forbidden('not allowed')
 
-	return ctx.user
+  return ctx.user
 }
+
+// TODO add check-auth function
