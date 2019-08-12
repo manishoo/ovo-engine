@@ -10,8 +10,9 @@ import { TAG_TYPE } from '@Types/tag'
 import { User } from '@Types/user'
 import { Weight } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
+import { Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
-import { Field, InputType, Int, ObjectType } from 'type-graphql'
+import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
 
 
@@ -275,9 +276,25 @@ export class RecipeInput {
   tags?: string[]
 }
 
-export interface RecipesQuery {
-  _id?: any
-  createdAt?: any
-  author?: any
-  title?: any
+@ArgsType()
+export class ListRecipesArgs {
+  @Field()
+  @Min(1)
+  page: number
+
+  @Field()
+  @Min(1)
+  @Max(30)
+  size: number
+
+  @Field({ nullable: true })
+  lastId?: string
+
+  @Field({ nullable: true })
+  nameSearchQuery?: string
+
+  @Field({ nullable: true })
+  userId?: string
+
+  viewerUserId?: string
 }
