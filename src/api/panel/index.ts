@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import 'reflect-metadata' // needed for type-graphql
 import config from '@Config'
 import expressLoader from '@Loaders/express.loader'
 import graphQLLoader from '@Loaders/graphql.loader'
 import healthCheckLoader from '@Loaders/health-check.loader'
 import chalk from 'chalk'
 import express, { Request } from 'express'
-import 'reflect-metadata' // needed for type-graphql
 import operatorMiddleware from './middlewares/operator.middleware'
 import { authChecker } from './utils'
 
@@ -26,6 +26,7 @@ async function main() {
   await graphQLLoader({
     app,
     resolverPath: __dirname + '/resolvers/*.resolver.*',
+    authChecker,
     context: async ({ req }: { req: Request }) => {
       const user = await operatorMiddleware(req)
 
@@ -35,7 +36,6 @@ async function main() {
         locale: req.language,
       }
     },
-    authChecker,
   })
 
   app.listen(port, url, () => {

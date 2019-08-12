@@ -5,7 +5,6 @@
 
 import { Image } from '@Types/common'
 import { NutritionalData } from '@Types/food'
-import { MEAL_ITEM_TYPES } from '@Types/meals'
 import { Weight } from '@Types/weight'
 import { Field, ID, Int, ObjectType } from 'type-graphql'
 import { prop } from 'typegoose'
@@ -15,9 +14,6 @@ import { prop } from 'typegoose'
 export class MealItem {
   @Field(type => ID)
   id: string
-
-  @Field()
-  type: MEAL_ITEM_TYPES
 
   @Field({ nullable: true })
   title?: string
