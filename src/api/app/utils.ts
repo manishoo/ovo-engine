@@ -19,12 +19,6 @@ export interface Context {
   },
 }
 
-export function checkUser(ctx: Context) {
-  if (!ctx.user) throw new Errors.Forbidden('not allowed')
-
-  return ctx.user
-}
-
 const authChecker: AuthChecker<Context> = (
   { root, args, context, info },
   roles,
