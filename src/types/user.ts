@@ -142,6 +142,13 @@ export class UserRegistrationInput {
   lastName?: string
 }
 
+@InputType()
+export class UserLoginInput {
+  @Field()
+  username: string
+  @Field()
+  password: string
+}
 
 @ObjectType()
 export class UserAuthResponse {
