@@ -16,6 +16,7 @@ import mongoose from 'mongoose'
 import shortid from 'shortid'
 import { Service } from 'typedi'
 import uuid from 'uuid/v1'
+import { UserModel } from '@Models/user.model';
 
 
 @Service()
@@ -89,7 +90,8 @@ export default class RecipeService {
   async create(data: RecipeInput, lang: LanguageCode, userId?: string) {
     let authorObjectId
     if (userId) {
-      const author = await this.userService.findById(userId)
+      const author = await UserModel.findById(userId)
+      if(!author) throw new Errors.NotFound('author not found')
       authorObjectId = author._id
     }
 
