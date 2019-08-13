@@ -48,7 +48,7 @@ export class UserSchema extends Typegoose implements User {
   @prop({ required: true })
   persistedPassword: PersistedPassword
   @prop({ required: true, unique: true, default: uuid })
-  session?: string
+  session: string
 
   /**
    * personal information
