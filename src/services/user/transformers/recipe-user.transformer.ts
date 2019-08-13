@@ -5,12 +5,13 @@
 
 import { User } from '@Types/user'
 
+
 export function transformRecipeUser(user: User): Partial<User> {
-	return {
-		id: user.publicId,
-		username: user.username,
-		avatar: user.avatar,
-		firstName: user.firstName,
-		lastName: user.lastName,
-	}
+  return {
+    id: user.publicId,
+    username: user.username,
+    avatar: user.avatar,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  }
 }

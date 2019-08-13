@@ -5,6 +5,7 @@
 
 import config from '@Config'
 
+
 export function setImageUrl(url: string, full: boolean = false, foodId: number) {
-	return `${config.imageUrl}/${foodId}/${full ? 'full' : 'thumb'}/${url.replace('jpg', 'png')}`
+  return `${config.imageUrl}/${foodId}/${full ? 'full' : 'thumb'}/${url.replace('jpg', 'png')}`
 }

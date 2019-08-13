@@ -1,5 +1,5 @@
 /*
- * weight.d.ts
+ * weight.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
@@ -11,32 +11,31 @@ import { prop } from 'typegoose'
 
 @ObjectType()
 export class Weight {
-	@prop({ default: mongoose.Types.ObjectId })
-	@Field(type => String)
-	id?: string
-	@Field()
-	amount: number
-	@Field()
-	gramWeight: number
-	@Field()
-	seq: number
-	@Field(type => [Translation])
-	name: Translation[]
+  @prop({ default: mongoose.Types.ObjectId })
+  @Field(type => String)
+  id?: string
+  @Field()
+  amount: number
+  @Field()
+  gramWeight: number
+  @Field()
+  seq: number
+  @Field(type => [Translation])
+  name: Translation[]
 }
-
 
 @InputType()
 export class WeightInput {
-	@Field(type => String, { nullable: true })
-	id?: string
-	@Field()
-	amount: number
-	@Field()
-	seq: number
-	@Field({ nullable: true })
-	unit?: string
-	@Field()
-	gramWeight: number
-	@Field(type => [TranslationInput])
-	name: TranslationInput[]
+  @Field(type => String, { nullable: true })
+  id?: string
+  @Field()
+  amount: number
+  @Field()
+  seq: number
+  @Field({ nullable: true })
+  unit?: string
+  @Field()
+  gramWeight: number
+  @Field(type => [TranslationInput])
+  name: TranslationInput[]
 }

@@ -1,5 +1,5 @@
 /*
- * operator.d.ts
+ * operator.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
@@ -7,29 +7,30 @@ import { PersistedPassword } from '@Types/auth'
 import { Role } from '@Types/common'
 import { Field, ObjectType } from 'type-graphql'
 
+
 @ObjectType()
 export class Operator {
-	@Field()
-	id: string
+  @Field()
+  id: string
 
-	@Field()
-	username: string
+  @Field()
+  username: string
 
-	@Field()
-	status?: string
+  @Field()
+  status?: string
 
-	@Field(type => Role)
-	role?: Role
+  @Field(type => Role)
+  role?: Role
 
-	persistedPassword: PersistedPassword
+  persistedPassword: PersistedPassword
 
-	session: string
+  session: string
 }
 
 @ObjectType()
 export class OperatorResponse {
-	@Field(type => Operator)
-	operator: Operator
-	@Field()
-	session: string
+  @Field(type => Operator)
+  operator: Operator
+  @Field()
+  session: string
 }

@@ -1,5 +1,5 @@
 /*
- * event.d.ts
+ * event.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
@@ -9,26 +9,25 @@ import { prop } from 'typegoose'
 
 
 export enum EVENT_TYPES {
-	meal = 'meal',
-	exercise = 'exercise',
+  meal = 'meal',
+  exercise = 'exercise',
 }
-
 
 @ObjectType()
 export class Event {
-	@Field()
-	id: string
+  @Field()
+  id: string
 
-	@Field()
-	name: string
+  @Field()
+  name: string
 
-	@Field()
-	datetime: string
+  @Field()
+  datetime: string
 
-	@Field()
-	type: 'meal' | 'exercise'
+  @Field()
+  type: 'meal' | 'exercise'
 
-	@Field(type => UserMeal, { nullable: true })
-	@prop()
-	meal?: UserMeal
+  @Field(type => UserMeal, { nullable: true })
+  @prop()
+  meal?: UserMeal
 }
