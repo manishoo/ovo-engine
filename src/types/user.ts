@@ -10,7 +10,7 @@ import { Image } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import mongoose from 'mongoose'
-import { Field, Float, Int, ObjectType } from 'type-graphql'
+import { Field, Float, Int, ObjectType, InputType } from 'type-graphql'
 import { Ref } from 'typegoose'
 
 
@@ -123,4 +123,30 @@ export class User {
   @Field(type => [Event], { nullable: true })
   path?: Event[]
   timeZone?: string
+}
+
+
+@InputType()
+export class UserRegistrationInput {
+  @Field()
+  username: string
+  @Field()
+  password: string
+  @Field()
+  email: string
+  @Field({ nullable: true })
+  firstName?: string
+  @Field({ nullable: true })
+  middleName?: string
+  @Field({ nullable: true })
+  lastName?: string
+}
+
+
+@ObjectType()
+export class UserAuthResponse {
+  @Field(type => User)
+  user: User
+  @Field()
+  session: string
 }
