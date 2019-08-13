@@ -130,6 +130,7 @@ export class User {
 export class UserRegistrationInput {
   @Field()
   username: string
+  @Field()
   password: string
   @Field()
   email: string
