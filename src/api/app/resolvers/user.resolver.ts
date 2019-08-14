@@ -4,11 +4,10 @@
  */
 
 import UserService from '@Services/user/user.service'
-import { GENDER, User, UserRegistrationInput, UserAuthResponse, UserLoginInput } from '@Types/user'
+import { User, UserRegistrationInput, UserAuthResponse, UserLoginInput } from '@Types/user'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
-import { Command } from 'ioredis';
 
 @Service()
 @Resolver(of => User)
