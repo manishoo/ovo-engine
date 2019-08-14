@@ -11,7 +11,7 @@ import { PersistedPassword } from '@Types/auth'
 import { Image, Status } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import { ACTIVITY, GENDER, GOALS, Height, MealUnit, User, WeightUnit } from '@Types/user'
+import { ACTIVITY, Gender, GOALS, Height, MealUnit, User, WeightUnit } from '@Types/user'
 import isUUID from 'is-uuid'
 import { Container } from 'typedi'
 import { arrayProp, post, prop, Ref, Typegoose } from 'typegoose'
@@ -78,7 +78,7 @@ export class UserSchema extends Typegoose implements User {
   @prop()
   bodyFat?: number
   @prop()
-  gender?: GENDER
+  gender?: Gender
   // FIXME allergies aren't foods!
   @arrayProp({ items: String, validate: value => !value.find((v: string) => !isUUID.v4(v)) })
   foodAllergies?: string[]

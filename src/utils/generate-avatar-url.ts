@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { GENDER } from '@Types/user'
+import { Gender } from '@Types/user'
 
 
 function getRandomFromArray(array: any[]): any {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-export function generateAvatarUrl(username: string, gender?: GENDER): string {
+export function generateAvatarUrl(username: string, gender?: Gender): string {
   let tops = []
   let hairColors = ['black', 'brown', 'blonde', 'auburn']
   let clothes = ['blazer', 'sweater', 'shirt', 'hoodie', 'overall']
@@ -19,9 +19,9 @@ export function generateAvatarUrl(username: string, gender?: GENDER): string {
   let brows = ['defaultValue', 'raised', 'up']
   let mouths = ['defaultValue', 'eating', 'twinkle', 'smile', 'eating', 'eating', 'eating']
 
-  if (gender == GENDER.female) {
+  if (gender == Gender.female) {
     tops = ['longHair']
-  } else if (gender == GENDER.male) {
+  } else if (gender == Gender.male) {
     tops = ['shortHair']
   } else {
     tops = ['hat']
