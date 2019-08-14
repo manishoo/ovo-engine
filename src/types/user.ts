@@ -11,7 +11,7 @@ import { Household } from '@Types/household'
 import mongoose from 'mongoose'
 import { Field, Float, Int, ObjectType, InputType } from 'type-graphql'
 import { Ref } from 'typegoose'
-import { GraphQLUpload } from 'apollo-server';
+import { GraphQLUpload } from 'apollo-server'
 
 
 export enum GENDER {
