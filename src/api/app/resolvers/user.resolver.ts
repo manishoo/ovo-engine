@@ -4,11 +4,12 @@
  */
 
 import UserService from '@Services/user/user.service'
-import { GENDER, User, UserRegistrationInput, UserAuthResponse } from '@Types/user'
-import { Arg, Ctx, Mutation, Resolver, Query, Authorized } from 'type-graphql'
+import { User, UserRegistrationInput, UserAuthResponse, UserLoginArgs } from '@Types/user'
+import { Arg, Ctx, Mutation, Resolver, Args, Authorized, Query } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
-import { Role, UserRole } from '@Types/common';
+import { UserRole } from '@Types/common'
+
 
 @Service()
 @Resolver(of => User)
@@ -27,11 +28,19 @@ export default class UserResolver {
   ) {
     return this.userService.register(user)
   }
+
+  @Mutation(returns => UserAuthResponse)
+  async loginUser(
+    @Args() {username, password}: UserLoginArgs,
+  ) {
+    return this.userService.loginUser({username, password})
+  }
+
   @Authorized(UserRole.user)
   @Query(returns => User)
   async me(
     @Ctx() ctx: Context,
   ) {
-
+    return this.userService.getUserInfo(ctx.user!.id)
   }
 }

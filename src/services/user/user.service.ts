@@ -6,19 +6,12 @@
 import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
-import transformSelfUser from '@Services/user/transformers/self-user.transformer'
-import transformUser from '@Services/user/transformers/user.transformer'
-import { Status } from '@Types/common'
-import { GENDER, User, UserRegistrationInput, UserAuthResponse } from '@Types/user'
+import { Status, UserRole } from '@Types/common'
+import { User, UserRegistrationInput, UserAuthResponse, UserLoginArgs } from '@Types/user'
 import Errors from '@Utils/errors'
-import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
-import { AuthenticationError } from 'apollo-server'
-import i18n, { __ } from 'i18n'
 import { Service } from 'typedi'
-import { checkUser } from 'src/api/panel/utils';
-
 
 @Service()
 export default class UserService {
@@ -41,6 +34,7 @@ export default class UserService {
       let user = {
         id: dbUser._id,
         status: dbUser.status,
+        role: dbUser.role
       }
       redis.setex(key, config.times.sessionExpiration, JSON.stringify(user))
         .catch(logError('findBySession->redis.setex'))
@@ -58,7 +52,8 @@ export default class UserService {
 
     let newUser = await UserModel.create({
       username: user.username,
-      persistedPassword: generateHashPassword(user.password),
+      persistedPassword: await generateHashPassword(user.password),
+      role: UserRole.user,
       email: user.email,
       firstName: user.firstName,
       middleName: user.middleName,
@@ -68,6 +63,27 @@ export default class UserService {
       user: newUser,
       session: newUser.session,
     }
+  }
+
+  async loginUser(user: UserLoginArgs): Promise<UserAuthResponse> {
+    const checkUser = await UserModel.findOne({ username: user.username })
+    if (!checkUser) throw new Errors.NotFound('user not found')
+
+    const validatePassword = await verifyPassword(checkUser.persistedPassword, user.password)
+
+    if (!validatePassword) throw new Errors.UserInput('wrong username or password', { password: 'wrong password' })
+
+    return {
+      user: checkUser,
+      session: checkUser.session,
+    }
+  }
+
+  async getUserInfo(id: string): Promise<User> {
+    const user = await UserModel.findById(id)
+    if(!user) throw new Errors.NotFound('user not found!')
+
+    return user
   }
 }
 
