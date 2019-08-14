@@ -27,6 +27,7 @@ async function main() {
     app,
     resolverPath: __dirname + '/resolvers/*.resolver.*',
     authChecker,
+    platform: 'APP',
     context: async ({ req }: { req: Request }) => {
       const user = await userMiddleware(req)
 
@@ -39,7 +40,7 @@ async function main() {
   })
 
   app.listen(port, url, () => {
-    console.info(chalk.inverse(`GraphQL listening on ${url}:${port}/${config.graphQLPath}`))
+    console.info(chalk.inverse(`GraphQL listening on ${url}:${port}/${config.graphQLPath_APP}`))
   })
 }
 
