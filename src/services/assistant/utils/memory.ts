@@ -47,12 +47,12 @@ export default <Memory>{
       }
 
       const userService = Container.get(UserService)
-      const tempData = await userService.getTempData(token)
-        .catch(logError('UserService.getTempData'))
+      //const tempData = await userService.getTempData(token)
+        //.catch(logError('UserService.getTempData'))
 
       return {
         user: null,
-        tempData,
+        //tempData,
         conversationHistory: JSON.parse(messages)
       }
     },
@@ -89,10 +89,10 @@ export default <Memory>{
     async recognizeTarget(userId) {
       const userService = Container.get(UserService)
 
-      const user = await userService.findById(userId)
-        .catch(logError('recognizeTarget->userService.findById'))
+      //const user = await userService.findById(userId)
+        //.catch(logError('recognizeTarget->userService.findById'))
       return {
-        user,
+       // user,
         tempData: null,
         conversationHistory: [],
       }
