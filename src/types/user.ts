@@ -6,12 +6,12 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import mongoose from 'mongoose'
 import { Field, Float, Int, ObjectType, InputType } from 'type-graphql'
 import { Ref } from 'typegoose'
+import { GraphQLUpload } from 'apollo-server';
 
 
 export enum GENDER {
@@ -54,8 +54,24 @@ export class Height {
   unit: HEIGHT_UNITS
 }
 
+@InputType()
+export class HeightInput {
+  @Field()
+  value: number
+  @Field()
+  unit: HEIGHT_UNITS
+}
+
 @ObjectType()
 export class WeightUnit {
+  @Field()
+  value: number
+  @Field()
+  unit: WEIGHT_UNITS
+}
+
+@InputType()
+export class WeightUnitInput {
   @Field()
   value: number
   @Field()
@@ -98,8 +114,8 @@ export class User {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
-  @Field({ nullable: true })
-  avatar?: Image
+  @Field(type => GraphQLUpload, { nullable: true })
+  imageUrl?: any
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
   @Field({ nullable: true })
@@ -140,6 +156,47 @@ export class UserRegistrationInput {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
+}
+
+
+@InputType()
+export class UserUpdateInput {
+  @Field()
+  id: string
+  @Field()
+  username: string
+  @Field()
+  email: string
+  @Field({ nullable: true })
+  firstName?: string
+  @Field({ nullable: true })
+  middleName?: string
+  @Field({ nullable: true })
+  lastName?: string
+  @Field({ nullable: true })
+  @Field(type => Float, { nullable: true })
+  caloriesPerDay?: number
+  @Field({ nullable: true })
+  height?: HeightInput
+  @Field({ nullable: true })
+  weight?: WeightUnitInput
+  @Field({ nullable: true })
+  age?: number
+  @Field(type => Int, { nullable: true })
+  bodyFat?: number
+  @Field({ nullable: true })
+  gender?: GENDER
+  @Field(type => GraphQLUpload, { nullable: true })
+  imageUrl?: any
+  foodAllergies?: string[]
+  status?: string
+  meals?: MealUnit[]
+  mealPlanSettings?: MacroNutrientDistribution
+  mealPlans?: Ref<MealPlanSchema>[]
+  household?: Ref<Household>
+  activityLevel?: ACTIVITY
+  goal?: GOALS
+  timeZone?: string
 }
 
 

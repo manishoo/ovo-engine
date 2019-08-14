@@ -6,23 +6,22 @@
 import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
-import transformSelfUser from '@Services/user/transformers/self-user.transformer'
-import transformUser from '@Services/user/transformers/user.transformer'
 import { Status } from '@Types/common'
-import { GENDER, User, UserRegistrationInput, UserAuthResponse } from '@Types/user'
+import { User, UserRegistrationInput, UserAuthResponse, UserUpdateInput } from '@Types/user'
 import Errors from '@Utils/errors'
-import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
-import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
-import { AuthenticationError } from 'apollo-server'
-import i18n, { __ } from 'i18n'
+import { generateHashPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
-import { checkUser } from 'src/api/panel/utils';
-
+import UploadService from '@Services/upload/upload.service'
 
 @Service()
 export default class UserService {
-
+  constructor(
+    // service injection
+    private readonly uploadService: UploadService
+  ) {
+    // noop
+  }
   async findBySession(session: string) {
     const key = `user:session:${session}`
     const userDataJSONString = await redis.get(key)
@@ -48,12 +47,8 @@ export default class UserService {
     }
   }
 
-  async findByUsername(username: string): Promise<User | null> {
-    return UserModel.findOne({ username })
-  }
-
   async register(user: UserRegistrationInput): Promise<UserAuthResponse> {
-    const checkUser = await this.findByUsername(user.username)
+    const checkUser = await UserModel.findOne({ username: user.username })
     if (checkUser) throw new Errors.UserInput('user creation error', { username: 'This username already exists' })
 
     let newUser = await UserModel.create({
@@ -69,5 +64,38 @@ export default class UserService {
       session: newUser.session,
     }
   }
-}
 
+  async update(inputUser: UserUpdateInput): Promise<User | undefined> {
+    let usr = await UserModel.findById(inputUser.id)
+    if (!usr) throw new Errors.NotFound('user not found')
+
+    if (inputUser.imageUrl) {
+      usr.imageUrl = {
+        url: await this.uploadService.processUpload(inputUser.imageUrl, 'full', `images/users/${usr.username}`)
+      }
+
+      usr.username = inputUser.username
+      usr.firstName = inputUser.firstName
+      usr.middleName = inputUser.middleName
+      usr.lastName = inputUser.lastName
+      usr.email = inputUser.email
+      usr.caloriesPerDay = inputUser.caloriesPerDay
+      usr.height = inputUser.height
+      usr.weight = inputUser.weight
+      usr.age = inputUser.age
+      usr.bodyFat = inputUser.bodyFat
+      usr.gender = inputUser.gender
+      usr.foodAllergies = inputUser.foodAllergies
+      usr.status = inputUser.status
+      usr.meals = inputUser.meals
+      usr.mealPlanSettings = inputUser.mealPlanSettings
+      usr.mealPlans = inputUser.mealPlans
+      usr.household = inputUser.household
+      usr.activityLevel = inputUser.activityLevel
+      usr.goal = inputUser.goal
+      usr.timeZone = inputUser.timeZone
+
+      return usr.save()
+    }
+  }
+}

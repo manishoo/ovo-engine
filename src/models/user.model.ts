@@ -62,7 +62,7 @@ export class UserSchema extends Typegoose implements User {
   @prop()
   lastName?: string
   @prop()
-  avatar?: Image
+  imageUrl?: Image
 
   /**
    * physical attributes
