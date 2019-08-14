@@ -15,7 +15,7 @@ import { ErrorInterceptor } from '../api/common/middlewares/error-interceptor.mi
 const UPLOAD_MAX_FILE_SIZE = 2000000 // 1 MB
 const UPLOAD_MAX_FILES = 1
 
-export default async ({ app, resolverPath, context, authChecker }: { app: express.Application, resolverPath: string, context: ContextFunction, authChecker?: AuthChecker<any> }) => {
+export default async ({ app, resolverPath, context, authChecker, platformPath }: { app: express.Application, resolverPath: string, context: ContextFunction, authChecker?: AuthChecker<any>, platformPath: string }) => {
   /**
    * Configure main app graphql server
    * */
@@ -36,5 +36,5 @@ export default async ({ app, resolverPath, context, authChecker }: { app: expres
       maxFiles: UPLOAD_MAX_FILES
     },
   })
-  graphQLAppServer.applyMiddleware({ app, path: `/${config.graphQLPath}` })
+  graphQLAppServer.applyMiddleware({ app, path: `/${platformPath}` })
 }
