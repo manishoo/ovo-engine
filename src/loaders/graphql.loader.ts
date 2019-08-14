@@ -48,7 +48,5 @@ export default async ({ app, resolverPath, context, authChecker, platform }: { a
       platformPath = config.graphQLPath
       break;
   }
-  console.log('---->')
-  console.log(platformPath)
   graphQLAppServer.applyMiddleware({ app, path: `/${platformPath}` })
 }
