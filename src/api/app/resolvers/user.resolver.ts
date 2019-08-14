@@ -5,9 +5,10 @@
 
 import UserService from '@Services/user/user.service'
 import { GENDER, User, UserRegistrationInput, UserAuthResponse } from '@Types/user'
-import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
+import { Arg, Ctx, Mutation, Resolver, Query, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
+import { Role, UserRole } from '@Types/common';
 
 @Service()
 @Resolver(of => User)
@@ -25,5 +26,12 @@ export default class UserResolver {
     @Ctx() ctx: Context,
   ) {
     return this.userService.register(user)
+  }
+  @Authorized(UserRole.user)
+  @Query(returns => User)
+  async me(
+    @Ctx() ctx: Context,
+  ) {
+
   }
 }
