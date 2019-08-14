@@ -18,6 +18,8 @@ export default {
   panelPort: Number(process.env.PANEL_PORT),
 
   graphQLPath: process.env.GRAPHQL_PATH || 'gql',
+  graphQLPath_APP: process.env.GRAPHQL_PATH_APP || 'gql',
+  graphQLPath_PANEL: process.env.GRAPHQL_PATH_PANEL || 'gql',
 
   bodyParserLimit: '1mb',
   bodyParserUrlEncoderLimit: '10mb',

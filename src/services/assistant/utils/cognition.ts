@@ -129,7 +129,7 @@ export default class Cognition {
               const data = message.data
               const validatedData = Validators.validateRegistration(data)
               const userService = Container.get(UserService)
-
+/*
               const tempData = await userService.getTempData(t)
 
               await userService.createNewUser(<User>{
@@ -153,7 +153,10 @@ export default class Cognition {
                   url: generateAvatarUrl(validatedData.username, tempData.gender)
                 }
               })
-              return askForMealPlan(lang, tempData.tdee)
+
+              */
+              //return askForMealPlan(lang, tempData.tdee)
+              return askForMealPlan(lang, 0)
             }
           }
 
