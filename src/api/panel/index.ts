@@ -27,7 +27,7 @@ async function main() {
     app,
     resolverPath: __dirname + '/resolvers/*.resolver.*',
     authChecker,
-    platform: 'PANEL',
+    platformPath: config.graphQLPath_PANEL,
     context: async ({ req }: { req: Request }) => {
       const user = await operatorMiddleware(req)
 
