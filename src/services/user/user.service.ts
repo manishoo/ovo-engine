@@ -7,7 +7,7 @@ import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import { Status } from '@Types/common'
-import { User, UserRegistrationInput, UserAuthResponse, UserLoginInput } from '@Types/user'
+import { User, UserRegistrationInput, UserAuthResponse, UserLoginArgs } from '@Types/user'
 import Errors from '@Utils/errors'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
@@ -63,7 +63,7 @@ export default class UserService {
     }
   }
 
-  async loginUser(user: UserLoginInput): Promise<UserAuthResponse> {
+  async loginUser(user: UserLoginArgs): Promise<UserAuthResponse> {
     const checkUser = await UserModel.findOne({ username: user.username })
     if (!checkUser) throw new Errors.NotFound('user not found')
 
