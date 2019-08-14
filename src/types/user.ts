@@ -10,7 +10,7 @@ import { Image } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import mongoose from 'mongoose'
-import { Field, Float, Int, ObjectType, InputType } from 'type-graphql'
+import { Field, Float, Int, ObjectType, InputType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 
 
@@ -142,6 +142,13 @@ export class UserRegistrationInput {
   lastName?: string
 }
 
+@ArgsType()
+export class UserLoginArgs {
+  @Field()
+  username: string
+  @Field()
+  password: string
+}
 
 @ObjectType()
 export class UserAuthResponse {
