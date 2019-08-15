@@ -30,8 +30,9 @@ export default class UserResolver {
   @Mutation(returns => User)
   async updateUser(
     @Arg('user') user: UserUpdateInput,
+    @Arg('id') userId: string,
     @Ctx() ctx: Context,
   ) {
-    return this.userService.update(user)
+    return this.userService.update(user, userId)
   }
 }

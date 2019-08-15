@@ -65,22 +65,24 @@ export default class UserService {
     }
   }
 
-  async update(userInput: UserUpdateInput): Promise<User | undefined> {
-    let usr = await UserModel.findById(userInput.id)
-    if (!usr) throw new Errors.NotFound('user not found')
+  async update(userInput: UserUpdateInput, userId: string): Promise<User | undefined> {
+    let user = await UserModel.findById(userId)
+    if (!user) throw new Errors.NotFound('user not found')
 
     if (userInput.imageUrl) {
-      usr.imageUrl = {
-        url: await this.uploadService.processUpload(userInput.imageUrl, userInput.username , `images/users/${usr.id}`)
+      user.imageUrl = {
+        url: await this.uploadService.processUpload(userInput.imageUrl, userInput.username , `images/users/${user.id}`)
+        }
       }
+      user.username = userInput.username
+      user.firstName = userInput.firstName
+      user.lastName = userInput.lastName
+      user.email = userInput.email
+      user.socialNetworks = userInput.socialNetworks
+      user.bio = userInput.bio
+      user.gender = userInput.gender
 
-      usr.username = userInput.username
-      usr.firstName = userInput.firstName
-      usr.middleName = userInput.middleName
-      usr.lastName = userInput.lastName
-      usr.email = userInput.email
-
-      return usr.save()
-    }
+      return user.save()
+    
   }
 }

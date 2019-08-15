@@ -12,6 +12,7 @@ import mongoose from 'mongoose'
 import { Field, Float, Int, ObjectType, InputType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { GraphQLUpload } from 'apollo-server'
+import { SocialNetworks } from '@Types/common'
 
 
 export enum GENDER {
@@ -114,8 +115,14 @@ export class User {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
+  @Field({ nullable: true })
+  bio?: string
+  @Field({ nullable: true })
+  phoneNumber?: string
   @Field(type => GraphQLUpload, { nullable: true })
   imageUrl?: any
+  @Field(type => SocialNetworks, { nullable: true })
+  socialNetworks?: SocialNetworks
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
   @Field({ nullable: true })
@@ -162,8 +169,6 @@ export class UserRegistrationInput {
 @InputType()
 export class UserUpdateInput {
   @Field()
-  id: string
-  @Field()
   username: string
   @Field()
   email: string
@@ -173,8 +178,16 @@ export class UserUpdateInput {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
+  @Field({ nullable: true })
+  gender?: GENDER
   @Field(type => GraphQLUpload, { nullable: true })
   imageUrl?: any
+  @Field(type => SocialNetworks, { nullable: true })
+  socialNetworks?: SocialNetworks
+  @Field({ nullable: true })
+  bio?: string
+  @Field({ nullable: true })
+  phoneNumber?: string
 }
 
 
