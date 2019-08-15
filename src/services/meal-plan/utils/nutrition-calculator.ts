@@ -4,7 +4,7 @@
  */
 
 import config from '@Config'
-import { Goals } from '@Types/user'
+import { Goal } from '@Types/user'
 
 
 export default {
@@ -50,19 +50,19 @@ export default {
 
   calculateGoal(goal: string, TDEE: number): number {
     switch (goal) {
-      case Goals.ml:
+      case Goal.ml:
         return TDEE * .85
-      case Goals.sl:
+      case Goal.sl:
         return TDEE * .80
-      case Goals.il:
+      case Goal.il:
         return TDEE * .75
-      case Goals.mg:
+      case Goal.mg:
         return TDEE * 1.05
-      case Goals.sg:
+      case Goal.sg:
         return TDEE * 1.10
-      case Goals.ig:
+      case Goal.ig:
         return TDEE * 1.15
-      case Goals.m:
+      case Goal.m:
       default:
         return TDEE
     }

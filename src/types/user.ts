@@ -27,7 +27,7 @@ export enum Activity {
   extreme = 'extreme',
 }
 
-export enum Goals {
+export enum Goal {
   ml = 'ml',
   sl = 'sl',
   il = 'il',
@@ -135,7 +135,7 @@ export class User {
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
   activityLevel?: Activity
-  goal?: Goals
+  goal?: Goal
   @Field(type => [Event], { nullable: true })
   path?: Event[]
   timeZone?: string
@@ -192,7 +192,7 @@ export class UserUpdateInput {
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
   activityLevel?: Activity
-  goal?: Goals
+  goal?: Goal
   timeZone?: string
 }
 

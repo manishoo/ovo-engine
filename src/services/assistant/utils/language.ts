@@ -6,7 +6,7 @@
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { Activity, Gender, Goals, Height, HeightUnits, WeightUnits, WeightUnit } from '@Types/user'
+import { Activity, Gender, Goal, Height, HeightUnits, WeightUnits, WeightUnit } from '@Types/user'
 
 
 export default {
@@ -75,9 +75,9 @@ export default {
   },
   async extractGoals(text: string): Promise<string> {
     let g
-    Object.keys(Goals).map((key: string) => {
+    Object.keys(Goal).map((key: string) => {
       // @ts-ignore
-      if (Goals[key] === text) {
+      if (Goal[key] === text) {
         // @ts-ignore
         g = key
       }

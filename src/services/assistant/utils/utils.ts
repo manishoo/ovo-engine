@@ -5,7 +5,7 @@
 
 import { Message, MessageAdditionalData } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
-import { Activity, Gender, Goals, MealUnit } from '@Types/user'
+import { Activity, Gender, Goal, MealUnit } from '@Types/user'
 import { __ } from 'i18n'
 import uuid from 'uuid/v1'
 import w2n from 'words-to-numbers'
@@ -69,34 +69,34 @@ export function generateGoalOptions(lang: LanguageCode, weight: number, height: 
   const bmi = weight / ((height / 100) * (height / 100))
   if (bmi < 18.5) { // underweight
     return [
-      { value: Goals.m, text: __({ phrase: 'goal_m', locale: lang }) },
-      { value: Goals.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
-      { value: Goals.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
-      { value: Goals.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
-      { value: Goals.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
-      { value: Goals.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
-      { value: Goals.il, text: __({ phrase: 'goal_il', locale: lang }) },
+      { value: Goal.m, text: __({ phrase: 'goal_m', locale: lang }) },
+      { value: Goal.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+      { value: Goal.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
+      { value: Goal.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+      { value: Goal.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+      { value: Goal.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+      { value: Goal.il, text: __({ phrase: 'goal_il', locale: lang }) },
     ]
   } else if (bmi >= 25) { // overweight
     return [
-      { value: Goals.m, text: __({ phrase: 'goal_m', locale: lang }) },
-      { value: Goals.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
-      { value: Goals.il, text: __({ phrase: 'goal_il', locale: lang }) },
-      { value: Goals.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
-      { value: Goals.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
-      { value: Goals.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
-      { value: Goals.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
+      { value: Goal.m, text: __({ phrase: 'goal_m', locale: lang }) },
+      { value: Goal.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+      { value: Goal.il, text: __({ phrase: 'goal_il', locale: lang }) },
+      { value: Goal.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+      { value: Goal.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+      { value: Goal.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+      { value: Goal.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
     ]
   }
 
   return [
-    { value: Goals.m, text: __({ phrase: 'goal_m', locale: lang }) },
-    { value: Goals.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
-    { value: Goals.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
-    { value: Goals.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
-    { value: Goals.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
-    { value: Goals.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
-    { value: Goals.il, text: __({ phrase: 'goal_il', locale: lang }) },
+    { value: Goal.m, text: __({ phrase: 'goal_m', locale: lang }) },
+    { value: Goal.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+    { value: Goal.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+    { value: Goal.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+    { value: Goal.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+    { value: Goal.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
+    { value: Goal.il, text: __({ phrase: 'goal_il', locale: lang }) },
   ]
 }
 
