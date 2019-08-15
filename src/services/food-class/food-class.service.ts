@@ -92,7 +92,7 @@ export default class FoodClassService {
     return foodClass.save()
   }
 
-  async deleteFoodClass(foodClassID: string): Promise<Boolean> {
+  async deleteFoodClass(foodClassID: string): Promise<String> {
     const foodClass = await FoodClassModel.findById(mongoose.Types.ObjectId(foodClassID))
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
@@ -101,7 +101,7 @@ export default class FoodClassService {
 
     await foodClass.remove()
 
-    return true
+    return foodClass.id
   }
 
   async createFoodClass(foodClass: FoodClassInput): Promise<FoodClass> {
