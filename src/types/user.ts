@@ -173,7 +173,6 @@ export class UserUpdateInput {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
-  @Field({ nullable: true })
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
   @Field({ nullable: true })
