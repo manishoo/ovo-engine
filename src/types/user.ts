@@ -173,29 +173,8 @@ export class UserUpdateInput {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
-  @Field(type => Float, { nullable: true })
-  caloriesPerDay?: number
-  @Field({ nullable: true })
-  height?: HeightInput
-  @Field({ nullable: true })
-  weight?: WeightUnitInput
-  @Field({ nullable: true })
-  age?: number
-  @Field(type => Int, { nullable: true })
-  bodyFat?: number
-  @Field({ nullable: true })
-  gender?: GENDER
   @Field(type => GraphQLUpload, { nullable: true })
   imageUrl?: any
-  foodAllergies?: string[]
-  status?: string
-  meals?: MealUnit[]
-  mealPlanSettings?: MacroNutrientDistribution
-  mealPlans?: Ref<MealPlanSchema>[]
-  household?: Ref<Household>
-  activityLevel?: ACTIVITY
-  goal?: GOALS
-  timeZone?: string
 }
 
 

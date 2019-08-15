@@ -65,35 +65,20 @@ export default class UserService {
     }
   }
 
-  async update(inputUser: UserUpdateInput): Promise<User | undefined> {
-    let usr = await UserModel.findById(inputUser.id)
+  async update(userInput: UserUpdateInput): Promise<User | undefined> {
+    let usr = await UserModel.findById(userInput.id)
     if (!usr) throw new Errors.NotFound('user not found')
 
-    if (inputUser.imageUrl) {
+    if (userInput.imageUrl) {
       usr.imageUrl = {
-        url: await this.uploadService.processUpload(inputUser.imageUrl, 'full', `images/users/${usr.username}`)
+        url: await this.uploadService.processUpload(userInput.imageUrl, userInput.username , `images/users/${usr.id}`)
       }
 
-      usr.username = inputUser.username
-      usr.firstName = inputUser.firstName
-      usr.middleName = inputUser.middleName
-      usr.lastName = inputUser.lastName
-      usr.email = inputUser.email
-      usr.caloriesPerDay = inputUser.caloriesPerDay
-      usr.height = inputUser.height
-      usr.weight = inputUser.weight
-      usr.age = inputUser.age
-      usr.bodyFat = inputUser.bodyFat
-      usr.gender = inputUser.gender
-      usr.foodAllergies = inputUser.foodAllergies
-      usr.status = inputUser.status
-      usr.meals = inputUser.meals
-      usr.mealPlanSettings = inputUser.mealPlanSettings
-      usr.mealPlans = inputUser.mealPlans
-      usr.household = inputUser.household
-      usr.activityLevel = inputUser.activityLevel
-      usr.goal = inputUser.goal
-      usr.timeZone = inputUser.timeZone
+      usr.username = userInput.username
+      usr.firstName = userInput.firstName
+      usr.middleName = userInput.middleName
+      usr.lastName = userInput.lastName
+      usr.email = userInput.email
 
       return usr.save()
     }
