@@ -6,10 +6,11 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
+import { Image, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import mongoose from 'mongoose'
-import { Field, Float, Int, ObjectType, InputType } from 'type-graphql'
+import { Field, Float, Int, ObjectType, InputType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { GraphQLUpload } from 'apollo-server'
 import { SocialNetworksInput, SocialNetworks } from '@Types/common'
@@ -107,6 +108,8 @@ export class User {
   persistedPassword: PersistedPassword
   @Field()
   session?: string
+  @Field(type => UserRole)
+  role?: UserRole
   @Field()
   email: string
   @Field({ nullable: true })
@@ -165,6 +168,13 @@ export class UserRegistrationInput {
   lastName?: string
 }
 
+@ArgsType()
+export class UserLoginArgs {
+  @Field()
+  username: string
+  @Field()
+  password: string
+}
 
 @InputType()
 export class UserUpdateInput {
