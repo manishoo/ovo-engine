@@ -5,7 +5,7 @@
 
 import { Message, MessageAdditionalData } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
-import { ACTIVITY, GENDER, GOALS, MealUnit } from '@Types/user'
+import { ACTIVITY, Gender, GOALS, MealUnit } from '@Types/user'
 import { __ } from 'i18n'
 import uuid from 'uuid/v1'
 import w2n from 'words-to-numbers'
@@ -100,7 +100,7 @@ export function generateGoalOptions(lang: LanguageCode, weight: number, height: 
   ]
 }
 
-export function generateActivitySelect(lang: LanguageCode, gender: GENDER) {
+export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
   return Object.keys(ACTIVITY).map((i: string) => {
     // @ts-ignore
     switch (ACTIVITY[i]) {
@@ -111,7 +111,7 @@ export function generateActivitySelect(lang: LanguageCode, gender: GENDER) {
         }
       case ACTIVITY.light: {
         let emoji
-        if (gender === GENDER.female) {
+        if (gender === Gender.female) {
           emoji = '🚶‍♀️'
         } else {
           emoji = '🚶‍♂️'
@@ -123,7 +123,7 @@ export function generateActivitySelect(lang: LanguageCode, gender: GENDER) {
       }
       case ACTIVITY.mod: {
         let emoji
-        if (gender === GENDER.female) {
+        if (gender === Gender.female) {
           emoji = '🏃‍♀️'
         } else {
           emoji = '🏃‍♂️'
@@ -135,7 +135,7 @@ export function generateActivitySelect(lang: LanguageCode, gender: GENDER) {
       }
       case ACTIVITY.high: {
         let emoji
-        if (gender === GENDER.female) {
+        if (gender === Gender.female) {
           emoji = '🏋‍♀️'
         } else {
           emoji = '🏋‍♂️'
@@ -156,13 +156,13 @@ export function generateActivitySelect(lang: LanguageCode, gender: GENDER) {
 
 export function generateGenderSelect(lang: LanguageCode) {
   return [
-    ...Object.keys(GENDER).map(i => {
+    ...Object.keys(Gender).map(i => {
       // @ts-ignore
-      const gender = GENDER[i]
+      const gender = Gender[i]
       switch (gender) {
-        case GENDER.female:
+        case Gender.female:
           return { text: `👱‍♀️${__({ locale: lang, phrase: 'female' })}`, value: 'female' }
-        case GENDER.male:
+        case Gender.male:
         default:
           return { text: `👱‍♂️${__({ locale: lang, phrase: 'male' })}`, value: 'male' }
       }

@@ -6,7 +6,7 @@
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { ACTIVITY, GENDER, GOALS, Height, HEIGHT_UNITS, WEIGHT_UNITS, WeightUnit } from '@Types/user'
+import { ACTIVITY, Gender, GOALS, Height, HEIGHT_UNITS, WEIGHT_UNITS, WeightUnit } from '@Types/user'
 
 
 export default {
@@ -48,8 +48,8 @@ export default {
   },
   async extractGender(text: string): Promise<string> {
     let g
-    Object.keys(GENDER).map((key: any) => {
-      if (GENDER[key] === text.replace(/[👱‍♀️‍♂️]/g, '')) {
+    Object.keys(Gender).map((key: any) => {
+      if (Gender[key] === text.replace(/[👱‍♀️‍♂️]/g, '')) {
         g = key
       }
     })
