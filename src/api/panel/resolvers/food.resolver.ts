@@ -35,16 +35,17 @@ export default class FoodResolver {
   @Authorized(Role.operator)
   @Mutation(returns => Food)
   async updateFood(
+    @Arg('foodId') foodId: string,
     @Arg('food') food: FoodInput,
     @Ctx() ctx: Context,
   ) {
-    return this.foodService.updateFood(food)
+    return this.foodService.updateFood(foodId, food)
   }
 
   @Authorized(Role.operator)
   @Mutation(returns => Food)
   async deleteFood(
-    @Arg('id') foodID: string,
+    @Arg('foodId') foodID: string,
     @Ctx() ctx: Context,
   ) {
     return this.foodService.deleteFood(foodID)

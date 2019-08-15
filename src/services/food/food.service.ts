@@ -44,8 +44,10 @@ export default class FoodService {
     }
   }
 
-  async updateFood(inputFood: FoodInput): Promise<Food | null> {
-    const food = await FoodModel.findById(inputFood.id)
+  async updateFood(foodId: string, inputFood: FoodInput): Promise<Food | null> {
+    if (!mongoose.Types.ObjectId.isValid(foodId)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
+
+    const food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('food not found')
 
     let weights: WeightInput[] = []
