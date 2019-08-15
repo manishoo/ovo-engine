@@ -104,15 +104,33 @@ export default class FoodClassService {
     return true
   }
 
-  async createFoodClass(foodClass: FoodClassInput): Promise<FoodClass> {
-    if (!mongoose.Types.ObjectId.isValid(foodClass.foodGroupId)) throw new Errors.UserInput('invalid food group id', { 'foodGroupId': 'invalid food group id' })
-    const foodGroup = await FoodGroupModel.findById(foodClass.foodGroupId)
+  async createFoodClass(foodClassInput: FoodClassInput): Promise<FoodClass> {
+    if (!mongoose.Types.ObjectId.isValid(foodClassInput.foodGroupId)) throw new Errors.UserInput('invalid food group id', { 'foodGroupId': 'invalid food group id' })
+    const foodGroup = await FoodGroupModel.findById(foodClassInput.foodGroupId)
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
-    let newFoodClass = new FoodClassModel({
-      ...foodClass,
+    let foodClass = new FoodClassModel({
+      ...foodClassInput,
       foodGroup,
     })
-    return newFoodClass.save()
+
+    if (foodClassInput.imageUrl) {
+      foodClass.imageUrl = {
+        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/foods/${foodClassInput.slug}`)
+      }
+      if (!foodClassInput.thumbnailUrl) {
+        foodClass.thumbnailUrl = {
+          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+        }
+      }
+    }
+
+    if (foodClassInput.thumbnailUrl) {
+      foodClass.thumbnailUrl = {
+        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+      }
+    }
+
+    return foodClass.save()
   }
 }
