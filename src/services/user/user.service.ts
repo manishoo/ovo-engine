@@ -6,7 +6,7 @@
 import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
-import { Status } from '@Types/common'
+import { Status, UserRole } from '@Types/common'
 import { User, UserRegistrationInput, UserAuthResponse, UserLoginArgs } from '@Types/user'
 import Errors from '@Utils/errors'
 import { logError } from '@Utils/logger'
@@ -34,6 +34,7 @@ export default class UserService {
       let user = {
         id: dbUser._id,
         status: dbUser.status,
+        role: dbUser.role
       }
       redis.setex(key, config.times.sessionExpiration, JSON.stringify(user))
         .catch(logError('findBySession->redis.setex'))
@@ -52,6 +53,7 @@ export default class UserService {
     let newUser = await UserModel.create({
       username: user.username,
       persistedPassword: await generateHashPassword(user.password),
+      role: UserRole.user,
       email: user.email,
       firstName: user.firstName,
       middleName: user.middleName,
@@ -75,6 +77,13 @@ export default class UserService {
       user: checkUser,
       session: checkUser.session,
     }
+  }
+
+  async getUserInfo(id: string): Promise<User> {
+    const user = await UserModel.findById(id)
+    if(!user) throw new Errors.NotFound('user not found!')
+
+    return user
   }
 }
 

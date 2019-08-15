@@ -6,7 +6,7 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image } from '@Types/common'
+import { Image, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import mongoose from 'mongoose'
@@ -90,6 +90,8 @@ export class User {
   persistedPassword: PersistedPassword
   @Field()
   session?: string
+  @Field(type => UserRole)
+  role?: UserRole
   @Field()
   email: string
   @Field({ nullable: true })

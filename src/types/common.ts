@@ -33,6 +33,15 @@ registerEnumType(Role, {
   description: 'Operator roles'
 })
 
+export enum UserRole {
+  user = 'USER',
+}
+
+registerEnumType(UserRole, {
+  name: 'UserRole',
+  description: 'User roles'
+})
+
 @ObjectType()
 export class NameAndId {
   @Field()
