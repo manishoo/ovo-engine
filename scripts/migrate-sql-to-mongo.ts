@@ -99,6 +99,8 @@ async function migrateFoodClassesAndFoodGroups() {
 			if (!fgg && fg.id) {
 				const f = await _createFG(foodSubGroup, fg.id)
 				id = f._id
+			} else if (fgg) {
+				id = fgg._id
 			}
 		} else {
 			const fg = await _createFG(foodGroup)
@@ -107,7 +109,9 @@ async function migrateFoodClassesAndFoodGroups() {
 			if (!fgg && fg.id) {
 				const f = await _createFG(foodSubGroup, fg.id)
 				id = f._id
-			}
+			} else if (fgg) {
+        id = fgg._id
+      }
 		}
 
 		if (!id) throw new Error()
