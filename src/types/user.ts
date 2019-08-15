@@ -14,12 +14,12 @@ import { Field, Float, Int, ObjectType, InputType, ArgsType } from 'type-graphql
 import { Ref } from 'typegoose'
 
 
-export enum GENDER {
+export enum Gender {
   male = 'Male',
   female = 'Female',
 }
 
-export enum ACTIVITY {
+export enum Activity {
   sed = 'sed',
   light = 'light',
   mod = 'mod',
@@ -27,7 +27,7 @@ export enum ACTIVITY {
   extreme = 'extreme',
 }
 
-export enum GOALS {
+export enum Goals {
   ml = 'ml',
   sl = 'sl',
   il = 'il',
@@ -37,12 +37,12 @@ export enum GOALS {
   ig = 'ig',
 }
 
-export enum WEIGHT_UNITS {
+export enum WeightUnits {
   kg = 'kg',
   pound = 'pound',
 }
 
-export enum HEIGHT_UNITS {
+export enum HeightUnits {
   cm = 'cm',
 }
 
@@ -51,7 +51,7 @@ export class Height {
   @Field()
   value: number
   @Field()
-  unit: HEIGHT_UNITS
+  unit: HeightUnits
 }
 
 @ObjectType()
@@ -59,7 +59,7 @@ export class WeightUnit {
   @Field()
   value: number
   @Field()
-  unit: WEIGHT_UNITS
+  unit: WeightUnits
 }
 
 @ObjectType()
@@ -111,15 +111,15 @@ export class User {
   @Field(type => Int, { nullable: true })
   bodyFat?: number
   @Field({ nullable: true })
-  gender?: GENDER
+  gender?: Gender
   foodAllergies?: string[]
   status?: string
   meals?: MealUnit[]
   mealPlanSettings?: MacroNutrientDistribution
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
-  activityLevel?: ACTIVITY
-  goal?: GOALS
+  activityLevel?: Activity
+  goal?: Goals
   @Field(type => [Event], { nullable: true })
   path?: Event[]
   timeZone?: string

@@ -5,7 +5,7 @@
 
 import { Message, MessageAdditionalData } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
-import { ACTIVITY, Gender, GOALS, MealUnit } from '@Types/user'
+import { Activity, Gender, Goals, MealUnit } from '@Types/user'
 import { __ } from 'i18n'
 import uuid from 'uuid/v1'
 import w2n from 'words-to-numbers'
@@ -69,47 +69,47 @@ export function generateGoalOptions(lang: LanguageCode, weight: number, height: 
   const bmi = weight / ((height / 100) * (height / 100))
   if (bmi < 18.5) { // underweight
     return [
-      { value: GOALS.m, text: __({ phrase: 'goal_m', locale: lang }) },
-      { value: GOALS.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
-      { value: GOALS.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
-      { value: GOALS.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
-      { value: GOALS.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
-      { value: GOALS.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
-      { value: GOALS.il, text: __({ phrase: 'goal_il', locale: lang }) },
+      { value: Goals.m, text: __({ phrase: 'goal_m', locale: lang }) },
+      { value: Goals.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+      { value: Goals.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
+      { value: Goals.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+      { value: Goals.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+      { value: Goals.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+      { value: Goals.il, text: __({ phrase: 'goal_il', locale: lang }) },
     ]
   } else if (bmi >= 25) { // overweight
     return [
-      { value: GOALS.m, text: __({ phrase: 'goal_m', locale: lang }) },
-      { value: GOALS.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
-      { value: GOALS.il, text: __({ phrase: 'goal_il', locale: lang }) },
-      { value: GOALS.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
-      { value: GOALS.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
-      { value: GOALS.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
-      { value: GOALS.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
+      { value: Goals.m, text: __({ phrase: 'goal_m', locale: lang }) },
+      { value: Goals.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+      { value: Goals.il, text: __({ phrase: 'goal_il', locale: lang }) },
+      { value: Goals.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+      { value: Goals.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+      { value: Goals.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+      { value: Goals.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
     ]
   }
 
   return [
-    { value: GOALS.m, text: __({ phrase: 'goal_m', locale: lang }) },
-    { value: GOALS.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
-    { value: GOALS.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
-    { value: GOALS.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
-    { value: GOALS.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
-    { value: GOALS.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
-    { value: GOALS.il, text: __({ phrase: 'goal_il', locale: lang }) },
+    { value: Goals.m, text: __({ phrase: 'goal_m', locale: lang }) },
+    { value: Goals.mg, text: __({ phrase: 'goal_mg', locale: lang }) },
+    { value: Goals.ml, text: __({ phrase: 'goal_ml', locale: lang }) },
+    { value: Goals.sg, text: __({ phrase: 'goal_sg', locale: lang }) },
+    { value: Goals.sl, text: __({ phrase: 'goal_sl', locale: lang }) },
+    { value: Goals.ig, text: __({ phrase: 'goal_ig', locale: lang }) },
+    { value: Goals.il, text: __({ phrase: 'goal_il', locale: lang }) },
   ]
 }
 
 export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
-  return Object.keys(ACTIVITY).map((i: string) => {
+  return Object.keys(Activity).map((i: string) => {
     // @ts-ignore
-    switch (ACTIVITY[i]) {
-      case ACTIVITY.sed:
+    switch (Activity[i]) {
+      case Activity.sed:
         return {
           text: '🛋' + __({ phrase: 'sedActivity', locale: lang }),
-          value: ACTIVITY.sed,
+          value: Activity.sed,
         }
-      case ACTIVITY.light: {
+      case Activity.light: {
         let emoji
         if (gender === Gender.female) {
           emoji = '🚶‍♀️'
@@ -118,10 +118,10 @@ export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
         }
         return {
           text: `${emoji}${__({ phrase: 'lightActivity', locale: lang })}`,
-          value: ACTIVITY.light,
+          value: Activity.light,
         }
       }
-      case ACTIVITY.mod: {
+      case Activity.mod: {
         let emoji
         if (gender === Gender.female) {
           emoji = '🏃‍♀️'
@@ -130,10 +130,10 @@ export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
         }
         return {
           text: `${emoji}${__({ phrase: 'modActivity', locale: lang })}`,
-          value: ACTIVITY.mod,
+          value: Activity.mod,
         }
       }
-      case ACTIVITY.high: {
+      case Activity.high: {
         let emoji
         if (gender === Gender.female) {
           emoji = '🏋‍♀️'
@@ -142,13 +142,13 @@ export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
         }
         return {
           text: `${emoji}${__({ phrase: 'highActivity', locale: lang })}`,
-          value: ACTIVITY.high,
+          value: Activity.high,
         }
       }
-      case ACTIVITY.extreme:
+      case Activity.extreme:
         return {
           text: '🔥' + __({ phrase: 'extremeActivity', locale: lang }),
-          value: ACTIVITY.extreme,
+          value: Activity.extreme,
         }
     }
   })
