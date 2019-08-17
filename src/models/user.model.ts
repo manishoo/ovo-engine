@@ -8,7 +8,7 @@ import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Status } from '@Types/common'
+import { Image, Status, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { Activity, Gender, Goal, Height, MealUnit, User, WeightUnit } from '@Types/user'
@@ -49,7 +49,8 @@ export class UserSchema extends Typegoose implements User {
   persistedPassword: PersistedPassword
   @prop({ required: true, unique: true, default: uuid })
   session: string
-
+  @prop({ required: true, enum: UserRole, default: UserRole.user })
+  role?: UserRole
   /**
    * personal information
    * */
