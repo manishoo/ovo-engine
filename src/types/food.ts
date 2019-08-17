@@ -176,7 +176,7 @@ export class Food {
   description?: Translation[]
   @Field(type => [Weight])
   weights: Weight[]
-  @Field()
+  @Field({ nullable: true })
   origDb?: string
   origFoodId?: string
   foodClass: Ref<FoodClassSchema>
