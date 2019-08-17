@@ -26,12 +26,19 @@ export default class FoodClassService {
     let query: any = {}
 
     if (foodGroupID) {
-      query['foodGroup._id'] = foodGroupID
+      query['foodGroup._id'] = {
+        /**
+         * Search group and subgroups
+         * */
+        $in: [mongoose.Types.ObjectId(foodGroupID), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupID }))]
+      }
     }
+
     if (nameSearchQuery) {
       let reg = new RegExp(nameSearchQuery)
       query['name.text'] = { $regex: reg, $options: 'i' }
     }
+
     const counts = await FoodClassModel.countDocuments(query)
 
     if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
