@@ -97,6 +97,30 @@ export class MealUnit {
 }
 
 @ObjectType()
+export class SocialNetworks {
+  @Field({ nullable: true })
+  instagram?: string
+  @Field({ nullable: true })
+  twitter?: string
+  @Field({ nullable: true })
+  pinterest?: string
+  @Field({ nullable: true })
+  website?: string
+}
+
+@InputType()
+export class SocialNetworksInput {
+  @Field({ nullable: true })
+  instagram?: string
+  @Field({ nullable: true })
+  twitter?: string
+  @Field({ nullable: true })
+  pinterest?: string
+  @Field({ nullable: true })
+  website?: string
+}
+
+@ObjectType()
 export class User {
   _id?: mongoose.Schema.Types.ObjectId
   @Field()
@@ -210,28 +234,4 @@ export class UserAuthResponse {
   user: User
   @Field()
   session: string
-}
-
-@ObjectType()
-export class SocialNetworks {
-  @Field({ nullable: true })
-  instagram?: string
-  @Field({ nullable: true })
-  twitter?: string
-  @Field({ nullable: true })
-  pinterest?: string
-  @Field({ nullable: true })
-  website?: string
-}
-
-@InputType()
-export class SocialNetworksInput {
-  @Field({ nullable: true })
-  instagram?: string
-  @Field({ nullable: true })
-  twitter?: string
-  @Field({ nullable: true })
-  pinterest?: string
-  @Field({ nullable: true })
-  website?: string
 }
