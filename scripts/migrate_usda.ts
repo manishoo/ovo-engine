@@ -58,7 +58,7 @@
 // 	{ fgid: '3600', en: 'Restaurant Foods', fa: 'غذا های رستورانی', image_url: '' },
 // ]
 //
-// const WEIGHT_UNITS = [
+// const WeightUnits = [
 // 	{ unit: 'fl oz', name: 'fl oz' },
 // 	{ unit: 'oz', name: 'oz' },
 // 	{ unit: 'lb', name: 'lb' },
@@ -191,7 +191,7 @@
 // 			msreDesc.replace('cup (8 fl oz)', 'cup')
 // 		}
 //
-// 		WEIGHT_UNITS.map(u => {
+// 		WeightUnits.map(u => {
 // 			const REGXP = `\\b${u.unit}\\b`
 // 			if (msreDesc.match(new RegExp(REGXP))) {
 // 				unit = u.name
