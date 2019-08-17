@@ -52,7 +52,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   reviews?: Review[]
   createdAt: Date
-  
+
 }
 
 export const RecipeModel = new RecipeSchema().getModelForClass(RecipeSchema, {

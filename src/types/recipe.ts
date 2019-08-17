@@ -4,19 +4,18 @@
  */
 
 import { UserSchema } from '@Models/user.model'
-import { Image, Pagination, Video, LanguageCode, Translation, TranslationInput } from '@Types/common'
-import { Food, NutritionalData } from '@Types/food'
+import { Image, Pagination, LanguageCode, Translation, TranslationInput } from '@Types/common'
+import { NutritionalData } from '@Types/food'
 import { TAG_TYPE } from '@Types/tag'
-import { User } from '@Types/user'
-import { Weight } from '@Types/weight'
+import { RecipeAuthor } from '@Types/user'
+import { Weight, WeightInput } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
 import { Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
-import mongoose from '@Config/connections/mongoose';
-import { FoodSchema } from '@Models/food.model';
-import { transports } from 'winston';
+import mongoose from '@Config/connections/mongoose'
+import { FoodSchema } from '@Models/food.model'
 
 
 @ObjectType()
@@ -85,7 +84,7 @@ export class Ingredient {
   @Field({ nullable: true })
   gramWeight?: number
 
-  @Field({ nullable: true })
+  @Field(type => String, { nullable: true })
   food?: Ref<FoodSchema>
 
   @Field({ nullable: true })
@@ -188,7 +187,7 @@ export class Recipe {
   likedByUser: boolean
   @Field(type => Int)
   likesCount: number
-  @Field(type => User)
+  @Field(type => RecipeAuthor)
   author: Ref<UserSchema>
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
@@ -198,7 +197,7 @@ export class Recipe {
   origin?: RecipeOrigin
   @Field(type => [RecipeTag], { nullable: true })
   tags?: RecipeTag[]
-  @Field({ nullable: true })
+  @Field(type => LanguageCode, { nullable: true })
   languages: LanguageCode[]
   @Field(type => Date)
   createdAt: Date
@@ -219,7 +218,7 @@ export class RecipesListResponse {
 
 @InputType()
 export class IngredientInput {
-  @Field({ nullable: true })
+  @Field(type => String, { nullable: true })
   food?: Ref<FoodSchema>
   @Field()
   amount: number
@@ -228,7 +227,7 @@ export class IngredientInput {
   @Field(type => [TranslationInput], { nullable: true })
   name?: TranslationInput[]
   @Field({ nullable: true })
-  weight?: Weight
+  weight?: WeightInput
   @Field(type => [TranslationInput], { nullable: true })
   description?: TranslationInput[]
 }
@@ -236,13 +235,14 @@ export class IngredientInput {
 @InputType()
 export class InstructionInput {
   @Field()
+  @Min(1)
   step: number
   @Field(type => [TranslationInput])
   text: TranslationInput[]
   @Field(type => [TranslationInput], { nullable: true })
   note?: TranslationInput[]
-  @Field(type => Image, { nullable: true })
-  Image?: Image
+  @Field(type => GraphQLUpload, { nullable: true })
+  Image?: any
 }
 
 @InputType()
@@ -261,8 +261,10 @@ export class RecipeInput {
   slug: string
   @Field(type => [TranslationInput], { nullable: true })
   description: [TranslationInput]
-  @Field(type => Image, { nullable: true })
-  coverImage?: Image
+  @Field(type => GraphQLUpload, { nullable: true })
+  coverImage?: any
+  @Field(type => GraphQLUpload, { nullable: true })
+  thumbnail?: any
   @Field(type => [RecipeTagInput], { nullable: true })
   tags?: RecipeTagInput[]
 }

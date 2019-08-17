@@ -177,6 +177,25 @@ export class User {
   timeZone?: string
 }
 
+@ObjectType()
+export class RecipeAuthor {
+  _id?: mongoose.Schema.Types.ObjectId
+  @Field()
+  id?: string
+  @Field()
+  username: string
+  @Field({ nullable: true })
+  firstName?: string
+  @Field({ nullable: true })
+  middleName?: string
+  @Field({ nullable: true })
+  lastName?: string
+  @Field({ nullable: true })
+  bio?: string
+  @Field(type => GraphQLUpload, { nullable: true })
+  imageUrl?: any
+}
+
 @InputType()
 export class UserRegistrationInput {
   @Field()

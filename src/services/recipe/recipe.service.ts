@@ -6,7 +6,6 @@
 import { RecipeModel } from '@Models/recipe.model'
 import { transformRecipe } from '@Services/recipe/transformers/recipe.transformer'
 import TagService from '@Services/tag/tag.service'
-import UserService from '@Services/user/user.service'
 import { Image, LanguageCode } from '@Types/common'
 import { ListRecipesArgs, Recipe, RecipeInput } from '@Types/recipe'
 import Errors from '@Utils/errors'
@@ -17,14 +16,15 @@ import shortid from 'shortid'
 import { Service } from 'typedi'
 import uuid from 'uuid/v1'
 import { UserModel } from '@Models/user.model';
+import UploadService from '@Services/upload/upload.service'
 
 
 @Service()
 export default class RecipeService {
   constructor(
     // service injection
-    private readonly userService: UserService,
     private readonly tagService: TagService,
+    private readonly uploadService: UploadService,
   ) {
     // noop
   }
@@ -91,7 +91,7 @@ export default class RecipeService {
     let authorObjectId
     if (userId) {
       const author = await UserModel.findById(userId)
-      if(!author) throw new Errors.NotFound('author not found')
+      if (!author) throw new Errors.NotFound('author not found')
       authorObjectId = author._id
     }
 
@@ -111,15 +111,16 @@ export default class RecipeService {
       // thumbnail: undefined,
       // video: undefined,
       // tags: undefined,
-      publicId: id,
       coverImage,
       title: data.title,
-      yield: data.yield,
+      serving: data.serving,
+      /*
       timing: {
         totalTime: data.totalTime,
         cookTime: data.cookTime,
         prepTime: data.prepTime,
       },
+      */
       slug: `${data.slug}-${slugAddedId}`,
       description: data.description,
       author: authorObjectId,
@@ -141,8 +142,8 @@ export default class RecipeService {
           amount: ingredientInput.amount,
           description: ingredientInput.description,
           unit: ingredientInput.customUnit,
-          weightId: ingredientInput.weightId,
-          foodId: ingredientInput.foodId,
+          weightId: ingredientInput.weight,
+          foodId: ingredientInput.food,
         }
       })),
     }
@@ -155,6 +156,31 @@ export default class RecipeService {
 
     if (!savedRecipe) throw new Errors.System('failed to create the recipe')
     return transformRecipe(savedRecipe, userId)
+  }
+
+  async createRecipe(recipe: RecipeInput, language: LanguageCode, userId: string): Promise<Recipe> {
+
+    const author = await UserModel.findById(userId)
+    if (!author) throw new Errors.NotFound('author not found')
+
+    return RecipeModel.create({
+      author: author.id,
+      title: recipe.title,
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions,
+      serving: recipe.serving,
+      timing: recipe.timing,
+      slug: recipe.slug,
+      description: recipe.description,
+      coverImage: {
+        url: recipe.coverImage ? await this.uploadService.processUpload(recipe.coverImage, 'full', `images/recipes/${recipe.slug}`) : null
+      },
+      thumbnail: {
+        url: recipe.thumbnail ? await this.uploadService.processUpload(recipe.thumbnail, 'thumb', `images/recipes/${recipe.slug}`) :
+          recipe.coverImage ? await this.uploadService.processUpload(recipe.coverImage, 'thumb', `images/recipes/${recipe.slug}`) : null
+      },
+      languages: [language],
+    })
   }
 
   async delete(id: string, userId?: string, operatorId?: string) {
@@ -187,8 +213,8 @@ export default class RecipeService {
           name: ingredient.name,
           amount: ingredient.amount,
           unit: ingredient.customUnit,
-          foodId: ingredient.foodId,
-          weightId: ingredient.weightId,
+          foodId: ingredient.food,
+          weightId: ingredient.weight,
           description: ingredient.description,
         }
       })
@@ -206,6 +232,7 @@ export default class RecipeService {
         url: await processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
       }
     }
+    /*
     if (data.totalTime) {
       recipe.timing = {
         ...recipe.timing,
@@ -227,6 +254,7 @@ export default class RecipeService {
     if (data.yield) {
       recipe.yield = data.yield
     }
+    */
     if (data.slug) {
       const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ publicId: { $ne: publicId }, slug: data.slug })
 
@@ -234,6 +262,7 @@ export default class RecipeService {
 
       recipe.slug = data.slug
     }
+    /*
     if (data.tags) {
       recipe.tags = await Promise.all(data.tags.map(async slug => {
         const t = await this.tagService.findBySlug(slug) // TODO we should probably only make one request to db
@@ -246,6 +275,7 @@ export default class RecipeService {
         }
       }))
     }
+    */
 
     await recipe.save()
 
@@ -254,7 +284,7 @@ export default class RecipeService {
 
   async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
     return this.update(recipePublicId, {
-      tags: tagSlugs,
+      //tags: tagSlugs,
     }, LanguageCode.en, userId)
   }
 }

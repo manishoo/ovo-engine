@@ -10,6 +10,7 @@ import { Tag } from '@Types/tag'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
+import { UserRole } from '@Types/common'
 
 
 @Service()
@@ -52,13 +53,13 @@ export default class RecipeResolver {
     })
   }
 
-  @Authorized()
+  @Authorized(UserRole.user)
   @Mutation(returns => Recipe)
   async createRecipe(
     @Arg('recipe') recipe: RecipeInput,
     @Ctx() ctx: Context,
-  ): Promise<Recipe> {
-    return this.recipeService.create(recipe, ctx.lang, ctx.user!.id)
+  ) {
+    return this.recipeService.createRecipe(recipe, ctx.lang, ctx.user!.id)
   }
 
   @Authorized()
