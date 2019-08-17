@@ -109,6 +109,6 @@ export default class UserService {
     user.gender = userInput.gender
 
     return user.save()
-
+    
   }
 }
