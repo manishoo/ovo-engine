@@ -38,7 +38,7 @@
 // 	['CalorieSlism', 'calorieslism'],
 // ]
 //
-// const WEIGHT_UNITS = [
+// const WeightUnits = [
 // 	{unit: 'fl oz', name: 'fl oz'},
 // 	{unit: 'oz', name: 'oz'},
 // 	{unit: 'lb', name: 'lb'},
@@ -298,7 +298,7 @@
 // 		/**
 // 		 * Find the unit
 // 		 * */
-// 		WEIGHT_UNITS.map(u => {
+// 		WeightUnits.map(u => {
 // 			const REGXP = `\\b${u.unit}\\b`
 // 			if (msreDesc.match(new RegExp(REGXP))) {
 // 				unit = u.name

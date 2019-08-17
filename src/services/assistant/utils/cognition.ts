@@ -13,7 +13,7 @@ import {
   MessagePayload
 } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
-import { GENDER, MealUnit, User } from '@Types/user'
+import { Gender, MealUnit, User } from '@Types/user'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
@@ -252,7 +252,7 @@ function askForGender(lang: LanguageCode) {
   ]
 }
 
-function askForActivity(lang: LanguageCode, bmr: number, gender: GENDER) {
+function askForActivity(lang: LanguageCode, bmr: number, gender: Gender) {
   return [
     createMessage(__({ phrase: 'assistantShowBMR', locale: lang }, { bmr: String(bmr) })),
     createMessage(__({ phrase: 'assistantExplainActivity', locale: lang })),
