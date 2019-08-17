@@ -6,15 +6,24 @@
 import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
+import UploadService from '@Services/upload/upload.service'
 import { Status, UserRole } from '@Types/common'
-import { User, UserRegistrationInput, UserAuthResponse, UserLoginArgs } from '@Types/user'
+import { User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
 import Errors from '@Utils/errors'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
 
+
 @Service()
 export default class UserService {
+  constructor(
+    // service injection
+    private readonly uploadService: UploadService
+  ) {
+    // noop
+  }
+
 
   async findBySession(session: string) {
     const key = `user:session:${session}`
@@ -42,12 +51,8 @@ export default class UserService {
     }
   }
 
-  async findByUsername(username: string): Promise<User | null> {
-    return UserModel.findOne({ username })
-  }
-
   async register(user: UserRegistrationInput): Promise<UserAuthResponse> {
-    const checkUser = await this.findByUsername(user.username)
+    const checkUser = await UserModel.findOne({ username: user.username })
     if (checkUser) throw new Errors.UserInput('user creation error', { username: 'This username already exists' })
 
     let newUser = await UserModel.create({
@@ -81,9 +86,29 @@ export default class UserService {
 
   async getUserInfo(id: string): Promise<User> {
     const user = await UserModel.findById(id)
-    if(!user) throw new Errors.NotFound('user not found!')
+    if (!user) throw new Errors.NotFound('user not found!')
 
     return user
   }
-}
 
+  async update(userInput: UserUpdateInput, userId: string): Promise<User> {
+    let user = await UserModel.findById(userId)
+    if (!user) throw new Errors.NotFound('user not found')
+
+    if (userInput.imageUrl) {
+      user.imageUrl = {
+        url: await this.uploadService.processUpload(userInput.imageUrl, userInput.username, `images/users/${user.id}`)
+      }
+    }
+    user.username = userInput.username
+    user.firstName = userInput.firstName
+    user.lastName = userInput.lastName
+    user.email = userInput.email
+    user.socialNetworks = userInput.socialNetworks
+    user.bio = userInput.bio
+    user.gender = userInput.gender
+
+    return user.save()
+
+  }
+}

@@ -6,20 +6,22 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, UserRole } from '@Types/common'
+import { UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
+import { GraphQLUpload } from 'apollo-server'
+import { IsEmail, IsPhoneNumber } from 'class-validator'
 import mongoose from 'mongoose'
-import { Field, Float, Int, ObjectType, InputType, ArgsType } from 'type-graphql'
+import { ArgsType, Field, Float, InputType, Int, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
 
 
-export enum GENDER {
+export enum Gender {
   male = 'Male',
   female = 'Female',
 }
 
-export enum ACTIVITY {
+export enum Activity {
   sed = 'sed',
   light = 'light',
   mod = 'mod',
@@ -27,7 +29,7 @@ export enum ACTIVITY {
   extreme = 'extreme',
 }
 
-export enum GOALS {
+export enum Goal {
   ml = 'ml',
   sl = 'sl',
   il = 'il',
@@ -37,12 +39,12 @@ export enum GOALS {
   ig = 'ig',
 }
 
-export enum WEIGHT_UNITS {
+export enum WeightUnits {
   kg = 'kg',
   pound = 'pound',
 }
 
-export enum HEIGHT_UNITS {
+export enum HeightUnits {
   cm = 'cm',
 }
 
@@ -51,7 +53,23 @@ export class Height {
   @Field()
   value: number
   @Field()
-  unit: HEIGHT_UNITS
+  unit: HeightUnits
+}
+
+@InputType()
+export class HeightInput {
+  @Field()
+  value: number
+  @Field()
+  unit: HeightUnits
+}
+
+@InputType()
+export class WeightUnitInput {
+  @Field()
+  value: number
+  @Field()
+  unit: WeightUnits
 }
 
 @ObjectType()
@@ -59,7 +77,7 @@ export class WeightUnit {
   @Field()
   value: number
   @Field()
-  unit: WEIGHT_UNITS
+  unit: WeightUnits
 }
 
 @ObjectType()
@@ -93,6 +111,7 @@ export class User {
   @Field(type => UserRole)
   role?: UserRole
   @Field()
+  @IsEmail()
   email: string
   @Field({ nullable: true })
   firstName?: string
@@ -101,7 +120,14 @@ export class User {
   @Field({ nullable: true })
   lastName?: string
   @Field({ nullable: true })
-  avatar?: Image
+  bio?: string
+  @Field({ nullable: true })
+  @IsPhoneNumber('any')
+  phoneNumber?: string
+  @Field(type => GraphQLUpload, { nullable: true })
+  imageUrl?: any
+  @Field(type => SocialNetworks, { nullable: true })
+  socialNetworks?: SocialNetworks
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
   @Field({ nullable: true })
@@ -113,20 +139,19 @@ export class User {
   @Field(type => Int, { nullable: true })
   bodyFat?: number
   @Field({ nullable: true })
-  gender?: GENDER
+  gender?: Gender
   foodAllergies?: string[]
   status?: string
   meals?: MealUnit[]
   mealPlanSettings?: MacroNutrientDistribution
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
-  activityLevel?: ACTIVITY
-  goal?: GOALS
+  activityLevel?: Activity
+  goal?: Goal
   @Field(type => [Event], { nullable: true })
   path?: Event[]
   timeZone?: string
 }
-
 
 @InputType()
 export class UserRegistrationInput {
@@ -135,6 +160,7 @@ export class UserRegistrationInput {
   @Field()
   password: string
   @Field()
+  @IsEmail()
   email: string
   @Field({ nullable: true })
   firstName?: string
@@ -152,10 +178,60 @@ export class UserLoginArgs {
   password: string
 }
 
+@InputType()
+export class UserUpdateInput {
+  @Field()
+  username: string
+  @Field()
+  @IsEmail()
+  email: string
+  @Field({ nullable: true })
+  firstName?: string
+  @Field({ nullable: true })
+  middleName?: string
+  @Field({ nullable: true })
+  lastName?: string
+  @Field({ nullable: true })
+  gender?: Gender
+  @Field(type => GraphQLUpload, { nullable: true })
+  imageUrl?: any
+  @Field(type => SocialNetworksInput, { nullable: true })
+  socialNetworks?: SocialNetworksInput
+  @Field({ nullable: true })
+  bio?: string
+  @Field({ nullable: true })
+  @IsPhoneNumber('any')
+  phoneNumber?: string
+}
+
 @ObjectType()
 export class UserAuthResponse {
   @Field(type => User)
   user: User
   @Field()
   session: string
+}
+
+@ObjectType()
+export class SocialNetworks {
+  @Field({ nullable: true })
+  instagram?: string
+  @Field({ nullable: true })
+  twitter?: string
+  @Field({ nullable: true })
+  pinterest?: string
+  @Field({ nullable: true })
+  website?: string
+}
+
+@InputType()
+export class SocialNetworksInput {
+  @Field({ nullable: true })
+  instagram?: string
+  @Field({ nullable: true })
+  twitter?: string
+  @Field({ nullable: true })
+  pinterest?: string
+  @Field({ nullable: true })
+  website?: string
 }

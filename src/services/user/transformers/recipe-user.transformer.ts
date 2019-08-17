@@ -10,7 +10,6 @@ export function transformRecipeUser(user: User): Partial<User> {
   return {
     id: user.publicId,
     username: user.username,
-    avatar: user.avatar,
     firstName: user.firstName,
     lastName: user.lastName,
   }

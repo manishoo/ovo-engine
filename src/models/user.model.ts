@@ -11,11 +11,12 @@ import { PersistedPassword } from '@Types/auth'
 import { Image, Status, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import { ACTIVITY, Gender, GOALS, Height, MealUnit, User, WeightUnit } from '@Types/user'
+import { Activity, Gender, Goal, Height, MealUnit, User, WeightUnit, SocialNetworks } from '@Types/user'
 import isUUID from 'is-uuid'
 import { Container } from 'typedi'
 import { arrayProp, post, prop, Ref, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
+import { Length } from 'class-validator'
 
 
 @post<UserSchema>('save', function () {
@@ -63,7 +64,14 @@ export class UserSchema extends Typegoose implements User {
   @prop()
   lastName?: string
   @prop()
-  avatar?: Image
+  imageUrl?: Image
+  @prop()
+  socialNetworks?: SocialNetworks
+  @prop()
+  bio?: string
+  @prop()
+  @Length(5, 15)
+  phoneNumber?: string
 
   /**
    * physical attributes
@@ -98,9 +106,9 @@ export class UserSchema extends Typegoose implements User {
   @prop({ ref: Household })
   household?: Ref<Household>
   @prop()
-  activityLevel?: ACTIVITY
+  activityLevel?: Activity
   @prop()
-  goal?: GOALS
+  goal?: Goal
   @prop({ default: [] })
   path?: Event[]
   @prop()

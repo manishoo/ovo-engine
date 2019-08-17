@@ -6,7 +6,7 @@
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { ACTIVITY, Gender, GOALS, Height, HEIGHT_UNITS, WEIGHT_UNITS, WeightUnit } from '@Types/user'
+import { Activity, Gender, Goal, Height, HeightUnits, WeightUnits, WeightUnit } from '@Types/user'
 
 
 export default {
@@ -23,11 +23,11 @@ export default {
   extractWeight(data: any): WeightUnit {
     if (!data) throw Error()
 
-    const foundUnit = Object.keys(WEIGHT_UNITS).find(i => i === data.unit)
+    const foundUnit = Object.keys(WeightUnits).find(i => i === data.unit)
     if (foundUnit) {
       return {
         value: +data.value,
-        unit: <WEIGHT_UNITS>foundUnit
+        unit: <WeightUnits>foundUnit
       }
     } else {
       throw Error('unit unacceptable')
@@ -36,11 +36,11 @@ export default {
   extractHeight(data: any): Height {
     if (!data) throw Error()
 
-    const foundUnit = Object.keys(HEIGHT_UNITS).find(i => i === data.unit)
+    const foundUnit = Object.keys(HeightUnits).find(i => i === data.unit)
     if (foundUnit) {
       return {
         value: +data.value,
-        unit: <HEIGHT_UNITS>foundUnit
+        unit: <HeightUnits>foundUnit
       }
     } else {
       throw Error('unit unacceptable')
@@ -61,9 +61,9 @@ export default {
   async extractActivity(text: string): Promise<string> {
     // one of enum
     let g
-    Object.keys(ACTIVITY).map((key: string) => {
+    Object.keys(Activity).map((key: string) => {
       // @ts-ignore
-      if (ACTIVITY[key] === text.replace(/[🏋‍♂️‍♀️🏃🚶🛋🔥]/g, '')) {
+      if (Activity[key] === text.replace(/[🏋‍♂️‍♀️🏃🚶🛋🔥]/g, '')) {
         // @ts-ignore
         g = key
       }
@@ -75,9 +75,9 @@ export default {
   },
   async extractGoals(text: string): Promise<string> {
     let g
-    Object.keys(GOALS).map((key: string) => {
+    Object.keys(Goal).map((key: string) => {
       // @ts-ignore
-      if (GOALS[key] === text) {
+      if (Goal[key] === text) {
         // @ts-ignore
         g = key
       }
