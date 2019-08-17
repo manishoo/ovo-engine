@@ -9,11 +9,11 @@ import { PersistedPassword } from '@Types/auth'
 import { UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import mongoose from 'mongoose'
-import { Field, Float, Int, ObjectType, InputType, ArgsType } from 'type-graphql'
-import { Ref } from 'typegoose'
 import { GraphQLUpload } from 'apollo-server'
-import { Length, IsEmail } from 'class-validator'
+import { IsEmail, IsPhoneNumber } from 'class-validator'
+import mongoose from 'mongoose'
+import { ArgsType, Field, Float, InputType, Int, ObjectType } from 'type-graphql'
+import { Ref } from 'typegoose'
 
 
 export enum Gender {
@@ -72,28 +72,12 @@ export class WeightUnitInput {
   unit: WeightUnits
 }
 
-@InputType()
-export class HeightInput {
-  @Field()
-  value: number
-  @Field()
-  unit: HEIGHT_UNITS
-}
-
 @ObjectType()
 export class WeightUnit {
   @Field()
   value: number
   @Field()
   unit: WeightUnits
-}
-
-@InputType()
-export class WeightUnitInput {
-  @Field()
-  value: number
-  @Field()
-  unit: WEIGHT_UNITS
 }
 
 @ObjectType()
@@ -138,7 +122,7 @@ export class User {
   @Field({ nullable: true })
   bio?: string
   @Field({ nullable: true })
-  @Length(5, 15)
+  @IsPhoneNumber('any')
   phoneNumber?: string
   @Field(type => GraphQLUpload, { nullable: true })
   imageUrl?: any
@@ -208,7 +192,7 @@ export class UserUpdateInput {
   @Field({ nullable: true })
   lastName?: string
   @Field({ nullable: true })
-  gender?: GENDER
+  gender?: Gender
   @Field(type => GraphQLUpload, { nullable: true })
   imageUrl?: any
   @Field(type => SocialNetworksInput, { nullable: true })
@@ -216,7 +200,7 @@ export class UserUpdateInput {
   @Field({ nullable: true })
   bio?: string
   @Field({ nullable: true })
-  @Length(5, 15)
+  @IsPhoneNumber('any')
   phoneNumber?: string
 }
 
