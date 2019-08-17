@@ -157,45 +157,6 @@ export class UserRegistrationInput {
   lastName?: string
 }
 
-@InputType()
-export class UserUpdateInput {
-  @Field()
-  id: string
-  @Field()
-  username: string
-  @Field()
-  email: string
-  @Field({ nullable: true })
-  firstName?: string
-  @Field({ nullable: true })
-  middleName?: string
-  @Field({ nullable: true })
-  lastName?: string
-  @Field(type => Float, { nullable: true })
-  caloriesPerDay?: number
-  @Field({ nullable: true })
-  height?: HeightInput
-  @Field({ nullable: true })
-  weight?: WeightUnitInput
-  @Field({ nullable: true })
-  age?: number
-  @Field(type => Int, { nullable: true })
-  bodyFat?: number
-  @Field({ nullable: true })
-  gender?: Gender
-  @Field(type => GraphQLUpload, { nullable: true })
-  imageUrl?: any
-  foodAllergies?: string[]
-  status?: string
-  meals?: MealUnit[]
-  mealPlanSettings?: MacroNutrientDistribution
-  mealPlans?: Ref<MealPlanSchema>[]
-  household?: Ref<Household>
-  activityLevel?: Activity
-  goal?: Goal
-  timeZone?: string
-}
-
 @ArgsType()
 export class UserLoginArgs {
   @Field()
