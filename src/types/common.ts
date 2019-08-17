@@ -6,7 +6,6 @@
 import { UserSchema } from '@Models/user.model'
 import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 import { prop, Ref } from 'typegoose'
-import { number, string } from 'joi';
 
 
 export enum LanguageCode {

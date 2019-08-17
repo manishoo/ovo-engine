@@ -13,6 +13,7 @@ import mongoose from 'mongoose'
 import { Field, Float, Int, ObjectType, InputType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { GraphQLUpload } from 'apollo-server'
+import { Length, IsEmail } from 'class-validator'
 
 
 export enum GENDER {
@@ -110,6 +111,7 @@ export class User {
   @Field(type => UserRole)
   role?: UserRole
   @Field()
+  @IsEmail()
   email: string
   @Field({ nullable: true })
   firstName?: string
@@ -120,6 +122,7 @@ export class User {
   @Field({ nullable: true })
   bio?: string
   @Field({ nullable: true })
+  @Length(5, 15)
   phoneNumber?: string
   @Field(type => GraphQLUpload, { nullable: true })
   imageUrl?: any
@@ -158,6 +161,7 @@ export class UserRegistrationInput {
   @Field()
   password: string
   @Field()
+  @IsEmail()
   email: string
   @Field({ nullable: true })
   firstName?: string
@@ -180,6 +184,7 @@ export class UserUpdateInput {
   @Field()
   username: string
   @Field()
+  @IsEmail()
   email: string
   @Field({ nullable: true })
   firstName?: string
@@ -196,6 +201,7 @@ export class UserUpdateInput {
   @Field({ nullable: true })
   bio?: string
   @Field({ nullable: true })
+  @Length(5, 15)
   phoneNumber?: string
 }
 

@@ -16,6 +16,7 @@ import isUUID from 'is-uuid'
 import { Container } from 'typedi'
 import { arrayProp, post, prop, Ref, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
+import { Length } from 'class-validator'
 
 
 @post<UserSchema>('save', function () {
@@ -69,6 +70,7 @@ export class UserSchema extends Typegoose implements User {
   @prop()
   bio?: string
   @prop()
+  @Length(5, 15)
   phoneNumber?: string
 
   /**

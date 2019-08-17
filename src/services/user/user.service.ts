@@ -91,7 +91,7 @@ export default class UserService {
     return user
   }
 
-  async update(userInput: UserUpdateInput, userId: string): Promise<User | undefined> {
+  async update(userInput: UserUpdateInput, userId: string): Promise<User> {
     let user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('user not found')
 
@@ -109,6 +109,6 @@ export default class UserService {
     user.gender = userInput.gender
 
     return user.save()
-    
+
   }
 }
