@@ -6,14 +6,13 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, UserRole } from '@Types/common'
+import { UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import mongoose from 'mongoose'
 import { Field, Float, Int, ObjectType, InputType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { GraphQLUpload } from 'apollo-server'
-import { SocialNetworksInput, SocialNetworks } from '@Types/common'
 
 
 export enum GENDER {
@@ -200,11 +199,34 @@ export class UserUpdateInput {
   phoneNumber?: string
 }
 
-
 @ObjectType()
 export class UserAuthResponse {
   @Field(type => User)
   user: User
   @Field()
   session: string
+}
+
+@ObjectType()
+export class SocialNetworks {
+  @Field({ nullable: true })
+  instagram?: string
+  @Field({ nullable: true })
+  twitter?: string
+  @Field({ nullable: true })
+  pinterest?: string
+  @Field({ nullable: true })
+  website?: string
+}
+
+@InputType()
+export class SocialNetworksInput {
+  @Field({ nullable: true })
+  instagram?: string
+  @Field({ nullable: true })
+  twitter?: string
+  @Field({ nullable: true })
+  pinterest?: string
+  @Field({ nullable: true })
+  website?: string
 }

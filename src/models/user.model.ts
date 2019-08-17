@@ -8,15 +8,14 @@ import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Status, UserRole, SocialNetworks } from '@Types/common'
+import { Image, Status, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import { ACTIVITY, GENDER, GOALS, Height, MealUnit, User, WeightUnit } from '@Types/user'
+import { ACTIVITY, GENDER, GOALS, Height, MealUnit, User, WeightUnit, SocialNetworks } from '@Types/user'
 import isUUID from 'is-uuid'
 import { Container } from 'typedi'
 import { arrayProp, post, prop, Ref, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
-import { IsPhoneNumber } from 'class-validator';
 
 
 @post<UserSchema>('save', function () {
