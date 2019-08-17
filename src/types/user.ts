@@ -16,12 +16,12 @@ import { GraphQLUpload } from 'apollo-server'
 import { Length, IsEmail } from 'class-validator'
 
 
-export enum GENDER {
+export enum Gender {
   male = 'Male',
   female = 'Female',
 }
 
-export enum ACTIVITY {
+export enum Activity {
   sed = 'sed',
   light = 'light',
   mod = 'mod',
@@ -29,7 +29,7 @@ export enum ACTIVITY {
   extreme = 'extreme',
 }
 
-export enum GOALS {
+export enum Goal {
   ml = 'ml',
   sl = 'sl',
   il = 'il',
@@ -39,12 +39,12 @@ export enum GOALS {
   ig = 'ig',
 }
 
-export enum WEIGHT_UNITS {
+export enum WeightUnits {
   kg = 'kg',
   pound = 'pound',
 }
 
-export enum HEIGHT_UNITS {
+export enum HeightUnits {
   cm = 'cm',
 }
 
@@ -53,7 +53,23 @@ export class Height {
   @Field()
   value: number
   @Field()
-  unit: HEIGHT_UNITS
+  unit: HeightUnits
+}
+
+@InputType()
+export class HeightInput {
+  @Field()
+  value: number
+  @Field()
+  unit: HeightUnits
+}
+
+@InputType()
+export class WeightUnitInput {
+  @Field()
+  value: number
+  @Field()
+  unit: WeightUnits
 }
 
 @InputType()
@@ -69,7 +85,7 @@ export class WeightUnit {
   @Field()
   value: number
   @Field()
-  unit: WEIGHT_UNITS
+  unit: WeightUnits
 }
 
 @InputType()
@@ -139,20 +155,19 @@ export class User {
   @Field(type => Int, { nullable: true })
   bodyFat?: number
   @Field({ nullable: true })
-  gender?: GENDER
+  gender?: Gender
   foodAllergies?: string[]
   status?: string
   meals?: MealUnit[]
   mealPlanSettings?: MacroNutrientDistribution
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
-  activityLevel?: ACTIVITY
-  goal?: GOALS
+  activityLevel?: Activity
+  goal?: Goal
   @Field(type => [Event], { nullable: true })
   path?: Event[]
   timeZone?: string
 }
-
 
 @InputType()
 export class UserRegistrationInput {

@@ -26,12 +26,19 @@ export default class FoodClassService {
     let query: any = {}
 
     if (foodGroupID) {
-      query['foodGroup._id'] = foodGroupID
+      query['foodGroup._id'] = {
+        /**
+         * Search group and subgroups
+         * */
+        $in: [mongoose.Types.ObjectId(foodGroupID), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupID }))]
+      }
     }
+
     if (nameSearchQuery) {
       let reg = new RegExp(nameSearchQuery)
       query['name.text'] = { $regex: reg, $options: 'i' }
     }
+
     const counts = await FoodClassModel.countDocuments(query)
 
     if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
@@ -92,7 +99,7 @@ export default class FoodClassService {
     return foodClass.save()
   }
 
-  async deleteFoodClass(foodClassID: string): Promise<Boolean> {
+  async deleteFoodClass(foodClassID: string): Promise<String> {
     const foodClass = await FoodClassModel.findById(mongoose.Types.ObjectId(foodClassID))
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
@@ -101,18 +108,36 @@ export default class FoodClassService {
 
     await foodClass.remove()
 
-    return true
+    return foodClass.id
   }
 
-  async createFoodClass(foodClass: FoodClassInput): Promise<FoodClass> {
-    if (!mongoose.Types.ObjectId.isValid(foodClass.foodGroupId)) throw new Errors.UserInput('invalid food group id', { 'foodGroupId': 'invalid food group id' })
-    const foodGroup = await FoodGroupModel.findById(foodClass.foodGroupId)
+  async createFoodClass(foodClassInput: FoodClassInput): Promise<FoodClass> {
+    if (!mongoose.Types.ObjectId.isValid(foodClassInput.foodGroupId)) throw new Errors.UserInput('invalid food group id', { 'foodGroupId': 'invalid food group id' })
+    const foodGroup = await FoodGroupModel.findById(foodClassInput.foodGroupId)
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
-    let newFoodClass = new FoodClassModel({
-      ...foodClass,
+    let foodClass = new FoodClassModel({
+      ...foodClassInput,
       foodGroup,
     })
-    return newFoodClass.save()
+
+    if (foodClassInput.imageUrl) {
+      foodClass.imageUrl = {
+        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/foods/${foodClassInput.slug}`)
+      }
+      if (!foodClassInput.thumbnailUrl) {
+        foodClass.thumbnailUrl = {
+          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+        }
+      }
+    }
+
+    if (foodClassInput.thumbnailUrl) {
+      foodClass.thumbnailUrl = {
+        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+      }
+    }
+
+    return foodClass.save()
   }
 }
