@@ -29,7 +29,7 @@ export default class RecipeResolver {
     @Ctx() ctx: Context,
     @Arg('slug', { nullable: true }) slug?: string,
     @Arg('id', { nullable: true }) id?: string,
-  ): Promise<Recipe> {
+  ) {
     return this.recipeService.get(id, slug)
   }
 

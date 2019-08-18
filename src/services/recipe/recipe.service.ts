@@ -32,16 +32,16 @@ export default class RecipeService {
   async get(id?: string, slug?: string) {
     if (!id && !slug) throw new Errors.Validation('Recipe id or slug must be provided')
 
-    const q: { slug?: string, _id?: mongoose.Types.ObjectId } = {}
+    const query: { slug?: string, _id?: mongoose.Types.ObjectId } = {}
 
     if (id) {
-      q._id = mongoose.Types.ObjectId(id)
+      query._id = mongoose.Types.ObjectId(id)
     }
     if (slug) {
-      q.slug = slug
+      query.slug = slug
     }
 
-    const recipe = await RecipeModel.findOne(q)
+    const recipe = await RecipeModel.findOne(query)
       .populate('author')
       .exec()
 
@@ -50,7 +50,7 @@ export default class RecipeService {
     return recipe
   }
 
-  async list(variables: ListRecipesArgs = {page: 1, size: 10}) {
+  async list(variables: ListRecipesArgs = { page: 1, size: 10 }) {
     const query: any = {}
     if (variables.nameSearchQuery) {
       query['title.text'] = { $regex: variables.nameSearchQuery, $options: 'i' }
