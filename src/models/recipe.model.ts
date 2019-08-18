@@ -5,12 +5,21 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
-import { Image, Translation, LanguageCode, Ref } from '@Types/common'
+import { Image, LanguageCode, Ref, Translation } from '@Types/common'
+import { NutritionalData } from '@Types/food'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
-import { arrayProp, prop, Typegoose } from 'typegoose'
-import { NutritionalData } from '@Types/food';
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { arrayProp, plugin, prop, Typegoose } from 'typegoose'
 
 
+export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class RecipeSchema extends Typegoose implements Recipe {
   _id: mongoose.Types.ObjectId
   id: string

@@ -235,9 +235,6 @@ async function migrateFoods() {
 
 		const foodbContents = await foodbModels.contents.findAll({
 			where: {
-				// origFoodId: {
-				// 	[Sequelize.Op.in]: foodVarieties.map(fv => fv.origFoodId)
-				// },
 				[Sequelize.Op.or]: foodVarieties.map(fv => {
 					let citation
 					const found = CITATIONS.find(i => i[1] === fv.origDb)
@@ -255,7 +252,7 @@ async function migrateFoods() {
 
 		await mongoFoodModel.create(foodVarieties.map(caloNewfoodVariety => {
 			process.stdout.write('.')
-			const fooooooo = foodbContents.filter(i => {
+			const myContents = foodbContents.filter(i => {
 				let citation
 				const found = CITATIONS.find(i => i[1] === caloNewfoodVariety.origDb)
 				if (found) {
@@ -277,7 +274,7 @@ async function migrateFoods() {
 					amount: w.amount,
 					name: createTranslations(w.origDescription),
 				})),
-				contents: fooooooo.map(foodbContent => {
+				contents: myContents.map(foodbContent => {
 					const content = contents.find(c => (c.origId === foodbContent.sourceId) && (foodbContent.sourceType === c.type))
 					if (!content) throw new Error('content not found')
 

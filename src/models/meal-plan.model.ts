@@ -5,9 +5,18 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { Day, MealPlan } from '@Types/meal-plan'
-import { prop, Typegoose } from 'typegoose'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { plugin, prop, Typegoose } from 'typegoose'
 
 
+export interface MealPlanSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class MealPlanSchema extends Typegoose implements MealPlan {
   id: string
   @prop({ required: true })
