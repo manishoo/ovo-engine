@@ -33,11 +33,12 @@ export default class RecipeResolver {
     return this.recipeService.get(id, slug)
   }
 
+  @Authorized(UserRole.user)
   @Query(returns => RecipesListResponse)
   async recipes(
     @Args() { page, size, lastId, nameSearchQuery, userId }: ListRecipesArgs,
     @Ctx() ctx: Context,
-  ): Promise<RecipesListResponse> {
+  ) {
     let viewerUserId
     if (ctx.user) {
       viewerUserId = ctx.user.id
