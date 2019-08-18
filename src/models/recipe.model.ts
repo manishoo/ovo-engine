@@ -5,35 +5,26 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
-import { Image, Video } from '@Types/common'
+import { Image, Translation, LanguageCode, Ref } from '@Types/common'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
-import { User } from '@Types/user'
-import { arrayProp, prop, Ref, Typegoose } from 'typegoose'
-import uuid from 'uuid'
+import { arrayProp, prop, Typegoose } from 'typegoose'
+import { NutritionalData } from '@Types/food';
 
 
 export class RecipeSchema extends Typegoose implements Recipe {
-  _id: string
+  _id: mongoose.Types.ObjectId
   id: string
   likedByUser: boolean
   likesCount: number
 
   @prop({ required: true })
-  title: string
-  @prop({ default: uuid, unique: true, required: true })
-  publicId?: string
+  title: Translation[]
   @prop({ required: true })
   ingredients: Ingredient[]
   @prop({ required: true })
-  yield: number
+  serving: number
   @prop()
-  calories?: number
-  @prop()
-  fat?: number
-  @prop()
-  carbohydrate?: number
-  @prop()
-  protein?: number
+  nutritionalData?: NutritionalData
   @prop()
   slug: string
   @prop()
@@ -41,19 +32,13 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   thumbnail?: Image
   @prop()
-  ingredientsRaw?: string
-  @prop()
-  instructionsRaw?: string
-  @prop()
   instructions?: Instruction[]
-  @prop()
-  reviews?: Review[]
   @arrayProp({ itemsRef: UserSchema, default: [] })
   likes: Ref<UserSchema>[]
   @prop({ ref: UserSchema })
-  author: Ref<UserSchema> | Partial<User>
+  author: Ref<UserSchema>
   @prop()
-  description?: string
+  description?: Translation[]
   @prop()
   timing: RecipeTiming
   @prop()
@@ -61,13 +46,12 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   tags?: RecipeTag[]
   @prop()
-  images?: Image[]
+  updatedAt?: Date
   @prop()
-  video?: Video
+  languages: LanguageCode[]
   @prop()
-  dataVersion?: number
+  reviews?: Review[]
   @prop()
-  additionalData?: any
   createdAt: Date
 }
 

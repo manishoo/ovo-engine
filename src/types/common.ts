@@ -4,6 +4,7 @@
  */
 
 import { UserSchema } from '@Models/user.model'
+import mongoose from 'mongoose'
 import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 import { prop, Ref } from 'typegoose'
 
@@ -140,3 +141,5 @@ export class TranslationInput {
   @Field()
   text: string
 }
+
+export declare type Ref<T> = T | mongoose.Types.ObjectId;
