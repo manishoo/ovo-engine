@@ -120,7 +120,7 @@ export default class RecipeService {
         step: instructionInput.step,
       })),
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
-        let output: Partial<Ingredient> = {}
+        let ingredient: Partial<Ingredient> = {}
         if (ingredientInput.weight) {
           // @ts-ignore
           output.weight = mongoose.Types.ObjectId(ingredientInput.weight)
@@ -128,28 +128,28 @@ export default class RecipeService {
           if (!ingredientInput.customUnit || !ingredientInput.gramWeight) {
             throw new Errors.UserInput('incomplete data', { 'customUnit': 'custom unit is mandatory', 'gramWeight': 'gram weight is mandatory' })
           }
-          output.gramWeight = ingredientInput.gramWeight
-          output.customUnit = ingredientInput.customUnit
+          ingredient.gramWeight = ingredientInput.gramWeight
+          ingredient.customUnit = ingredientInput.customUnit
         }
 
         if (!ingredientInput.food) {
           if (!ingredientInput.name) {
             throw new Errors.UserInput('incomplete data', { 'name': 'either food or name should be entered' })
           }
-          output.name = ingredientInput.name
+          ingredient.name = ingredientInput.name
         } else {
           if (!mongoose.Types.ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
           const food = await FoodModel.findById(ingredientInput.food)
           if (!food) throw new Errors.NotFound('food not found')
 
           // @ts-ignore
-          output.food = mongoose.Types.ObjectId(ingredientInput.food)
-          output.name = food.name
+          ingredient.food = mongoose.Types.ObjectId(ingredientInput.food)
+          ingredient.name = food.name
         }
-        output.amount = ingredientInput.amount
-        output.description = ingredientInput.description
+        ingredient.amount = ingredientInput.amount
+        ingredient.description = ingredientInput.description
 
-        return <Ingredient>output
+        return <Ingredient>ingredient
       })),
     }
     let createdRecipe = await RecipeModel.create(recipe)
