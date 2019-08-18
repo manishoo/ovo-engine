@@ -1,0 +1,9337 @@
+[
+  {
+    "token": "piece, small",
+    "count": 1,
+    "tr": "قطعه کوچک"
+  },
+  {
+    "token": "package 4 servings",
+    "count": 1,
+    "tr": "بسته 4 وعده"
+  },
+  {
+    "token": "can 10 fl oz",
+    "count": 1,
+    "tr": "قوطی 10 فلت"
+  },
+  {
+    "token": "serving 2 fl oz",
+    "count": 1,
+    "tr": "وعده 2 فنجان"
+  },
+  {
+    "token": "package 1.4 oz box, 4 servings",
+    "count": 1,
+    "tr": "جعبه 1.4 اونس ، 4 وعده"
+  },
+  {
+    "token": "roll (pan, dinner, or small roll) (2\" square, 2\" high)",
+    "count": 1,
+    "tr": "رول (تابه ، شام یا رول کوچک) (ارتفاع 2 \"مربع ، 2\")"
+  },
+  {
+    "token": "cup, crumbled, not packed",
+    "count": 1,
+    "tr": "لیوان، فرو ریختن، نه بسته بندی شده"
+  },
+  {
+    "token": "serving 1 packet SUGAR TWIN",
+    "count": 1,
+    "tr": "ارائه 1 بسته TWIN SUGAR"
+  },
+  {
+    "token": "serving about 1/4 cup",
+    "count": 1,
+    "tr": "حدود 1/4 فنجان را سرو کنید"
+  },
+  {
+    "token": "serving 1.31 oz bag",
+    "count": 1,
+    "tr": "تهیه کیسه 1.31 اونس"
+  },
+  {
+    "token": "serving 5 miniatures",
+    "count": 1,
+    "tr": "وعده 5 مینیاتور"
+  },
+  {
+    "token": "cookie 2011 label",
+    "count": 1,
+    "tr": "برچسب کوکی 2011"
+  },
+  {
+    "token": "package (4.5 oz)",
+    "count": 1,
+    "tr": "بسته بندی (4.5 اونس)"
+  },
+  {
+    "token": "patty, cooked",
+    "count": 1,
+    "tr": "پتی ، پخته شده"
+  },
+  {
+    "token": "cup, large curd (not packed)",
+    "count": 1,
+    "tr": "جام، شکلات بزرگ (بسته بندی نشده)"
+  },
+  {
+    "token": "cup, small curd (not packed)",
+    "count": 1,
+    "tr": "جام، پنیر کوچک (بسته بندی نشده)"
+  },
+  {
+    "token": "serving 1.63 oz singles bag",
+    "count": 1,
+    "tr": "تهیه کیسه تک آهنگ 1.63 اونس"
+  },
+  {
+    "token": "fl oz assumed specific gravity of honey",
+    "count": 1,
+    "tr": "fl اوز وزن مخصوص عسل را فرض کرد"
+  },
+  {
+    "token": "package, small (3 oz)",
+    "count": 1,
+    "tr": "بسته بندی، کوچک (3 اونس)"
+  },
+  {
+    "token": "serving 4 pieces in serving",
+    "count": 1,
+    "tr": "در وعده 4 تکه"
+  },
+  {
+    "token": "serving varied from 1 to 3 tacos per serving",
+    "count": 1,
+    "tr": "1 تا 3 تاکو در هر وعده متفاوت بود"
+  },
+  {
+    "token": "serving varied from 2-3 tacos per serving",
+    "count": 1,
+    "tr": "وعده از 2-3 تاکو در هر وعده متفاوت است"
+  },
+  {
+    "token": "serving serving size varied from 1 to 3 tamales",
+    "count": 1,
+    "tr": "اندازه وعده از 1 تا 3 متغیر متغیر بود"
+  },
+  {
+    "token": "serving serving size varied by diameter and count of raviloi",
+    "count": 1,
+    "tr": "اندازه وعده به اندازه و قطر و تعداد راویوی متفاوت است"
+  },
+  {
+    "token": "serving varied from 7-9 ravioli per serving",
+    "count": 1,
+    "tr": "وعده از 7-9 راویولی در هر وعده متفاوت بود"
+  },
+  {
+    "token": "serving varied from 8 to 10 ravioli per serving",
+    "count": 1,
+    "tr": "سرویس از 8 تا 10 راویولی در هر وعده متفاوت بود"
+  },
+  {
+    "token": "quesadilla 5-6 inch diameter",
+    "count": 1,
+    "tr": "قطر 5-6 اینچ"
+  },
+  {
+    "token": "quesadilla 8-10 inch diameter",
+    "count": 1,
+    "tr": "quesadilla قطر 8-10 اینچ"
+  },
+  {
+    "token": "serving serving size varied on diameter and count of quesadila",
+    "count": 1,
+    "tr": "اندازه وعده به قطر و تعداد پرسشنامه متفاوت بود"
+  },
+  {
+    "token": "serving 1 quesadilla",
+    "count": 1,
+    "tr": "وعده 1 سؤال"
+  },
+  {
+    "token": "serving (3 pieces)",
+    "count": 1,
+    "tr": "وعده (3 قطعه)"
+  },
+  {
+    "token": "bulb peeled",
+    "count": 1,
+    "tr": "لامپ پوست کنده"
+  },
+  {
+    "token": "container, individual (.5 fl oz)",
+    "count": 1,
+    "tr": "ظرف، فرد (.5 فلش)"
+  },
+  {
+    "token": "pad peeled",
+    "count": 1,
+    "tr": "لایه برداری"
+  },
+  {
+    "token": "pieces pierogies",
+    "count": 1,
+    "tr": "سوراخ قطعات"
+  },
+  {
+    "token": "cup dry rice mix",
+    "count": 1,
+    "tr": "فنجان مخلوط برنج خشک"
+  },
+  {
+    "token": "thigh with bone and breading",
+    "count": 1,
+    "tr": "ران با استخوان و نان"
+  },
+  {
+    "token": "serving 1 pouch",
+    "count": 1,
+    "tr": "وعده 1 کیسه"
+  },
+  {
+    "token": "serving 4.5 oz",
+    "count": 1,
+    "tr": "وعده 4.5 اونس"
+  },
+  {
+    "token": "pieces 1 serving",
+    "count": 1,
+    "tr": "قطعات 1 وعده"
+  },
+  {
+    "token": "portion, amount to make 1 tbsp",
+    "count": 1,
+    "tr": "مقدار، مقدار 1 قاشق غذاخوری"
+  },
+  {
+    "token": "serving 6 rolls",
+    "count": 1,
+    "tr": "وعده 6 رول"
+  },
+  {
+    "token": "serving (2 oz)",
+    "count": 1,
+    "tr": "وعده (2 اونس)"
+  },
+  {
+    "token": "cup (makes 1 cup reconstituted milk)",
+    "count": 1,
+    "tr": "لیوان (باعث می شود 1 لیوان شیر تصفیه شده)"
+  },
+  {
+    "token": "cup drained",
+    "count": 1,
+    "tr": "جام تخلیه"
+  },
+  {
+    "token": "cup unprepared",
+    "count": 1,
+    "tr": "فنجان آماده نیست"
+  },
+  {
+    "token": "container (10.6 oz)",
+    "count": 1,
+    "tr": "ظرف (10.6 اونس)"
+  },
+  {
+    "token": "container (11 oz)",
+    "count": 1,
+    "tr": "ظرف (11 اونس)"
+  },
+  {
+    "token": "individual box (2 oz)",
+    "count": 1,
+    "tr": "جعبه جداگانه (2 اونس)"
+  },
+  {
+    "token": "Arrowroot biscuit (include Arrowroot cookie)",
+    "count": 1,
+    "tr": "بیسکویت Arrowroot (شامل کوکی Arrowroot)"
+  },
+  {
+    "token": "serving cookie",
+    "count": 1,
+    "tr": "سرویس کوکی"
+  },
+  {
+    "token": "cup mix 1 serving",
+    "count": 1,
+    "tr": "مخلوط فنجان 1 وعده"
+  },
+  {
+    "token": "piece bagel",
+    "count": 1,
+    "tr": "شیرینی قطعه ای"
+  },
+  {
+    "token": "piece roll",
+    "count": 1,
+    "tr": "رول قطعه"
+  },
+  {
+    "token": "muffin 1 serving",
+    "count": 1,
+    "tr": "کلوچه 1 وعده"
+  },
+  {
+    "token": "piece bagel 1 serving",
+    "count": 1,
+    "tr": "قطعه شیرینی 1 وعده"
+  },
+  {
+    "token": "serving 3 pancakes",
+    "count": 1,
+    "tr": "وعده 3 پنکیک"
+  },
+  {
+    "token": "serving 2 waffles",
+    "count": 1,
+    "tr": "وعده 2 وافل"
+  },
+  {
+    "token": "cup (4.86 large eggs)",
+    "count": 1,
+    "tr": "لیوان (4.86 تخم مرغ بزرگ)"
+  },
+  {
+    "token": "serving 55 pieces",
+    "count": 1,
+    "tr": "وعده 55 قطعه"
+  },
+  {
+    "token": "brownie 1 serving",
+    "count": 1,
+    "tr": "سرویس براون 1"
+  },
+  {
+    "token": "tortilla 1 serving",
+    "count": 1,
+    "tr": "تورتیلا 1 وعده"
+  },
+  {
+    "token": "package (40 g)",
+    "count": 1,
+    "tr": "بسته (40 گرم)"
+  },
+  {
+    "token": "cookies 1 serving",
+    "count": 1,
+    "tr": "کوکی ها 1 وعده"
+  },
+  {
+    "token": "container (9oz)",
+    "count": 1,
+    "tr": "ظرف (9oz)"
+  },
+  {
+    "token": "pint",
+    "count": 1,
+    "tr": "پینت"
+  },
+  {
+    "token": "slice 3/4 oz",
+    "count": 1,
+    "tr": "تکه 3/4 اونس"
+  },
+  {
+    "token": "slice 2/3 oz",
+    "count": 1,
+    "tr": "تکه 2/3 اونس"
+  },
+  {
+    "token": "container (9 oz)",
+    "count": 1,
+    "tr": "ظرف (9 اونس)"
+  },
+  {
+    "token": "tablespoons",
+    "count": 1,
+    "tr": "قاشق غذاخوری"
+  },
+  {
+    "token": "oz dry (half noodle block)",
+    "count": 1,
+    "tr": "اونس خشک (بلوک نیمه نودل)"
+  },
+  {
+    "token": "pieces average",
+    "count": 1,
+    "tr": "قطعات متوسط"
+  },
+  {
+    "token": "piece chips",
+    "count": 1,
+    "tr": "تراشه های قطعه"
+  },
+  {
+    "token": "Bag",
+    "count": 1,
+    "tr": "کیسه"
+  },
+  {
+    "token": "Roll",
+    "count": 1,
+    "tr": "رول"
+  },
+  {
+    "token": "steak (yield from 593 g raw meat)",
+    "count": 1,
+    "tr": "استیک (عملکرد از 593 گرم گوشت خام)"
+  },
+  {
+    "token": "patty ( yield from 1/4 lb raw meat )",
+    "count": 1,
+    "tr": "پتی (عملکرد از گوشت خام 1/4 پوند)"
+  },
+  {
+    "token": "patty (yield from 1/4 lb raw meat)",
+    "count": 1,
+    "tr": "پتی (عملکرد از گوشت خام 1/4 پوند)"
+  },
+  {
+    "token": "portion ( yield from 1/2 lb raw meat )",
+    "count": 1,
+    "tr": "بخش (عملکرد حاصل از گوشت خام 1/2 پوند)"
+  },
+  {
+    "token": "oz ( 1 serving  )",
+    "count": 1,
+    "tr": "اونس (1 وعده)"
+  },
+  {
+    "token": "container (7 oz)",
+    "count": 1,
+    "tr": "ظرف (7 اونس)"
+  },
+  {
+    "token": "oz (4 oz)",
+    "count": 1,
+    "tr": "اونس (4 اونس)"
+  },
+  {
+    "token": "corndog mini",
+    "count": 1,
+    "tr": "corndog mini"
+  },
+  {
+    "token": "corndog",
+    "count": 1,
+    "tr": "candog"
+  },
+  {
+    "token": "container (mean weight over brands)",
+    "count": 1,
+    "tr": "ظرف (متوسط وزن بیش از مارک ها)"
+  },
+  {
+    "token": "each (analytical measurement)",
+    "count": 1,
+    "tr": "هر (اندازه گیری تحلیلی)"
+  },
+  {
+    "token": "serving (makes about 1 cup prepared)",
+    "count": 1,
+    "tr": "وعده (حدود 1 فنجان آماده می کند)"
+  },
+  {
+    "token": "bowl",
+    "count": 1,
+    "tr": "کاسه"
+  },
+  {
+    "token": "tsp, crumbled",
+    "count": 1,
+    "tr": "تیپ، فرو ریختن"
+  },
+  {
+    "token": "tbsp, crumbled",
+    "count": 1,
+    "tr": "قاشق غذاخوری، خراب شد"
+  },
+  {
+    "token": "egg roll",
+    "count": 1,
+    "tr": "رول تخم مرغ"
+  },
+  {
+    "token": "burrito cooked",
+    "count": 1,
+    "tr": "پخته شده"
+  },
+  {
+    "token": "tbsp, chopped",
+    "count": 1,
+    "tr": "قاشق غذاخوری، خرد شده"
+  },
+  {
+    "token": "cup leaves, whole",
+    "count": 1,
+    "tr": "لیوان برگ، کل"
+  },
+  {
+    "token": "burrito frozen",
+    "count": 1,
+    "tr": "یخ زده منجمد"
+  },
+  {
+    "token": "cup sprigs",
+    "count": 1,
+    "tr": "جام شاخه ها"
+  },
+  {
+    "token": "tsp or 1 packet",
+    "count": 1,
+    "tr": "1 قاشق غذاخوری"
+  },
+  {
+    "token": "tbsp, drained",
+    "count": 1,
+    "tr": "قاشق غذاخوری، تخلیه شده"
+  },
+  {
+    "token": "serving (1 NLEA serving)",
+    "count": 1,
+    "tr": "وعده (1 وعده NLEA)"
+  },
+  {
+    "token": "slice 1/8 of 14\" pizza",
+    "count": 1,
+    "tr": "برش 1/8 از 14 \"پیتزا"
+  },
+  {
+    "token": "slice 1/8 of 12\" pizza",
+    "count": 1,
+    "tr": "برش 1/8 از 12 پیتزا"
+  },
+  {
+    "token": "pie, cooked (average weight)",
+    "count": 1,
+    "tr": "پای پخته شده (وزن متوسط)"
+  },
+  {
+    "token": "jar Gerber Third Foods (2.5 oz)",
+    "count": 1,
+    "tr": "جار گربر سوم غذا (2.5 اونس)"
+  },
+  {
+    "token": "jar Heinz Junior-3 (2.5 oz)",
+    "count": 1,
+    "tr": "جر Heinz Junior-3 (2.5 اونس)"
+  },
+  {
+    "token": "serving (1 cup)",
+    "count": 1,
+    "tr": "سرو (1 فنجان)"
+  },
+  {
+    "token": "biscuit regular size biscuit",
+    "count": 1,
+    "tr": "بیسکویت با اندازه معمولی"
+  },
+  {
+    "token": "pizza whole",
+    "count": 1,
+    "tr": "پیتزا کامل"
+  },
+  {
+    "token": "slice 1/8 pizza",
+    "count": 1,
+    "tr": "برش پیتزا 1/8"
+  },
+  {
+    "token": "each quesadilla",
+    "count": 1,
+    "tr": "هر سؤال"
+  },
+  {
+    "token": "pie 24.8 oz",
+    "count": 1,
+    "tr": "پای 24.8 اونس"
+  },
+  {
+    "token": "pie 22.1 oz",
+    "count": 1,
+    "tr": "پای 22.1 اونس"
+  },
+  {
+    "token": "pie 23 oz",
+    "count": 1,
+    "tr": "پای 23 اونس"
+  },
+  {
+    "token": "wing without skin",
+    "count": 1,
+    "tr": "بال بدون پوست"
+  },
+  {
+    "token": "drumstick, drumstick without skin",
+    "count": 1,
+    "tr": "طبل ، طبل بدون پوست"
+  },
+  {
+    "token": "wing without skin, bone and breading",
+    "count": 1,
+    "tr": "بال بدون پوست ، استخوان و نان"
+  },
+  {
+    "token": "thigh thigh without skin",
+    "count": 1,
+    "tr": "ران ران بدون پوست"
+  },
+  {
+    "token": "wing wing without skin",
+    "count": 1,
+    "tr": "بال بال بدون پوست"
+  },
+  {
+    "token": "jar Gerber Graduate (4.5 oz)",
+    "count": 1,
+    "tr": "جار گربر فارغ التحصیل (4.5 اونس)"
+  },
+  {
+    "token": "serving 5 sticks",
+    "count": 1,
+    "tr": "وعده 5 چوب"
+  },
+  {
+    "token": "item 5.2 oz",
+    "count": 1,
+    "tr": "مورد 5.2 اونس"
+  },
+  {
+    "token": "item 3.1 oz",
+    "count": 1,
+    "tr": "مورد 3.1 اونس"
+  },
+  {
+    "token": "item 7.8 oz",
+    "count": 1,
+    "tr": "مورد 7.8 اونس"
+  },
+  {
+    "token": "item 11.3 oz",
+    "count": 1,
+    "tr": "مورد 11.3 اونس"
+  },
+  {
+    "token": "item 10.8 oz",
+    "count": 1,
+    "tr": "مورد 10.8 اونس"
+  },
+  {
+    "token": "item 14.8 oz",
+    "count": 1,
+    "tr": "مورد 14.8 اونس"
+  },
+  {
+    "token": "item 5.7 oz",
+    "count": 1,
+    "tr": "مورد 5.7 اونس"
+  },
+  {
+    "token": "item 4.1 oz",
+    "count": 1,
+    "tr": "مورد 4.1 اونس"
+  },
+  {
+    "token": "item 4.9 oz",
+    "count": 1,
+    "tr": "مورد 4.9 اونس"
+  },
+  {
+    "token": "item 9.5 oz",
+    "count": 1,
+    "tr": "مورد 9.5 اونس"
+  },
+  {
+    "token": "bottle Beech-Nut Stage 3 (4 fl oz)",
+    "count": 1,
+    "tr": "بطری راش-مهره مرحله 3 (4 فلاسک)"
+  },
+  {
+    "token": "item (6.4 oz)",
+    "count": 1,
+    "tr": "مورد (6.4 اونس)"
+  },
+  {
+    "token": "item (3.2 oz)",
+    "count": 1,
+    "tr": "مورد (3.2 اونس)"
+  },
+  {
+    "token": "item 7 oz",
+    "count": 1,
+    "tr": "مورد 7 اونس"
+  },
+  {
+    "token": "hotcakes 5.3 oz",
+    "count": 1,
+    "tr": "کیک های داغ 5.3 اونس"
+  },
+  {
+    "token": "serving 1 patty",
+    "count": 1,
+    "tr": "وعده 1 پتی"
+  },
+  {
+    "token": "item 6.1 oz",
+    "count": 1,
+    "tr": "مورد 6.1 اونس"
+  },
+  {
+    "token": "toast, Gerber Zwieback",
+    "count": 1,
+    "tr": "تست، Gerber Zwieback"
+  },
+  {
+    "token": "serving 3.5 oz serving",
+    "count": 1,
+    "tr": "وعده 3.5 اونس"
+  },
+  {
+    "token": "package 7 oz",
+    "count": 1,
+    "tr": "بسته 7 اونس"
+  },
+  {
+    "token": "jar Earth's Best",
+    "count": 1,
+    "tr": "jar زمین بهترین است"
+  },
+  {
+    "token": "jar Beech nut",
+    "count": 1,
+    "tr": "مهره راش مهره ای"
+  },
+  {
+    "token": "medium 16 oz. cup",
+    "count": 1,
+    "tr": "متوسط 16 اونس فنجان"
+  },
+  {
+    "token": "scope",
+    "count": 1,
+    "tr": "محدوده"
+  },
+  {
+    "token": "small 12 oz. cup",
+    "count": 1,
+    "tr": "12 اونس کوچک فنجان"
+  },
+  {
+    "token": "Serving 100 ml",
+    "count": 1,
+    "tr": "وعده 100 میلی لیتر"
+  },
+  {
+    "token": "junior 6 oz. cup",
+    "count": 1,
+    "tr": "جونیور 6 اونس فنجان"
+  },
+  {
+    "token": "large Serving",
+    "count": 1,
+    "tr": "وعده بزرگ"
+  },
+  {
+    "token": "medium Serving",
+    "count": 1,
+    "tr": "وعده متوسط"
+  },
+  {
+    "token": "small Serving",
+    "count": 1,
+    "tr": "وعده کوچک"
+  },
+  {
+    "token": "kid's meal Serving",
+    "count": 1,
+    "tr": "وعده غذایی بچه ها"
+  },
+  {
+    "token": "spray , about 1/3 second (1 NLEA serving)",
+    "count": 1,
+    "tr": "اسپری، حدود 1/3 ثانیه (وعده 1 NLEA)"
+  },
+  {
+    "token": "kids serving",
+    "count": 1,
+    "tr": "بچه ها وعده می کنند"
+  },
+  {
+    "token": "tbsp (1 serving)",
+    "count": 1,
+    "tr": "قاشق غذاخوری (1 سرو)"
+  },
+  {
+    "token": "serving (approximately 10 sprays)",
+    "count": 1,
+    "tr": "وعده (حدود 10 اسپری)"
+  },
+  {
+    "token": "item 7.6 oz",
+    "count": 1,
+    "tr": "مورد 7.6 اونس"
+  },
+  {
+    "token": "item 7.1 oz",
+    "count": 1,
+    "tr": "مورد 7.1 اونس"
+  },
+  {
+    "token": "package 14.3 oz pizza",
+    "count": 1,
+    "tr": "بسته بندی پیتزا 14.3 اونس"
+  },
+  {
+    "token": "package 30.7 oz pizza",
+    "count": 1,
+    "tr": "بسته پیتزا 30.7 اونس"
+  },
+  {
+    "token": "package 34.98 oz pizza",
+    "count": 1,
+    "tr": "پکیج 34.98 اونس پیتزا"
+  },
+  {
+    "token": "serving 3 servings per 14.3 oz package",
+    "count": 1,
+    "tr": "ارائه 3 وعده در هر بسته 14.3 اونس"
+  },
+  {
+    "token": "serving 6 servings per 30.7 oz package",
+    "count": 1,
+    "tr": "ارائه 6 وعده در هر بسته 30.7 اونس"
+  },
+  {
+    "token": "serving 6 servings per 34.98 oz package",
+    "count": 1,
+    "tr": "ارائه 6 وعده در هر بسته 34.98 اونس"
+  },
+  {
+    "token": "package 10.9 oz pizza",
+    "count": 1,
+    "tr": "بسته پیتزا 10.9 اونس"
+  },
+  {
+    "token": "package 22.85 oz pizza",
+    "count": 1,
+    "tr": "بسته بندی پیتزا 22.85 اونس"
+  },
+  {
+    "token": "package 24.2 oz pizza",
+    "count": 1,
+    "tr": "بسته 24.2 اونس پیتزا"
+  },
+  {
+    "token": "chicken, separable fat",
+    "count": 1,
+    "tr": "مرغ، چربی قابل جدا شدن"
+  },
+  {
+    "token": "serving 2 servings per 10.9 oz package",
+    "count": 1,
+    "tr": "ارائه 2 وعده به ازای هر بسته 10.9 اونس"
+  },
+  {
+    "token": "serving 5 servings per 22.85 oz package",
+    "count": 1,
+    "tr": "ارائه 5 وعده در هر بسته 22.85 اونس"
+  },
+  {
+    "token": "breast, bone removed (yield from 1 lb ready-to-cook chicken)",
+    "count": 1,
+    "tr": "پستان، استخوان برداشته شده (حاصل از 1 لیتر مرغ آماده به غذا)"
+  },
+  {
+    "token": "serving 5 servings per 24.2 oz package",
+    "count": 1,
+    "tr": "ارائه 5 وعده در هر بسته 24.2 اونس"
+  },
+  {
+    "token": "package 19.7 oz pizza",
+    "count": 1,
+    "tr": "بسته پیتزا 19.7 اونس"
+  },
+  {
+    "token": "package 29.25 oz pizza",
+    "count": 1,
+    "tr": "بسته بندی پیتزا 29.25 اونس"
+  },
+  {
+    "token": "serving 4 servings per 19.7 oz package",
+    "count": 1,
+    "tr": "ارائه 4 وعده در هر بسته 19.7 اونس"
+  },
+  {
+    "token": "serving 6 servings per 29.25 oz package",
+    "count": 1,
+    "tr": "ارائه 6 وعده در هر بسته 29.25 اونس"
+  },
+  {
+    "token": "drumstick with skin (yield from 1 lb ready-to-cook chicken)",
+    "count": 1,
+    "tr": "خرگوش با پوست (حاصل از 1 لیوان مرغ آماده به آشپزی)"
+  },
+  {
+    "token": "package 8 oz pizza",
+    "count": 1,
+    "tr": "بسته 8 پیتزا پیتزا"
+  },
+  {
+    "token": "drumstick  with skin",
+    "count": 1,
+    "tr": "خرگوش با پوست"
+  },
+  {
+    "token": "package 9.8 oz pizza",
+    "count": 1,
+    "tr": "بسته بندی پیتزا 9.8 اونس"
+  },
+  {
+    "token": "package 15.1 oz pizza",
+    "count": 1,
+    "tr": "بسته بندی پیتزا 15.1 اونس"
+  },
+  {
+    "token": "package 24 oz pizza",
+    "count": 1,
+    "tr": "بسته 24 پیتزا پیتزا"
+  },
+  {
+    "token": "serving 1 serving per 8 oz box",
+    "count": 1,
+    "tr": "وعده 1 وعده در هر جعبه 8 اونس"
+  },
+  {
+    "token": "serving 2 servings per 9.8 oz package",
+    "count": 1,
+    "tr": "ارائه 2 وعده در هر بسته 9.8 اونس"
+  },
+  {
+    "token": "leg, bone and skin removed (Sum of drumstick+thigh+back meat only)",
+    "count": 1,
+    "tr": "پا، استخوان و پوست برداشته می شود (مجموع خرچنگ + ران + گوشت فقط پشت)"
+  },
+  {
+    "token": "serving 3 servings per 15.1 oz package",
+    "count": 1,
+    "tr": "ارائه 3 وعده در هر بسته 15.1 اونس"
+  },
+  {
+    "token": "drumstick bone and skin removed",
+    "count": 1,
+    "tr": "استخوان دندانی و پوست برداشته شده است"
+  },
+  {
+    "token": "back bone and skin removed",
+    "count": 1,
+    "tr": "استخوان پشت و پوست برداشته شده است"
+  },
+  {
+    "token": "serving 9 servings per 24 oz package",
+    "count": 1,
+    "tr": "ارائه 9 وعده در هر بسته 24 اونس"
+  },
+  {
+    "token": "leg (Sum of drumstick+thigh+back meat only)",
+    "count": 1,
+    "tr": "پا (مجموع خرچنگ + ران + گوشت فقط پشت)"
+  },
+  {
+    "token": "drumstick bone and skin",
+    "count": 1,
+    "tr": "استخوان استخوان و پوست"
+  },
+  {
+    "token": "thigh bone and skin",
+    "count": 1,
+    "tr": "استخوان ران و پوست"
+  },
+  {
+    "token": "back bone and skin",
+    "count": 1,
+    "tr": "پشت استخوان و پوست"
+  },
+  {
+    "token": "piece 3.2 oz",
+    "count": 1,
+    "tr": "قطعه 3.2 اونس"
+  },
+  {
+    "token": "serving 4 pieces",
+    "count": 1,
+    "tr": "وعده 4 قطعه"
+  },
+  {
+    "token": "medium 16 fl oz",
+    "count": 1,
+    "tr": "متوسط 16 فنجان"
+  },
+  {
+    "token": "small 12 fl oz",
+    "count": 1,
+    "tr": "12 عیار کوچک"
+  },
+  {
+    "token": "serving large",
+    "count": 1,
+    "tr": "وعده بزرگ"
+  },
+  {
+    "token": "serving medium",
+    "count": 1,
+    "tr": "متوسط وعده"
+  },
+  {
+    "token": "wing, bone and skin removed (yield from 1 lb ready-to-cook chicken)",
+    "count": 1,
+    "tr": "بال، استخوان و پوست حذف شده (حاصل از 1 لیوان مرغ آماده به آشپز)"
+  },
+  {
+    "token": "serving small",
+    "count": 1,
+    "tr": "وعده کوچک"
+  },
+  {
+    "token": "package (18 onion rings)",
+    "count": 1,
+    "tr": "بسته (18 حلقه پیاز)"
+  },
+  {
+    "token": "pieces shrimp",
+    "count": 1,
+    "tr": "قطعات میگو"
+  },
+  {
+    "token": "serving 29 round pieces",
+    "count": 1,
+    "tr": "سرو 29 قطعه گرد"
+  },
+  {
+    "token": "serving 14 round pieces",
+    "count": 1,
+    "tr": "وعده 14 قطعه گرد"
+  },
+  {
+    "token": "round piece",
+    "count": 1,
+    "tr": "قطعه گرد"
+  },
+  {
+    "token": "eggs",
+    "count": 1,
+    "tr": "تخم مرغ"
+  },
+  {
+    "token": "cup elbows not packed not packed",
+    "count": 1,
+    "tr": "آرنج فنجان بسته بندی نشده بسته بندی نشده است"
+  },
+  {
+    "token": "cup(not packed) not packed",
+    "count": 1,
+    "tr": "فنجان (بسته بندی نشده) بسته بندی نشده است"
+  },
+  {
+    "token": "cup shells not packed",
+    "count": 1,
+    "tr": "بسته های فنجان بسته بندی نشده است"
+  },
+  {
+    "token": "cup spirals not packed",
+    "count": 1,
+    "tr": "مارپیچهای فنجان بسته بندی نشده اند"
+  },
+  {
+    "token": "cup fettucini not packed",
+    "count": 1,
+    "tr": "فتوشوینی فنجان بسته بندی نشده است"
+  },
+  {
+    "token": "cup penne not packed",
+    "count": 1,
+    "tr": "فنجان پنکه بسته بندی نشده است"
+  },
+  {
+    "token": "cup dry",
+    "count": 1,
+    "tr": "فنجان خشک"
+  },
+  {
+    "token": "cup, loosely packed",
+    "count": 1,
+    "tr": "لیوان، باریک بسته بندی شده"
+  },
+  {
+    "token": "milliliter",
+    "count": 1,
+    "tr": "میلی لیتر"
+  },
+  {
+    "token": "serving 1oz pack",
+    "count": 1,
+    "tr": "وعده 1oz بسته"
+  },
+  {
+    "token": "raw gizzard",
+    "count": 1,
+    "tr": "جادوگر خام"
+  },
+  {
+    "token": "gizzard cooked",
+    "count": 1,
+    "tr": "گوشت خوار پخته شده"
+  },
+  {
+    "token": "raw liver",
+    "count": 1,
+    "tr": "کبد خام"
+  },
+  {
+    "token": "liver cooked",
+    "count": 1,
+    "tr": "کبد پخته شده"
+  },
+  {
+    "token": "serving 2 pops",
+    "count": 1,
+    "tr": "وعده 2 پاپ"
+  },
+  {
+    "token": "turkey, bone removed",
+    "count": 1,
+    "tr": "ترکیه، بدون استخوان"
+  },
+  {
+    "token": "serving 1 pop",
+    "count": 1,
+    "tr": "وعده 1 پاپ"
+  },
+  {
+    "token": "serving 1 sandwich",
+    "count": 1,
+    "tr": "وعده 1 ساندویچ"
+  },
+  {
+    "token": "turkey, skin only",
+    "count": 1,
+    "tr": "ترکیه، پوست تنها"
+  },
+  {
+    "token": "serving 1 cone",
+    "count": 1,
+    "tr": "وعده 1 مخروط"
+  },
+  {
+    "token": "serving 3.5 fl oz bar",
+    "count": 1,
+    "tr": "وعده 3.5 نوار فلزی"
+  },
+  {
+    "token": "container Ghirardelli label 2011",
+    "count": 1,
+    "tr": "قوطی Ghirardelli برچسب 2011"
+  },
+  {
+    "token": "package (net weight, 5 oz)",
+    "count": 1,
+    "tr": "بسته بندی (وزن خالص، 5 اونس)"
+  },
+  {
+    "token": "box (net weight, 2.5 lb)",
+    "count": 1,
+    "tr": "جعبه (وزن خالص، 2.5 پوند)"
+  },
+  {
+    "token": "stick (2.25 oz)",
+    "count": 1,
+    "tr": "چوب (2.25 اونس)"
+  },
+  {
+    "token": "patty, 4 oz",
+    "count": 1,
+    "tr": "کثیف، 4 اونس"
+  },
+  {
+    "token": "patty (4 oz, raw) (yield after cooking)",
+    "count": 1,
+    "tr": "پیتی (4 اونس، خام) (عملکرد پس از پخت و پز)"
+  },
+  {
+    "token": "unit, yield from 1 lb raw",
+    "count": 1,
+    "tr": "واحد، حاصل از 1 پوند خام"
+  },
+  {
+    "token": "tablespoon Hershey's label 2011",
+    "count": 1,
+    "tr": "لوستر لوبیای Hershey 2011"
+  },
+  {
+    "token": "leg, bone removed (yield after cooking)",
+    "count": 1,
+    "tr": "پا، استخوان حذف شده (عملکرد پس از پخت و پز)"
+  },
+  {
+    "token": "cup chopped or diced, cooked",
+    "count": 1,
+    "tr": "لیوان خرد شده یا کبابی، پخته شده"
+  },
+  {
+    "token": "tablespoon Ghirardelli label 2011",
+    "count": 1,
+    "tr": "قاشق غذا خوری Ghirardelli برچسب 2011"
+  },
+  {
+    "token": "serving 1.2 fl oz pop",
+    "count": 1,
+    "tr": "وعده 1.2 فلوس پاپ"
+  },
+  {
+    "token": "can (6.25 oz)",
+    "count": 1,
+    "tr": "می (6.25 اونس)"
+  },
+  {
+    "token": "can (7 oz)",
+    "count": 1,
+    "tr": "قوطیید (7 اونس)"
+  },
+  {
+    "token": "breast breast with skin and bone",
+    "count": 1,
+    "tr": "پستان سینه با پوست و استخوان"
+  },
+  {
+    "token": "serving (3oz)",
+    "count": 1,
+    "tr": "وعده (3oz)"
+  },
+  {
+    "token": "patty (yield from 135.8 g raw meat)",
+    "count": 1,
+    "tr": "پتی (حاصل از 135.8 گرم گوشت خام)"
+  },
+  {
+    "token": "recipe yield (60 pieces)",
+    "count": 1,
+    "tr": "عملکرد دستور غذا (60 قطعه)"
+  },
+  {
+    "token": "fan fillet",
+    "count": 1,
+    "tr": "فیله فن"
+  },
+  {
+    "token": "serving 2.17 oz pack",
+    "count": 1,
+    "tr": "وعده 2.17 اونس بسته"
+  },
+  {
+    "token": "flat fillet",
+    "count": 1,
+    "tr": "فیله تخت"
+  },
+  {
+    "token": "full rump",
+    "count": 1,
+    "tr": "خرگوش کامل"
+  },
+  {
+    "token": "full rump cooked ( yield from 695 g raw meat )",
+    "count": 1,
+    "tr": "کامل خمیر پخته شده (حاصل از 695 گرم گوشت خام)"
+  },
+  {
+    "token": "inside drum",
+    "count": 1,
+    "tr": "داخل درام"
+  },
+  {
+    "token": "inside drum cooked ( yield from 572 g raw meat )",
+    "count": 1,
+    "tr": "درون درام پخته شده (حاصل از 572 گرم گوشت خام)"
+  },
+  {
+    "token": "outside drum",
+    "count": 1,
+    "tr": "درام بیرونی"
+  },
+  {
+    "token": "serving ( cooked from 4oz raw)",
+    "count": 1,
+    "tr": "وعده (پخته شده از 4oz خام)"
+  },
+  {
+    "token": "serving ( cooked from 4 oz raw )",
+    "count": 1,
+    "tr": "وعده (تهیه شده از 4 اونس خام)"
+  },
+  {
+    "token": "serving 1.80 oz bag",
+    "count": 1,
+    "tr": "وعده 1.80 اونس کیسه"
+  },
+  {
+    "token": "serving 1.56 oz bar",
+    "count": 1,
+    "tr": "وعده 1.56 اونس بار"
+  },
+  {
+    "token": "serving 1.66 oz bar",
+    "count": 1,
+    "tr": "وعده 1.66 اونس بار"
+  },
+  {
+    "token": "serving (cooked from 4 oz)",
+    "count": 1,
+    "tr": "سرو (پخته شده از 4 اونس)"
+  },
+  {
+    "token": "piece (1-3/4\" x 1-1/4\" x 1/2\")",
+    "count": 1,
+    "tr": "قطعه (1-3 / 4 \"x 1-1 / 4\" x 1/2 \")"
+  },
+  {
+    "token": "tbsp unsifted",
+    "count": 1,
+    "tr": "قاشق غذا خوری نشده"
+  },
+  {
+    "token": "cup sifted",
+    "count": 1,
+    "tr": "لیوان خرد شده"
+  },
+  {
+    "token": "can 11.5 oz",
+    "count": 1,
+    "tr": "قوطی 11.5 اونس باشد"
+  },
+  {
+    "token": "cup unsifted",
+    "count": 1,
+    "tr": "لیوان نوشیدنی"
+  },
+  {
+    "token": "can (19.25 oz)",
+    "count": 1,
+    "tr": "قوطی (19.25 اونس)"
+  },
+  {
+    "token": "serving 1 cube",
+    "count": 1,
+    "tr": "وعده 1 مکعب"
+  },
+  {
+    "token": "container 32 oz",
+    "count": 1,
+    "tr": "ظرف 32 اونس"
+  },
+  {
+    "token": "can 19 oz",
+    "count": 1,
+    "tr": "قوطی 19 اونس"
+  },
+  {
+    "token": "serving packet",
+    "count": 1,
+    "tr": "وعده بسته"
+  },
+  {
+    "token": "tsp brownulated",
+    "count": 1,
+    "tr": "قهوه تلخ"
+  },
+  {
+    "token": "tsp packed",
+    "count": 1,
+    "tr": "چای بسته بندی شده"
+  },
+  {
+    "token": "can (20 oz)",
+    "count": 1,
+    "tr": "می (20 اونس)"
+  },
+  {
+    "token": "can (11.2 oz)",
+    "count": 1,
+    "tr": "قوطی (11.2 اونس)"
+  },
+  {
+    "token": "can (11.5 oz)",
+    "count": 1,
+    "tr": "قوطی (11.5 اونس)"
+  },
+  {
+    "token": "can (18.75 oz)",
+    "count": 1,
+    "tr": "قوطی (18.75 اونس)"
+  },
+  {
+    "token": "cup unpacked",
+    "count": 1,
+    "tr": "لیوان بسته بندی شده"
+  },
+  {
+    "token": "tsp unpacked",
+    "count": 1,
+    "tr": "تیپ بسته بندی نشده"
+  },
+  {
+    "token": "jar 10.5 oz",
+    "count": 1,
+    "tr": "شیشه 10.5 اونس"
+  },
+  {
+    "token": "serving 0.7 oz bar",
+    "count": 1,
+    "tr": "وعده 0.7 اونس بار"
+  },
+  {
+    "token": "packet (6 fl oz)",
+    "count": 1,
+    "tr": "بسته (6 عدد)"
+  },
+  {
+    "token": "can (14.5 oz)",
+    "count": 1,
+    "tr": "قوطی (14.5 اونس)"
+  },
+  {
+    "token": "package (1.75 oz)",
+    "count": 1,
+    "tr": "بسته بندی (1.75 اونس)"
+  },
+  {
+    "token": "serving 15 pieces",
+    "count": 1,
+    "tr": "وعده 15 قطعه"
+  },
+  {
+    "token": "package (0.5 oz)",
+    "count": 1,
+    "tr": "بسته بندی (0.5 اونس)"
+  },
+  {
+    "token": "serving 1.42 oz bar",
+    "count": 1,
+    "tr": "وعده 1.42 اونس بار"
+  },
+  {
+    "token": "serving 1.6 oz bag",
+    "count": 1,
+    "tr": "وعده 1.6 اونس کیسه"
+  },
+  {
+    "token": "rolls",
+    "count": 1,
+    "tr": "رول"
+  },
+  {
+    "token": "serving 28 pieces",
+    "count": 1,
+    "tr": "وعده 28 قطعه"
+  },
+  {
+    "token": "bar (3 fl oz)",
+    "count": 1,
+    "tr": "نوار (3 عدد)"
+  },
+  {
+    "token": "can (11.5 oz), prepared",
+    "count": 1,
+    "tr": "قوطیید (11.5 اونس) تهیه کنید"
+  },
+  {
+    "token": "bar (2.5 fl oz)",
+    "count": 1,
+    "tr": "نوار (2.5 لیتر)"
+  },
+  {
+    "token": "cube (6 fl oz prepared)",
+    "count": 1,
+    "tr": "مکعب (6 فلاسک آماده)"
+  },
+  {
+    "token": "serving 7 pieces",
+    "count": 1,
+    "tr": "وعده 7 قطعه"
+  },
+  {
+    "token": "serving 1.3 oz bar",
+    "count": 1,
+    "tr": "وعده 1.3 اونس بار"
+  },
+  {
+    "token": "can 10.7 oz (10.75 oz)",
+    "count": 1,
+    "tr": "قوطی 10.7 اونس (10.75 اونس)"
+  },
+  {
+    "token": "serving 1.30 oz bar",
+    "count": 1,
+    "tr": "وعده 1.30 اونس بار"
+  },
+  {
+    "token": "oz bar",
+    "count": 1,
+    "tr": "نوار اوز"
+  },
+  {
+    "token": "can 10.7 oz",
+    "count": 1,
+    "tr": "قوطی 10.7 اونس باشد"
+  },
+  {
+    "token": "bar king size 2.8 oz",
+    "count": 1,
+    "tr": "نوار شاه اندازه 2.8 اونس"
+  },
+  {
+    "token": "serving 1/3 cup",
+    "count": 1,
+    "tr": "وعده 1/3 لیوان"
+  },
+  {
+    "token": "serving 1/4 cup 2 oz",
+    "count": 1,
+    "tr": "وعده 1/4 لیوان 2 اونس"
+  },
+  {
+    "token": "can 10.5 oz",
+    "count": 1,
+    "tr": "قوطی 10.5 اونس باشد"
+  },
+  {
+    "token": "slice (5-7/8\" x 3-1/2\" x 1/16\")",
+    "count": 1,
+    "tr": "قطعه (5-7 / 8 \"x 3-1 / 2\" x 1/16 \")"
+  },
+  {
+    "token": "bar 1.94 oz",
+    "count": 1,
+    "tr": "نوار 1.94 اونس"
+  },
+  {
+    "token": "slice (2-3/4\" dia x 1/16\")",
+    "count": 1,
+    "tr": "قطعه (2-3 / 4 \"دی وی دی 1/16\")"
+  },
+  {
+    "token": "bars",
+    "count": 1,
+    "tr": "کافه ها"
+  },
+  {
+    "token": "slice, medium (4-1/2\" dia x 1/8\" thick) (1 oz)",
+    "count": 1,
+    "tr": "تکه، متوسط (ضخامت 4-1 / 2 \"ضخامت 1/8\") (1 اونس)"
+  },
+  {
+    "token": "bar 1.92 oz",
+    "count": 1,
+    "tr": "نوار 1.92 اونس"
+  },
+  {
+    "token": "link cooked",
+    "count": 1,
+    "tr": "پیوند پخته"
+  },
+  {
+    "token": "serving 4 oz",
+    "count": 1,
+    "tr": "وعده 4 اونس"
+  },
+  {
+    "token": "serving 3.5 oz shelf stable",
+    "count": 1,
+    "tr": "وعده 3.5 اونس قفسه ثابت"
+  },
+  {
+    "token": "links",
+    "count": 1,
+    "tr": "لینک ها"
+  },
+  {
+    "token": "serving (1 serving)",
+    "count": 1,
+    "tr": "وعده (1 وعده)"
+  },
+  {
+    "token": "link (4\" long)",
+    "count": 1,
+    "tr": "لینک (4 \"طولانی)"
+  },
+  {
+    "token": "tbsp whipped",
+    "count": 1,
+    "tr": "قاشق غذاخوری شلاق زده"
+  },
+  {
+    "token": "hot dog",
+    "count": 1,
+    "tr": "هات داگ"
+  },
+  {
+    "token": "package (1.5 oz)",
+    "count": 1,
+    "tr": "بسته بندی (1.5 اونس)"
+  },
+  {
+    "token": "container shelf stable 3.5 oz",
+    "count": 1,
+    "tr": "قفسه ظرف پایدار 3.5 اونس"
+  },
+  {
+    "token": "grams 1 serving",
+    "count": 1,
+    "tr": "گرم 1 وعده"
+  },
+  {
+    "token": "g",
+    "count": 1,
+    "tr": "g"
+  },
+  {
+    "token": "serving 4 oz pudding cup",
+    "count": 1,
+    "tr": "وعده 4 عدد پودینگ لیوان"
+  },
+  {
+    "token": "slice oval",
+    "count": 1,
+    "tr": "بیضی بیضی شکل"
+  },
+  {
+    "token": "slice rectangle",
+    "count": 1,
+    "tr": "مستطیل تکه ای"
+  },
+  {
+    "token": "slice NFS",
+    "count": 1,
+    "tr": "قطعه NFS"
+  },
+  {
+    "token": "cup wafer slices or shaved",
+    "count": 1,
+    "tr": "لیوان ویفر یا تراشیده شده"
+  },
+  {
+    "token": "slice (15 per 8 oz package)",
+    "count": 1,
+    "tr": "قطعه (15 در هر بسته 8 اونس)"
+  },
+  {
+    "token": "sausage (10\" long x 1-1/4\" dia)",
+    "count": 1,
+    "tr": "سوسیس (10 \"طولانی 1-1 / 4\" دیا)"
+  },
+  {
+    "token": "link (raw dimensions: 4\" long x 7/8\" dia), cooked",
+    "count": 1,
+    "tr": "لینک (ابعاد خام: 4 \"طولانی x 7/8\" دیا)، پخته شده است"
+  },
+  {
+    "token": "patty, cooked (raw dimensions: 3-7/8\" dia x 1/4\" thick)",
+    "count": 1,
+    "tr": "پنیر، پخته شده (ابعاد خام: ضخامت 3-7 / 8 \"ضخامت 1/4\")"
+  },
+  {
+    "token": "slice round",
+    "count": 1,
+    "tr": "قطعه دور"
+  },
+  {
+    "token": "package (4 oz)",
+    "count": 1,
+    "tr": "بسته بندی (4 اونس)"
+  },
+  {
+    "token": "slice (3-1/8\" dia x 1/16\" thick)",
+    "count": 1,
+    "tr": "قطعه (ضخامت 3-1 / 8 \"ضخامت 1/16\")"
+  },
+  {
+    "token": "slices 1 serving",
+    "count": 1,
+    "tr": "تکه های 1 سرو"
+  },
+  {
+    "token": "container shelf stable, 3.5 oz",
+    "count": 1,
+    "tr": "قفسه ظرف پایدار 3.5 اونس"
+  },
+  {
+    "token": "link, little (2\" long x 3/4\" dia)",
+    "count": 1,
+    "tr": "لینک، کمی (2 \"طولانی x 3/4\" دیا)"
+  },
+  {
+    "token": "link,  little (2\" long x 3/4\" dia)",
+    "count": 1,
+    "tr": "لینک، کمی (2 \"طولانی x 3/4\" دیا)"
+  },
+  {
+    "token": "sausage (7/8\" dia x 2\" long)",
+    "count": 1,
+    "tr": "سوسیس (7/8 \"قطر 2\" طولانی)"
+  },
+  {
+    "token": "sausages (drained contents from can, net wt 4 oz)",
+    "count": 1,
+    "tr": "سوسیس (محتوی تخلیه از can، net wt 4 اونس)"
+  },
+  {
+    "token": "container refrigerated, 4 oz",
+    "count": 1,
+    "tr": "ظرف یخچال، 4 اونس"
+  },
+  {
+    "token": "serving (4 slices)",
+    "count": 1,
+    "tr": "وعده (4 برش)"
+  },
+  {
+    "token": "serving 3 slices",
+    "count": 1,
+    "tr": "وعده 3 برش"
+  },
+  {
+    "token": "slice 12 oz pkg",
+    "count": 1,
+    "tr": "قطعه 12 اونس pkg"
+  },
+  {
+    "token": "slice 6 oz pkg",
+    "count": 1,
+    "tr": "تکه 6 اونس pkg"
+  },
+  {
+    "token": "lb 16 oz",
+    "count": 1,
+    "tr": "lb 16 اونس"
+  },
+  {
+    "token": "frank 1 NLEA serving",
+    "count": 1,
+    "tr": "فرانک 1 NLEA وعده"
+  },
+  {
+    "token": "package (1 oz)",
+    "count": 1,
+    "tr": "بسته بندی (1 اونس)"
+  },
+  {
+    "token": "envelope (1 tbsp)",
+    "count": 1,
+    "tr": "پاکت (1 قاشق غذاخوری)"
+  },
+  {
+    "token": "package 3 oz, yields 2 cups",
+    "count": 1,
+    "tr": "بسته 3 اونس، 2 لیوان را تولید می کند"
+  },
+  {
+    "token": "serving .25 cup",
+    "count": 1,
+    "tr": "وعده 25 لیوان"
+  },
+  {
+    "token": "link 3 oz",
+    "count": 1,
+    "tr": "لینک 3 اونس"
+  },
+  {
+    "token": "bar 2.6 oz",
+    "count": 1,
+    "tr": "نوار 2.6 اونس"
+  },
+  {
+    "token": "serving 2.67 oz",
+    "count": 1,
+    "tr": "وعده 2.67 اونس"
+  },
+  {
+    "token": "oz serving 2.7 oz",
+    "count": 1,
+    "tr": "جو دوتایی 2.7 اونس"
+  },
+  {
+    "token": "serving 2.7 oz",
+    "count": 1,
+    "tr": "وعده 2.7 اونس"
+  },
+  {
+    "token": "Chiclets",
+    "count": 1,
+    "tr": "شیکلت ها"
+  },
+  {
+    "token": "serving 6 slices",
+    "count": 1,
+    "tr": "وعده 6 برش"
+  },
+  {
+    "token": "bar 1.7 oz",
+    "count": 1,
+    "tr": "نوار 1.7 اونس"
+  },
+  {
+    "token": "serving 5 slices",
+    "count": 1,
+    "tr": "وعده 5 برش"
+  },
+  {
+    "token": "package (9.43 oz)",
+    "count": 1,
+    "tr": "بسته بندی (9.43 اونس)"
+  },
+  {
+    "token": "oz cooked",
+    "count": 1,
+    "tr": "اوز پخته شده"
+  },
+  {
+    "token": "cup (1 NLEA serving for adults)",
+    "count": 1,
+    "tr": "لیوان (1 NLEA وعده برای بزرگسالان)"
+  },
+  {
+    "token": "cup (1 serving for children under 4 years)",
+    "count": 1,
+    "tr": "لیوان (1 وعده برای کودکان زیر 4 سال)"
+  },
+  {
+    "token": "package (1.77 oz)",
+    "count": 1,
+    "tr": "بسته بندی (1.77 اونس)"
+  },
+  {
+    "token": "package (1.89 oz, 2 bars)",
+    "count": 1,
+    "tr": "بسته بندی (1.89 اونس، 2 بار)"
+  },
+  {
+    "token": "package (11 oz)",
+    "count": 1,
+    "tr": "بسته بندی (11 اونس)"
+  },
+  {
+    "token": "package, king size (3.35 oz, 4 bars)",
+    "count": 1,
+    "tr": "بسته بندی، اندازه پادشاه (3.35 اونس، 4 بار)"
+  },
+  {
+    "token": "serving 2 fun size bars",
+    "count": 1,
+    "tr": "وعده 2 میله اندازه سرگرم کننده"
+  },
+  {
+    "token": "serving 2.13 oz bar",
+    "count": 1,
+    "tr": "وعده 2.13 اونس بار"
+  },
+  {
+    "token": "packet, dry, yields",
+    "count": 1,
+    "tr": "بسته، خشک، بازده"
+  },
+  {
+    "token": "serving 1 1.94 oz tube",
+    "count": 1,
+    "tr": "وعده 1 لوله 1.94 اونس"
+  },
+  {
+    "token": "serving 0.50 oz box",
+    "count": 1,
+    "tr": "وعده 0.50 اونس جعبه"
+  },
+  {
+    "token": "serving (NLEA serving size = 0.75 cup)",
+    "count": 1,
+    "tr": "وعده (NLEA وعده اندازه = 0.75 لیوان)"
+  },
+  {
+    "token": "cup (NLEA serving)",
+    "count": 1,
+    "tr": "لیوان (وعده NLEA)"
+  },
+  {
+    "token": "serving 1.0 oz tube",
+    "count": 1,
+    "tr": "وعده 1.0 اونس لوله"
+  },
+  {
+    "token": "tablespoon (1 serving)",
+    "count": 1,
+    "tr": "قاشق غذاخوری (1 سرو)"
+  },
+  {
+    "token": "bar, king size (4 oz)",
+    "count": 1,
+    "tr": "نوار، اندازه پادشاه (4 اونس)"
+  },
+  {
+    "token": "bar, fun size",
+    "count": 1,
+    "tr": "نوار، اندازه سرگرم کننده"
+  },
+  {
+    "token": "cup, quartered or chopped",
+    "count": 1,
+    "tr": "لیوان، ردیف یا خرد شده"
+  },
+  {
+    "token": "bar (2 oz)",
+    "count": 1,
+    "tr": "نوار (2 اونس)"
+  },
+  {
+    "token": "serving 5 mints",
+    "count": 1,
+    "tr": "وعده 5 قوطی"
+  },
+  {
+    "token": "package 1 package",
+    "count": 1,
+    "tr": "بسته 1 بسته"
+  },
+  {
+    "token": "package (1.6 oz)",
+    "count": 1,
+    "tr": "بسته بندی (1.6 اونس)"
+  },
+  {
+    "token": "extra small (2-1/2\" dia)",
+    "count": 1,
+    "tr": "فوق العاده کوچک (2-1 / 2 \"قطر)"
+  },
+  {
+    "token": "package 1.63 oz",
+    "count": 1,
+    "tr": "بسته 1.63 اونس"
+  },
+  {
+    "token": "ring",
+    "count": 1,
+    "tr": "حلقه"
+  },
+  {
+    "token": "miniature",
+    "count": 1,
+    "tr": "مینیاتوری"
+  },
+  {
+    "token": "package 1.6 oz 2 cups",
+    "count": 1,
+    "tr": "بسته 1.6 اونس 2 لیوان"
+  },
+  {
+    "token": "package 0.6 oz 1 cup",
+    "count": 1,
+    "tr": "بسته 0.6 اونس 1 لیوان"
+  },
+  {
+    "token": "apricot",
+    "count": 1,
+    "tr": "زردآلو"
+  },
+  {
+    "token": "serving 1.58 oz bag",
+    "count": 1,
+    "tr": "وعده 1.58 اونس کیسه"
+  },
+  {
+    "token": "bar (1.75 fl oz)",
+    "count": 1,
+    "tr": "نوار (1.75 میلی لیتر)"
+  },
+  {
+    "token": "bar (1.6 oz)",
+    "count": 1,
+    "tr": "نوار (1.6 اونس)"
+  },
+  {
+    "token": "serving 4 fun size bars",
+    "count": 1,
+    "tr": "وعده 4 میله سرگرم کننده است"
+  },
+  {
+    "token": "bar 0.5 oz",
+    "count": 1,
+    "tr": "نوار 0.5 اونس"
+  },
+  {
+    "token": "bar 1.55 oz",
+    "count": 1,
+    "tr": "نوار 1.55 اونس"
+  },
+  {
+    "token": "avocado, NS as to Florida or California",
+    "count": 1,
+    "tr": "آووکادو، NS به فلوریدا یا کالیفرنیا"
+  },
+  {
+    "token": "serving 1.5 oz bar",
+    "count": 1,
+    "tr": "وعده 1.5 اونس بار"
+  },
+  {
+    "token": "fruit, without skin and seed",
+    "count": 1,
+    "tr": "میوه، بدون پوست و دانه"
+  },
+  {
+    "token": "bar (2.6 oz)",
+    "count": 1,
+    "tr": "نوار (2.6 اونس)"
+  },
+  {
+    "token": "bar (1.75 oz)",
+    "count": 1,
+    "tr": "نوار (1.75 اونس)"
+  },
+  {
+    "token": "extra small (less than 6\" long)",
+    "count": 1,
+    "tr": "کوچک کوچک (کمتر از 6 \"طولانی)"
+  },
+  {
+    "token": "small (6\" to 6-7/8\" long)",
+    "count": 1,
+    "tr": "کوچک (6 \"تا 6-7 / 8\" طولانی)"
+  },
+  {
+    "token": "medium (7\" to 7-7/8\" long)",
+    "count": 1,
+    "tr": "متوسط (7 تا 7-7 / 8 \"بلند)"
+  },
+  {
+    "token": "large (8\" to 8-7/8\" long)",
+    "count": 1,
+    "tr": "بزرگ (طول 8 \"تا 8-7 / 8\")"
+  },
+  {
+    "token": "extra large (9\" or longer)",
+    "count": 1,
+    "tr": "فوق العاده بزرگ (9 \"و یا طولانی تر)"
+  },
+  {
+    "token": "package 1.9 oz",
+    "count": 1,
+    "tr": "بسته 1.9 اونس"
+  },
+  {
+    "token": "box (1.48 oz)",
+    "count": 1,
+    "tr": "جعبه (1.48 اونس)"
+  },
+  {
+    "token": "berries",
+    "count": 1,
+    "tr": "انواع توت ها"
+  },
+  {
+    "token": "cup, frozen",
+    "count": 1,
+    "tr": "لیوان، یخ زده"
+  },
+  {
+    "token": "package (1.69 oz)",
+    "count": 1,
+    "tr": "بسته بندی (1.69 اونس)"
+  },
+  {
+    "token": "serving 1 singles bag",
+    "count": 1,
+    "tr": "وعده 1 کیسه تک"
+  },
+  {
+    "token": "recipe yield, recipe makes 49     1 \" x 1\"     pieces",
+    "count": 1,
+    "tr": "عملکرد دستور العمل، دستور العمل باعث می شود 49 1 \"x 1\" قطعه"
+  },
+  {
+    "token": "bar 1.4 oz",
+    "count": 1,
+    "tr": "نوار 1.4 اونس"
+  },
+  {
+    "token": "large (4-1/2\" long)",
+    "count": 1,
+    "tr": "بزرگ (4-1 / 2 \"بلند)"
+  },
+  {
+    "token": "medium (3-5/8\" long)",
+    "count": 1,
+    "tr": "متوسط (3-5 / 8 \"بلند)"
+  },
+  {
+    "token": "small (3-1/8\" long)",
+    "count": 1,
+    "tr": "کوچک (3-1 / 8 \"بلند)"
+  },
+  {
+    "token": "cup, pieces",
+    "count": 1,
+    "tr": "لیوان، قطعه"
+  },
+  {
+    "token": "piece miniature 5 pieces = serving",
+    "count": 1,
+    "tr": "قطعه کوچک 5 قطعه = وعده"
+  },
+  {
+    "token": "serving 2.05 oz bar",
+    "count": 1,
+    "tr": "وعده 2.05 اونس بار"
+  },
+  {
+    "token": "bar (1.65 oz)",
+    "count": 1,
+    "tr": "نوار (1.65 اونس)"
+  },
+  {
+    "token": "bar 2.8 oz",
+    "count": 1,
+    "tr": "نوار 2.8 اونس"
+  },
+  {
+    "token": "slice (1/2\" thick, approx 8 slices per can)",
+    "count": 1,
+    "tr": "قطعه (1/2 \"ضخامت، تقریبا 8 برش در هر کان)"
+  },
+  {
+    "token": "serving 2 TBSP",
+    "count": 1,
+    "tr": "وعده 2 TBSP"
+  },
+  {
+    "token": "large (2-1/2\" dia)",
+    "count": 1,
+    "tr": "بزرگ (2-1 / 2 \"دیا)"
+  },
+  {
+    "token": "medium (2-1/4\" dia)",
+    "count": 1,
+    "tr": "متوسط (دی وی دی 2-1 / 4)"
+  },
+  {
+    "token": "tablet",
+    "count": 1,
+    "tr": "قرص"
+  },
+  {
+    "token": "cup From 19191",
+    "count": 1,
+    "tr": "لیوان از سال 19191"
+  },
+  {
+    "token": "fig",
+    "count": 1,
+    "tr": "شکل"
+  },
+  {
+    "token": "serving 1.4 oz bar",
+    "count": 1,
+    "tr": "وعده 1.4 اونس بار"
+  },
+  {
+    "token": "large (approx 4-1/2\" dia)",
+    "count": 1,
+    "tr": "بزرگ (تقریبا 4-1 / 2 \"دیا)"
+  },
+  {
+    "token": "medium (approx 4\" dia)",
+    "count": 1,
+    "tr": "متوسط (حدود 4 \"دیا)"
+  },
+  {
+    "token": "small (approx 3-1/2\" dia)",
+    "count": 1,
+    "tr": "کوچک (تقریبا 3-1 / 2 \"دیا)"
+  },
+  {
+    "token": "serving fun size bar",
+    "count": 1,
+    "tr": "وعده به نوار اندازه سرگرمی"
+  },
+  {
+    "token": "regular",
+    "count": 1,
+    "tr": "منظم"
+  },
+  {
+    "token": "miniatures",
+    "count": 1,
+    "tr": "مینیاتورها"
+  },
+  {
+    "token": "grapes",
+    "count": 1,
+    "tr": "انگور"
+  },
+  {
+    "token": "fruit, without refuse",
+    "count": 1,
+    "tr": "میوه، بدون رد کردن"
+  },
+  {
+    "token": "cup of miniature",
+    "count": 1,
+    "tr": "لیوان مینیاتوری"
+  },
+  {
+    "token": "bar (1.76 oz)",
+    "count": 1,
+    "tr": "نوار (1.76 اونس)"
+  },
+  {
+    "token": "pieces 1.6oz",
+    "count": 1,
+    "tr": "قطعه 1.6oz"
+  },
+  {
+    "token": "serving fun size bar 0.65 oz",
+    "count": 1,
+    "tr": "وعده بارسا اندازه بار 0.65 اونس"
+  },
+  {
+    "token": "bar (3.375 oz)",
+    "count": 1,
+    "tr": "نوار (3.375 اونس)"
+  },
+  {
+    "token": "fruit (2-3/8\" dia)",
+    "count": 1,
+    "tr": "میوه (2-3 / 8 \"دی)"
+  },
+  {
+    "token": "wedge or slice (1/8 of one 2-1/8\" dia lemon)",
+    "count": 1,
+    "tr": "گوه یا برش (1/8 از یک لیمو دیابتی 2-1 / 8 \")"
+  },
+  {
+    "token": "lemon yields",
+    "count": 1,
+    "tr": "لیمو تولید می کند"
+  },
+  {
+    "token": "wedge yields",
+    "count": 1,
+    "tr": "محصول گوه"
+  },
+  {
+    "token": "lime yields",
+    "count": 1,
+    "tr": "تولید آهک"
+  },
+  {
+    "token": "cup, cubed",
+    "count": 1,
+    "tr": "لیوان، مکعب"
+  },
+  {
+    "token": "bar (2.8 oz)",
+    "count": 1,
+    "tr": "نوار (2.8 اونس)"
+  },
+  {
+    "token": "bar (1.625 oz)",
+    "count": 1,
+    "tr": "نوار (1.625 اونس)"
+  },
+  {
+    "token": "cantaloupe balls",
+    "count": 1,
+    "tr": "توپ های کمانه"
+  },
+  {
+    "token": "melon, large (about 6-1/2\" dia)",
+    "count": 1,
+    "tr": "خربزه بزرگ (حدود 6-1 / 2 \"dia)"
+  },
+  {
+    "token": "wedge, large (1/8 of large melon)",
+    "count": 1,
+    "tr": "گوه، بزرگ (1/8 خربزه بزرگ)"
+  },
+  {
+    "token": "melon, medium (about 5\" dia)",
+    "count": 1,
+    "tr": "خربزه متوسط (حدود 5 \"دی)"
+  },
+  {
+    "token": "wedge, medium (1/8 of medium melon)",
+    "count": 1,
+    "tr": "گوه، متوسط (1/8 خربزه متوسط)"
+  },
+  {
+    "token": "melon, small (about 4-1/4\" dia)",
+    "count": 1,
+    "tr": "خربزه کوچک (حدود 4-1 / 4 \"dia)"
+  },
+  {
+    "token": "wedge, small (1/8 of small melon)",
+    "count": 1,
+    "tr": "گوه، کوچک (1/8 خربزه کوچک)"
+  },
+  {
+    "token": "melon",
+    "count": 1,
+    "tr": "خربزه"
+  },
+  {
+    "token": "cup, diced (approx 20 pieces per cup)",
+    "count": 1,
+    "tr": "لیوان، قهوه ای (تقریبا 20 عدد در هر لیوان)"
+  },
+  {
+    "token": "melon (5-1/4\" dia)",
+    "count": 1,
+    "tr": "خربزه (5-1 / 4 \"دی)"
+  },
+  {
+    "token": "melon (6\" - 7\" dia)",
+    "count": 1,
+    "tr": "خربزه (6 \"- 7\" قطر)"
+  },
+  {
+    "token": "wedge (1/8 of 5-1/4\" dia melon)",
+    "count": 1,
+    "tr": "گوه (1/8 از خربزه خرما 5-1 / 4 \")"
+  },
+  {
+    "token": "wedge (1/8 of 6\" to 7\" dia melon)",
+    "count": 1,
+    "tr": "گوه (1/8 از 6 تا 7 عدد خربزه)"
+  },
+  {
+    "token": "honeydew balls",
+    "count": 1,
+    "tr": "توپ های عجیب و غریب"
+  },
+  {
+    "token": "small (2-1/3\" dia)",
+    "count": 1,
+    "tr": "کوچک (2-1 / 3 \"دیا)"
+  },
+  {
+    "token": "bar, miniature (.35 oz)",
+    "count": 1,
+    "tr": "نوار مینیاتوری (35 اونس)"
+  },
+  {
+    "token": "large (1 oz)",
+    "count": 1,
+    "tr": "بزرگ (1 اونس)"
+  },
+  {
+    "token": "super colossal",
+    "count": 1,
+    "tr": "فوق العاده عظیم"
+  },
+  {
+    "token": "olive",
+    "count": 1,
+    "tr": "زیتون"
+  },
+  {
+    "token": "large (3-1/16\" dia)",
+    "count": 1,
+    "tr": "بزرگ (3-1 / 16 \"دیا)"
+  },
+  {
+    "token": "gumdrop, small (1/2\" dia)",
+    "count": 1,
+    "tr": "زرد، کوچک (1/2 \"دی)"
+  },
+  {
+    "token": "spice drop",
+    "count": 1,
+    "tr": "افت ادویه"
+  },
+  {
+    "token": "spice stick",
+    "count": 1,
+    "tr": "چوب ادویه"
+  },
+  {
+    "token": "gummy worms",
+    "count": 1,
+    "tr": "کرم های چرب"
+  },
+  {
+    "token": "fruit (2-11/16\" dia)",
+    "count": 1,
+    "tr": "میوه (2-11 / 16 \"دی)"
+  },
+  {
+    "token": "fruit without seeds",
+    "count": 1,
+    "tr": "میوه بدون دانه"
+  },
+  {
+    "token": "small (2-1/4\" dia)",
+    "count": 1,
+    "tr": "کوچک (2-1 / 4 \"دیا)"
+  },
+  {
+    "token": "fruit, large",
+    "count": 1,
+    "tr": "میوه، بزرگ"
+  },
+  {
+    "token": "small (2-1/2\" dia)",
+    "count": 1,
+    "tr": "کوچک (2-1 / 2 \"دیا)"
+  },
+  {
+    "token": "medium (2-2/3\" dia)",
+    "count": 1,
+    "tr": "متوسط (2-2 / 3 \"dia)"
+  },
+  {
+    "token": "extra large (3\" dia)",
+    "count": 1,
+    "tr": "فوق العاده بزرگ (3 \"دی)"
+  },
+  {
+    "token": "gummy fish",
+    "count": 1,
+    "tr": "ماهی چرب"
+  },
+  {
+    "token": "gummy dinosaurs",
+    "count": 1,
+    "tr": "دایناسورهای چسبیده"
+  },
+  {
+    "token": "cup, slices",
+    "count": 1,
+    "tr": "لیوان، برش"
+  },
+  {
+    "token": "halves",
+    "count": 1,
+    "tr": "نیمه"
+  },
+  {
+    "token": "fruit (2-1/2\" dia)",
+    "count": 1,
+    "tr": "میوه (2-1 / 2 \"دی)"
+  },
+  {
+    "token": "gummy bears",
+    "count": 1,
+    "tr": "خرس های عجیب و غریب"
+  },
+  {
+    "token": "gumdrops",
+    "count": 1,
+    "tr": "خمیردندان"
+  },
+  {
+    "token": "slice (3-1/2\" dia x 3/4\" thick)",
+    "count": 1,
+    "tr": "قطعه (ضخامت 3-1 / 2 \"قطر x 3/4\")"
+  },
+  {
+    "token": "slice, thin (3-1/2\" dia x 1/2\" thick)",
+    "count": 1,
+    "tr": "تکه، نازک (3-1 / 2 \"ضخامت 1/2\" ضخامت)"
+  },
+  {
+    "token": "jelly ring (1-1/4\" dia)",
+    "count": 1,
+    "tr": "حلقه ژله (1-1/4 \"دیو)"
+  },
+  {
+    "token": "gumdrop, large (1\" dia)",
+    "count": 1,
+    "tr": "بزرگ، بزرگ (1 \"دی)"
+  },
+  {
+    "token": "gumdrop, medium (3/4\" dia)",
+    "count": 1,
+    "tr": "چاقو، متوسط (3/4 \"قطر)"
+  },
+  {
+    "token": "cup gumdrops",
+    "count": 1,
+    "tr": "جام قوطی"
+  },
+  {
+    "token": "cup arils (seed/juice sacs)",
+    "count": 1,
+    "tr": "جام Arils (بذر / کیسه آب)"
+  },
+  {
+    "token": "pomegranate (4\" dia)",
+    "count": 1,
+    "tr": "انار (4 \"دی)"
+  },
+  {
+    "token": "prunes with liquid",
+    "count": 1,
+    "tr": "آلو با مایع"
+  },
+  {
+    "token": "prune, pitted",
+    "count": 1,
+    "tr": "زغال اخته، خالص"
+  },
+  {
+    "token": "package 1.375 oz",
+    "count": 1,
+    "tr": "بسته 1.375 اونس"
+  },
+  {
+    "token": "miniature box (.5 oz)",
+    "count": 1,
+    "tr": "جعبه مینیاتوری (5 اونس)"
+  },
+  {
+    "token": "small box (1.5 oz)",
+    "count": 1,
+    "tr": "جعبه کوچک (1.5 اونس)"
+  },
+  {
+    "token": "raisins",
+    "count": 1,
+    "tr": "کشمش"
+  },
+  {
+    "token": "oz (60 raisins)",
+    "count": 1,
+    "tr": "اوز (60 راز)"
+  },
+  {
+    "token": "bar (2.75 fl oz)",
+    "count": 1,
+    "tr": "نوار (2.75 میلی لیتر)"
+  },
+  {
+    "token": "raspberries",
+    "count": 1,
+    "tr": "تمشک"
+  },
+  {
+    "token": "bar 2.4 oz",
+    "count": 1,
+    "tr": "نوار 2.4 اونس"
+  },
+  {
+    "token": "cup, without refuse",
+    "count": 1,
+    "tr": "لیوان، بدون رد"
+  },
+  {
+    "token": "bar 1.5 oz",
+    "count": 1,
+    "tr": "نوار 1.5 اونس"
+  },
+  {
+    "token": "sapodilla",
+    "count": 1,
+    "tr": "sapodilla"
+  },
+  {
+    "token": "fruit (7\" x 5-1/4\" dia)",
+    "count": 1,
+    "tr": "میوه (7 \"x 5-1 / 4\" dia)"
+  },
+  {
+    "token": "extra large (1-5/8\" dia)",
+    "count": 1,
+    "tr": "فوق العاده بزرگ (1-5 / 8 \"قطر)"
+  },
+  {
+    "token": "large (1-3/8\" dia)",
+    "count": 1,
+    "tr": "بزرگ (1-3 / 8 \"قطر)"
+  },
+  {
+    "token": "medium (1-1/4\" dia)",
+    "count": 1,
+    "tr": "متوسط (1-1/4 \"دی)"
+  },
+  {
+    "token": "small (1\" dia)",
+    "count": 1,
+    "tr": "کوچک (1 \"دی)"
+  },
+  {
+    "token": "berry",
+    "count": 1,
+    "tr": "توت"
+  },
+  {
+    "token": "fruit (3\" x 1\")",
+    "count": 1,
+    "tr": "میوه (3 \"x 1\")"
+  },
+  {
+    "token": "melon (15\" long x 7-1/2\" dia)",
+    "count": 1,
+    "tr": "خربزه (15 \"طولانی 7-1 / 2\" دی وی دی)"
+  },
+  {
+    "token": "wedge (approx 1/16 of melon)",
+    "count": 1,
+    "tr": "گوه (تقریبا 16/1 خربزه)"
+  },
+  {
+    "token": "watermelon balls",
+    "count": 1,
+    "tr": "توپ هندوانه"
+  },
+  {
+    "token": "cherry (NLEA serving)",
+    "count": 1,
+    "tr": "گیلاس (وعده NLEA)"
+  },
+  {
+    "token": "fruit without peel",
+    "count": 1,
+    "tr": "میوه بدون پوست"
+  },
+  {
+    "token": "cup 1/2\" chunks",
+    "count": 1,
+    "tr": "لیوان 1/2 \"قطعه"
+  },
+  {
+    "token": "fruit 2-1/4\" high x 2-1/2\" dia",
+    "count": 1,
+    "tr": "میوه 2-1 / 4 \"high x 2-1 / 2\" dia"
+  },
+  {
+    "token": "fruit 3-3/8\" high x 3\" diameter",
+    "count": 1,
+    "tr": "میوه 3-3 / 8 قطر \"x 3\" بالا"
+  },
+  {
+    "token": "patty 1.5 oz",
+    "count": 1,
+    "tr": "پاتو 1.5 اونس"
+  },
+  {
+    "token": "patty, small",
+    "count": 1,
+    "tr": "کوچک، کوچک"
+  },
+  {
+    "token": "slices (1/4\" thick)",
+    "count": 1,
+    "tr": "برش (ضخامت 1/4 \")"
+  },
+  {
+    "token": "fruit without pits",
+    "count": 1,
+    "tr": "میوه بدون چاله"
+  },
+  {
+    "token": "cup without pits, thawed",
+    "count": 1,
+    "tr": "لیوان بدون چاله، افتاب"
+  },
+  {
+    "token": "fruit without pits, thawed",
+    "count": 1,
+    "tr": "میوه بدون چاله، باز شدن"
+  },
+  {
+    "token": "cup thawed",
+    "count": 1,
+    "tr": "لیوان معطر"
+  },
+  {
+    "token": "fruit (4-2/3\" long x 2-3/4\" dia)",
+    "count": 1,
+    "tr": "میوه (4-2 / 3 \"طولانی x 2-3 / 4\" دیا)"
+  },
+  {
+    "token": "patty, large",
+    "count": 1,
+    "tr": "کثیف، بزرگ"
+  },
+  {
+    "token": "oz Hersheys",
+    "count": 1,
+    "tr": "اوز هرشی"
+  },
+  {
+    "token": "oz square Bakers",
+    "count": 1,
+    "tr": "مربع نانوایی نانوایی"
+  },
+  {
+    "token": "bar 2.25 oz",
+    "count": 1,
+    "tr": "نوار 2.25 اونس"
+  },
+  {
+    "token": "bar 1.6 oz",
+    "count": 1,
+    "tr": "نوار 1.6 اونس"
+  },
+  {
+    "token": "chop without refuse (Yield from 1 raw chop, with refuse, weighing 201g)",
+    "count": 1,
+    "tr": "ریز ریز کردن بدون رد کردن (عملکرد 1 ریز خرد شده، با رد شدن، وزن 201 گرم)"
+  },
+  {
+    "token": "chop without refuse (Yield from 1 cooked chop, with refuse, weighing 172g)",
+    "count": 1,
+    "tr": "ریز ریز کردن بدون رجوع (از 1 ریز ریز خرد شده، با رد شدن، وزن 172 گرم)"
+  },
+  {
+    "token": "roast without refuse (Yield from 1 raw roast, with refuse, weighing 1817g)",
+    "count": 1,
+    "tr": "کباب پز بدون رختخواب (حاصل از 1 کباب خام، با رد، وزن 1817g)"
+  },
+  {
+    "token": "roast without refuse (Yield from 1 cooked roast, with refuse, weighing 1515g)",
+    "count": 1,
+    "tr": "کباب پز بدون رختخواب (عملکرد 1 کباب پخته شده، با رد شدن، وزن 1515 گرم)"
+  },
+  {
+    "token": "roast without refuse (Yield from 1 raw roast, with refuse, weighing 1818g)",
+    "count": 1,
+    "tr": "کباب کردن بدون رختخواب (حاصل از 1 کباب خام، با زباله، وزن 1818g)"
+  },
+  {
+    "token": "oz (Yield from 1 cooked roast, with refuse, weighing 1515g)",
+    "count": 1,
+    "tr": "اوز (مقدار 1 کباب پخته شده، با رد شدن، وزن 1515 گرم)"
+  },
+  {
+    "token": "roast without refuse",
+    "count": 1,
+    "tr": "کباب کردن بدون رد کردن"
+  },
+  {
+    "token": "bar 1.25 oz",
+    "count": 1,
+    "tr": "نوار 1.25 اونس"
+  },
+  {
+    "token": "steak without refuse (Yield from 1 raw steak, with refuse, weighing 380g)",
+    "count": 1,
+    "tr": "استیک بدون رجوع (از 1 استیک خام، با رد، وزن 380g)"
+  },
+  {
+    "token": "steak without refuse (Yield from 1 cooked steak, with refuse, weighing 249g)",
+    "count": 1,
+    "tr": "استیک بدون رجوع (از 1 استیک پخته شده، با زباله، وزن 249 گرم)"
+  },
+  {
+    "token": "package (2.5 oz)",
+    "count": 1,
+    "tr": "بسته بندی (2.5 اونس)"
+  },
+  {
+    "token": "steak without refuse (Yield from 1 raw steak, with refuse, weighing 379g)",
+    "count": 1,
+    "tr": "استیک بدون رجوع (از 1 استیک خام، با زباله، وزن 379 گرم)"
+  },
+  {
+    "token": "ear",
+    "count": 1,
+    "tr": "گوش"
+  },
+  {
+    "token": "ear (yield after cooking)",
+    "count": 1,
+    "tr": "گوش (عملکرد پس از پخت و پز)"
+  },
+  {
+    "token": "cup BB's",
+    "count": 1,
+    "tr": "لیوان BB"
+  },
+  {
+    "token": "kidney",
+    "count": 1,
+    "tr": "کلیه"
+  },
+  {
+    "token": "slice raw",
+    "count": 1,
+    "tr": "برش خام"
+  },
+  {
+    "token": "Butterfinger BB's",
+    "count": 1,
+    "tr": "Butterfinger BB"
+  },
+  {
+    "token": "slices (6 per 6-oz pkg.)",
+    "count": 1,
+    "tr": "برش (6 بر 6 اونس pkg.)"
+  },
+  {
+    "token": "piece, cooked (yield from 1 lb unheated product)",
+    "count": 1,
+    "tr": "قطعه، پخته شده (حاصل از 1 کیلو گرم بدون محصول)"
+  },
+  {
+    "token": "slice (6-1/4\" x 4\" x 1/16\") (1 oz)",
+    "count": 1,
+    "tr": "قطعه (6-1 / 4 \"x 4\" x 1/16 \") (1 اونس)"
+  },
+  {
+    "token": "bar bite size",
+    "count": 1,
+    "tr": "نوار نیش اندازه"
+  },
+  {
+    "token": "rib without refuse (Yield from 1 raw rib, with refuse, weighing 196g)",
+    "count": 1,
+    "tr": "بدون رغبت (رطوبت از یک رد خام، با رد شدن، وزن 196 گرم)"
+  },
+  {
+    "token": "rib without refuse (Yield from 1 cooked rib, with refuse, weighing 140g)",
+    "count": 1,
+    "tr": "رنده بدون رجوع (از 1 رنده پخته شده، با رد، وزن 140 گرم)"
+  },
+  {
+    "token": "serving 0.75 oz bar",
+    "count": 1,
+    "tr": "وعده 0.75 اونس بار"
+  },
+  {
+    "token": "rib",
+    "count": 1,
+    "tr": "دنده"
+  },
+  {
+    "token": "rib without refuse (yield from 1 cooked rib, with refuse, weighing 141g)",
+    "count": 1,
+    "tr": "رنده بدون رجوع (حاصل از 1 رشته پخته شده، با رد، وزن 141 گرم)"
+  },
+  {
+    "token": "roast (Yield from 1 raw roast, with refuse, weighing 504g)",
+    "count": 1,
+    "tr": "کباب (از 1 کباب خام، با زباله، وزن 504 گرم)"
+  },
+  {
+    "token": "chop boneless",
+    "count": 1,
+    "tr": "ریز ریز کردن"
+  },
+  {
+    "token": "chop boneless (yield from 189g raw meat)",
+    "count": 1,
+    "tr": "خرد کردن ریز ریز (حاصل از گوشت خام 189 گرم)"
+  },
+  {
+    "token": "serving 1 fun size bar 0.65 oz",
+    "count": 1,
+    "tr": "وعده 1 نوار سرگرم کننده اندازه 0.65 اونس"
+  },
+  {
+    "token": "package 1.76 oz",
+    "count": 1,
+    "tr": "بسته 1.76 اونس"
+  },
+  {
+    "token": "can (6.75 oz)",
+    "count": 1,
+    "tr": "قوطی (6.75 اونس)"
+  },
+  {
+    "token": "oz (approx 2/3 cup)",
+    "count": 1,
+    "tr": "اونس (تقریبا 2/3 لیوان)"
+  },
+  {
+    "token": "roast whole",
+    "count": 1,
+    "tr": "کبابی کل"
+  },
+  {
+    "token": "bar (1.25 oz)",
+    "count": 1,
+    "tr": "نوار (1.25 اونس)"
+  },
+  {
+    "token": "oz puffs (about 13 pieces)",
+    "count": 1,
+    "tr": "اوز پف (حدود 13 قطعه)"
+  },
+  {
+    "token": "oz crunchy (about 21 pieces)",
+    "count": 1,
+    "tr": "اوز ترد (حدود 21 قطعه)"
+  },
+  {
+    "token": "piece, large",
+    "count": 1,
+    "tr": "قطعه بزرگ"
+  },
+  {
+    "token": "bun",
+    "count": 1,
+    "tr": "نوشیدنی"
+  },
+  {
+    "token": "slice presliced",
+    "count": 1,
+    "tr": "برش نگهدارنده"
+  },
+  {
+    "token": "serving (1 NLEA serving - about 4 crackers)",
+    "count": 1,
+    "tr": "وعده (وعده 1 NLEA - حدود 4 کرکر)"
+  },
+  {
+    "token": "piece (1 serving)",
+    "count": 1,
+    "tr": "قطعه (1 وعده)"
+  },
+  {
+    "token": "loaf",
+    "count": 1,
+    "tr": "نوشیدنی"
+  },
+  {
+    "token": "slice (average weight of 1 slice)",
+    "count": 1,
+    "tr": "برش (وزن متوسط 1 تکه)"
+  },
+  {
+    "token": "cake square",
+    "count": 1,
+    "tr": "کیک مربع"
+  },
+  {
+    "token": "cake square (average weight of whole item)",
+    "count": 1,
+    "tr": "مربع کیک (میانگین وزن کل مورد)"
+  },
+  {
+    "token": "artichoke, large",
+    "count": 1,
+    "tr": "artichoke، بزرگ"
+  },
+  {
+    "token": "serving (approximate serving size)",
+    "count": 1,
+    "tr": "وعده (اندازه تقریبی وعده)"
+  },
+  {
+    "token": "pieces (mean serving weight, aggregated over brands)",
+    "count": 1,
+    "tr": "قطعات (میانگین وزن وعده، جمع آوری بیش از مارک ها)"
+  },
+  {
+    "token": "waffles",
+    "count": 1,
+    "tr": "کلوچه"
+  },
+  {
+    "token": "crackers, Wheat Thins",
+    "count": 1,
+    "tr": "کیکرها، نان گندم"
+  },
+  {
+    "token": "spear, small (5\" long or less)",
+    "count": 1,
+    "tr": "اسپیر، کوچک (5 \"طولانی و یا کمتر)"
+  },
+  {
+    "token": "spear, medium (5-1/4\" to 7\" long)",
+    "count": 1,
+    "tr": "کلیه، متوسط (5-1 / 4 \"تا 7\" طولانی)"
+  },
+  {
+    "token": "spear, large (7-1/4\" to 8-1/2\")",
+    "count": 1,
+    "tr": "چاقو بزرگ (7-1 / 4 \"تا 8-1 / 2\")"
+  },
+  {
+    "token": "spear, extra large (8-3/4\" to 10\" long)",
+    "count": 1,
+    "tr": "صاف، فوق العاده بزرگ (8-3 / 4 \"تا 10\" طولانی)"
+  },
+  {
+    "token": "spear tip (2\" long or less)",
+    "count": 1,
+    "tr": "نوک تیز (2 \"طولانی یا کمتر)"
+  },
+  {
+    "token": "Triscuits, regular size",
+    "count": 1,
+    "tr": "Triscuits، اندازه منظم"
+  },
+  {
+    "token": "pie crust",
+    "count": 1,
+    "tr": "پوسته پوسته شده"
+  },
+  {
+    "token": "pie 1 pie (1/8 of 9\" pie)",
+    "count": 1,
+    "tr": "پای 1 پای (1/8 از 9 پایه)"
+  },
+  {
+    "token": "muffin small",
+    "count": 1,
+    "tr": "کافئین کوچک"
+  },
+  {
+    "token": "serving (3 pancakes)",
+    "count": 1,
+    "tr": "وعده (3 پنکیک)"
+  },
+  {
+    "token": "waffle, round (4\"dia)",
+    "count": 1,
+    "tr": "وفل، گرد (4 \"دیو)"
+  },
+  {
+    "token": "balsam-pear",
+    "count": 1,
+    "tr": "گلابی گلابی"
+  },
+  {
+    "token": "waffle round (4\" dia)",
+    "count": 1,
+    "tr": "دور ورقه (4 \"دیو)"
+  },
+  {
+    "token": "waffle, round",
+    "count": 1,
+    "tr": "وفل، دور"
+  },
+  {
+    "token": "cup (1/8\" slices)",
+    "count": 1,
+    "tr": "لیوان (1/8 \"برش)"
+  },
+  {
+    "token": "waffle, square",
+    "count": 1,
+    "tr": "وفل، مربع"
+  },
+  {
+    "token": "cracker 1 cracker = 6.5g",
+    "count": 1,
+    "tr": "کراکر 1 کراکر = 6.5 گرم"
+  },
+  {
+    "token": "eclair, frozen",
+    "count": 1,
+    "tr": "اکلار، یخ زده"
+  },
+  {
+    "token": "serving 1 roll with icing",
+    "count": 1,
+    "tr": "وعده 1 رول با یخ زدگی"
+  },
+  {
+    "token": "serving 2 cookies",
+    "count": 1,
+    "tr": "وعده 2 کوکی"
+  },
+  {
+    "token": "beet (2\" dia)",
+    "count": 1,
+    "tr": "چغندر (2 \"دی)"
+  },
+  {
+    "token": "cracker (1 NLEA serving)",
+    "count": 1,
+    "tr": "کراکر (وعده 1 NLEA)"
+  },
+  {
+    "token": "beet",
+    "count": 1,
+    "tr": "چغندرقند"
+  },
+  {
+    "token": "NLEA serving (makes 1/2 cup prepared)",
+    "count": 1,
+    "tr": "وعده NLEA (1/2 لیوان تهیه می شود)"
+  },
+  {
+    "token": "broadbean",
+    "count": 1,
+    "tr": "باقلا"
+  },
+  {
+    "token": "tart",
+    "count": 1,
+    "tr": "تارت"
+  },
+  {
+    "token": "doughnut, medium (3-1/4\" dia)",
+    "count": 1,
+    "tr": "دونات، متوسط (3-1 / 4 \"قطر)"
+  },
+  {
+    "token": "cup Cheez-its",
+    "count": 1,
+    "tr": "لیوان Chez-its"
+  },
+  {
+    "token": "container (3 oz)",
+    "count": 1,
+    "tr": "ظرف (3 اونس)"
+  },
+  {
+    "token": "cracker, square",
+    "count": 1,
+    "tr": "کراکر، مربع"
+  },
+  {
+    "token": "cracker, thin square",
+    "count": 1,
+    "tr": "کراکر، مربع نازک"
+  },
+  {
+    "token": "bunch cooked",
+    "count": 1,
+    "tr": "دسته پخته شده"
+  },
+  {
+    "token": "cracker, oval",
+    "count": 1,
+    "tr": "کراکر، بیضی شکل"
+  },
+  {
+    "token": "medium bagel (3-1/2\" to 4\")",
+    "count": 1,
+    "tr": "بوته متوسط (3-1 / 2 \"تا 4\")"
+  },
+  {
+    "token": "petiole",
+    "count": 1,
+    "tr": "دمبرگ"
+  },
+  {
+    "token": "waffle, square (4\" square)",
+    "count": 1,
+    "tr": "وفل، مربع (4 \"مربع)"
+  },
+  {
+    "token": "head, large (about 7\" dia)",
+    "count": 1,
+    "tr": "سر، بزرگ (حدود 7 \"دی)"
+  },
+  {
+    "token": "waffle, round (4\" dia)",
+    "count": 1,
+    "tr": "وفل، گرد (4 \"دیو)"
+  },
+  {
+    "token": "head, medium (about 5-3/4\" dia)",
+    "count": 1,
+    "tr": "سر، متوسط (حدود 5-3/4 \"دی)"
+  },
+  {
+    "token": "large roll or bun (3-1/2\" dia)",
+    "count": 1,
+    "tr": "رول بزرگ یا طناب (3-1 / 2 \"dia)"
+  },
+  {
+    "token": "head, small (about 4-1/2\" dia)",
+    "count": 1,
+    "tr": "سر، کوچک (حدود 4-1 / 2 \"dia)"
+  },
+  {
+    "token": "cookie (2-5/8\" dia)",
+    "count": 1,
+    "tr": "کوکی (2-5 / 8 \"قطر)"
+  },
+  {
+    "token": "head, large (about 5-1/2\" dia)",
+    "count": 1,
+    "tr": "سر، بزرگ (حدود 5-1 / 2 \"قطر)"
+  },
+  {
+    "token": "head, medium (about 5\" dia)",
+    "count": 1,
+    "tr": "سر، متوسط (حدود 5 \"دی)"
+  },
+  {
+    "token": "cake (0.6 oz)",
+    "count": 1,
+    "tr": "کیک (0.6 اونس)"
+  },
+  {
+    "token": "cup strips or slices",
+    "count": 1,
+    "tr": "لیوان نوار یا برش"
+  },
+  {
+    "token": "large (7-1/4\" to 8-/1/2\" long)",
+    "count": 1,
+    "tr": "بزرگ (7-1 / 4 \"به 8- / 1/2\" طولانی)"
+  },
+  {
+    "token": "small (5-1/2\" long)",
+    "count": 1,
+    "tr": "کوچک (5-1 / 2 \"طولانی)"
+  },
+  {
+    "token": "strip large (3\" long)",
+    "count": 1,
+    "tr": "نوار بزرگ (3 \"بلند)"
+  },
+  {
+    "token": "strip medium",
+    "count": 1,
+    "tr": "نوار رسانه"
+  },
+  {
+    "token": "wrapper, wonton (3-1/2\" square)",
+    "count": 1,
+    "tr": "wrapper، wonton (مربع 3-1 / 2)"
+  },
+  {
+    "token": "cup chopped (1/2\" pieces)",
+    "count": 1,
+    "tr": "لیوان خرد شده (1/2 قطعه)"
+  },
+  {
+    "token": "wrapper, eggroll (7\" square)",
+    "count": 1,
+    "tr": "بسته بندی شده، تخم مرغ (7 \"مربع)"
+  },
+  {
+    "token": "head large (6-7\" dia.)",
+    "count": 1,
+    "tr": "سر بزرگ (6-7 عدد)"
+  },
+  {
+    "token": "head medium (5-6\" dia.)",
+    "count": 1,
+    "tr": "متوسط (قطر 5-6 اینچ)"
+  },
+  {
+    "token": "head small (4\" dia.)",
+    "count": 1,
+    "tr": "سر کوچک (4 اینچ)"
+  },
+  {
+    "token": "waffle, round (7\" dia)",
+    "count": 1,
+    "tr": "وفل، گرد (7 اینچ)"
+  },
+  {
+    "token": "strip (4\" long)",
+    "count": 1,
+    "tr": "نوار (4 \"بلند)"
+  },
+  {
+    "token": "chayote (5-3/4\")",
+    "count": 1,
+    "tr": "کیوتو (5-3 / 4 \")"
+  },
+  {
+    "token": "waffle, square (4\" square) (include frozen)",
+    "count": 1,
+    "tr": "وفل، مربع (4 \"مربع) (شامل یخ زده)"
+  },
+  {
+    "token": "tsp chopped",
+    "count": 1,
+    "tr": "تیپ خرد شده"
+  },
+  {
+    "token": "stem (8-3/4\" long)",
+    "count": 1,
+    "tr": "ساقه (8-3 / 4 \"طولانی)"
+  },
+  {
+    "token": "tortilla medium (approx 6\" dia)",
+    "count": 1,
+    "tr": "فلفل سبز (حدود 6 \"دی)"
+  },
+  {
+    "token": "ear, large (7-3/4\" to 9\" long) yields",
+    "count": 1,
+    "tr": "گوش، بزرگ (طول 7-3 / 4 \"تا 9\") طول می کشد"
+  },
+  {
+    "token": "ear, medium (6-3/4\" to 7-1/2\" long) yields",
+    "count": 1,
+    "tr": "گوش، متوسط (6-3 / 4 \"به 7-1 / 2\" طولانی) تولید می کند"
+  },
+  {
+    "token": "large (6-1/2\" dia)",
+    "count": 1,
+    "tr": "بزرگ (6-1 / 2 \"قطر)"
+  },
+  {
+    "token": "roll (2-3/4\" square)",
+    "count": 1,
+    "tr": "رول (مربع 2-3 / 4 \")"
+  },
+  {
+    "token": "roll (3-1/2\" dia)",
+    "count": 1,
+    "tr": "رول (3-1 / 2 \"دیا)"
+  },
+  {
+    "token": "roll 1 serving",
+    "count": 1,
+    "tr": "رول 1 وعده"
+  },
+  {
+    "token": "roll (small submarine, hoagie roll)",
+    "count": 1,
+    "tr": "رول (زیردریایی کوچک، رول کوهی)"
+  },
+  {
+    "token": "roll medium submarine, hoagie",
+    "count": 1,
+    "tr": "زیردریایی رول متحرک، هویج"
+  },
+  {
+    "token": "can (12 oz) yields",
+    "count": 1,
+    "tr": "قوطی (12 اونس) تولید کند"
+  },
+  {
+    "token": "roll, large submarine, hoagie",
+    "count": 1,
+    "tr": "رول، زیردریایی بزرگ، هویج"
+  },
+  {
+    "token": "roll (hamburger, frankfurter roll)",
+    "count": 1,
+    "tr": "رول (همبرگر، رول فرنگی)"
+  },
+  {
+    "token": "roll (foot long frankfurter roll)",
+    "count": 1,
+    "tr": "رول (طول رول فرانسوی پا)"
+  },
+  {
+    "token": "roll (hamburger, frankfurter, onion roll, bun, large roll)",
+    "count": 1,
+    "tr": "رول (همبرگر، گوشت خوک، رول پیاز، نان، رول بزرگ)"
+  },
+  {
+    "token": "each (pan, dinner, or small roll) (2\" square, 2\" high)",
+    "count": 1,
+    "tr": "هر (پان، شام، یا رول کوچک) (2 \"مربع، 2\" بالا)"
+  },
+  {
+    "token": "sheet dough",
+    "count": 1,
+    "tr": "خمیر ورقه"
+  },
+  {
+    "token": "pie crust (average weight of 1 baked crust)",
+    "count": 1,
+    "tr": "پوسته پوسته (وزن متوسط پوسته پخته شده)"
+  },
+  {
+    "token": "cucumber (8-1/4\")",
+    "count": 1,
+    "tr": "خیار (8-1 / 4 \")"
+  },
+  {
+    "token": "cup, pared, chopped",
+    "count": 1,
+    "tr": "لیوان، زرد، خرد شده"
+  },
+  {
+    "token": "large (8-1/4\" long)",
+    "count": 1,
+    "tr": "بزرگ (8-1 / 4 \"بلند)"
+  },
+  {
+    "token": "small (6-3/8\" long)",
+    "count": 1,
+    "tr": "کوچک (6-3 / 8 \"طولانی)"
+  },
+  {
+    "token": "stick (4\" long)",
+    "count": 1,
+    "tr": "چوب (4 \"بلند)"
+  },
+  {
+    "token": "eggplant, peeled (yield from 1-1/4 lb)",
+    "count": 1,
+    "tr": "بادمجان، پوست کنده (حاصل از 1-1 / 4 پوند)"
+  },
+  {
+    "token": "eggplant, unpeeled (approx 1-1/4 lb)",
+    "count": 1,
+    "tr": "بادمجان، بدون پوست (تقریبا 1-1 / 4 پوند)"
+  },
+  {
+    "token": "pie crust (average weight of 1 frozen crust)",
+    "count": 1,
+    "tr": "پوسته پوسته (وزن متوسط پوسته یخ زده)"
+  },
+  {
+    "token": "clove",
+    "count": 1,
+    "tr": "حبه"
+  },
+  {
+    "token": "cloves",
+    "count": 1,
+    "tr": "حبه ها"
+  },
+  {
+    "token": "cup slices (1\" dia)",
+    "count": 1,
+    "tr": "برش لیوان (1 \"دیو)"
+  },
+  {
+    "token": "slices (1\" dia)",
+    "count": 1,
+    "tr": "برش (1 \"دیو)"
+  },
+  {
+    "token": "piece (1/8 of 7\" pie)",
+    "count": 1,
+    "tr": "قطعه (1/8 از 7 \"پای)"
+  },
+  {
+    "token": "piece (1/6 of 7\" pie)",
+    "count": 1,
+    "tr": "قطعه (1/6 از 7 \"پای)"
+  },
+  {
+    "token": "piece (1/4 of 6\" pie)",
+    "count": 1,
+    "tr": "قطعه (1/4 از 6 \"پای)"
+  },
+  {
+    "token": "serving .167 pie",
+    "count": 1,
+    "tr": "وعده 167 پای"
+  },
+  {
+    "token": "pie (9\" dia)",
+    "count": 1,
+    "tr": "پای (9 \"دی)"
+  },
+  {
+    "token": "mini pancake",
+    "count": 1,
+    "tr": "مینک پانکک"
+  },
+  {
+    "token": "cup, shredded or chopped",
+    "count": 1,
+    "tr": "لیوان، خرد شده یا خرد شده"
+  },
+  {
+    "token": "head (5\" dia)",
+    "count": 1,
+    "tr": "سر (5 اینچ)"
+  },
+  {
+    "token": "muffin (2-3/4\" dia x 2\")",
+    "count": 1,
+    "tr": "کاهو (2-3 / 4 \"دی وی دی 2\")"
+  },
+  {
+    "token": "package, mix + drained berries",
+    "count": 1,
+    "tr": "بسته بندی، مخلوط کردن توت های خشک شده"
+  },
+  {
+    "token": "cup, chopped (1/2\" pieces, loosely packed)",
+    "count": 1,
+    "tr": "لیوان، خرد شده (1/2 \"قطعه، به آرامی بسته بندی شده)"
+  },
+  {
+    "token": "head, large",
+    "count": 1,
+    "tr": "سر، بزرگ"
+  },
+  {
+    "token": "head, medium (6\" dia)",
+    "count": 1,
+    "tr": "سر، متوسط (6 اینچ)"
+  },
+  {
+    "token": "head, small",
+    "count": 1,
+    "tr": "سر، کوچک"
+  },
+  {
+    "token": "leaf, small",
+    "count": 1,
+    "tr": "برگ کوچک"
+  },
+  {
+    "token": "large (3-1/4\" dia x 2-3/4\")",
+    "count": 1,
+    "tr": "بزرگ (3-1 / 4 \"ضخامت 2-3 / 4\")"
+  },
+  {
+    "token": "root (9-1/2\" long)",
+    "count": 1,
+    "tr": "ریشه (9-1 / 2 \"بلند)"
+  },
+  {
+    "token": "yam",
+    "count": 1,
+    "tr": "سیب زمینی شیرین"
+  },
+  {
+    "token": "cup, pieces or slices",
+    "count": 1,
+    "tr": "لیوان، قطعات یا برش"
+  },
+  {
+    "token": "small (2-3/4\" dia x 2\")",
+    "count": 1,
+    "tr": "کوچک (2-3 / 4 \"قطر x 2\")"
+  },
+  {
+    "token": "caps",
+    "count": 1,
+    "tr": "کلاه"
+  },
+  {
+    "token": "mini (1-1/4\" dia)",
+    "count": 1,
+    "tr": "مینی (1-1 / 4 \"دیا)"
+  },
+  {
+    "token": "large waffle cone",
+    "count": 1,
+    "tr": "مخروط وفل بزرگ"
+  },
+  {
+    "token": "hush puppy",
+    "count": 1,
+    "tr": "توله سگ"
+  },
+  {
+    "token": "doughnut, small (approx 3\" dia)",
+    "count": 1,
+    "tr": "دونات کوچک (تقریبا 3 \"قطر)"
+  },
+  {
+    "token": "doughnut medium (approx 3-3/4\" dia)",
+    "count": 1,
+    "tr": "متوسط دونات (تقریبا 3-3 / 4 \"قطر)"
+  },
+  {
+    "token": "doughnut, long type (twist) approx 5-1/4\" x 2-1/2\" x 1-1/2\" high)",
+    "count": 1,
+    "tr": "دونات، نوع بلند (پیچ و تاب) تقریبا 5-1 / 4 \"x 2-1 / 2\" x 1-1 / 2 \"بالا)"
+  },
+  {
+    "token": "doughnut, large (approx 4-1/4\" dia)",
+    "count": 1,
+    "tr": "دونات، بزرگ (تقریبا 4-1 / 4 \"دیا)"
+  },
+  {
+    "token": "jumbo (approx 6\" dia)",
+    "count": 1,
+    "tr": "jumbo (حدود 6 \"دیو)"
+  },
+  {
+    "token": "medium (4-1/8\" long)",
+    "count": 1,
+    "tr": "متوسط (4-1 / 8 \"بلند)"
+  },
+  {
+    "token": "small (3\" long)",
+    "count": 1,
+    "tr": "کوچک (3 \"طولانی)"
+  },
+  {
+    "token": "rings, large (3-4\" dia)",
+    "count": 1,
+    "tr": "حلقه، بزرگ (3-4 \"دی)"
+  },
+  {
+    "token": "rings, medium (2-3\" dia)",
+    "count": 1,
+    "tr": "حلقه ها، متوسط (2-3 \"دیو)"
+  },
+  {
+    "token": "rings, small (1-2\" dia)",
+    "count": 1,
+    "tr": "حلقه ها، کوچک (1-2 \"دیو)"
+  },
+  {
+    "token": "extra large (approx 5\" dia)",
+    "count": 1,
+    "tr": "فوق العاده بزرگ (حدود 5 \"دیا)"
+  },
+  {
+    "token": "pea pods",
+    "count": 1,
+    "tr": "غلاف نخود"
+  },
+  {
+    "token": "doughnut hole",
+    "count": 1,
+    "tr": "سوراخ دونات"
+  },
+  {
+    "token": "large (2-1/4 per lb, approx 3-3/4\" long, 3\" dia)",
+    "count": 1,
+    "tr": "بزرگ (2-1 / 4 per lb، تقریبا 3-3 / 4 \"طول، 3\" دیو)"
+  },
+  {
+    "token": "medium (approx 2-3/4\" long, 2-1/2\" dia)",
+    "count": 1,
+    "tr": "متوسط (تقریبا 2-3 / 4 \"بلند، 2-1 / 2\" دیا)"
+  },
+  {
+    "token": "ring (3\" dia, 1/4\" thick)",
+    "count": 1,
+    "tr": "حلقه (3 \"ضخامت، ضخامت 1/4\")"
+  },
+  {
+    "token": "doughnut",
+    "count": 1,
+    "tr": "دونات"
+  },
+  {
+    "token": "doughnut, medium (approx 3-3/4\" dia)",
+    "count": 1,
+    "tr": "دونات، متوسط (تقریبا 3-3 / 4 \"قطر)"
+  },
+  {
+    "token": "honeybun (5\" x 3-1/2\")",
+    "count": 1,
+    "tr": "Honeybun (5 \"x 3-1 / 2\")"
+  },
+  {
+    "token": "seeds",
+    "count": 1,
+    "tr": "دانه"
+  },
+  {
+    "token": "Potato large (3\" to 4-1/4\" dia)",
+    "count": 1,
+    "tr": "سیب زمینی بزرگ (3 \"به 4-1 / 4\" دیا)"
+  },
+  {
+    "token": "honeybun (4-1/2\" x 3-1/2\")",
+    "count": 1,
+    "tr": "Honeybun (4-1 / 2 \"x 3-1 / 2\")"
+  },
+  {
+    "token": "Potato small (1-3/4\" to 2-1/2\" dia)",
+    "count": 1,
+    "tr": "سیب زمینی کوچک (1-3 / 4 \"به 2-1 / 2\" دیا)"
+  },
+  {
+    "token": "honeybun (4\" x 3\")",
+    "count": 1,
+    "tr": "Honeybun (4 \"x 3\")"
+  },
+  {
+    "token": "Potato small (1-3/4\" to 2-1/4\" dia)",
+    "count": 1,
+    "tr": "سیب زمینی کوچک (1-3 / 4 \"به 2-1 / 4\" دیا)"
+  },
+  {
+    "token": "doughnut (approx 1-1/2 oz)",
+    "count": 1,
+    "tr": "دونات (تقریبا 1-1 / 2 اونس)"
+  },
+  {
+    "token": "medium (2+-1/4\" to 3-1/4\" dia.)",
+    "count": 1,
+    "tr": "متوسط (2-1 / 4 \"به 3-1 / 4\" دیا)."
+  },
+  {
+    "token": "small (1-3/4\" to 2-1/4\" dia.)",
+    "count": 1,
+    "tr": "کوچک (1-3 / 4 \"به 2-1 / 4\" دیا)."
+  },
+  {
+    "token": "cruller (3\" dia)",
+    "count": 1,
+    "tr": "کورلر (3 اینچ)"
+  },
+  {
+    "token": "potato small (1-3/4\" to 2-1/4\" dia)",
+    "count": 1,
+    "tr": "سیب زمینی کوچک (1-3 / 4 \"تا 2-1 / 4\")"
+  },
+  {
+    "token": "doughnut large (approx 3-1/2\" dia)",
+    "count": 1,
+    "tr": "نان بزرگ (تقریبا 3-1 / 2 \"دیا)"
+  },
+  {
+    "token": "donettes (2\" dia)",
+    "count": 1,
+    "tr": "donettes (2 \"dia)"
+  },
+  {
+    "token": "doughnut, large (4\" dia)",
+    "count": 1,
+    "tr": "دونات، بزرگ (4 \"دی)"
+  },
+  {
+    "token": "doughnut, mini (1-1/2\" dia) or doughnut hole",
+    "count": 1,
+    "tr": "دونات، مینی (1-1 / 2 \"دی) و یا سوراخ دونات"
+  },
+  {
+    "token": "doughnut medium (3-1/4\" dia)",
+    "count": 1,
+    "tr": "دونات (3-1 / 4 \"دی)"
+  },
+  {
+    "token": "doughnut, long type (twist) (4-1/2\" long)",
+    "count": 1,
+    "tr": "دونات، نوع بلند (پیچ و تاب) (4-1 / 2 \"طولانی)"
+  },
+  {
+    "token": "donut",
+    "count": 1,
+    "tr": "دونات"
+  },
+  {
+    "token": "medium (2-1/4\" to 3-1/4\" dia.)",
+    "count": 1,
+    "tr": "متوسط (2-1 / 4 \"به 3-1 / 4\" دیا)."
+  },
+  {
+    "token": "cubes",
+    "count": 1,
+    "tr": "مکعبها"
+  },
+  {
+    "token": "potato",
+    "count": 1,
+    "tr": "سیب زمینی"
+  },
+  {
+    "token": "package, fast food",
+    "count": 1,
+    "tr": "بسته بندی، فست فود"
+  },
+  {
+    "token": "croissant, mini",
+    "count": 1,
+    "tr": "کریسانت، مینی"
+  },
+  {
+    "token": "cream puff shell",
+    "count": 1,
+    "tr": "پوف کرم پف"
+  },
+  {
+    "token": "cup (unprepared)",
+    "count": 1,
+    "tr": "لیوان (آماده نشده)"
+  },
+  {
+    "token": "eclair (5\" x 2\" x 1-3/4\")",
+    "count": 1,
+    "tr": "اکلر (5 \"x 2\" x 1-3/4 \")"
+  },
+  {
+    "token": "patty, oval (approx 3\" x 1-1/2\" x 1/2\")",
+    "count": 1,
+    "tr": "پاتو، بیضی (حدود 3 \"x 1-1 / 2\" x 1/2 \")"
+  },
+  {
+    "token": "package yield, 12 oz",
+    "count": 1,
+    "tr": "عملکرد بسته، 12 اونس"
+  },
+  {
+    "token": "puffs",
+    "count": 1,
+    "tr": "خمیر هزارلا"
+  },
+  {
+    "token": "Crispy Crowns",
+    "count": 1,
+    "tr": "تاج های ترد"
+  },
+  {
+    "token": "puff",
+    "count": 1,
+    "tr": "پف کردن"
+  },
+  {
+    "token": "crackers, Triscuits, regular size",
+    "count": 1,
+    "tr": "کراکر، Triscuits، اندازه به طور منظم"
+  },
+  {
+    "token": "cup crushed",
+    "count": 1,
+    "tr": "لیوان خرد شده"
+  },
+  {
+    "token": "crackers, regular size, round (1 serving)",
+    "count": 1,
+    "tr": "کراکر، اندازه منظم، گرد (1 وعده)"
+  },
+  {
+    "token": "squash",
+    "count": 1,
+    "tr": "اسکواش"
+  },
+  {
+    "token": "large (1\" to 1-1/4\" dia)",
+    "count": 1,
+    "tr": "بزرگ (1 \"به 1-1 / 4\" دیا)"
+  },
+  {
+    "token": "medium (3/4\" to 1\" dia)",
+    "count": 1,
+    "tr": "متوسط (3/4 \"به 1\" دیا)"
+  },
+  {
+    "token": "cracker square",
+    "count": 1,
+    "tr": "مربع کراکر"
+  },
+  {
+    "token": "crackers square (1 serving)",
+    "count": 1,
+    "tr": "کراکر مربع (1 وعده)"
+  },
+  {
+    "token": "sheets",
+    "count": 1,
+    "tr": "ورق"
+  },
+  {
+    "token": "cup flowers",
+    "count": 1,
+    "tr": "لیوان گل"
+  },
+  {
+    "token": "sprouts",
+    "count": 1,
+    "tr": "جوانه زدن"
+  },
+  {
+    "token": "squash (4 inch dia)",
+    "count": 1,
+    "tr": "اسکواش (4 اینچ دیواری)"
+  },
+  {
+    "token": "package (4 lb)",
+    "count": 1,
+    "tr": "بسته بندی (4 پوند)"
+  },
+  {
+    "token": "leaf (12-1/4\" long)",
+    "count": 1,
+    "tr": "برگ (12-1 / 4 \"طولانی)"
+  },
+  {
+    "token": "sweetpotato, 5\" long",
+    "count": 1,
+    "tr": "sweetpotato، 5 \"طولانی"
+  },
+  {
+    "token": "cracker (4-1/2\" x 2-1/2\" x 1/8\")",
+    "count": 1,
+    "tr": "کراکر (4-1 / 2 \"x 2-1 / 2\" x 1/8 \")"
+  },
+  {
+    "token": "crispbread, Wasa rye",
+    "count": 1,
+    "tr": "crispbread، چاودار Wasa"
+  },
+  {
+    "token": "leaf (11\" x 6-1/2\")",
+    "count": 1,
+    "tr": "برگ (11 \"x 6-1 / 2\")"
+  },
+  {
+    "token": "slice or wedge",
+    "count": 1,
+    "tr": "قطعه یا گوه"
+  },
+  {
+    "token": "cup cherry tomatoes",
+    "count": 1,
+    "tr": "لیوان گوجه فرنگی گیلاس"
+  },
+  {
+    "token": "slice, thick/large (1/2\" thick)",
+    "count": 1,
+    "tr": "قطعه، ضخامت / بزرگ (ضخامت 1/2 \")"
+  },
+  {
+    "token": "wedge (1/4 of medium tomato)",
+    "count": 1,
+    "tr": "گوه (1/4 از گوجه فرنگی متوسط)"
+  },
+  {
+    "token": "slice, thin/small",
+    "count": 1,
+    "tr": "تکه، نازک / کوچک"
+  },
+  {
+    "token": "cup, chopped or sliced",
+    "count": 1,
+    "tr": "لیوان خرد شده یا برش خورده"
+  },
+  {
+    "token": "Italian tomato",
+    "count": 1,
+    "tr": "گوجه فرنگی ایتالیایی"
+  },
+  {
+    "token": "large whole (3\" dia)",
+    "count": 1,
+    "tr": "کل کل (3 \"قطر)"
+  },
+  {
+    "token": "medium whole (2-3/5\" dia)",
+    "count": 1,
+    "tr": "کل متوسط (2-3 / 5 \"قطر)"
+  },
+  {
+    "token": "slice, medium (1/4\" thick)",
+    "count": 1,
+    "tr": "برش، متوسط (1/4 \"ضخامت)"
+  },
+  {
+    "token": "plum tomato",
+    "count": 1,
+    "tr": "گوجه فرنگی آلو"
+  },
+  {
+    "token": "small whole (2-2/5\" dia)",
+    "count": 1,
+    "tr": "کل کوچک (2-2 / 5 \"قطر)"
+  },
+  {
+    "token": "wafer, Rye Krisp (triple cracker)",
+    "count": 1,
+    "tr": "ویفر، چاودار Krisp (کراکر سه گانه)"
+  },
+  {
+    "token": "cracker, Norwegian flatbread (4-3/4\" x 2-3/4\" x 1/16\")",
+    "count": 1,
+    "tr": "کراکر، پهن نروژی (4-3 / 4 \"x 2-3 / 4\" x 1/16 \")"
+  },
+  {
+    "token": "wafer, thin",
+    "count": 1,
+    "tr": "ویفر، نازک"
+  },
+  {
+    "token": "crispbread",
+    "count": 1,
+    "tr": "crispbread"
+  },
+  {
+    "token": "pack (2-1/2 lb)",
+    "count": 1,
+    "tr": "بسته (2-1 / 2 پوند)"
+  },
+  {
+    "token": "snack stick",
+    "count": 1,
+    "tr": "چوب اسنک"
+  },
+  {
+    "token": "waxgourd",
+    "count": 1,
+    "tr": "waxgourd"
+  },
+  {
+    "token": "pod (15-1/3\" long)",
+    "count": 1,
+    "tr": "غلاف (15-1 / 3 \"بلند)"
+  },
+  {
+    "token": "cup (#6 scoop)",
+    "count": 1,
+    "tr": "لیوان (# 6 قاشق چایخوری)"
+  },
+  {
+    "token": "wafers mini wafers",
+    "count": 1,
+    "tr": "وفلس مینی وفلس"
+  },
+  {
+    "token": "piece (2-1/2\" x 2\" dia)",
+    "count": 1,
+    "tr": "قطعه (2-1 / 2 \"x 2\" دیا)"
+  },
+  {
+    "token": "small 2-3/4 in. dia., 5/8 in. thick.",
+    "count": 1,
+    "tr": "کوچک 2-3 / 4 in. قطر، 5/8 در ضخامت."
+  },
+  {
+    "token": "medium 3-1/4 in. x 3-5/8 in., 5/8 in. thick.",
+    "count": 1,
+    "tr": "متوسط 3-1 / 4 in. x 3-5 / 8 in.، 5/8 in. ضخامت."
+  },
+  {
+    "token": "potato large",
+    "count": 1,
+    "tr": "سیب زمینی (بزرگ"
+  },
+  {
+    "token": "potato medium",
+    "count": 1,
+    "tr": "سیب زمینی متوسط"
+  },
+  {
+    "token": "potato small",
+    "count": 1,
+    "tr": "سیب زمینی کوچک"
+  },
+  {
+    "token": "potato (2-3/4\" dia by 4-3/4\" long)",
+    "count": 1,
+    "tr": "سیب زمینی (2-3 / 4 \"دیا با 4-3 / 4\" طولانی)"
+  },
+  {
+    "token": "wafers",
+    "count": 1,
+    "tr": "وفلس"
+  },
+  {
+    "token": "corm, medium",
+    "count": 1,
+    "tr": "مریم، متوسط"
+  },
+  {
+    "token": "cup flowerets",
+    "count": 1,
+    "tr": "لیوان گلدان"
+  },
+  {
+    "token": "slice large (1/4\" thick)",
+    "count": 1,
+    "tr": "قطعه بزرگ (ضخامت 1/4 \")"
+  },
+  {
+    "token": "slice medium (1/8\" thick)",
+    "count": 1,
+    "tr": "برش متوسط (1/8 \"ضخامت)"
+  },
+  {
+    "token": "slice thin",
+    "count": 1,
+    "tr": "تکه نازک"
+  },
+  {
+    "token": "large (2-1/4 per pound, approx 3-3/4\" long, 3\" dia.)",
+    "count": 1,
+    "tr": "بزرگ (2-1 / 4 هر پوند، تقریبا 3-3 / 4 \"طول، 3\" دی.)"
+  },
+  {
+    "token": "medium (approx 2-3/4\" long, 2-1/2 dia.)",
+    "count": 1,
+    "tr": "متوسط (حدود 2-3 / 4 \"بلند، 2-1 / 2 دی.)"
+  },
+  {
+    "token": "ring (3\" dia., 1/4\" thick)",
+    "count": 1,
+    "tr": "حلقه (3 \"قطر، 1/4\" ضخامت)"
+  },
+  {
+    "token": "cup, strips",
+    "count": 1,
+    "tr": "لیوان، نوار"
+  },
+  {
+    "token": "medium (2-1/4\" to 2-1/4\" dia.)",
+    "count": 1,
+    "tr": "متوسط (2-1 / 4 \"به 2-1 / 4\" دیا)."
+  },
+  {
+    "token": "sheet",
+    "count": 1,
+    "tr": "ورق"
+  },
+  {
+    "token": "cookie, round (1-3/4\" dia)",
+    "count": 1,
+    "tr": "کوکی، دور (1-3 / 4 \"دیا)"
+  },
+  {
+    "token": "cookie, oval (3-1/8\" x 1-1/4\" x 3/8\")",
+    "count": 1,
+    "tr": "کوکی، بیضی (3-1 / 8 \"x 1-1 / 4\" x 3/8 \")"
+  },
+  {
+    "token": "cookie 1 rolled cookie dough",
+    "count": 1,
+    "tr": "کوکی 1 کوکی کوک نورد"
+  },
+  {
+    "token": "cookie dough for 1rolled cookie",
+    "count": 1,
+    "tr": "خمیر کوکی برای کوکی 1rolled"
+  },
+  {
+    "token": "cup pieces or slices",
+    "count": 1,
+    "tr": "قطعات فنجانی یا برش"
+  },
+  {
+    "token": "cup sliced or chips",
+    "count": 1,
+    "tr": "لیوان برش یا تراشه"
+  },
+  {
+    "token": "large Gherkin (3\" long)",
+    "count": 1,
+    "tr": "خرچنگ بزرگ (3 \"بلند)"
+  },
+  {
+    "token": "Gherkin (2-3/4\" long)",
+    "count": 1,
+    "tr": "خرچنگ (2-3 / 4 \"بلند)"
+  },
+  {
+    "token": "midget Gherkin (2-1/8\" long)",
+    "count": 1,
+    "tr": "خرچنگ نازک (2-1 / 8 \"طولانی)"
+  },
+  {
+    "token": "chip",
+    "count": 1,
+    "tr": "تراشه"
+  },
+  {
+    "token": "small Gherkin (2-1/2\" long)",
+    "count": 1,
+    "tr": "خرچنگ کوچک (2-1 / 2 \"بلند)"
+  },
+  {
+    "token": "spear Gherkin",
+    "count": 1,
+    "tr": "گوشت خوک"
+  },
+  {
+    "token": "cookie (2\" dia)",
+    "count": 1,
+    "tr": "کوکی (2 عدد)"
+  },
+  {
+    "token": "pimiento, whole",
+    "count": 1,
+    "tr": "pimiento، کل"
+  },
+  {
+    "token": "packet (2/3 tbsp)",
+    "count": 1,
+    "tr": "بسته (2/3 قاشق غذاخوری)"
+  },
+  {
+    "token": "cup, (about 23 slices)",
+    "count": 1,
+    "tr": "لیوان (حدود 23 برش)"
+  },
+  {
+    "token": "pepper, large (3-3/4\" long, 3\" dia)",
+    "count": 1,
+    "tr": "فلفل، بزرگ (3-3 / 4 \"بلند، 3\" دی)"
+  },
+  {
+    "token": "cookie (3\" dia)",
+    "count": 1,
+    "tr": "کوکی (3 عدد)"
+  },
+  {
+    "token": "cookie, big (3-1/2\" - 4\" dia) (include Archway brand, Grandma brand)",
+    "count": 1,
+    "tr": "کوکی، بزرگ (3-1 / 2 \"- 4\" دیا) (شامل نام تجاری بایگانی، مارک مادربزرگ)"
+  },
+  {
+    "token": "head, large (6-7\" dia)",
+    "count": 1,
+    "tr": "سر، بزرگ (6-7 عدد)"
+  },
+  {
+    "token": "head, medium (5-6\" dia)",
+    "count": 1,
+    "tr": "سر، متوسط (5-6 عدد)"
+  },
+  {
+    "token": "small (4\" long)",
+    "count": 1,
+    "tr": "کوچک (4 \"بلند)"
+  },
+  {
+    "token": "medium (4-1/2\" long)",
+    "count": 1,
+    "tr": "متوسط (4-1 / 2 \"بلند)"
+  },
+  {
+    "token": "large (5\" long)",
+    "count": 1,
+    "tr": "بزرگ (5 \"طولانی)"
+  },
+  {
+    "token": "oz (8-14 seeds)",
+    "count": 1,
+    "tr": "اوز (8-14 دانه)"
+  },
+  {
+    "token": "oz (42 medium seeds)",
+    "count": 1,
+    "tr": "تخم (42 دانه متوسط)"
+  },
+  {
+    "token": "cup, with hulls, edible yield",
+    "count": 1,
+    "tr": "لیوان، با پوست، عملکرد خوراکی"
+  },
+  {
+    "token": "cup, slivered",
+    "count": 1,
+    "tr": "لیوان"
+  },
+  {
+    "token": "cookie, Little Debbie",
+    "count": 1,
+    "tr": "کوکی، دبی کوچک"
+  },
+  {
+    "token": "oz (23 whole kernels)",
+    "count": 1,
+    "tr": "اوز (23 کل هسته)"
+  },
+  {
+    "token": "almond",
+    "count": 1,
+    "tr": "بادام"
+  },
+  {
+    "token": "large (3-1/2\" to 4\" dia) (include Archway brand)",
+    "count": 1,
+    "tr": "بزرگ (3-1 / 2 \"به 4\" دیا) (شامل نام تجاری بایگانی)"
+  },
+  {
+    "token": "cookie, small (1-3/4\" dia x 3/4\")",
+    "count": 1,
+    "tr": "کوکی، کوچک (1-3 / 4 \"قطر 3/4\")"
+  },
+  {
+    "token": "cup, firmly packed",
+    "count": 1,
+    "tr": "لیوان، محکم بسته بندی شده"
+  },
+  {
+    "token": "pie, marshmallow (3\" dia x 3/4\")",
+    "count": 1,
+    "tr": "بیسکوئیت، خلیجی (3 \"قطر 3/4\")"
+  },
+  {
+    "token": "oz (6 kernels)",
+    "count": 1,
+    "tr": "اوز (6 هسته)"
+  },
+  {
+    "token": "nutmeat",
+    "count": 1,
+    "tr": "نعناع"
+  },
+  {
+    "token": "Fudge Marshmallow",
+    "count": 1,
+    "tr": "فود یخ زده"
+  },
+  {
+    "token": "large rectangular piece or 2 squares or 4 small rectangular pieces",
+    "count": 1,
+    "tr": "قطعه مستطیلی بزرگ یا 2 مربع یا 4 قطعه مستطیلی کوچک"
+  },
+  {
+    "token": "individual package (2 oz package containing 2 3\" bars)",
+    "count": 1,
+    "tr": "بسته فردی (بسته 2 اونس حاوی 2 3 \"میله)"
+  },
+  {
+    "token": "piece (2\" x 2\" x 1/2\")",
+    "count": 1,
+    "tr": "قطعه (2 \"x 2\" x 1/2 \")"
+  },
+  {
+    "token": "coconut yields",
+    "count": 1,
+    "tr": "عملکرد نارگیل"
+  },
+  {
+    "token": "oz (21 whole kernels)",
+    "count": 1,
+    "tr": "اوز (21 کل هسته)"
+  },
+  {
+    "token": "Figaroo (2 square halves)",
+    "count": 1,
+    "tr": "فیگارو (2 عدد مربع)"
+  },
+  {
+    "token": "cup (78 kernels)",
+    "count": 1,
+    "tr": "لیوان (78 هسته)"
+  },
+  {
+    "token": "oz (14 kernels)",
+    "count": 1,
+    "tr": "اوز (14 هسته)"
+  },
+  {
+    "token": "bar (2\" square)",
+    "count": 1,
+    "tr": "نوار (مربع 2 \")"
+  },
+  {
+    "token": "portion, dough spoon from roll",
+    "count": 1,
+    "tr": "بخشی از قاشق خمیر رول"
+  },
+  {
+    "token": "cookie (average weight of 1 cookie)",
+    "count": 1,
+    "tr": "کوکی (میانگین وزن 1 کوکی)"
+  },
+  {
+    "token": "oz (19 halves)",
+    "count": 1,
+    "tr": "اوز (19 نیمه)"
+  },
+  {
+    "token": "cookie, large (include Keebler Rich 'n Chips, Pecan Chips Delux)",
+    "count": 1,
+    "tr": "کوکی، بزرگ (شامل چیپس Keebler Rich 'N، چیپس پیکان Delux)"
+  },
+  {
+    "token": "oz (15 kernels)",
+    "count": 1,
+    "tr": "اوز (15 هسته)"
+  },
+  {
+    "token": "oz (167 kernels)",
+    "count": 1,
+    "tr": "اوز (167 هسته)"
+  },
+  {
+    "token": "cookie, big (3-1/2\" - 4\" dia) (include Grandma brand)",
+    "count": 1,
+    "tr": "کوکی، بزرگ (3-1 / 2 \"- 4\") (شامل نام تجاری مادر بزرگ)"
+  },
+  {
+    "token": "cup, in shell, edible yield (7 nuts)",
+    "count": 1,
+    "tr": "لیوان، در پوسته، عملکرد خوراکی (7 مهره)"
+  },
+  {
+    "token": "cup shelled (50 halves)",
+    "count": 1,
+    "tr": "لیوان خرد شده (50 لیوان)"
+  },
+  {
+    "token": "cup pieces or chips",
+    "count": 1,
+    "tr": "قطعات لیوان یا چیپس"
+  },
+  {
+    "token": "oz (14 halves)",
+    "count": 1,
+    "tr": "اوز (14 نیمه)"
+  },
+  {
+    "token": "cookie (average weight of 1 cookie, variety of brands)",
+    "count": 1,
+    "tr": "کوکی (میانگین وزن 1 کوکی، انواع مارک ها)"
+  },
+  {
+    "token": "kernels",
+    "count": 1,
+    "tr": "هسته"
+  },
+  {
+    "token": "package (1.875 oz) yields",
+    "count": 1,
+    "tr": "بسته (1.875 اونس) تولید می کند"
+  },
+  {
+    "token": "oz (28 almonds)",
+    "count": 1,
+    "tr": "اونس (28 عدد بادام)"
+  },
+  {
+    "token": "nuts, assorted",
+    "count": 1,
+    "tr": "آجیل، انواع"
+  },
+  {
+    "token": "steak (yield from 483 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 483 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 297 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 297 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 297g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 297 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (Yield from 448 g raw meat)",
+    "count": 1,
+    "tr": "استیک (از 448 گرم گوشت خام)"
+  },
+  {
+    "token": "brownie (2\" square)",
+    "count": 1,
+    "tr": "brownie (2 \"مربع)"
+  },
+  {
+    "token": "package (21.5 oz)",
+    "count": 1,
+    "tr": "بسته بندی (21.5 اونس)"
+  },
+  {
+    "token": "package, cooked (yield from 12 oz raw product)",
+    "count": 1,
+    "tr": "بسته بندی شده، پخته شده (حاصل از محصول 12 اونس خام)"
+  },
+  {
+    "token": "package, 2.5 oz",
+    "count": 1,
+    "tr": "بسته بندی، 2.5 اونس"
+  },
+  {
+    "token": "steak (Yield from 418 g raw meat)",
+    "count": 1,
+    "tr": "استیک (از 418 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 418g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 418 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 1601 g raw meat)",
+    "count": 1,
+    "tr": "کباب (حاصل از 1601 گرم گوشت خام)"
+  },
+  {
+    "token": "package, Little Debbie (twin wrapped)",
+    "count": 1,
+    "tr": "بسته، کوچک دبی (Twin پیچیده)"
+  },
+  {
+    "token": "roast (yield from 1528g raw meat)",
+    "count": 1,
+    "tr": "کباب (حاصل از 1528 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 233 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 233 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 296 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 296 گرم گوشت خام)"
+  },
+  {
+    "token": "square, large (2-3/4\" sq x 7/8\")",
+    "count": 1,
+    "tr": "مربع بزرگ (2-3 / 4 \"sq x 7/8\")"
+  },
+  {
+    "token": "piece (1 NLEA serving)",
+    "count": 1,
+    "tr": "قطعه (1 وعده NLEA)"
+  },
+  {
+    "token": "piece (1/6 of 17 oz cake)",
+    "count": 1,
+    "tr": "قطعه (1/6 از کیک 17 اونس)"
+  },
+  {
+    "token": "cake, 2-layer (8\" dia)",
+    "count": 1,
+    "tr": "کیک دو لایه (8 اینچ)"
+  },
+  {
+    "token": "piece (1/12 of 8\" dia)",
+    "count": 1,
+    "tr": "قطعه (1/12 از 8 \"دیا)"
+  },
+  {
+    "token": "piece (1/12 of 10 inch cake)",
+    "count": 1,
+    "tr": "قطعه (1/12 از کیک 10 اینچ)"
+  },
+  {
+    "token": "piece (1/12 of 16 oz cake)",
+    "count": 1,
+    "tr": "قطعه (1/12 از کیک 16 اونس)"
+  },
+  {
+    "token": "cupcake",
+    "count": 1,
+    "tr": "کیک کوچک"
+  },
+  {
+    "token": "piece individually wrapped cake",
+    "count": 1,
+    "tr": "کیک بسته بندی شده به صورت جداگانه"
+  },
+  {
+    "token": "loaf 1/6 of the loaf",
+    "count": 1,
+    "tr": "خمیر 1/6 کلوچه"
+  },
+  {
+    "token": "package (14.5 oz)",
+    "count": 1,
+    "tr": "بسته بندی (14.5 اونس)"
+  },
+  {
+    "token": "steak (yield from 161 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 161 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 136 g raw meat)",
+    "count": 1,
+    "tr": "استیک (عملکرد 136 گرم گوشت خام)"
+  },
+  {
+    "token": "piece (1/8 of 8\" x 5-3/4\" cake)",
+    "count": 1,
+    "tr": "قطعه (1/8 کیک 8 \"x 5-3 / 4\")"
+  },
+  {
+    "token": "piece (1/6 of 19 oz cake)",
+    "count": 1,
+    "tr": "قطعه (1/6 از کیک 19 اونس)"
+  },
+  {
+    "token": "steak, excluding refuse (yield from 1 raw steak, with refuse, weighing 223 g)",
+    "count": 1,
+    "tr": "استیک، به استثنای امتناع (حاصل از 1 استیک خام، با زباله، وزن 223 گرم)"
+  },
+  {
+    "token": "steak (yield from 518 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 518 گرم گوشت خام)"
+  },
+  {
+    "token": "piece (1/6 of 16 oz cake)",
+    "count": 1,
+    "tr": "قطعه (1/6 کیک 16 اونس)"
+  },
+  {
+    "token": "package (18.25 oz)",
+    "count": 1,
+    "tr": "بسته بندی (18.25 اونس)"
+  },
+  {
+    "token": "oz ( 1serving )",
+    "count": 1,
+    "tr": "oz (1serving)"
+  },
+  {
+    "token": "piece (1/6 of pie)",
+    "count": 1,
+    "tr": "قطعه (6/1 پایه)"
+  },
+  {
+    "token": "loaf ( yield from 1 lb raw meat )",
+    "count": 1,
+    "tr": "خوری (حاصل از 1 پوند گوشت خام)"
+  },
+  {
+    "token": "steak (yield from raw steak weighing 550 g)",
+    "count": 1,
+    "tr": "استیک (حاصل از استاییک خامه ای با وزن 550 گرم)"
+  },
+  {
+    "token": "steak (yield from 320 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 320 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 1 raw steak weighing 321g)",
+    "count": 1,
+    "tr": "استیک (حاصل از 1 استاییک خامه ای با وزن 321 گرم)"
+  },
+  {
+    "token": "roast (yield from 1 raw roast weighing 776g)",
+    "count": 1,
+    "tr": "کباب (حاصل از 1 کباب خام وزن 776 گرم)"
+  },
+  {
+    "token": "steak (yield from 341 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 341 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from raw roast weighing 766g)",
+    "count": 1,
+    "tr": "کباب (حاصل از کباب خام وزن 766 گرم)"
+  },
+  {
+    "token": "steak (yield from raw steak weighing 340g)",
+    "count": 1,
+    "tr": "استیک (حاصل از استاییک خامه ای با وزن 340 گرم)"
+  },
+  {
+    "token": "roast (yield from 1 raw roast weighing 786g)",
+    "count": 1,
+    "tr": "کباب (حاصل از 1 کباب خام وزن 786 گرم)"
+  },
+  {
+    "token": "roast (yield from 530 g raw meat)",
+    "count": 1,
+    "tr": "کباب (حاصل از 530 گرم گوشت خام)"
+  },
+  {
+    "token": "piece cooked, excluding refuse (yield from 1 lb raw meat with refuse)",
+    "count": 1,
+    "tr": "قطعه پخته شده، به استثنای امتناع (حاصل از 1 پوند گوشت خام با زباله)"
+  },
+  {
+    "token": "steak (yield from raw steak weighing 492 g)",
+    "count": 1,
+    "tr": "استیک (حاصل از استاییک خامه ای با وزن 492 گرم)"
+  },
+  {
+    "token": "steak (yield from raw steak weighing 491g)",
+    "count": 1,
+    "tr": "استیک (حاصل از استاییک خامه ای با وزن 491 گرم)"
+  },
+  {
+    "token": "steak (yield from 270 g raw meat)",
+    "count": 1,
+    "tr": "استیک (عملکرد 270 گرم گوشت خام)"
+  },
+  {
+    "token": "tube cake (10\" dia, 4-3/8\" high)",
+    "count": 1,
+    "tr": "کیک لوله ای (10 \"دی، 4-3 / 8\" بالا)"
+  },
+  {
+    "token": "piece (1/12 of 10\" dia)",
+    "count": 1,
+    "tr": "قطعه (1/12 از 10 قطر)"
+  },
+  {
+    "token": "steak (yield from 181 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 181 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 1 raw steak weighing149g)",
+    "count": 1,
+    "tr": "استیک (حاصل از 1 استیک سبز وزن 149 گرم)"
+  },
+  {
+    "token": "steak (yield from 1 raw steak weighing 151g)",
+    "count": 1,
+    "tr": "استیک (حاصل از 1 استایک خام با وزن 151 گرم)"
+  },
+  {
+    "token": "steak (yield from 1 raw steak weighing 624g)",
+    "count": 1,
+    "tr": "استیک (حاصل از 1 استایک خام وزن 624 گرم)"
+  },
+  {
+    "token": "oz ( 1 serving )",
+    "count": 1,
+    "tr": "اوز (1 وعده)"
+  },
+  {
+    "token": "steak (yield from 475 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 475 گرم گوشت خام)"
+  },
+  {
+    "token": "cake (9\" dia x 4\")",
+    "count": 1,
+    "tr": "کیک (9 \"دی وی دی 4\")"
+  },
+  {
+    "token": "steak (yield from 388 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 388 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 294 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 294 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 295 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 295 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 690g raw meat)",
+    "count": 1,
+    "tr": "کباب (حاصل از گوشت خام 690 گرم)"
+  },
+  {
+    "token": "roast (yield from 714 g raw meat)",
+    "count": 1,
+    "tr": "کباب (حاصل از 714 گرم گوشت خام)"
+  },
+  {
+    "token": "stick (9-1/4\" x 3/8\")",
+    "count": 1,
+    "tr": "چوب (9-1 / 4 \"x 3/8\")"
+  },
+  {
+    "token": "steak (yield from 381 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 381 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 396 g raw meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 396 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 368 g meat)",
+    "count": 1,
+    "tr": "استیک (حاصل از 368 گرم گوشت)"
+  },
+  {
+    "token": "stick (7-5/8\" x 5/8\")",
+    "count": 1,
+    "tr": "چوب (7-5 / 8 \"x 5/8\")"
+  },
+  {
+    "token": "stick, small (approx 4-1/4\" long)",
+    "count": 1,
+    "tr": "چوب، کوچک (تقریبا 4-1 / 4 \"طولانی)"
+  },
+  {
+    "token": "cocktail (2 fl oz)",
+    "count": 1,
+    "tr": "کوکتل (2 عدد)"
+  },
+  {
+    "token": "cocktail (4.5 fl oz)",
+    "count": 1,
+    "tr": "کوکتل (4.5 میلی لیتر)"
+  },
+  {
+    "token": "packet prepared",
+    "count": 1,
+    "tr": "بسته آماده شده است"
+  },
+  {
+    "token": "cup, small pieces",
+    "count": 1,
+    "tr": "لیوان، قطعات کوچک"
+  },
+  {
+    "token": "jigger 1.5 fl oz",
+    "count": 1,
+    "tr": "جگر 1.5 لیتر"
+  },
+  {
+    "token": "slice, regular (4\" x 5\" x 3/4\")",
+    "count": 1,
+    "tr": "برش، منظم (4 \"x 5\" x 3/4 \")"
+  },
+  {
+    "token": "slice (5\" x 4\" x 3/8\")",
+    "count": 1,
+    "tr": "قطعه (5 \"x 4\" x 3/8 \")"
+  },
+  {
+    "token": "slice, small",
+    "count": 1,
+    "tr": "تکه، کوچک"
+  },
+  {
+    "token": "slice regular, crust not eaten",
+    "count": 1,
+    "tr": "برش منظم، پوسته خورده نشده است"
+  },
+  {
+    "token": "slice, large or thick",
+    "count": 1,
+    "tr": "تکه، بزرگ یا ضخیم"
+  },
+  {
+    "token": "individual loaf (include Keebler Elfin Loaves)",
+    "count": 1,
+    "tr": "نان انفرادی (شامل Keebler Elfin Loaves)"
+  },
+  {
+    "token": "serving (12 fl oz)",
+    "count": 1,
+    "tr": "وعده (12 عدد)"
+  },
+  {
+    "token": "serving (16.9 fl oz)",
+    "count": 1,
+    "tr": "وعده (16.9 میلی لیتر)"
+  },
+  {
+    "token": "biscuit (4\" dia)",
+    "count": 1,
+    "tr": "بیسکویت (4 \"دی)"
+  },
+  {
+    "token": "drink (12 fl oz)",
+    "count": 1,
+    "tr": "نوشیدنی (12 عدد)"
+  },
+  {
+    "token": "biscuit (2-1/4\" dia)",
+    "count": 1,
+    "tr": "بیسکویت (دیود 2-1 / 4 \")"
+  },
+  {
+    "token": "serving 1 biscuit",
+    "count": 1,
+    "tr": "وعده 1 بیسکویت"
+  },
+  {
+    "token": "cup (NLEA serving size)",
+    "count": 1,
+    "tr": "لیوان (NLEA serving size)"
+  },
+  {
+    "token": "cup, spooned into cup",
+    "count": 1,
+    "tr": "لیوان، به لیوان خرد شده است"
+  },
+  {
+    "token": "cup, homemade",
+    "count": 1,
+    "tr": "لیوان، خانگی"
+  },
+  {
+    "token": "cup, purchased",
+    "count": 1,
+    "tr": "لیوان، خریداری شده"
+  },
+  {
+    "token": "cup 12 fl oz 12 fl oz",
+    "count": 1,
+    "tr": "لیوان 12 لیوان عقیق 12 عدد"
+  },
+  {
+    "token": "can (8 fl oz)",
+    "count": 1,
+    "tr": "قوطیید (8 عدد)"
+  },
+  {
+    "token": "medium bagel (4\" dia)",
+    "count": 1,
+    "tr": "شیرینی متوسط (4 \"دیواری)"
+  },
+  {
+    "token": "can 8.4 fl oz",
+    "count": 1,
+    "tr": "قوطی 8.4 میلی لیتر باشد"
+  },
+  {
+    "token": "bottle (11 fl oz)",
+    "count": 1,
+    "tr": "بطری (11 فلاسک)"
+  },
+  {
+    "token": "serving 8.3 fl oz can",
+    "count": 1,
+    "tr": "وعده 8.3 عدد قوطی"
+  },
+  {
+    "token": "cup dry mix",
+    "count": 1,
+    "tr": "لیوان مخلوط خشک"
+  },
+  {
+    "token": "bottle (16 fl oz)",
+    "count": 1,
+    "tr": "بطری (16 عدد)"
+  },
+  {
+    "token": "small bagel (3-1/2\" to 4\"dia)",
+    "count": 1,
+    "tr": "بژل کوچک (3-1 / 2 \"به 4\" دیا)"
+  },
+  {
+    "token": "can (5.5 oz)",
+    "count": 1,
+    "tr": "می (5.5 اونس)"
+  },
+  {
+    "token": "steak ( yield from 134.9 g raw meat )",
+    "count": 1,
+    "tr": "استیک (حاصل از 134.9 گرم گوشت خام)"
+  },
+  {
+    "token": "roast ( yield from 271.8 g raw meat ) (0.5 to 1 lb roast)",
+    "count": 1,
+    "tr": "کباب (حاصل از 271.8 گرم گوشت خام) (0.5 تا 1 لیتر کباب)"
+  },
+  {
+    "token": "steak ( yield from 123.5 g raw meat )",
+    "count": 1,
+    "tr": "استیک (حاصل از 123.5 گرم گوشت خام)"
+  },
+  {
+    "token": "envelope Alba (.675 oz)",
+    "count": 1,
+    "tr": "پاکت آلبا (.675 اونس)"
+  },
+  {
+    "token": "steak ( yield from 233.1 g raw meat )",
+    "count": 1,
+    "tr": "استیک (حاصل از 233.1 گرم گوشت خام)"
+  },
+  {
+    "token": "steak ( yield from 148.1 g raw meat )",
+    "count": 1,
+    "tr": "استیک (حاصل از 148.1 گرم گوشت خام)"
+  },
+  {
+    "token": "tsp rounded",
+    "count": 1,
+    "tr": "چای سبز گرد"
+  },
+  {
+    "token": "patty ( yield from 104.1 g raw meat )",
+    "count": 1,
+    "tr": "پتی (حاصل از 104.1 گرم گوشت خام)"
+  },
+  {
+    "token": "tsp (1 serving)",
+    "count": 1,
+    "tr": "تیپ (1 وعده)"
+  },
+  {
+    "token": "patty ( yield from 102.2 g raw meat )",
+    "count": 1,
+    "tr": "پتی (عملکرد 102.2 گرم گوشت خام)"
+  },
+  {
+    "token": "scoop (2 tbsp)",
+    "count": 1,
+    "tr": "قاشق چایخوری (2 قاشق غذاخوری)"
+  },
+  {
+    "token": "steak ( yield from 232.8 g raw meat )",
+    "count": 1,
+    "tr": "استیک (حاصل از 232.8 گرم گوشت خام)"
+  },
+  {
+    "token": "individual serving (4-5 heaping tsp or 1 envelope)",
+    "count": 1,
+    "tr": "وعده فردی (4-5 قاشق چایخوری یا 1 پاکت)"
+  },
+  {
+    "token": "milkshake (10 fl oz)",
+    "count": 1,
+    "tr": "milkshake (10 عدد)"
+  },
+  {
+    "token": "small McDonald's shake (12 fl oz)",
+    "count": 1,
+    "tr": "لکه کوچک McDonald's (12 فلاسک)"
+  },
+  {
+    "token": "medium McDonald's shake (16 fl oz)",
+    "count": 1,
+    "tr": "لرزش رسانه مک دونالد (16 فلاسک)"
+  },
+  {
+    "token": "large McDonald's shake (22 fl oz)",
+    "count": 1,
+    "tr": "لرزش بزرگ مک دونالد (22 فلاش)"
+  },
+  {
+    "token": "serving (2-3 heaping tsp)",
+    "count": 1,
+    "tr": "وعده (2-3 قاشق چای خوری)"
+  },
+  {
+    "token": "serving 2 tsp",
+    "count": 1,
+    "tr": "وعده 2 قاشق چایخوری"
+  },
+  {
+    "token": "roast ( yield from 1247 g raw meat ) ( 3 to 5 lb roast)",
+    "count": 1,
+    "tr": "کباب (حاصل از 1247 گرم گوشت خام) (3 تا 5 لیتر کباب)"
+  },
+  {
+    "token": "serving 1 tsp",
+    "count": 1,
+    "tr": "وعده 1 قاشق چایخوری"
+  },
+  {
+    "token": "tbsp, rounded",
+    "count": 1,
+    "tr": "قاشق غذاخوری، گرد"
+  },
+  {
+    "token": "tbsp (1/4 cup)",
+    "count": 1,
+    "tr": "قاشق غذاخوری (1/4 لیوان)"
+  },
+  {
+    "token": "bottle 6.5 fl oz",
+    "count": 1,
+    "tr": "بطری 6.5 لیتر"
+  },
+  {
+    "token": "bottle 11 fl oz",
+    "count": 1,
+    "tr": "بطری 11 میلی لیتر"
+  },
+  {
+    "token": "steak ( yield from 309.7 g raw meat )",
+    "count": 1,
+    "tr": "استیک (حاصل از 309.7 گرم گوشت خام)"
+  },
+  {
+    "token": "patty ( yield from 112.7 g raw meat )",
+    "count": 1,
+    "tr": "پتی (حاصل از 112.7 گرم گوشت خام)"
+  },
+  {
+    "token": "cup,",
+    "count": 1,
+    "tr": "لیوان"
+  },
+  {
+    "token": "serving dry mix with 6 fl oz water",
+    "count": 1,
+    "tr": "وعده خشک مخلوط با 6 فلاسک آب"
+  },
+  {
+    "token": "serving child 12 fl oz, without ice",
+    "count": 1,
+    "tr": "وعده به بچه 12 عدد، بدون یخ"
+  },
+  {
+    "token": "serving small 16 fl oz, without ice",
+    "count": 1,
+    "tr": "وعده کوچک 16 فلاسک، بدون یخ"
+  },
+  {
+    "token": "serving medium 21 fl oz,  without ice",
+    "count": 1,
+    "tr": "وعده محتوی 21 فلاسک، بدون یخ"
+  },
+  {
+    "token": "serving large 32 fl oz,  without ice",
+    "count": 1,
+    "tr": "وعده بزرگی 32 عدد، بدون یخ"
+  },
+  {
+    "token": "portion, amount of dry mix to make 8 fl oz prepared",
+    "count": 1,
+    "tr": "بخشی، مقدار مخلوط خشک را به 8 فلاسک تهیه کنید"
+  },
+  {
+    "token": "can drained",
+    "count": 1,
+    "tr": "قوطی تخلیه شود"
+  },
+  {
+    "token": "serving 8 fl oz 8 fl oz",
+    "count": 1,
+    "tr": "وعده 8 فلاسک 8 فلاسک"
+  },
+  {
+    "token": "serving 1.5 fl oz",
+    "count": 1,
+    "tr": "وعده 1.5 فلاسک"
+  },
+  {
+    "token": "can can 12 fl oz",
+    "count": 1,
+    "tr": "قوطی 12 لیتری"
+  },
+  {
+    "token": "bottle bottle 16 fl oz",
+    "count": 1,
+    "tr": "بطری بطری 16 عدد"
+  },
+  {
+    "token": "serving child 12 fl oz",
+    "count": 1,
+    "tr": "وعده به بچه 12 عدد"
+  },
+  {
+    "token": "serving small 16 fl oz",
+    "count": 1,
+    "tr": "وعده کوچک 16 فلاسک"
+  },
+  {
+    "token": "serving medium 21 fl oz",
+    "count": 1,
+    "tr": "وعده متوسط 21 فلاسک"
+  },
+  {
+    "token": "serving large 32 fl oz",
+    "count": 1,
+    "tr": "وعده بزرگ 32 اونس"
+  },
+  {
+    "token": "cup cup rinsed solids",
+    "count": 1,
+    "tr": "لیوان جامد شسته شده"
+  },
+  {
+    "token": "serving small 12 fl oz",
+    "count": 1,
+    "tr": "وعده کوچک 12 عدد"
+  },
+  {
+    "token": "serving medium 16 fl oz",
+    "count": 1,
+    "tr": "وعده متوسط 16 لیوان"
+  },
+  {
+    "token": "serving large 21 fl oz",
+    "count": 1,
+    "tr": "وعده به کل 21 فلاسک"
+  },
+  {
+    "token": "ice cube (3/4 fl oz)",
+    "count": 1,
+    "tr": "مکعب یخ (3/4 فلوس)"
+  },
+  {
+    "token": "pattie",
+    "count": 1,
+    "tr": "پتی"
+  },
+  {
+    "token": "patty (approx 2-1/4\" dia)",
+    "count": 1,
+    "tr": "پتی (تقریبا 2-1 / 4 \"دیا)"
+  },
+  {
+    "token": "bottle 25 fl oz",
+    "count": 1,
+    "tr": "بطری 25 میلی لیتر"
+  },
+  {
+    "token": "bottle 16.9 fl oz i",
+    "count": 1,
+    "tr": "بطری 16.9 میلی لیتر"
+  },
+  {
+    "token": "cup (1/2\" cubes)",
+    "count": 1,
+    "tr": "لیوان (1/2 \"مکعب)"
+  },
+  {
+    "token": "piece (2-1/2\" x 2-3/4\" x 1\")",
+    "count": 1,
+    "tr": "قطعه (2-1 / 2 \"x 2-3 / 4\" x 1 \")"
+  },
+  {
+    "token": "bottle 8.5 fl oz",
+    "count": 1,
+    "tr": "بطری 8.5 میلی لیتر"
+  },
+  {
+    "token": "scoop powder",
+    "count": 1,
+    "tr": "پودر قراضه"
+  },
+  {
+    "token": "cup powder",
+    "count": 1,
+    "tr": "پودر لیوان"
+  },
+  {
+    "token": "bottle 23.7 fl oz",
+    "count": 1,
+    "tr": "بطری 23.7 میلی لیتر"
+  },
+  {
+    "token": "packet (0.675 oz)",
+    "count": 1,
+    "tr": "بسته (0.675 اونس)"
+  },
+  {
+    "token": "Jigger 1.5 fl oz",
+    "count": 1,
+    "tr": "جگر 1.5 لیتر"
+  },
+  {
+    "token": "fl oz (1 NLEA serving)",
+    "count": 1,
+    "tr": "fl oz (1 serving NLEA)"
+  },
+  {
+    "token": "serving 8 fluid oz",
+    "count": 1,
+    "tr": "وعده 8 اونس مایع"
+  },
+  {
+    "token": "oz shelled",
+    "count": 1,
+    "tr": "اوز شلیک کرد"
+  },
+  {
+    "token": "fl oz (approximate weight, 1 serving)",
+    "count": 1,
+    "tr": "fl oz (وزن تقریبی، 1 وعده)"
+  },
+  {
+    "token": "fl oz (1 serving)",
+    "count": 1,
+    "tr": "fl oz (1 سرو)"
+  },
+  {
+    "token": "cup, shelled",
+    "count": 1,
+    "tr": "لیوان، کلوچه"
+  },
+  {
+    "token": "anchovy",
+    "count": 1,
+    "tr": "ماهی کولی"
+  },
+  {
+    "token": "can (2 oz)",
+    "count": 1,
+    "tr": "قوطیید (2 اونس)"
+  },
+  {
+    "token": "anchovies",
+    "count": 1,
+    "tr": "anchovies"
+  },
+  {
+    "token": "cup in shell, edible yield",
+    "count": 1,
+    "tr": "لیوان در پوسته، عملکرد خوراکی"
+  },
+  {
+    "token": "oz dry, yield after cooking",
+    "count": 1,
+    "tr": "oz خشک، عملکرد پس از پخت و پز"
+  },
+  {
+    "token": "oz with bone (yield after bone removed)",
+    "count": 1,
+    "tr": "اوز با استخوان (عملکرد پس از استخراج حذف شده)"
+  },
+  {
+    "token": "can (total can contents)",
+    "count": 1,
+    "tr": "قوطی (مجموع قوطی محتوا)"
+  },
+  {
+    "token": "piece (4\" x 2\" x 1/2\")",
+    "count": 1,
+    "tr": "قطعه (4 \"x 2\" x 1/2 \")"
+  },
+  {
+    "token": "stick (4\" x 1\" x 1/2\")",
+    "count": 1,
+    "tr": "چوب (4 \"x 1\" x 1/2 \")"
+  },
+  {
+    "token": "piece (1-3/4\" x 7/8\" x 1/2\")",
+    "count": 1,
+    "tr": "قطعه (1-3 / 4 \"x 7/8\" x 1/2 \")"
+  },
+  {
+    "token": "fillet, large (7\" x 2-1/4\" x 1/4\")",
+    "count": 1,
+    "tr": "فیله بزرگ (7 \"x 2-1 / 4\" x 1/4 \")"
+  },
+  {
+    "token": "fillet, medium (5\" x 1-3/4\" x 1/4\")",
+    "count": 1,
+    "tr": "فیله، متوسط (5 \"x 1-3/4\" x 1/4 \")"
+  },
+  {
+    "token": "fillet, small (2-3/8\" x 1-3/8\" x 1/4\")",
+    "count": 1,
+    "tr": "فیله کوچک (2-3 / 8 \"x 1-3 / 8\" x 1/4 \")"
+  },
+  {
+    "token": "can (15 oz)",
+    "count": 1,
+    "tr": "قوطیید (15 اونس)"
+  },
+  {
+    "token": "can (8 oz), solids and liquid",
+    "count": 1,
+    "tr": "قوطی (8 اونس)، جامدات و مایع"
+  },
+  {
+    "token": "can (3.75 oz)",
+    "count": 1,
+    "tr": "می (3.75 اونس)"
+  },
+  {
+    "token": "small (2-2/3\" x 1/2\" x 1/4\")",
+    "count": 1,
+    "tr": "کوچک (2-2 / 3 \"x 1/2\" x 1/4 \")"
+  },
+  {
+    "token": "sardines",
+    "count": 1,
+    "tr": "ساردین ها"
+  },
+  {
+    "token": "sardine",
+    "count": 1,
+    "tr": "ساردین"
+  },
+  {
+    "token": "fish",
+    "count": 1,
+    "tr": "ماهی"
+  },
+  {
+    "token": "can drained solids (total)",
+    "count": 1,
+    "tr": "قوطی جامدات را تخلیه کند (کل)"
+  },
+  {
+    "token": "unit 2 large or 5 small",
+    "count": 1,
+    "tr": "واحد 2 بزرگ یا 5 کوچک"
+  },
+  {
+    "token": "oyster",
+    "count": 1,
+    "tr": "صدف"
+  },
+  {
+    "token": "can (12 oz), oysters and liquid",
+    "count": 1,
+    "tr": "قوطیید (12 اونس)، صدف و مایع"
+  },
+  {
+    "token": "cup, flaked and pieces",
+    "count": 1,
+    "tr": "لیوان، نعناع و قطعات"
+  },
+  {
+    "token": "can (6.5 oz), drained",
+    "count": 1,
+    "tr": "قوطی (6.5 اونس)، تخلیه شود"
+  },
+  {
+    "token": "oz, drained",
+    "count": 1,
+    "tr": "اوز، تخلیه شده است"
+  },
+  {
+    "token": "cup (with liquid and clams)",
+    "count": 1,
+    "tr": "لیوان (با مایع و سرخ شده)"
+  },
+  {
+    "token": "lb (with shell), yield after shell removed",
+    "count": 1,
+    "tr": "lb (با پوسته)، عملکرد پس از پوسته حذف شده است"
+  },
+  {
+    "token": "can (4.5 oz), drained",
+    "count": 1,
+    "tr": "قوطی (4.5 اونس)، تخلیه شود"
+  },
+  {
+    "token": "shrimp",
+    "count": 1,
+    "tr": "میگو"
+  },
+  {
+    "token": "flower",
+    "count": 2,
+    "tr": "گل"
+  },
+  {
+    "token": "package (20 oz)",
+    "count": 2,
+    "tr": "بسته بندی (20 اونس)"
+  },
+  {
+    "token": "can (12.5 oz), drained",
+    "count": 2,
+    "tr": "قوطی (12.5 اونس)، تخلیه شود"
+  },
+  {
+    "token": "cup, solid or chunks",
+    "count": 2,
+    "tr": "لیوان، جامد یا تکه"
+  },
+  {
+    "token": "can drained solids, bone and skin removed",
+    "count": 2,
+    "tr": "قوطی جامدات، استخوان و پوست را از بین ببرد"
+  },
+  {
+    "token": "filet",
+    "count": 2,
+    "tr": "فیله"
+  },
+  {
+    "token": "piece (4-1/2\" x 2-1/8\" x 7/8\")",
+    "count": 2,
+    "tr": "قطعه (4-1 / 2 \"x 2-1 / 8\" x 7/8 \")"
+  },
+  {
+    "token": "medium slice (approx 3\" x 2\" x 1/4\")",
+    "count": 2,
+    "tr": "برش متوسط (تقریباً 3 \"x 2\" x 1/4 \")"
+  },
+  {
+    "token": "piece (5-1/2\" x 1-1/2\" x 1/2\")",
+    "count": 2,
+    "tr": "قطعه (5-1 / 2 \"x 1-1 / 2\" x 1/2 \")"
+  },
+  {
+    "token": "oz with bone, cooked (yield after bone removed)",
+    "count": 2,
+    "tr": "اونس با استخوان ، پخته شده (عملکرد بعد از برداشتن استخوان)"
+  },
+  {
+    "token": "links 1 NLEA serving",
+    "count": 2,
+    "tr": "پیوندها 1 سرویس NLEA"
+  },
+  {
+    "token": "pouch",
+    "count": 2,
+    "tr": "کیسه"
+  },
+  {
+    "token": "oz shelled (32 nuts)",
+    "count": 2,
+    "tr": "اوز شلاق (32 مهره)"
+  },
+  {
+    "token": "peanut",
+    "count": 2,
+    "tr": "بادام زمینی"
+  },
+  {
+    "token": "wedge (1.33 oz)",
+    "count": 2,
+    "tr": "گوه (1.33 اونس)"
+  },
+  {
+    "token": "bottle 20 fl oz",
+    "count": 2,
+    "tr": "بطری 20 میلی لیتر"
+  },
+  {
+    "token": "tbsp, whipped",
+    "count": 2,
+    "tr": "قاشق غذاخوری، شلاق زدن"
+  },
+  {
+    "token": "bottle 500 ml",
+    "count": 2,
+    "tr": "بطری 500 میلی لیتر"
+  },
+  {
+    "token": "can drained solids",
+    "count": 2,
+    "tr": "قوطی جامدات را تخلیه کند"
+  },
+  {
+    "token": "bottle 11.2 fl oz",
+    "count": 2,
+    "tr": "بطری 11.2 لیتر"
+  },
+  {
+    "token": "package (5 oz)",
+    "count": 2,
+    "tr": "بسته بندی (5 اونس)"
+  },
+  {
+    "token": "jar (5 oz)",
+    "count": 2,
+    "tr": "شیشه (5 اونس)"
+  },
+  {
+    "token": "serving serving size varied from 1 to 3 enchiladas",
+    "count": 2,
+    "tr": "اندازه وعده از 1 تا 3 انسداد متفاوت بود"
+  },
+  {
+    "token": "chop, excluding refuse (yield from 1 raw chop, with refuse, weighing 195 g)",
+    "count": 2,
+    "tr": "ریز ریز کردن، به استثنای رد کردن (حاصل از 1 ریز خرد شده، با رد کردن، وزن 195 گرم)"
+  },
+  {
+    "token": "cup, whipped",
+    "count": 2,
+    "tr": "لیوان، شلاق زده"
+  },
+  {
+    "token": "cup, fluid (yields 2 cups whipped)",
+    "count": 2,
+    "tr": "لیوان، مایع (دارای 2 لیوان شلاق)"
+  },
+  {
+    "token": "envelope (1-1/3 cup)",
+    "count": 2,
+    "tr": "پاکت (1-1 / 3 لیوان)"
+  },
+  {
+    "token": "roast (3 to 5 lb roast)",
+    "count": 2,
+    "tr": "کباب کردن (3 تا 5 لیتر کباب)"
+  },
+  {
+    "token": "serving (4 tbsp or 1 envelope)",
+    "count": 2,
+    "tr": "وعده (4 قاشق غذاخوری یا 1 پاکت)"
+  },
+  {
+    "token": "serving (3.5 oz)",
+    "count": 2,
+    "tr": "وعده (3.5 اونس)"
+  },
+  {
+    "token": "tsp, rounded",
+    "count": 2,
+    "tr": "تفت، گرد"
+  },
+  {
+    "token": "tsp dry",
+    "count": 2,
+    "tr": "تیپ خشک"
+  },
+  {
+    "token": "envelope  Swiss Miss (.53 oz)",
+    "count": 2,
+    "tr": "پاکت سوئیس خانم (53 اونس)"
+  },
+  {
+    "token": "serving 1 envelope",
+    "count": 2,
+    "tr": "وعده 1 پاکت"
+  },
+  {
+    "token": "can (13 oz)",
+    "count": 2,
+    "tr": "قوطیید (13 اونس)"
+  },
+  {
+    "token": "serving (4 oz)",
+    "count": 2,
+    "tr": "وعده (4 اونس)"
+  },
+  {
+    "token": "cutlet",
+    "count": 2,
+    "tr": "کتلت"
+  },
+  {
+    "token": "shank whole",
+    "count": 2,
+    "tr": "کل کل"
+  },
+  {
+    "token": "shank cross cut",
+    "count": 2,
+    "tr": "ساقه بریده بریده"
+  },
+  {
+    "token": "cracker 1 serving",
+    "count": 2,
+    "tr": "کراکر 1 وعده"
+  },
+  {
+    "token": "container (5 oz)",
+    "count": 2,
+    "tr": "ظرف (5 اونس)"
+  },
+  {
+    "token": "bagel",
+    "count": 2,
+    "tr": "بژل"
+  },
+  {
+    "token": "jumbo",
+    "count": 2,
+    "tr": "jumbo"
+  },
+  {
+    "token": "cookie 1 serving",
+    "count": 2,
+    "tr": "کوکی 1 وعده"
+  },
+  {
+    "token": "cake 1 serving",
+    "count": 2,
+    "tr": "کیک 1 وعده"
+  },
+  {
+    "token": "large bagel (4-1/2\")",
+    "count": 2,
+    "tr": "بژل بزرگ (4-1 / 2 \")"
+  },
+  {
+    "token": "cup grated",
+    "count": 2,
+    "tr": "لیوان رنده شده"
+  },
+  {
+    "token": "unit",
+    "count": 2,
+    "tr": "واحد"
+  },
+  {
+    "token": "slice (2/3 oz)",
+    "count": 2,
+    "tr": "قطعه (2/3 اونس)"
+  },
+  {
+    "token": "hot pocket (1 NLEA serving)",
+    "count": 2,
+    "tr": "جیب گرم (1 سرویس NLEA)"
+  },
+  {
+    "token": "dash",
+    "count": 2,
+    "tr": "خط تیره"
+  },
+  {
+    "token": "piece center",
+    "count": 2,
+    "tr": "مرکز قطعه"
+  },
+  {
+    "token": "slice (5\" x 3\" x 1/2\")",
+    "count": 2,
+    "tr": "قطعه (5 \"x 3\" x 1/2 \")"
+  },
+  {
+    "token": "piece corner",
+    "count": 2,
+    "tr": "گوشه قطعه"
+  },
+  {
+    "token": "piece side",
+    "count": 2,
+    "tr": "سمت قطعه"
+  },
+  {
+    "token": "cup 1 serving",
+    "count": 2,
+    "tr": "فنجان 1 وعده"
+  },
+  {
+    "token": "slice regular",
+    "count": 2,
+    "tr": "برش منظم"
+  },
+  {
+    "token": "slice large",
+    "count": 2,
+    "tr": "تکه بزرگ"
+  },
+  {
+    "token": "pita, small  (4\" dia)",
+    "count": 2,
+    "tr": "پیتا، کوچک (4 \"دی)"
+  },
+  {
+    "token": "slice, snack-size",
+    "count": 2,
+    "tr": "تکه، اندازه میان وعده"
+  },
+  {
+    "token": "glass (3.5 fl oz)",
+    "count": 2,
+    "tr": "شیشه (3.5 لیتر)"
+  },
+  {
+    "token": "pizza 12\" diameter",
+    "count": 2,
+    "tr": "قطر پیتزا 12 اینچ"
+  },
+  {
+    "token": "slice, very thin",
+    "count": 2,
+    "tr": "تکه، بسیار نازک است"
+  },
+  {
+    "token": "slice crust not eaten",
+    "count": 2,
+    "tr": "پوسته تکه خوردن نیست"
+  },
+  {
+    "token": "jigger (1.5 fl oz)",
+    "count": 2,
+    "tr": "جگرگ (1.5 لیتر)"
+  },
+  {
+    "token": "portion (2 oz mix + 1.5 oz whiskey)",
+    "count": 2,
+    "tr": "بخشی (2 اونس مخلوط + ویسکی 1.5 اونس)"
+  },
+  {
+    "token": "jar Beech-Nut Stage 1 (2.5 oz)",
+    "count": 2,
+    "tr": "جار راش گردو مرحله 1 (2.5 اونس)"
+  },
+  {
+    "token": "serving (1 hot pocket)",
+    "count": 2,
+    "tr": "وعده (1 جیب گرم)"
+  },
+  {
+    "token": "roast (yield from 666 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 666 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 467 g raw meat)",
+    "count": 2,
+    "tr": "استیک (عملکرد از 467 گرم گوشت خام)"
+  },
+  {
+    "token": "steak, excluding refuse (yield from 1 raw steak, with refuse, weighing 242 g)",
+    "count": 2,
+    "tr": "استیک، به استثنای امتناع (حاصل از 1 استیک خام، با زباله، وزن 242 گرم)"
+  },
+  {
+    "token": "portion (yield from 1/2 lb raw meat )",
+    "count": 2,
+    "tr": "بخش (حاصل از 1/2 پوند گوشت خام)"
+  },
+  {
+    "token": "piece (1/8 cake)",
+    "count": 2,
+    "tr": "قطعه (1/8 کیک)"
+  },
+  {
+    "token": "piece (1/12 of a cake)",
+    "count": 2,
+    "tr": "قطعه (1/12 از یک کیک)"
+  },
+  {
+    "token": "piece (1/8 of 18 oz cake)",
+    "count": 2,
+    "tr": "قطعه (1/8 کیک 18 اونس)"
+  },
+  {
+    "token": "steak (yield from 505 g raw meat)",
+    "count": 2,
+    "tr": "استیک (حاصل از 505 گرم گوشت خام)"
+  },
+  {
+    "token": "jar Heinz Strained-2 (2.5 oz)",
+    "count": 2,
+    "tr": "جر Heinz Strained-2 (2.5 اونس)"
+  },
+  {
+    "token": "cake, 2-layer (8\" or 9\" dia)",
+    "count": 2,
+    "tr": "کیک دو لایه (8 \"یا 9\" دیواری)"
+  },
+  {
+    "token": "steak (yield from 532 g raw meat)",
+    "count": 2,
+    "tr": "استیک (عملکرد 532 گرم گوشت خام)"
+  },
+  {
+    "token": "individual cake",
+    "count": 2,
+    "tr": "کیک فردی"
+  },
+  {
+    "token": "piece (1/9 of 20 oz cake)",
+    "count": 2,
+    "tr": "قطعه (9/1 کیک 20 اونس)"
+  },
+  {
+    "token": "steak (yield from 186 g raw meat)",
+    "count": 2,
+    "tr": "استیک (حاصل از 186 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 203 g raw meat)",
+    "count": 2,
+    "tr": "استیک (حاصل از 203 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 1388 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 1388 گرم گوشت خام)"
+  },
+  {
+    "token": "piece (1/9 of 8\" square)",
+    "count": 2,
+    "tr": "قطعه (1/9 از 8 مربع)"
+  },
+  {
+    "token": "roast (yield from 1405 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 1405 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 426 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 426 گرم گوشت خام)"
+  },
+  {
+    "token": "piece (1/10 of 10.6 oz cake)",
+    "count": 2,
+    "tr": "قطعه (10/10 کیک 10.6 اونس)"
+  },
+  {
+    "token": "snack cake (2.5 oz)",
+    "count": 2,
+    "tr": "کیک اسنک (2.5 اونس)"
+  },
+  {
+    "token": "roast (yield from 445 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 445 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 436 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 436 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 572 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 572 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 281 g raw meat)",
+    "count": 2,
+    "tr": "استیک (حاصل از 281 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 627 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 627 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 299 g raw meat)",
+    "count": 2,
+    "tr": "استیک (حاصل از 299 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 600 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 600 گرم گوشت خام)"
+  },
+  {
+    "token": "steak (yield from 290 g raw meat)",
+    "count": 2,
+    "tr": "استیک (حاصل از 290 گرم گوشت خام)"
+  },
+  {
+    "token": "roast (yield from 1675 g raw meat)",
+    "count": 2,
+    "tr": "کباب (حاصل از 1675 گرم گوشت خام)"
+  },
+  {
+    "token": "package (net weight, 12 oz)",
+    "count": 2,
+    "tr": "بسته بندی (وزن خالص، 12 اونس)"
+  },
+  {
+    "token": "slice per 1/8 pizza",
+    "count": 2,
+    "tr": "برش در هر 1/8 پیتزا"
+  },
+  {
+    "token": "serving 3 cookies",
+    "count": 2,
+    "tr": "وعده 3 کوکی"
+  },
+  {
+    "token": "cookie Pepperidge Farm Chocolate Chunk Pecan",
+    "count": 2,
+    "tr": "کوکی Pepperidge Farm Chocolate Pecan"
+  },
+  {
+    "token": "oz (85 seeds)",
+    "count": 2,
+    "tr": "اوز (85 دانه)"
+  },
+  {
+    "token": "oz (15 halves)",
+    "count": 2,
+    "tr": "اوز (15 نیمه)"
+  },
+  {
+    "token": "cookie, bite size (include Mini Chips Ahoy!)",
+    "count": 2,
+    "tr": "کوکی ها، اندازه نیش (شامل Mini Chips Ahoy!)"
+  },
+  {
+    "token": "package (17.5 oz)",
+    "count": 2,
+    "tr": "بسته بندی (17.5 اونس)"
+  },
+  {
+    "token": "nut",
+    "count": 2,
+    "tr": "مهره"
+  },
+  {
+    "token": "wrap",
+    "count": 2,
+    "tr": "بسته بندی کردن"
+  },
+  {
+    "token": "oz (18 kernels)",
+    "count": 2,
+    "tr": "اوز (18 هسته)"
+  },
+  {
+    "token": "large (approx 3-1/2\" to 4\" dia)",
+    "count": 2,
+    "tr": "بزرگ (تقریبا 3-1 / 2 \"به 4\" دیا)"
+  },
+  {
+    "token": "cup, halves and pieces",
+    "count": 2,
+    "tr": "لیوان، نیمه و قطعه"
+  },
+  {
+    "token": "anisette sponge (4\" x 1-1/8\" x 7/8\")",
+    "count": 2,
+    "tr": "اسفنج آنیسیت (4 \"x 1-1 / 8\" x 7/8 \")"
+  },
+  {
+    "token": "breakfast treat (approx 4\" x 2\" x 7/8\")",
+    "count": 2,
+    "tr": "صبحانه (حدود 4 \"x 2\" x 7/8 \")"
+  },
+  {
+    "token": "ladyfinger",
+    "count": 2,
+    "tr": "ladyfinger"
+  },
+  {
+    "token": "cup, halves and whole",
+    "count": 2,
+    "tr": "لیوان، نصف و کل"
+  },
+  {
+    "token": "breadstick",
+    "count": 2,
+    "tr": "نان آور"
+  },
+  {
+    "token": "thigh, with skin",
+    "count": 2,
+    "tr": "ران ، با پوست"
+  },
+  {
+    "token": "portion, dough for 1 cookie",
+    "count": 2,
+    "tr": "بخشی، خمیر برای 1 کوکی"
+  },
+  {
+    "token": "bulb",
+    "count": 2,
+    "tr": "لامپ"
+  },
+  {
+    "token": "medium (3-3/4\" long)",
+    "count": 2,
+    "tr": "متوسط (3-3 / 4 \"بلند)"
+  },
+  {
+    "token": "cookie, medium (1-5/8\" dia)",
+    "count": 2,
+    "tr": "کوکی، متوسط (1-5 / 8 \"قطر)"
+  },
+  {
+    "token": "cup (about 23 slices)",
+    "count": 2,
+    "tr": "لیوان (حدود 23 برش)"
+  },
+  {
+    "token": "cookie 1 pre-sliced cookie dough",
+    "count": 2,
+    "tr": "کوکی 1 خمیر کوکی قبل از خرد شده"
+  },
+  {
+    "token": "wing bone and skin removed",
+    "count": 2,
+    "tr": "استخوان بال و پوست برداشته شده است"
+  },
+  {
+    "token": "spear, small",
+    "count": 2,
+    "tr": "کپی، کوچک"
+  },
+  {
+    "token": "tomato",
+    "count": 2,
+    "tr": "گوجه فرنگی"
+  },
+  {
+    "token": "cup, bite size",
+    "count": 2,
+    "tr": "لیوان، اندازه نیش"
+  },
+  {
+    "token": "gold fish",
+    "count": 2,
+    "tr": "ماهی طلایی"
+  },
+  {
+    "token": "waterchestnuts",
+    "count": 2,
+    "tr": "آب زردآلو"
+  },
+  {
+    "token": "cracker (1\" square)",
+    "count": 2,
+    "tr": "کراکر (1 \"مربع)"
+  },
+  {
+    "token": "fl oz cup",
+    "count": 2,
+    "tr": "فنجان فنجان"
+  },
+  {
+    "token": "package, mashed (10 oz)",
+    "count": 2,
+    "tr": "بسته بندی، پشم (10 اونس)"
+  },
+  {
+    "token": "frond (6-1/2\" long)",
+    "count": 2,
+    "tr": "فریزر (6-1 / 2 \"بلند)"
+  },
+  {
+    "token": "can (29 oz) (401 x 411)",
+    "count": 2,
+    "tr": "can (29 oz) (401 x 411)"
+  },
+  {
+    "token": "can (6 oz)",
+    "count": 2,
+    "tr": "قوطیید (6 اونس)"
+  },
+  {
+    "token": "can (404 x 307)",
+    "count": 2,
+    "tr": "can (404 x 307)"
+  },
+  {
+    "token": "each",
+    "count": 2,
+    "tr": "هر یک"
+  },
+  {
+    "token": "cup, rounds",
+    "count": 2,
+    "tr": "لیوان، دور"
+  },
+  {
+    "token": "melba round",
+    "count": 2,
+    "tr": "دور ماله"
+  },
+  {
+    "token": "piece (3-3/4\" x 1-3/4\" x 1/8\")",
+    "count": 2,
+    "tr": "قطعه (3-3 / 4 \"x 1-3 / 4\" x 1/8 \")"
+  },
+  {
+    "token": "jar Gerber",
+    "count": 2,
+    "tr": "جر گربر"
+  },
+  {
+    "token": "medium (2\" dia, 5\" long, raw)",
+    "count": 2,
+    "tr": "متوسط (2 \"دی، 5\" طولانی، خام)"
+  },
+  {
+    "token": "cracker, triple",
+    "count": 2,
+    "tr": "کراکر، سه گانه"
+  },
+  {
+    "token": "bottle Gerber First Food (4 fl oz)",
+    "count": 2,
+    "tr": "بطری Gerber First Food (4 عدد)"
+  },
+  {
+    "token": "cup, undrained",
+    "count": 2,
+    "tr": "جام حذفی"
+  },
+  {
+    "token": "radish (7\" long)",
+    "count": 2,
+    "tr": "تربچه (7 \"بلند)"
+  },
+  {
+    "token": "cracker, round large",
+    "count": 2,
+    "tr": "کراکر، گرد بزرگ"
+  },
+  {
+    "token": "cracker, oyster",
+    "count": 2,
+    "tr": "کراکر، صدف"
+  },
+  {
+    "token": "cracker, rectangle",
+    "count": 2,
+    "tr": "کراکر، مستطیل"
+  },
+  {
+    "token": "cup oyster crackers",
+    "count": 2,
+    "tr": "لیوان سوسن کراکر"
+  },
+  {
+    "token": "plant",
+    "count": 2,
+    "tr": "گیاه"
+  },
+  {
+    "token": "cracker, round",
+    "count": 2,
+    "tr": "کراکر، گرد"
+  },
+  {
+    "token": "cracker, rectangular",
+    "count": 2,
+    "tr": "کراکر، مستطیل شکل"
+  },
+  {
+    "token": "thick slice (approx 3\" x 2\" x 3/8\")",
+    "count": 2,
+    "tr": "برش ضخیم (تقریباً 3 \"x 2\" x 3/8 \")"
+  },
+  {
+    "token": "fries",
+    "count": 2,
+    "tr": "سیب زمینی سرخ شده"
+  },
+  {
+    "token": "Triscuit Bits",
+    "count": 2,
+    "tr": "بیت Triscuit"
+  },
+  {
+    "token": "bottle Beech-Nut Stage I (4 fl oz)",
+    "count": 2,
+    "tr": "بطری راش-مهره مرحله ی I (4 فلاسک)"
+  },
+  {
+    "token": "package yield, 5.5 oz",
+    "count": 2,
+    "tr": "عملکرد بسته، 5.5 اونس"
+  },
+  {
+    "token": "package (5.5 oz) yields",
+    "count": 2,
+    "tr": "بسته بندی (5.5 اونس) تولید می کند"
+  },
+  {
+    "token": "croissant, small",
+    "count": 2,
+    "tr": "کراوات، کوچک"
+  },
+  {
+    "token": "croissant, large",
+    "count": 2,
+    "tr": "کراوات، بزرگ"
+  },
+  {
+    "token": "small (1-3/4\" to 2-1/2\" dia.)",
+    "count": 2,
+    "tr": "کوچک (1-3 / 4 \"به 2-1 / 2\" دیا)."
+  },
+  {
+    "token": "bottle (4 fl oz)",
+    "count": 2,
+    "tr": "بطری (4 عدد)"
+  },
+  {
+    "token": "large (16 fl oz)",
+    "count": 2,
+    "tr": "بزرگ (16 عیار)"
+  },
+  {
+    "token": "regular (12 fl oz)",
+    "count": 2,
+    "tr": "منظم (12 فلو)"
+  },
+  {
+    "token": "item (6.3 oz)",
+    "count": 2,
+    "tr": "مورد (6.3 اونس)"
+  },
+  {
+    "token": "potato (2-1/2\" dia, sphere)",
+    "count": 2,
+    "tr": "سیب زمینی (2-1 / 2 \"قطر، کره)"
+  },
+  {
+    "token": "doughnut stick",
+    "count": 2,
+    "tr": "چوب شیرینی پزی"
+  },
+  {
+    "token": "item 5.8 oz",
+    "count": 2,
+    "tr": "مورد 5.8 اونس"
+  },
+  {
+    "token": "pretzel",
+    "count": 2,
+    "tr": "چوب برنج"
+  },
+  {
+    "token": "potato small (1-3/4\" to 2-1/2\" dia)",
+    "count": 2,
+    "tr": "سیب زمینی کوچک (1-3 / 4 \"به 2-1 / 2\" دیا)"
+  },
+  {
+    "token": "potato small (1-3/4\" to 2-1/2\" dia.)",
+    "count": 2,
+    "tr": "سیب زمینی کوچک (1-3 / 4 \"به 2-1 / 2\" دیا)."
+  },
+  {
+    "token": "potato medium (2-1/4\" to 3-1/4\" dia.)",
+    "count": 2,
+    "tr": "سیب زمینی متوسط (2-1 / 4 \"به 3-1 / 4\" دی.)"
+  },
+  {
+    "token": "potato large (3\" to 4-1/4\" dia.",
+    "count": 2,
+    "tr": "سیب زمینی بزرگ (3 \"به 4-1 / 4\" دی."
+  },
+  {
+    "token": "doughnut (3-3/4\" dia)",
+    "count": 2,
+    "tr": "دونات (3-3 / 4 \"دی)"
+  },
+  {
+    "token": "doughnut oval (3-1/2\" x 2-1/2\")",
+    "count": 2,
+    "tr": "بیضی دونات (3-1 / 2 \"x 2-1 / 2\")"
+  },
+  {
+    "token": "rusk",
+    "count": 2,
+    "tr": "خرگوش"
+  },
+  {
+    "token": "Potato medium (2-1/4\" to 3-1/4\" dia)",
+    "count": 2,
+    "tr": "متوسط سیب زمینی (دیود 2-1 / 4 \"به 3-1 / 4\")"
+  },
+  {
+    "token": "large serving",
+    "count": 2,
+    "tr": "وعده بزرگ"
+  },
+  {
+    "token": "medium serving",
+    "count": 2,
+    "tr": "وعده متوسط"
+  },
+  {
+    "token": "parsnip (9\" long)",
+    "count": 2,
+    "tr": "پشمک (9 \"طولانی)"
+  },
+  {
+    "token": "onion",
+    "count": 2,
+    "tr": "پیاز"
+  },
+  {
+    "token": "slice, medium (1/8\" thick)",
+    "count": 2,
+    "tr": "برش، متوسط (ضخامت 1/8 \")"
+  },
+  {
+    "token": "slice, large (1/4\" thick)",
+    "count": 2,
+    "tr": "برش، بزرگ (ضخامت 1/4 \")"
+  },
+  {
+    "token": "rings",
+    "count": 2,
+    "tr": "حلقه"
+  },
+  {
+    "token": "cone",
+    "count": 2,
+    "tr": "مخروطی"
+  },
+  {
+    "token": "small serving",
+    "count": 2,
+    "tr": "وعده کوچک"
+  },
+  {
+    "token": "item 4 oz",
+    "count": 2,
+    "tr": "مورد 4 اونس"
+  },
+  {
+    "token": "mini",
+    "count": 2,
+    "tr": "مینی"
+  },
+  {
+    "token": "cup chopped or dice",
+    "count": 2,
+    "tr": "لیوان خرد شده یا تاس"
+  },
+  {
+    "token": "leg, with skin (Sum of drumstick+thigh+back)",
+    "count": 2,
+    "tr": "پا، با پوست (مجموع خرچنگ + ران + پشت)"
+  },
+  {
+    "token": "back with skin",
+    "count": 2,
+    "tr": "پشت با پوست"
+  },
+  {
+    "token": "piece 4\" x 6\"",
+    "count": 2,
+    "tr": "قطعه 4 \"x 6\""
+  },
+  {
+    "token": "slice 1/10 per pizza",
+    "count": 2,
+    "tr": "برش 1/10 در هر پیتزا"
+  },
+  {
+    "token": "slice 1/8 per pizza",
+    "count": 2,
+    "tr": "برش 1/8 در هر پیتزا"
+  },
+  {
+    "token": "cup (1\" slices)",
+    "count": 2,
+    "tr": "لیوان (1 \"برش)"
+  },
+  {
+    "token": "gourd",
+    "count": 2,
+    "tr": "کدو تنبل"
+  },
+  {
+    "token": "each burrito",
+    "count": 2,
+    "tr": "هر بوریتو"
+  },
+  {
+    "token": "capon",
+    "count": 2,
+    "tr": "کاپون"
+  },
+  {
+    "token": "capon, bone removed",
+    "count": 2,
+    "tr": "کاپون، بدون استخوان"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to-cook guinea)",
+    "count": 2,
+    "tr": "واحد (حاصل از 1 پوند گینه آماده گاو)"
+  },
+  {
+    "token": "guinea",
+    "count": 2,
+    "tr": "گینه"
+  },
+  {
+    "token": "can drained, rinsed",
+    "count": 2,
+    "tr": "قوطی تخلیه شود، شستشو داده شود"
+  },
+  {
+    "token": "roll (2-1/2\" dia)",
+    "count": 2,
+    "tr": "رول (2-1 / 2 \"دیو)"
+  },
+  {
+    "token": "pheasant",
+    "count": 2,
+    "tr": "قرقاول"
+  },
+  {
+    "token": "cup drained, rinsed",
+    "count": 2,
+    "tr": "لیوان خشک شده، شستشو داده شده است"
+  },
+  {
+    "token": "cup lasagna",
+    "count": 2,
+    "tr": "فنجان لازانیا"
+  },
+  {
+    "token": "baby ear",
+    "count": 2,
+    "tr": "گوش کودک"
+  },
+  {
+    "token": "ear large (7-3/4\" to 9\" long)",
+    "count": 2,
+    "tr": "گوش بزرگ (7-3 / 4 \"تا 9\" طولانی)"
+  },
+  {
+    "token": "ear medium (6-3/4\" to 7-1/2\" long)",
+    "count": 2,
+    "tr": "محیط گوش (6-3 / 4 \"به 7-1 / 2\" طولانی)"
+  },
+  {
+    "token": "ear small (5-1/2\" to 6-1/2\" long)",
+    "count": 2,
+    "tr": "گوش کوچک (5-1 / 2 \"به 6-1 / 2\" طولانی)"
+  },
+  {
+    "token": "quail",
+    "count": 2,
+    "tr": "بلدرچین"
+  },
+  {
+    "token": "medium (approx 5\" dia)",
+    "count": 2,
+    "tr": "متوسط (حدود 5 \"دی)"
+  },
+  {
+    "token": "cup spiral shaped",
+    "count": 2,
+    "tr": "جام مارپیچی شکل"
+  },
+  {
+    "token": "miniature (3\" dia)",
+    "count": 2,
+    "tr": "مینیاتور (3 اینچ)"
+  },
+  {
+    "token": "cup unsifted, dipped",
+    "count": 2,
+    "tr": "لیوان نوشیدنی، پوشیده شده"
+  },
+  {
+    "token": "tortilla (approx 10\" dia)",
+    "count": 2,
+    "tr": "تریتیلا (حدود 10 \"دی)"
+  },
+  {
+    "token": "tortilla (approx 12\" dia)",
+    "count": 2,
+    "tr": "تریتیلا (حدود 12 \"دی)"
+  },
+  {
+    "token": "tortilla (approx 7-8\" dia)",
+    "count": 2,
+    "tr": "تریتیلا (تقریبا 7-8 دی)"
+  },
+  {
+    "token": "flowerets",
+    "count": 2,
+    "tr": "گلها"
+  },
+  {
+    "token": "carrot",
+    "count": 2,
+    "tr": "هویج"
+  },
+  {
+    "token": "head, small (4\" dia)",
+    "count": 2,
+    "tr": "سر، کوچک (4 \"دیو)"
+  },
+  {
+    "token": "squab",
+    "count": 2,
+    "tr": "سگ"
+  },
+  {
+    "token": "serving 1 bar",
+    "count": 2,
+    "tr": "وعده 1 بار"
+  },
+  {
+    "token": "package (2 lb)",
+    "count": 2,
+    "tr": "بسته (2 پوند)"
+  },
+  {
+    "token": "tortilla, medium (approx 6\" dia)",
+    "count": 2,
+    "tr": "ترتیلا، متوسط (حدود 6 \"دی)"
+  },
+  {
+    "token": "saltines",
+    "count": 2,
+    "tr": "سالتین"
+  },
+  {
+    "token": "can (5 oz) yields",
+    "count": 2,
+    "tr": "قوطی (5 اونس) تولید کند"
+  },
+  {
+    "token": "beets (2\" dia, sphere)",
+    "count": 2,
+    "tr": "چغندر (2 \"قطر، کره)"
+  },
+  {
+    "token": "oz crumbled",
+    "count": 2,
+    "tr": "اوز فرو ریخت"
+  },
+  {
+    "token": "beans (4\" long)",
+    "count": 2,
+    "tr": "لوبیا (4 \"بلند)"
+  },
+  {
+    "token": "serving fun size bag",
+    "count": 2,
+    "tr": "وعده کردن کیسه های سرگرم کننده اندازه"
+  },
+  {
+    "token": "serving 2.1 oz bag",
+    "count": 2,
+    "tr": "وعده 2.1 کیسه oz"
+  },
+  {
+    "token": "serving ( cooked from 4 oz raw)",
+    "count": 2,
+    "tr": "وعده (تهیه شده از 4 اونس خام)"
+  },
+  {
+    "token": "crust",
+    "count": 2,
+    "tr": "پوسته"
+  },
+  {
+    "token": "spears (1/2\" base)",
+    "count": 2,
+    "tr": "اسپیرز (1/2 \"پایه)"
+  },
+  {
+    "token": "can (11.25 oz)",
+    "count": 2,
+    "tr": "قوطی (11.25 اونس)"
+  },
+  {
+    "token": "cup hearts",
+    "count": 2,
+    "tr": "قلب لیوان"
+  },
+  {
+    "token": "can 14.5 oz",
+    "count": 2,
+    "tr": "قوطی 14.5 اونس باشد"
+  },
+  {
+    "token": "can (10.7 oz)",
+    "count": 2,
+    "tr": "می (10.7 اونس)"
+  },
+  {
+    "token": "cup packed",
+    "count": 2,
+    "tr": "بسته بندی لیوان"
+  },
+  {
+    "token": "lb rump",
+    "count": 2,
+    "tr": "lb rump"
+  },
+  {
+    "token": "oz rump",
+    "count": 2,
+    "tr": "خرگوش اوز"
+  },
+  {
+    "token": "crackers (1 NLEA serving)",
+    "count": 2,
+    "tr": "کراکر (وعده 1 NLEA)"
+  },
+  {
+    "token": "lb shank",
+    "count": 2,
+    "tr": "lb shank"
+  },
+  {
+    "token": "oz shank",
+    "count": 2,
+    "tr": "oz shank"
+  },
+  {
+    "token": "lb spiral slice",
+    "count": 2,
+    "tr": "برش مارپیچی"
+  },
+  {
+    "token": "jar 12 oz",
+    "count": 2,
+    "tr": "شیشه 12 اونس"
+  },
+  {
+    "token": "serving 0.78 oz bar",
+    "count": 2,
+    "tr": "وعده 0.78 اونس بار"
+  },
+  {
+    "token": "oz spiral slice",
+    "count": 2,
+    "tr": "برش مارپیچی اوز"
+  },
+  {
+    "token": "can (21 oz)",
+    "count": 2,
+    "tr": "قوطیید (21 اونس)"
+  },
+  {
+    "token": "carton (32 oz)",
+    "count": 2,
+    "tr": "کارتن (32 اونس)"
+  },
+  {
+    "token": "serving 13 pieces",
+    "count": 2,
+    "tr": "وعده 13 قطعه"
+  },
+  {
+    "token": "serving 1.76 oz bar",
+    "count": 2,
+    "tr": "وعده 1.76 اونس بار"
+  },
+  {
+    "token": "can (11.25 oz), prepared",
+    "count": 2,
+    "tr": "قوطیید (11.25 اونس)، تهیه کنید"
+  },
+  {
+    "token": "cup condensed",
+    "count": 2,
+    "tr": "لیوان چندهست"
+  },
+  {
+    "token": "serving 2.1 oz bar",
+    "count": 2,
+    "tr": "وعده 2.1 اونس بار"
+  },
+  {
+    "token": "carton 32 oz",
+    "count": 2,
+    "tr": "کارتن 32 اونس"
+  },
+  {
+    "token": "bar king size",
+    "count": 2,
+    "tr": "نوار پادشاه اندازه"
+  },
+  {
+    "token": "serving 1.5 oz",
+    "count": 2,
+    "tr": "وعده 1.5 اونس"
+  },
+  {
+    "token": "sausage",
+    "count": 2,
+    "tr": "سوسیس"
+  },
+  {
+    "token": "bar (3 oz)",
+    "count": 2,
+    "tr": "نوار (3 اونس)"
+  },
+  {
+    "token": "steak, excluding refuse (yield from 1 raw steak, with refuse, weighing 300 g)",
+    "count": 2,
+    "tr": "استیک، به استثنای امتناع (حاصل از 1 استیک خام، با زباله، وزن 300 گرم)"
+  },
+  {
+    "token": "chop without refuse (Yield from 1 cooked chop, with refuse, weighing 209g)",
+    "count": 2,
+    "tr": "ریز ریز کردن بدون رجوع (از 1 ریز ریز خرد شده، با رد شدن، وزن 209 گرم)"
+  },
+  {
+    "token": "chop without refuse (Yield from 1 raw chop, with refuse, weighing 259g)",
+    "count": 2,
+    "tr": "ریز ریز کردن بدون رجوع (از 1 ریز خرد کردن، با رد کردن، وزن 259 گرم)"
+  },
+  {
+    "token": "slice (2-1/2\" dia x 1/4\" thick)",
+    "count": 2,
+    "tr": "قطعه (ضخامت 2-1 / 2 \"ضخامت 1/4\")"
+  },
+  {
+    "token": "cup, grated",
+    "count": 2,
+    "tr": "لیوان، رنده شده"
+  },
+  {
+    "token": "cup large chips",
+    "count": 2,
+    "tr": "لیوان چیپس بزرگ"
+  },
+  {
+    "token": "cup mini chips",
+    "count": 2,
+    "tr": "لیوان مینی تراشه"
+  },
+  {
+    "token": "oz (approx 60 pcs)",
+    "count": 2,
+    "tr": "اونس (تقریبا 60 عدد)"
+  },
+  {
+    "token": "cup chips (6 oz package)",
+    "count": 2,
+    "tr": "چیپس لیوان (بسته 6 اونس)"
+  },
+  {
+    "token": "link (4\" long x 1-1/8\" dia)",
+    "count": 2,
+    "tr": "لینک (4 \"طولانی x 1-1 / 8\" دیا)"
+  },
+  {
+    "token": "pint as purchased, yields",
+    "count": 2,
+    "tr": "پنت به عنوان خریداری می شود"
+  },
+  {
+    "token": "serving 0.25 cup",
+    "count": 2,
+    "tr": "وعده 0.25 لیوان"
+  },
+  {
+    "token": "serving fun size",
+    "count": 2,
+    "tr": "وعده به اندازه سرگرمی"
+  },
+  {
+    "token": "oz 1 NLEA serving",
+    "count": 2,
+    "tr": "اوز 1 NLEA وعده"
+  },
+  {
+    "token": "plantain",
+    "count": 2,
+    "tr": "سیب زمینی"
+  },
+  {
+    "token": "serving 2.96 oz",
+    "count": 2,
+    "tr": "وعده 2.96 اونس"
+  },
+  {
+    "token": "serving 2.33 oz",
+    "count": 2,
+    "tr": "وعده 2.33 اونس"
+  },
+  {
+    "token": "crayfish",
+    "count": 2,
+    "tr": "سرخدار"
+  },
+  {
+    "token": "serving (1 hot dog)",
+    "count": 2,
+    "tr": "وعده (1 هات داگ)"
+  },
+  {
+    "token": "package (2.06 oz, 2 bars)",
+    "count": 2,
+    "tr": "بسته بندی (2.06 اونس، 2 بار)"
+  },
+  {
+    "token": "fruit (2-7/8\" dia)",
+    "count": 2,
+    "tr": "میوه (دیود 2-7 / 8 \")"
+  },
+  {
+    "token": "small (2-3/8\" dia)",
+    "count": 2,
+    "tr": "کوچک (2-3 / 8 \"قطر)"
+  },
+  {
+    "token": "package (2 oz)",
+    "count": 2,
+    "tr": "بسته بندی (2 اونس)"
+  },
+  {
+    "token": "cup, dry, yields",
+    "count": 2,
+    "tr": "لیوان، خشک، بازده"
+  },
+  {
+    "token": "oz, dry, yields",
+    "count": 2,
+    "tr": "oz، خشک، بازده"
+  },
+  {
+    "token": "fruit (2-1/8\" dia)",
+    "count": 2,
+    "tr": "میوه (2-1 / 8 \"دی)"
+  },
+  {
+    "token": "bar 1.45 oz",
+    "count": 2,
+    "tr": "نوار 1.45 اونس"
+  },
+  {
+    "token": "packet, prepared",
+    "count": 2,
+    "tr": "بسته، تهیه شده است"
+  },
+  {
+    "token": "fruit (2\" dia)",
+    "count": 2,
+    "tr": "میوه (2 \"دی)"
+  },
+  {
+    "token": "serving (3 T dry cereal plus 1 cup water)",
+    "count": 2,
+    "tr": "وعده (3 تنی غلیظ خشک و 1 لیوان آب)"
+  },
+  {
+    "token": "grape",
+    "count": 2,
+    "tr": "انگور"
+  },
+  {
+    "token": "cup From 19211",
+    "count": 2,
+    "tr": "لیوان از سال 19211"
+  },
+  {
+    "token": "small (1-1/2\" dia)",
+    "count": 2,
+    "tr": "کوچک (1-1 / 2 \"دیا)"
+  },
+  {
+    "token": "date, pitted",
+    "count": 2,
+    "tr": "تاریخ، کثیف"
+  },
+  {
+    "token": "large (3-1/4\" dia)",
+    "count": 2,
+    "tr": "بزرگ (3-1 / 4 \"دیا)"
+  },
+  {
+    "token": "bar (1.4 oz)",
+    "count": 2,
+    "tr": "نوار (1.4 اونس)"
+  },
+  {
+    "token": "cherry",
+    "count": 2,
+    "tr": "گیلاس"
+  },
+  {
+    "token": "cup, without pits",
+    "count": 2,
+    "tr": "لیوان، بدون چاله"
+  },
+  {
+    "token": "fruit, small",
+    "count": 2,
+    "tr": "میوه، کوچک"
+  },
+  {
+    "token": "medium (3\" dia)",
+    "count": 2,
+    "tr": "متوسط (3 \"دی)"
+  },
+  {
+    "token": "serving 0.5 oz, about 1 tbsp",
+    "count": 2,
+    "tr": "وعده 0.5 اونس، حدود 1 قاشق غذاخوری"
+  },
+  {
+    "token": "small (2-3/4\" dia)",
+    "count": 2,
+    "tr": "کوچک (2-3 / 4 \"دیا)"
+  },
+  {
+    "token": "package fun size",
+    "count": 2,
+    "tr": "بسته بندی سرگرم کننده اندازه"
+  },
+  {
+    "token": "slice (4-2/3\" dia x 3/4\" thick)",
+    "count": 3,
+    "tr": "قطعه (ضخامت 4-2 / 3 \"قطر x 3/4\")"
+  },
+  {
+    "token": "breast without skin",
+    "count": 3,
+    "tr": "پستان بدون پوست"
+  },
+  {
+    "token": "stalk, small (5\" long)",
+    "count": 3,
+    "tr": "ساقه، کوچک (5 \"طولانی)"
+  },
+  {
+    "token": "stalk, medium (7-1/2\" - 8\" long)",
+    "count": 3,
+    "tr": "ساقه، متوسط (7-1 / 2 \"- 8\" طولانی)"
+  },
+  {
+    "token": "stalk, large (11\"-12\" long)",
+    "count": 3,
+    "tr": "ساقه، بزرگ (11 \"-12\" طولانی)"
+  },
+  {
+    "token": "bunch",
+    "count": 3,
+    "tr": "دسته ای"
+  },
+  {
+    "token": "slice, thin (3-3/4\" x 5\" x 3/8\")",
+    "count": 3,
+    "tr": "تکه، نازک (3-3 / 4 \"x 5\" x 3/8 \")"
+  },
+  {
+    "token": "doughnut, medium (approx 3\" dia)",
+    "count": 3,
+    "tr": "دونات، متوسط (تقریبا 3 \"قطر)"
+  },
+  {
+    "token": "can (5 oz)",
+    "count": 3,
+    "tr": "می (5 اونس)"
+  },
+  {
+    "token": "serving 16 fl oz",
+    "count": 3,
+    "tr": "وعده 16 فلاسک"
+  },
+  {
+    "token": "bag, single serving",
+    "count": 3,
+    "tr": "کیسه، وعده تک"
+  },
+  {
+    "token": "bird whole",
+    "count": 3,
+    "tr": "پرنده کل"
+  },
+  {
+    "token": "potato medium (2-1/4\" to 3-1/4\" dia)",
+    "count": 3,
+    "tr": "سیب زمینی متوسط (2-1 / 4 \"به 3-1 / 4\" دیا)"
+  },
+  {
+    "token": "serving 12 fl oz",
+    "count": 3,
+    "tr": "وعده 12 عدد"
+  },
+  {
+    "token": "cup 1/2\" pieces",
+    "count": 3,
+    "tr": "لیوان 1/2 \"قطعه"
+  },
+  {
+    "token": "bag (6 oz)",
+    "count": 3,
+    "tr": "کیسه (6 اونس)"
+  },
+  {
+    "token": "large (3\" to 4-1/4\" dia.)",
+    "count": 3,
+    "tr": "بزرگ (3 \"به 4-1 / 4\" دیا)."
+  },
+  {
+    "token": "cup (1/2\" slices)",
+    "count": 3,
+    "tr": "لیوان (1/2 \"برش)"
+  },
+  {
+    "token": "waffle",
+    "count": 3,
+    "tr": "وفل"
+  },
+  {
+    "token": "container (5.3 oz)",
+    "count": 3,
+    "tr": "ظرف (5.3 اونس)"
+  },
+  {
+    "token": "drink, extra large (44 fl oz)",
+    "count": 3,
+    "tr": "نوشیدن، فوق العاده بزرگ (44 عدد)"
+  },
+  {
+    "token": "spears",
+    "count": 3,
+    "tr": "اسپیرز"
+  },
+  {
+    "token": "individual packet",
+    "count": 3,
+    "tr": "بسته های فردی"
+  },
+  {
+    "token": "serving 1 packet",
+    "count": 3,
+    "tr": "وعده 1 بسته"
+  },
+  {
+    "token": "pie crust (average weight)",
+    "count": 3,
+    "tr": "پوسته پوسته (وزن متوسط)"
+  },
+  {
+    "token": "can (300 x 407)",
+    "count": 3,
+    "tr": "can (300 x 407)"
+  },
+  {
+    "token": "tablespoon (1 NLEA serving)",
+    "count": 3,
+    "tr": "قاشق غذاخوری (1 خامه NLEA)"
+  },
+  {
+    "token": "package (9 oz) yields",
+    "count": 3,
+    "tr": "بسته بندی (9 اونس) تولید می کند"
+  },
+  {
+    "token": "can (11 oz), undiluted",
+    "count": 3,
+    "tr": "قوطی (11 اونس)، بدون تجزیه و تحلیل"
+  },
+  {
+    "token": "drink, large (32 fl oz)",
+    "count": 3,
+    "tr": "نوشیدنی، بزرگ (32 فلاسک)"
+  },
+  {
+    "token": "piece (1/12 of 12 oz cake)",
+    "count": 3,
+    "tr": "قطعه (1/12 از کیک 12 اونس)"
+  },
+  {
+    "token": "artichoke, medium",
+    "count": 3,
+    "tr": "artichoke، متوسط"
+  },
+  {
+    "token": "wafer",
+    "count": 3,
+    "tr": "ویفر"
+  },
+  {
+    "token": "drink, medium (22 fl oz)",
+    "count": 3,
+    "tr": "نوشیدنی، متوسط (22 عدد)"
+  },
+  {
+    "token": "steak, excluding refuse (yield from 1 raw steak, with refuse, weighing 154 g)",
+    "count": 3,
+    "tr": "استیک، به استثنای امتناع (حاصل از 1 استیک خام، با زباله، وزن 154 گرم)"
+  },
+  {
+    "token": "drink, small (16 fl oz)",
+    "count": 3,
+    "tr": "نوشیدن، کوچک (16 فلاسک)"
+  },
+  {
+    "token": "oz (49 kernels)",
+    "count": 3,
+    "tr": "اونس (49 هسته)"
+  },
+  {
+    "token": "pods (3\" long)",
+    "count": 3,
+    "tr": "غلاف (3 \"بلند)"
+  },
+  {
+    "token": "mushrooms",
+    "count": 3,
+    "tr": "قارچ"
+  },
+  {
+    "token": "slice per 1/10 pizza",
+    "count": 3,
+    "tr": "برش به ازای هر 1/10 پیتزا"
+  },
+  {
+    "token": "lb whole",
+    "count": 3,
+    "tr": "lb کل"
+  },
+  {
+    "token": "serving 1 tbsp",
+    "count": 3,
+    "tr": "وعده 1 قاشق غذاخوری"
+  },
+  {
+    "token": "oz whole",
+    "count": 3,
+    "tr": "کل کل"
+  },
+  {
+    "token": "tbsp, leaves",
+    "count": 3,
+    "tr": "قاشق غذاخوری، برگ"
+  },
+  {
+    "token": "cup diced",
+    "count": 3,
+    "tr": "لیوان کباب شده"
+  },
+  {
+    "token": "mushroom",
+    "count": 3,
+    "tr": "قارچ"
+  },
+  {
+    "token": "slices (2-1/2\" dia)",
+    "count": 3,
+    "tr": "برش (2-1 / 2 \"دیا)"
+  },
+  {
+    "token": "leaf outer",
+    "count": 3,
+    "tr": "برگ بیرونی"
+  },
+  {
+    "token": "toast",
+    "count": 3,
+    "tr": "تست"
+  },
+  {
+    "token": "serving (8 fl oz)",
+    "count": 3,
+    "tr": "وعده (8 عدد)"
+  },
+  {
+    "token": "leaf inner",
+    "count": 3,
+    "tr": "برگ درونی"
+  },
+  {
+    "token": "serving 1.75 fl oz pop",
+    "count": 3,
+    "tr": "وعده 1.75 فلز پاپ"
+  },
+  {
+    "token": "oz (10-12 kernels)",
+    "count": 3,
+    "tr": "اونس (10-12 هسته)"
+  },
+  {
+    "token": "serving 6 pieces",
+    "count": 3,
+    "tr": "وعده 6 قطعه"
+  },
+  {
+    "token": "drumstick, bone removed",
+    "count": 3,
+    "tr": "خرچنگ، استخوان برداشته شده است"
+  },
+  {
+    "token": "bar snack size",
+    "count": 3,
+    "tr": "نوار میان وعده"
+  },
+  {
+    "token": "leek",
+    "count": 3,
+    "tr": "تره فرنگی"
+  },
+  {
+    "token": "slice cooked",
+    "count": 3,
+    "tr": "برش پخته شده"
+  },
+  {
+    "token": "package without flavor packet",
+    "count": 3,
+    "tr": "بسته بدون طعم بسته"
+  },
+  {
+    "token": "package (8.5 oz)",
+    "count": 3,
+    "tr": "بسته بندی (8.5 اونس)"
+  },
+  {
+    "token": "cup, whole or halves",
+    "count": 3,
+    "tr": "لیوان، کل یا نیمه"
+  },
+  {
+    "token": "piece 4\"x6\"",
+    "count": 3,
+    "tr": "قطعه 4 \"x6\""
+  },
+  {
+    "token": "bottle 24 fl oz",
+    "count": 3,
+    "tr": "بطری 24 میلی لیتر"
+  },
+  {
+    "token": "liter",
+    "count": 3,
+    "tr": "لیتر"
+  },
+  {
+    "token": "leaves",
+    "count": 3,
+    "tr": "برگها"
+  },
+  {
+    "token": "oz 1 serving",
+    "count": 3,
+    "tr": "اوز 1 وعده"
+  },
+  {
+    "token": "serving (3 heaping tsp)",
+    "count": 3,
+    "tr": "وعده (3 قاشق چای خوری)"
+  },
+  {
+    "token": "blocks",
+    "count": 3,
+    "tr": "بلوک ها"
+  },
+  {
+    "token": "slice thin, crust not eaten",
+    "count": 3,
+    "tr": "تکه نازک، پوسته خورده نشده است"
+  },
+  {
+    "token": "pie (5\" x 3-3/4\")",
+    "count": 3,
+    "tr": "پای (5 \"x 3-3 / 4\")"
+  },
+  {
+    "token": "neck, bone and skin removed",
+    "count": 3,
+    "tr": "گردن، استخوان و پوست برداشته شده است"
+  },
+  {
+    "token": "tbsp creamy",
+    "count": 3,
+    "tr": "کرم خرد شده"
+  },
+  {
+    "token": "package (0.35 oz)",
+    "count": 3,
+    "tr": "بسته بندی (0.35 اونس)"
+  },
+  {
+    "token": "tamale",
+    "count": 3,
+    "tr": "تاماله"
+  },
+  {
+    "token": "crab",
+    "count": 3,
+    "tr": "خرچنگ"
+  },
+  {
+    "token": "sundae",
+    "count": 3,
+    "tr": "ساندای"
+  },
+  {
+    "token": "sprig",
+    "count": 3,
+    "tr": "شاخه"
+  },
+  {
+    "token": "bar (1.45 oz)",
+    "count": 3,
+    "tr": "نوار (1.45 اونس)"
+  },
+  {
+    "token": "container refrigerated 4 oz",
+    "count": 3,
+    "tr": "ظرف یخچال 4 اونس"
+  },
+  {
+    "token": "spear",
+    "count": 3,
+    "tr": "نیزه"
+  },
+  {
+    "token": "serving 2 slices",
+    "count": 3,
+    "tr": "وعده 2 برش"
+  },
+  {
+    "token": "container, Dannon Sprinkl'ins (4.1 oz)",
+    "count": 3,
+    "tr": "ظرف Dannon Sprinkl'ins (4.1 اونس)"
+  },
+  {
+    "token": "serving (1 slice)",
+    "count": 3,
+    "tr": "وعده (1 تکه)"
+  },
+  {
+    "token": "roll (1 oz)",
+    "count": 3,
+    "tr": "رول (1 اونس)"
+  },
+  {
+    "token": "bar 2 oz",
+    "count": 3,
+    "tr": "نوار 2 اونس"
+  },
+  {
+    "token": "cup, packed",
+    "count": 3,
+    "tr": "لیوان، بسته بندی شده"
+  },
+  {
+    "token": "leg",
+    "count": 3,
+    "tr": "پا"
+  },
+  {
+    "token": "lobster",
+    "count": 3,
+    "tr": "خرچنگ"
+  },
+  {
+    "token": "crackers 1 serving",
+    "count": 3,
+    "tr": "کراکر 1 وعده"
+  },
+  {
+    "token": "container, individual",
+    "count": 3,
+    "tr": "ظرف، فردی"
+  },
+  {
+    "token": "thigh, without skin",
+    "count": 3,
+    "tr": "ران ، بدون پوست"
+  },
+  {
+    "token": "cup, ground",
+    "count": 3,
+    "tr": "لیوان، زمین"
+  },
+  {
+    "token": "pad",
+    "count": 3,
+    "tr": "پد"
+  },
+  {
+    "token": "pita, large (6-1/2\" dia)",
+    "count": 3,
+    "tr": "پیتا بزرگ (6-1 / 2 \"dia)"
+  },
+  {
+    "token": "cup (1 serving)",
+    "count": 3,
+    "tr": "لیوان (1 سرو)"
+  },
+  {
+    "token": "cup cut",
+    "count": 3,
+    "tr": "لیوان برش"
+  },
+  {
+    "token": "cup, stirred",
+    "count": 3,
+    "tr": "لیوان، هم زدن"
+  },
+  {
+    "token": "cup sections, without membranes",
+    "count": 3,
+    "tr": "بخش لیوان، بدون غشاء"
+  },
+  {
+    "token": "fruit (2-5/8\" dia)",
+    "count": 3,
+    "tr": "میوه (2-5 / 8 \"دی)"
+  },
+  {
+    "token": "croissant, medium",
+    "count": 3,
+    "tr": "کریسانت، متوسط"
+  },
+  {
+    "token": "piece turnover 1 serving",
+    "count": 3,
+    "tr": "گردش مالی قطعه 1 وعده"
+  },
+  {
+    "token": "large (2-3/4\" dia)",
+    "count": 3,
+    "tr": "بزرگ (2-3 / 4 \"قطر)"
+  },
+  {
+    "token": "bottle Beech-Nut Stage 2 (4 fl oz)",
+    "count": 3,
+    "tr": "بطری راش-مهره مرحله 2 (4 فلاسک)"
+  },
+  {
+    "token": "cup, balls",
+    "count": 3,
+    "tr": "لیوان، توپ"
+  },
+  {
+    "token": "oz cooked, yield",
+    "count": 3,
+    "tr": "اوز پخته شده، عملکرد"
+  },
+  {
+    "token": "large (approx 7\" dia)",
+    "count": 3,
+    "tr": "بزرگ (حدود 7 \"دیا)"
+  },
+  {
+    "token": "serving 2 tbsp",
+    "count": 3,
+    "tr": "وعده 2 قاشق غذاخوری"
+  },
+  {
+    "token": "serving (3 heaping tsp or 1 envelope)",
+    "count": 3,
+    "tr": "وعده (3 قاشق چایخوری یا 1 پاکت)"
+  },
+  {
+    "token": "tortilla",
+    "count": 3,
+    "tr": "طرقه"
+  },
+  {
+    "token": "biscuits (1 NLEA serving)",
+    "count": 3,
+    "tr": "بیسکویت ها (وعده 1 NLEA)"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to cook quail)",
+    "count": 3,
+    "tr": "واحد (حاصل از 1 کیلوگرم آماده به طبخ بلدرچین)"
+  },
+  {
+    "token": "cup 1\" pieces",
+    "count": 3,
+    "tr": "لیوان 1 \"قطعه"
+  },
+  {
+    "token": "jar Gerber Second Foods (2.5 oz)",
+    "count": 3,
+    "tr": "مواد غذایی دوم خاردار (2.5 اونس)"
+  },
+  {
+    "token": "fruit yields",
+    "count": 3,
+    "tr": "میوه می دهد"
+  },
+  {
+    "token": "serving 2.07 oz pack",
+    "count": 3,
+    "tr": "وعده 2.07 اونس بسته"
+  },
+  {
+    "token": "serving fun size (8 chews)",
+    "count": 3,
+    "tr": "وعده کردن به اندازه سرگرمی (8 جویدن)"
+  },
+  {
+    "token": "bar, miniature",
+    "count": 3,
+    "tr": "نوار، مینیاتوری"
+  },
+  {
+    "token": "bar (1.55 oz)",
+    "count": 3,
+    "tr": "نوار (1.55 اونس)"
+  },
+  {
+    "token": "fig with liquid",
+    "count": 3,
+    "tr": "انجیر با مایع"
+  },
+  {
+    "token": "packet (.75 oz)",
+    "count": 3,
+    "tr": "بسته (75 اونس)"
+  },
+  {
+    "token": "breast bone and skin removed",
+    "count": 3,
+    "tr": "استخوان پستان و پوست برداشته شد"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to-cook squab)",
+    "count": 3,
+    "tr": "واحد (حاصل از 1 پوند آماده به آشپز)"
+  },
+  {
+    "token": "jar Gerber Graduate (2.5 oz)",
+    "count": 3,
+    "tr": "جار گربر فارغ التحصیل (2.5 اونس)"
+  },
+  {
+    "token": "floweret",
+    "count": 3,
+    "tr": "گل"
+  },
+  {
+    "token": "ear, large (7-3/4\" to 9\" long)",
+    "count": 3,
+    "tr": "گوش، بزرگ (7-3 / 4 \"تا 9\" طولانی)"
+  },
+  {
+    "token": "cup, with pits, yields",
+    "count": 3,
+    "tr": "لیوان، با چاله، بازده"
+  },
+  {
+    "token": "bar fun size",
+    "count": 3,
+    "tr": "نوار سرگرم کننده اندازه"
+  },
+  {
+    "token": "ear, medium (6-3/4\" to 7-1/2\" long)",
+    "count": 3,
+    "tr": "گوش، متوسط (6-3 / 4 \"به 7-1 / 2\" طولانی)"
+  },
+  {
+    "token": "shell",
+    "count": 3,
+    "tr": "پوسته"
+  },
+  {
+    "token": "leaf, medium",
+    "count": 3,
+    "tr": "برگ، متوسط"
+  },
+  {
+    "token": "leaf, large",
+    "count": 3,
+    "tr": "برگ، بزرگ"
+  },
+  {
+    "token": "stalks",
+    "count": 3,
+    "tr": "ساقه ها"
+  },
+  {
+    "token": "envelope",
+    "count": 3,
+    "tr": "پاكت نامه"
+  },
+  {
+    "token": "sprout",
+    "count": 3,
+    "tr": "جوانه"
+  },
+  {
+    "token": "package (18 oz)",
+    "count": 3,
+    "tr": "بسته بندی (18 اونس)"
+  },
+  {
+    "token": "drink box (8.45 fl oz)",
+    "count": 3,
+    "tr": "جعبه نوشیدنی (8.45 میلی لیتر)"
+  },
+  {
+    "token": "cup, whole, without pits",
+    "count": 3,
+    "tr": "لیوان، کل، بدون چاله"
+  },
+  {
+    "token": "fruit without skin and seeds",
+    "count": 3,
+    "tr": "میوه بدون پوست و دانه"
+  },
+  {
+    "token": "drumstick, with skin",
+    "count": 4,
+    "tr": "طبل ، با پوست"
+  },
+  {
+    "token": "cup elbows packed",
+    "count": 4,
+    "tr": "آرنج فنجان بسته بندی شده"
+  },
+  {
+    "token": "package (7 oz)",
+    "count": 4,
+    "tr": "بسته بندی (7 اونس)"
+  },
+  {
+    "token": "cup, crumbled",
+    "count": 4,
+    "tr": "لیوان، فرو ریخت"
+  },
+  {
+    "token": "apricot half with liquid",
+    "count": 4,
+    "tr": "نیمه زردآلو با مایع"
+  },
+  {
+    "token": "chop, excluding refuse (yield from 1 raw chop, with refuse, weighing 120 g)",
+    "count": 4,
+    "tr": "ریز ریز کردن، به استثنای رد (حاصل از 1 ریز خرد شده، با رد، وزن 120 گرم)"
+  },
+  {
+    "token": "chop, excluding refuse (yield from 1 raw chop, with refuse, weighing 85 g)",
+    "count": 4,
+    "tr": "ریز ریز کردن، به استثنای رد (حاصل از 1 ریز خرد شده، با رد، وزن 85 گرم)"
+  },
+  {
+    "token": "steak, excluding refuse (yield from 1 raw steak, with refuse, weighing 385 g)",
+    "count": 4,
+    "tr": "استیک، به استثنای امتناع (حاصل از 1 استیک خام، با زباله، وزن 385 گرم)"
+  },
+  {
+    "token": "serving 8 fl oz",
+    "count": 4,
+    "tr": "وعده 8 فلاسک"
+  },
+  {
+    "token": "leg bottom, boneless",
+    "count": 4,
+    "tr": "پایین پا، بدون استخوان"
+  },
+  {
+    "token": "container (4.4 oz)",
+    "count": 4,
+    "tr": "ظرف (4.4 اونس)"
+  },
+  {
+    "token": "leg hindshank, heel on",
+    "count": 4,
+    "tr": "کمربند پا، پاشنه پا"
+  },
+  {
+    "token": "leg trotter off",
+    "count": 4,
+    "tr": "پا زدن"
+  },
+  {
+    "token": "slice 1 serving",
+    "count": 4,
+    "tr": "برش 1 وعده"
+  },
+  {
+    "token": "serving 1/4 cup",
+    "count": 4,
+    "tr": "وعده 1/4 لیوان"
+  },
+  {
+    "token": "cup, sections",
+    "count": 4,
+    "tr": "لیوان، بخش"
+  },
+  {
+    "token": "extra large",
+    "count": 4,
+    "tr": "فوق العاده بزرگ"
+  },
+  {
+    "token": "egg",
+    "count": 4,
+    "tr": "تخم مرغ"
+  },
+  {
+    "token": "biscuit (2-1/2\" dia)",
+    "count": 4,
+    "tr": "بیسکویت (2-1 / 2 \"دی)"
+  },
+  {
+    "token": "slice or ring (3\" dia) with liquid",
+    "count": 4,
+    "tr": "قطعه یا حلقه (3 \"دی) با مایع"
+  },
+  {
+    "token": "tbsp, whole",
+    "count": 4,
+    "tr": "قاشق غذاخوری، کل"
+  },
+  {
+    "token": "oz (1 serving)",
+    "count": 4,
+    "tr": "اوز (1 وعده)"
+  },
+  {
+    "token": "plum with liquid",
+    "count": 4,
+    "tr": "آلو با مایع"
+  },
+  {
+    "token": "cup, pulp",
+    "count": 4,
+    "tr": "لیوان، پالپ"
+  },
+  {
+    "token": "tsp, leaves",
+    "count": 4,
+    "tr": "چای سیاه، برگ ها"
+  },
+  {
+    "token": "slice, regular",
+    "count": 4,
+    "tr": "قطعه، به طور منظم"
+  },
+  {
+    "token": "sprigs",
+    "count": 4,
+    "tr": "شاخه ها"
+  },
+  {
+    "token": "slice, medium",
+    "count": 4,
+    "tr": "برش، متوسط"
+  },
+  {
+    "token": "slice, thick",
+    "count": 4,
+    "tr": "تکه، ضخیم"
+  },
+  {
+    "token": "can (6.8 fl oz, 200 ml)",
+    "count": 4,
+    "tr": "قوطیید (6.8 میلی لیتر، 200 میلی لیتر)"
+  },
+  {
+    "token": "piece (1/12 of 9\" dia)",
+    "count": 4,
+    "tr": "قطعه (1/12 از 9 \"دیا)"
+  },
+  {
+    "token": "nuts",
+    "count": 4,
+    "tr": "آجیل"
+  },
+  {
+    "token": "kernel",
+    "count": 4,
+    "tr": "هسته"
+  },
+  {
+    "token": "wing, with skin",
+    "count": 4,
+    "tr": "بال ، با پوست"
+  },
+  {
+    "token": "bottle 12 fl oz",
+    "count": 4,
+    "tr": "بطری 12 عدد"
+  },
+  {
+    "token": "breast, with skin",
+    "count": 4,
+    "tr": "پستان ، با پوست"
+  },
+  {
+    "token": "individual (3.5 fl oz)",
+    "count": 4,
+    "tr": "فرد (3.5 لیتر)"
+  },
+  {
+    "token": "large (4\" long)",
+    "count": 4,
+    "tr": "بزرگ (4 \"بلند)"
+  },
+  {
+    "token": "packet (0.5 oz)",
+    "count": 4,
+    "tr": "بسته (0.5 اونس)"
+  },
+  {
+    "token": "twists",
+    "count": 4,
+    "tr": "پیچ و تاب ها"
+  },
+  {
+    "token": "matzo",
+    "count": 4,
+    "tr": "نان فطیر"
+  },
+  {
+    "token": "bottle Earth's Best (4.2 fl oz)",
+    "count": 4,
+    "tr": "بهترین بطری زمین (4.2 فلاسک)"
+  },
+  {
+    "token": "cup prepared",
+    "count": 4,
+    "tr": "لیوان آماده شده است"
+  },
+  {
+    "token": "bar (1.5 oz)",
+    "count": 4,
+    "tr": "نوار (1.5 اونس)"
+  },
+  {
+    "token": "package (5.5 oz)",
+    "count": 4,
+    "tr": "بسته بندی (5.5 اونس)"
+  },
+  {
+    "token": "bottle Gerber Second Foods (4 fl oz)",
+    "count": 4,
+    "tr": "بطری دوم مواد غذایی گربر (4 عدد)"
+  },
+  {
+    "token": "can (19 oz)",
+    "count": 4,
+    "tr": "قوطی (19 اونس)"
+  },
+  {
+    "token": "small or frozen (approx 3\" dia)",
+    "count": 4,
+    "tr": "کوچک یا یخ زده (حدود 3 \"دیا)"
+  },
+  {
+    "token": "Toaster Strudel",
+    "count": 4,
+    "tr": "توستر استرولد"
+  },
+  {
+    "token": "piece (1/8 of 15 oz ring)",
+    "count": 4,
+    "tr": "قطعه (1/8 حلقه 15 اونس)"
+  },
+  {
+    "token": "spear (about 5\" long)",
+    "count": 4,
+    "tr": "تپه (حدود 5 \"بلند)"
+  },
+  {
+    "token": "patty (cooked from 4 oz raw)",
+    "count": 4,
+    "tr": "پتی (پخته شده از 4 اونس خام)"
+  },
+  {
+    "token": "potato large (3\" to 4-1/4\" dia)",
+    "count": 4,
+    "tr": "سیب زمینی بزرگ (3 \"به 4-1 / 4\" دیا)"
+  },
+  {
+    "token": "tablespoon, chopped",
+    "count": 4,
+    "tr": "قاشق غذا خوری، خرد شده"
+  },
+  {
+    "token": "cup, chopped or strips",
+    "count": 4,
+    "tr": "لیوان، خرد شده یا نوار"
+  },
+  {
+    "token": "muffin, toaster",
+    "count": 4,
+    "tr": "کاهو، توستر"
+  },
+  {
+    "token": "heart",
+    "count": 4,
+    "tr": "قلب"
+  },
+  {
+    "token": "beans",
+    "count": 4,
+    "tr": "لوبیا"
+  },
+  {
+    "token": "back, bone and skin removed",
+    "count": 4,
+    "tr": "پشت، استخوان و پوست حذف شده است"
+  },
+  {
+    "token": "leg, bone and skin removed",
+    "count": 4,
+    "tr": "پا، استخوان و پوست حذف شده است"
+  },
+  {
+    "token": "neck, bone removed",
+    "count": 4,
+    "tr": "گردن، بدون استخوان"
+  },
+  {
+    "token": "thigh, bone removed",
+    "count": 4,
+    "tr": "ران، بدون استخوان"
+  },
+  {
+    "token": "package (3 lb)",
+    "count": 4,
+    "tr": "بسته (3 پوند)"
+  },
+  {
+    "token": "ear, small (5-1/2\" to 6-1/2\" long)",
+    "count": 4,
+    "tr": "گوش، کوچک (5-1 / 2 \"به 6-1 / 2\" طولانی)"
+  },
+  {
+    "token": "taco",
+    "count": 4,
+    "tr": "تاکو"
+  },
+  {
+    "token": "goose",
+    "count": 4,
+    "tr": "غاز"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to-eat pheasant)",
+    "count": 4,
+    "tr": "واحد (حاصل از 1 پوند فوزان آماده به غذا)"
+  },
+  {
+    "token": "pancake",
+    "count": 5,
+    "tr": "پنکیک"
+  },
+  {
+    "token": "jar Beech-Nut Baby's First (2.5 oz)",
+    "count": 5,
+    "tr": "ابتدا باک بوفکوس کودک (2.5 اونس)"
+  },
+  {
+    "token": "package (1 NLEA serving)",
+    "count": 5,
+    "tr": "بسته (1 سرویس NLEA)"
+  },
+  {
+    "token": "stalk",
+    "count": 5,
+    "tr": "ساقه"
+  },
+  {
+    "token": "medium (2-1/2\" dia)",
+    "count": 5,
+    "tr": "متوسط (2-1 / 2 \"dia)"
+  },
+  {
+    "token": "cracker, sandwich",
+    "count": 5,
+    "tr": "کراکر، ساندویچ"
+  },
+  {
+    "token": "Tbsp",
+    "count": 5,
+    "tr": "قاشق غذاخوری"
+  },
+  {
+    "token": "cup, sifted",
+    "count": 5,
+    "tr": "جام حذفی"
+  },
+  {
+    "token": "cup, halves or slices",
+    "count": 5,
+    "tr": "لیوان، نیمه یا برش"
+  },
+  {
+    "token": "cup, thawed",
+    "count": 5,
+    "tr": "لیوان، یخ زده"
+  },
+  {
+    "token": "slice (4-1/4\" x 4-1/4\" x 1/16\")",
+    "count": 5,
+    "tr": "قطعه (4-1 / 4 \"x 4-1 / 4\" x 1/16 \")"
+  },
+  {
+    "token": "bag (7 oz)",
+    "count": 5,
+    "tr": "کیسه (7 اونس)"
+  },
+  {
+    "token": "oz grilled patties",
+    "count": 5,
+    "tr": "اوت کیک پنیری"
+  },
+  {
+    "token": "cube",
+    "count": 5,
+    "tr": "مکعب"
+  },
+  {
+    "token": "package (3.12 oz)",
+    "count": 5,
+    "tr": "بسته بندی (3.12 اونس)"
+  },
+  {
+    "token": "cup shredded",
+    "count": 5,
+    "tr": "لیوان خرد شده"
+  },
+  {
+    "token": "cup chips",
+    "count": 5,
+    "tr": "چیپس لیوان"
+  },
+  {
+    "token": "pastry (4-1/4\" dia)",
+    "count": 5,
+    "tr": "شیرینی (4-1 / 4 \"دی)"
+  },
+  {
+    "token": "bottle 16.9 fl oz",
+    "count": 5,
+    "tr": "بطری 16.9 میلی لیتر"
+  },
+  {
+    "token": "package (9 oz), yields",
+    "count": 5,
+    "tr": "بسته بندی (9 اونس)، محصول"
+  },
+  {
+    "token": "cup, crumbs",
+    "count": 5,
+    "tr": "لیوان، خرده"
+  },
+  {
+    "token": "cup, poured from box",
+    "count": 5,
+    "tr": "لیوان، از جعبه ریخته شده است"
+  },
+  {
+    "token": "pastry",
+    "count": 5,
+    "tr": "شیرینی"
+  },
+  {
+    "token": "cup, chunks",
+    "count": 5,
+    "tr": "لیوان، تکه ها"
+  },
+  {
+    "token": "potato (2-1/3\" x 4-3/4\")",
+    "count": 5,
+    "tr": "سیب زمینی (2-1 / 3 \"x 4-3 / 4\")"
+  },
+  {
+    "token": "cup (1/2\" pieces)",
+    "count": 5,
+    "tr": "لیوان (1/2 قطعه)"
+  },
+  {
+    "token": "shoot",
+    "count": 5,
+    "tr": "شلیک"
+  },
+  {
+    "token": "piece, cooked, excluding refuse",
+    "count": 5,
+    "tr": "قطعه، پخته شده، به استثنای امتناع"
+  },
+  {
+    "token": "cookie, medium (2-1/4\" dia)",
+    "count": 5,
+    "tr": "کوکی، متوسط (2-1 / 4 \"دیا)"
+  },
+  {
+    "token": "package (12 oz)",
+    "count": 5,
+    "tr": "بسته بندی (12 اونس)"
+  },
+  {
+    "token": "cup whole",
+    "count": 5,
+    "tr": "کل جام"
+  },
+  {
+    "token": "slice (4\" dia x 1/8\" thick)",
+    "count": 5,
+    "tr": "برش (ضخامت 4 اینچ ضخامت 1/8 \")"
+  },
+  {
+    "token": "chicken, skin only",
+    "count": 5,
+    "tr": "مرغ، پوست تنها"
+  },
+  {
+    "token": "cup, pureed",
+    "count": 5,
+    "tr": "لیوان خالص"
+  },
+  {
+    "token": "can total can contents",
+    "count": 5,
+    "tr": "قوطی مجموع محتویات باشد"
+  },
+  {
+    "token": "package (16 oz)",
+    "count": 5,
+    "tr": "بسته بندی (16 اونس)"
+  },
+  {
+    "token": "medallion",
+    "count": 5,
+    "tr": "مدالیون"
+  },
+  {
+    "token": "liver",
+    "count": 5,
+    "tr": "کبد"
+  },
+  {
+    "token": "back, bone removed",
+    "count": 5,
+    "tr": "پشت، بدون استخوان"
+  },
+  {
+    "token": "cup, crushed, sliced, or chunks",
+    "count": 5,
+    "tr": "لیوان، خرد شده، قطعه قطعه، یا قطعات"
+  },
+  {
+    "token": "leg, bone removed",
+    "count": 5,
+    "tr": "پا، بدون استخوان"
+  },
+  {
+    "token": "pie 12\" diameter",
+    "count": 5,
+    "tr": "قطر پای 12 \""
+  },
+  {
+    "token": "serving 5 pieces",
+    "count": 5,
+    "tr": "وعده 5 قطعه"
+  },
+  {
+    "token": "oz (22 whole kernels)",
+    "count": 5,
+    "tr": "اوز (22 کل هسته)"
+  },
+  {
+    "token": "thigh, bone and skin removed",
+    "count": 5,
+    "tr": "ران، استخوان و پوست حذف شده است"
+  },
+  {
+    "token": "wing, bone removed",
+    "count": 5,
+    "tr": "بال، بدون استخوان"
+  },
+  {
+    "token": "tsp, whole",
+    "count": 5,
+    "tr": "چای سبز، کل"
+  },
+  {
+    "token": "burrito",
+    "count": 5,
+    "tr": "بوریتو"
+  },
+  {
+    "token": "NLEA Serving",
+    "count": 5,
+    "tr": "وعده NLEA"
+  },
+  {
+    "token": "wing, without skin",
+    "count": 5,
+    "tr": "بال ، بدون پوست"
+  },
+  {
+    "token": "cup (1\" cubes)",
+    "count": 5,
+    "tr": "لیوان (1 \"مکعب)"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to cook capon)",
+    "count": 5,
+    "tr": "واحد (حاصل از 1 پوند آماده کپک)"
+  },
+  {
+    "token": "duck",
+    "count": 5,
+    "tr": "اردک"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to-cook goose)",
+    "count": 5,
+    "tr": "واحد (حاصل از 1 پوند گاو آماده به آشپزی)"
+  },
+  {
+    "token": "half",
+    "count": 5,
+    "tr": "نیم"
+  },
+  {
+    "token": "breast, without skin",
+    "count": 5,
+    "tr": "سینه ، بدون پوست"
+  },
+  {
+    "token": "steak, excluding refuse (yield from 1 raw steak, with refuse, weighing 102 g)",
+    "count": 5,
+    "tr": "استیک، به استثنای امتناع (حاصل از 1 استیک خام، با زباله، وزن 102 گرم)"
+  },
+  {
+    "token": "pat (1\" sq, 1/3\" high)",
+    "count": 5,
+    "tr": "پت (1 \"sq، 1/3\" بالا)"
+  },
+  {
+    "token": "thigh bone and skin removed",
+    "count": 6,
+    "tr": "استخوان ران و پوست برداشته شده است"
+  },
+  {
+    "token": "can, 15 oz (303 x 406)",
+    "count": 6,
+    "tr": "قوطیید 15 اونس (303x406)"
+  },
+  {
+    "token": "cup, melted",
+    "count": 6,
+    "tr": "جام، ذوب شده"
+  },
+  {
+    "token": "bottle 8 fl oz",
+    "count": 6,
+    "tr": "بطری 8 میلی لیتر"
+  },
+  {
+    "token": "package (9 oz)",
+    "count": 6,
+    "tr": "بسته بندی (9 اونس)"
+  },
+  {
+    "token": "roast with bone",
+    "count": 6,
+    "tr": "کباب با استخوان"
+  },
+  {
+    "token": "chop, excluding refuse (yield from 1 raw chop, with refuse, weighing 160 g)",
+    "count": 6,
+    "tr": "ریز ریز کردن، به استثنای رد کردن (حاصل از 1 ریز خرد شده، با رد، وزن 160 گرم)"
+  },
+  {
+    "token": "can (6 fl oz)",
+    "count": 6,
+    "tr": "can (6 oz)"
+  },
+  {
+    "token": "pod",
+    "count": 6,
+    "tr": "غلاف"
+  },
+  {
+    "token": "serving (cooked from 4 oz raw)",
+    "count": 6,
+    "tr": "وعده (تهیه شده از 4 اونس خام)"
+  },
+  {
+    "token": "can (10.5 oz)",
+    "count": 6,
+    "tr": "می (10.5 اونس)"
+  },
+  {
+    "token": "crust, single 9\"",
+    "count": 6,
+    "tr": "پوسته، تک 9 \""
+  },
+  {
+    "token": "tbsp (1/8 cup)",
+    "count": 6,
+    "tr": "قاشق غذاخوری (1/8 لیوان)"
+  },
+  {
+    "token": "can (11 oz), prepared",
+    "count": 6,
+    "tr": "قوطیید (11 اونس) تهیه کنید"
+  },
+  {
+    "token": "each taco",
+    "count": 6,
+    "tr": "هر تاکو"
+  },
+  {
+    "token": "package yields",
+    "count": 6,
+    "tr": "بازده بسته"
+  },
+  {
+    "token": "giblets",
+    "count": 6,
+    "tr": "زخم ها"
+  },
+  {
+    "token": "goldfish",
+    "count": 6,
+    "tr": "ماهی قرمز"
+  },
+  {
+    "token": "jar Heinz Beginner-1 (2.5 oz)",
+    "count": 6,
+    "tr": "جر Heinz مبتدی-1 (2.5 اونس)"
+  },
+  {
+    "token": "fruit (3-3/4\" dia)",
+    "count": 6,
+    "tr": "میوه (3-3 / 4 \"دی)"
+  },
+  {
+    "token": "jar Beech-Nut Stage I (4 oz)",
+    "count": 6,
+    "tr": "ژامبون راش-گردو مرحله ی I (4 اونس)"
+  },
+  {
+    "token": "cup, drained",
+    "count": 6,
+    "tr": "لیوان، تخلیه می شود"
+  },
+  {
+    "token": "jar, Gerber (4 oz)",
+    "count": 6,
+    "tr": "جار، گربر (4 اونس)"
+  },
+  {
+    "token": "package (18.50 oz)",
+    "count": 6,
+    "tr": "بسته بندی (18.50 اونس)"
+  },
+  {
+    "token": "serving 5 fl oz",
+    "count": 6,
+    "tr": "وعده 5 عدد"
+  },
+  {
+    "token": "pancake (4\" dia)",
+    "count": 6,
+    "tr": "پنکیک (4 \"دیواری)"
+  },
+  {
+    "token": "cup elbows not packed",
+    "count": 6,
+    "tr": "آرنج فنجان بسته بندی نشده است"
+  },
+  {
+    "token": "can (10.5 oz), prepared",
+    "count": 7,
+    "tr": "قوطیید (10.5 اونس)، تهیه کنید"
+  },
+  {
+    "token": "tbsp, ground",
+    "count": 7,
+    "tr": "قاشق غذاخوری، زمین"
+  },
+  {
+    "token": "pancake (6\" dia)",
+    "count": 7,
+    "tr": "پنکیک (6 اینچ)"
+  },
+  {
+    "token": "large bagel (4-1/2\" dia)",
+    "count": 7,
+    "tr": "شیرینی بزرگ (4-1 / 2 \"قطر)"
+  },
+  {
+    "token": "oz 1 pouch",
+    "count": 7,
+    "tr": "کیسه ای 1 عدد"
+  },
+  {
+    "token": "cup spaghetti packed",
+    "count": 7,
+    "tr": "فنجان اسپاگتی بسته بندی شده"
+  },
+  {
+    "token": "piece whole",
+    "count": 7,
+    "tr": "قطعه کل"
+  },
+  {
+    "token": "cup, cooked",
+    "count": 7,
+    "tr": "لیوان، پخته شده"
+  },
+  {
+    "token": "medium bagel (3-1/2\" to 4\" dia)",
+    "count": 7,
+    "tr": "بوته متوسط (3-1 / 2 \"به 4\" دیو)"
+  },
+  {
+    "token": "jar Gerber First Foods (2.5 oz)",
+    "count": 7,
+    "tr": "جار Gerber Foods (2.5 اونس)"
+  },
+  {
+    "token": "cup sections, with juice",
+    "count": 7,
+    "tr": "بخش لیوان، با آب میوه"
+  },
+  {
+    "token": "serving 6 fl oz",
+    "count": 7,
+    "tr": "وعده 6 فلاسک"
+  },
+  {
+    "token": "bag (8 oz)",
+    "count": 7,
+    "tr": "کیسه (8 اونس)"
+  },
+  {
+    "token": "serving 2 oz",
+    "count": 7,
+    "tr": "وعده 2 اونس"
+  },
+  {
+    "token": "cup whole kernels",
+    "count": 7,
+    "tr": "لیوان کل هسته"
+  },
+  {
+    "token": "bag",
+    "count": 7,
+    "tr": "کیسه"
+  },
+  {
+    "token": "enchilada",
+    "count": 7,
+    "tr": "enchilada"
+  },
+  {
+    "token": "drumstick, without skin",
+    "count": 7,
+    "tr": "طبل ، بدون پوست"
+  },
+  {
+    "token": "bottle Heinz Strained (4 fl oz)",
+    "count": 7,
+    "tr": "بطری Heinz Strained (4 فلاسک)"
+  },
+  {
+    "token": "piece (1/8 of 9\" crust)",
+    "count": 7,
+    "tr": "قطعه (1/8 از 9 پوسته)"
+  },
+  {
+    "token": "serving (2 tbsp)",
+    "count": 7,
+    "tr": "وعده (2 قاشق غذاخوری)"
+  },
+  {
+    "token": "bottle NFS",
+    "count": 7,
+    "tr": "بطری NFS"
+  },
+  {
+    "token": "cup spaghetti",
+    "count": 7,
+    "tr": "اسپاگتی فنجان"
+  },
+  {
+    "token": "cup elbows",
+    "count": 7,
+    "tr": "آرنج فنجان"
+  },
+  {
+    "token": "cup kernels",
+    "count": 7,
+    "tr": "هسته لیوان"
+  },
+  {
+    "token": "skin",
+    "count": 7,
+    "tr": "پوست"
+  },
+  {
+    "token": "cup 8 fl oz",
+    "count": 8,
+    "tr": "لیوان 8 عدد"
+  },
+  {
+    "token": "roast rump",
+    "count": 8,
+    "tr": "گوشت چرخ کرده"
+  },
+  {
+    "token": "slice, large",
+    "count": 8,
+    "tr": "برش، بزرگ"
+  },
+  {
+    "token": "slice (1 oz) (4\" x 4\" x 3/32\" thick)",
+    "count": 8,
+    "tr": "تکه (1 اونس) (4 \"x 4\" x 3/32 \"ضخامت)"
+  },
+  {
+    "token": "cup, unthawed",
+    "count": 8,
+    "tr": "لیوان، بی نظیر"
+  },
+  {
+    "token": "chicken",
+    "count": 8,
+    "tr": "مرغ"
+  },
+  {
+    "token": "tbsp chopped",
+    "count": 8,
+    "tr": "قاشق غذاخوری خرد شده"
+  },
+  {
+    "token": "chips",
+    "count": 8,
+    "tr": "چیپس"
+  },
+  {
+    "token": "package (3 oz)",
+    "count": 8,
+    "tr": "بسته بندی (3 اونس)"
+  },
+  {
+    "token": "strips",
+    "count": 8,
+    "tr": "نوارها"
+  },
+  {
+    "token": "cup spaghetti not packed",
+    "count": 8,
+    "tr": "اسپاگتی فنجان بسته بندی نشده است"
+  },
+  {
+    "token": "roast shank",
+    "count": 8,
+    "tr": "سیب زمینی سرخ شده"
+  },
+  {
+    "token": "slice 1/4 of pie",
+    "count": 8,
+    "tr": "برش 1/4 از پای"
+  },
+  {
+    "token": "root",
+    "count": 8,
+    "tr": "ریشه"
+  },
+  {
+    "token": "crackers",
+    "count": 8,
+    "tr": "کراکر ها"
+  },
+  {
+    "token": "small bagel (3\" dia)",
+    "count": 8,
+    "tr": "قاشق کوچک (3 \"دیواری)"
+  },
+  {
+    "token": "tsp, ground",
+    "count": 8,
+    "tr": "چای، زمین"
+  },
+  {
+    "token": "ml",
+    "count": 8,
+    "tr": "میلی لیتر"
+  },
+  {
+    "token": "cup (not packed)",
+    "count": 8,
+    "tr": "لیوان (بسته بندی نشده)"
+  },
+  {
+    "token": "frankfurter",
+    "count": 8,
+    "tr": "گوشت خوک"
+  },
+  {
+    "token": "box",
+    "count": 8,
+    "tr": "جعبه"
+  },
+  {
+    "token": "rack",
+    "count": 8,
+    "tr": "دندانه دار کردن"
+  },
+  {
+    "token": "package (3.5 oz)",
+    "count": 9,
+    "tr": "بسته بندی (3.5 اونس)"
+  },
+  {
+    "token": "cup sliced",
+    "count": 9,
+    "tr": "لیوان برش خورده"
+  },
+  {
+    "token": "cup chopped",
+    "count": 9,
+    "tr": "لیوان خرد شده"
+  },
+  {
+    "token": "mini bagel (2-1/2\" dia)",
+    "count": 9,
+    "tr": "مینی بیلل (2-1 / 2 \"دیا)"
+  },
+  {
+    "token": "serving 100 ml",
+    "count": 9,
+    "tr": "وعده 100 میلی لیتر"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to-cook turkey)",
+    "count": 9,
+    "tr": "واحد (حاصل از 1 کیلوگرم آماده به ترک بوقلمون)"
+  },
+  {
+    "token": "ear, yields",
+    "count": 9,
+    "tr": "گوش، بازده"
+  },
+  {
+    "token": "recipe yield",
+    "count": 9,
+    "tr": "عملکرد دستورالعمل"
+  },
+  {
+    "token": "jar Heinz Strained-2 (4.25 oz)",
+    "count": 9,
+    "tr": "جر Heinz Strained-2 (4.25 اونس)"
+  },
+  {
+    "token": "wing, bone and skin removed",
+    "count": 9,
+    "tr": "بال، استخوان و پوست حذف شده است"
+  },
+  {
+    "token": "cup lasagne",
+    "count": 10,
+    "tr": "فنجان لازانیا"
+  },
+  {
+    "token": "package yield (2 cups)",
+    "count": 10,
+    "tr": "عملکرد بسته (2 لیوان)"
+  },
+  {
+    "token": "slice (3/4 oz)",
+    "count": 10,
+    "tr": "برش (3/4 اونس)"
+  },
+  {
+    "token": "can or bottle (16 fl oz)",
+    "count": 10,
+    "tr": "قوطی یا بطری (16 فلاسک)"
+  },
+  {
+    "token": "bottle",
+    "count": 10,
+    "tr": "بطری"
+  },
+  {
+    "token": "drumstick, bone and skin removed",
+    "count": 10,
+    "tr": "خرچنگ، استخوان و پوست حذف شده است"
+  },
+  {
+    "token": "chop, excluding refuse (yield from 1 raw chop, with refuse, weighing 151 g)",
+    "count": 10,
+    "tr": "ریز ریز کردن، به استثنای رد کردن (حاصل از 1 ریز خرد شده، با رد شدن، وزن 151 گرم)"
+  },
+  {
+    "token": "back",
+    "count": 10,
+    "tr": "بازگشت"
+  },
+  {
+    "token": "can or bottle (12 fl oz)",
+    "count": 10,
+    "tr": "قوطی یا بطری (12 فلاسک)"
+  },
+  {
+    "token": "package (8 oz)",
+    "count": 10,
+    "tr": "بسته بندی (8 اونس)"
+  },
+  {
+    "token": "half, with liquid",
+    "count": 10,
+    "tr": "نیمی، با مایع"
+  },
+  {
+    "token": "piece (1/6 of 8\" pie)",
+    "count": 10,
+    "tr": "قطعه (1/6 از 8 پایه)"
+  },
+  {
+    "token": "container (4 oz)",
+    "count": 10,
+    "tr": "ظرف (4 اونس)"
+  },
+  {
+    "token": "breast, bone removed",
+    "count": 10,
+    "tr": "پستان، بدون استخوان"
+  },
+  {
+    "token": "jar Earth's Best (4.5 oz)",
+    "count": 10,
+    "tr": "jar زمین بهترین (4.5 اونس)"
+  },
+  {
+    "token": "head",
+    "count": 11,
+    "tr": "سر"
+  },
+  {
+    "token": "drumstick without skin",
+    "count": 11,
+    "tr": "خرچنگ بدون پوست"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to-cook duck)",
+    "count": 11,
+    "tr": "واحد (حاصل از 1 پوند اردک آماده به غذا)"
+  },
+  {
+    "token": "block",
+    "count": 11,
+    "tr": "مسدود کردن"
+  },
+  {
+    "token": "bar (1 oz)",
+    "count": 11,
+    "tr": "نوار (1 اونس)"
+  },
+  {
+    "token": "breast, bone and skin removed",
+    "count": 11,
+    "tr": "پستان، استخوان و پوست حذف شده است"
+  },
+  {
+    "token": "chop, excluding refuse (yield from 1 raw chop, with refuse, weighing 113 g)",
+    "count": 11,
+    "tr": "ریز ریز کردن، به استثنای رد (حاصل از 1 ریز خرد شده، با رد، وزن 113 گرم)"
+  },
+  {
+    "token": "cup shells",
+    "count": 12,
+    "tr": "پوسته های جام"
+  },
+  {
+    "token": "cup penne",
+    "count": 12,
+    "tr": "فنجان پن"
+  },
+  {
+    "token": "cup farfalle",
+    "count": 12,
+    "tr": "farfalle cup"
+  },
+  {
+    "token": "cup rotini",
+    "count": 12,
+    "tr": "فنجان روتینی"
+  },
+  {
+    "token": "drumstick with skin",
+    "count": 12,
+    "tr": "خرگوش با پوست"
+  },
+  {
+    "token": "can (12 fl oz)",
+    "count": 12,
+    "tr": "can (12 oz fl oz)"
+  },
+  {
+    "token": "tbsp (1 NLEA serving)",
+    "count": 12,
+    "tr": "قاشق غذاخوری (1 قاشق غذاخوری NLEA)"
+  },
+  {
+    "token": "wing",
+    "count": 12,
+    "tr": "بال"
+  },
+  {
+    "token": "cup, pitted",
+    "count": 12,
+    "tr": "جام حذفی"
+  },
+  {
+    "token": "fruit",
+    "count": 13,
+    "tr": "میوه"
+  },
+  {
+    "token": "pepper",
+    "count": 13,
+    "tr": "فلفل"
+  },
+  {
+    "token": "cubic inch, boneless",
+    "count": 13,
+    "tr": "مکعب اینچ، بدون بیسکویت"
+  },
+  {
+    "token": "package (6 oz)",
+    "count": 13,
+    "tr": "بسته بندی (6 اونس)"
+  },
+  {
+    "token": "stick",
+    "count": 13,
+    "tr": "چوب"
+  },
+  {
+    "token": "thigh",
+    "count": 13,
+    "tr": "ران"
+  },
+  {
+    "token": "drumstick",
+    "count": 13,
+    "tr": "خرگوش"
+  },
+  {
+    "token": "order",
+    "count": 13,
+    "tr": "سفارش"
+  },
+  {
+    "token": "serving (3 oz)",
+    "count": 13,
+    "tr": "وعده (3 اونس)"
+  },
+  {
+    "token": "cakes",
+    "count": 14,
+    "tr": "کیک ها"
+  },
+  {
+    "token": "chicken, bone and skin removed",
+    "count": 14,
+    "tr": "مرغ، استخوان و پوست برداشته شده است"
+  },
+  {
+    "token": "can (10.75 oz)",
+    "count": 14,
+    "tr": "قوطی (10.75 اونس)"
+  },
+  {
+    "token": "jar Beech-Nut Stage 3 (6 oz)",
+    "count": 14,
+    "tr": "جار راش گردو مرحله 3 (6 اونس)"
+  },
+  {
+    "token": "thigh with skin",
+    "count": 14,
+    "tr": "ران با پوست"
+  },
+  {
+    "token": "bird",
+    "count": 14,
+    "tr": "پرنده"
+  },
+  {
+    "token": "cookies",
+    "count": 14,
+    "tr": "بیسکویت ها"
+  },
+  {
+    "token": "ribs",
+    "count": 14,
+    "tr": "دنده"
+  },
+  {
+    "token": "muffin",
+    "count": 15,
+    "tr": "کوفته"
+  },
+  {
+    "token": "fruit without refuse",
+    "count": 15,
+    "tr": "میوه بدون رد کردن"
+  },
+  {
+    "token": "cup, whole",
+    "count": 15,
+    "tr": "لیوان، کل"
+  },
+  {
+    "token": "thigh without skin",
+    "count": 15,
+    "tr": "ران بدون پوست"
+  },
+  {
+    "token": "cup, crushed",
+    "count": 15,
+    "tr": "لیوان، خرد شده"
+  },
+  {
+    "token": "biscuit",
+    "count": 16,
+    "tr": "بیسکویت"
+  },
+  {
+    "token": "piece (1/8 of 9\" dia)",
+    "count": 16,
+    "tr": "قطعه (1/8 از 9 \"دیا)"
+  },
+  {
+    "token": "slices",
+    "count": 16,
+    "tr": "برش ها"
+  },
+  {
+    "token": "jar NFS",
+    "count": 16,
+    "tr": "شیشه NFS"
+  },
+  {
+    "token": "cracker",
+    "count": 16,
+    "tr": "کراکر"
+  },
+  {
+    "token": "container (8 oz)",
+    "count": 16,
+    "tr": "ظرف (8 اونس)"
+  },
+  {
+    "token": "cup pieces",
+    "count": 16,
+    "tr": "لیوان، قطعات"
+  },
+  {
+    "token": "packet (1 NLEA serving)",
+    "count": 17,
+    "tr": "بسته"
+  },
+  {
+    "token": "teaspoon",
+    "count": 17,
+    "tr": "قاشق چای‌خوری"
+  },
+  {
+    "token": "pie",
+    "count": 17,
+    "tr": "پای"
+  },
+  {
+    "token": "jar Heinz Junior-3 (6 oz)",
+    "count": 17,
+    "tr": "شیشه Heinz Junior-3 (6 اونس)"
+  },
+  {
+    "token": "link",
+    "count": 18,
+    "tr": "لینک"
+  },
+  {
+    "token": "strip",
+    "count": 18,
+    "tr": "نوار"
+  },
+  {
+    "token": "breast",
+    "count": 18,
+    "tr": "سینه"
+  },
+  {
+    "token": "slice, thin",
+    "count": 18,
+    "tr": "تکه، نازک"
+  },
+  {
+    "token": "serving 8 oz",
+    "count": 19,
+    "tr": "وعده 8 اونسی"
+  },
+  {
+    "token": "serving 1 cup",
+    "count": 19,
+    "tr": "وعده 1 لیوانی"
+  },
+  {
+    "token": "chicken, bone removed",
+    "count": 19,
+    "tr": "مرغ، بدون استخوان"
+  },
+  {
+    "token": "cake",
+    "count": 19,
+    "tr": "کیک"
+  },
+  {
+    "token": "container (6 oz)",
+    "count": 19,
+    "tr": "ظرف (6 اونس)"
+  },
+  {
+    "token": "piece, cooked (yield from 1 lb raw meat, boneless)",
+    "count": 20,
+    "tr": "قطعه، پخته شده (حاصل از 1 پوند گوشت خام، بدون استخوان)"
+  },
+  {
+    "token": "jar Beech-Nut Stage 2 (4 oz)",
+    "count": 20,
+    "tr": "شیشه Beech-Nut Stage 2 (4 اونس)"
+  },
+  {
+    "token": "jar Gerber Third Foods (6 oz)",
+    "count": 20,
+    "tr": "گلدان Gerber غذاهای سوم (6 اونس)"
+  },
+  {
+    "token": "roll",
+    "count": 20,
+    "tr": "رول"
+  },
+  {
+    "token": "oz, boneless",
+    "count": 21,
+    "tr": "اوز، بیچاره"
+  },
+  {
+    "token": "leaf",
+    "count": 21,
+    "tr": "برگ"
+  },
+  {
+    "token": "can (10.75 oz), prepared",
+    "count": 21,
+    "tr": "قوطی (10.75 اونس)، آماده شود"
+  },
+  {
+    "token": "cup (4 fl oz)",
+    "count": 22,
+    "tr": "لیوان (4 عدد)"
+  },
+  {
+    "token": "patty",
+    "count": 22,
+    "tr": "قطعه"
+  },
+  {
+    "token": "serving 1/2 cup",
+    "count": 23,
+    "tr": "وعده 1/2 لیوانی"
+  },
+  {
+    "token": "portion, amount to make 1/2 cup",
+    "count": 23,
+    "tr": "بخش، به اندازه 1/2 لیوان"
+  },
+  {
+    "token": "jar Heinz Strained-2 (4 oz)",
+    "count": 23,
+    "tr": "شیشه (۴ اونس) Heinz Strained "
+  },
+  {
+    "token": "cup, halves",
+    "count": 24,
+    "tr": "لیوان، نصف شده"
+  },
+  {
+    "token": "slice (1 oz)",
+    "count": 24,
+    "tr": "برش (1 اونس)"
+  },
+  {
+    "token": "cup, mashed",
+    "count": 25,
+    "tr": "لیوان، له شده"
+  },
+  {
+    "token": "cup (1\" pieces)",
+    "count": 25,
+    "tr": "لیوان (1 عدد)"
+  },
+  {
+    "token": "serving (5 fl oz)",
+    "count": 26,
+    "tr": "وعده (5 عدد)"
+  },
+  {
+    "token": "container",
+    "count": 27,
+    "tr": "ظرف"
+  },
+  {
+    "token": "serving ( 3 oz )",
+    "count": 30,
+    "tr": "وعده (3 اونس)"
+  },
+  {
+    "token": "NLEA serving",
+    "count": 32,
+    "tr": "وعده"
+  },
+  {
+    "token": "package (10 oz) yields",
+    "count": 32,
+    "tr": "بسته (10 اونس)"
+  },
+  {
+    "token": "quart",
+    "count": 32,
+    "tr": "کوارت"
+  },
+  {
+    "token": "packet",
+    "count": 33,
+    "tr": "بسته"
+  },
+  {
+    "token": "unit, cooked (yield from 1 lb raw meat)",
+    "count": 33,
+    "tr": "واحد، پخته شده (حاصل از 1 پوند گوشت خام)"
+  },
+  {
+    "token": "sandwich",
+    "count": 35,
+    "tr": "ساندویچ"
+  },
+  {
+    "token": "cookie",
+    "count": 35,
+    "tr": "کوکی"
+  },
+  {
+    "token": "oz (3 oz)",
+    "count": 35,
+    "tr": "اونس (3 اونس)"
+  },
+  {
+    "token": "can (303 x 406)",
+    "count": 36,
+    "tr": "قوطی (303 در 406)"
+  },
+  {
+    "token": "jar Gerber Second Food (4 oz)",
+    "count": 36,
+    "tr": "گلدان Gerber مواد غذایی دوم (4 اونس)"
+  },
+  {
+    "token": "pizza",
+    "count": 37,
+    "tr": "پیتزا"
+  },
+  {
+    "token": "cup, cubes",
+    "count": 43,
+    "tr": "لیوان، قطعات مکعبی"
+  },
+  {
+    "token": "inch sub",
+    "count": 44,
+    "tr": "اینچ"
+  },
+  {
+    "token": "pieces",
+    "count": 46,
+    "tr": "قطعات"
+  },
+  {
+    "token": "scoop",
+    "count": 46,
+    "tr": "اسکوپ"
+  },
+  {
+    "token": "cup, diced",
+    "count": 46,
+    "tr": "لیوان، قطعات مکعبی"
+  },
+  {
+    "token": "small",
+    "count": 49,
+    "tr": "کوچک"
+  },
+  {
+    "token": "package (10 oz)",
+    "count": 50,
+    "tr": "بسته بندی (10 اونس)"
+  },
+  {
+    "token": "cup, sliced",
+    "count": 51,
+    "tr": "لیوان، برش خورده"
+  },
+  {
+    "token": "cubic inch",
+    "count": 51,
+    "tr": "اینچ مکعب"
+  },
+  {
+    "token": "cup, shredded",
+    "count": 52,
+    "tr": "لیوان، رنده شده"
+  },
+  {
+    "token": "item",
+    "count": 53,
+    "tr": "عدد"
+  },
+  {
+    "token": "package",
+    "count": 56,
+    "tr": "بسته"
+  },
+  {
+    "token": "chop",
+    "count": 57,
+    "tr": "تکه"
+  },
+  {
+    "token": "cup, chopped or diced",
+    "count": 58,
+    "tr": "لیوان، خرد شده"
+  },
+  {
+    "token": "can",
+    "count": 58,
+    "tr": "قوطی"
+  },
+  {
+    "token": "large",
+    "count": 58,
+    "tr": "بزرگ"
+  },
+  {
+    "token": "medium",
+    "count": 60,
+    "tr": "متوسط"
+  },
+  {
+    "token": "bar",
+    "count": 66,
+    "tr": "بار"
+  },
+  {
+    "token": "cup slices",
+    "count": 68,
+    "tr": "لیوان، برش خورده"
+  },
+  {
+    "token": "cup, chopped",
+    "count": 71,
+    "tr": "لیوان، خرد شده"
+  },
+  {
+    "token": "cup (8 fl oz)",
+    "count": 90,
+    "tr": "لیوان (8 اونس)"
+  },
+  {
+    "token": "tablespoon",
+    "count": 91,
+    "tr": "قاشق غذاخوری"
+  },
+  {
+    "token": "cup (1 NLEA serving)",
+    "count": 98,
+    "tr": "لیوان"
+  },
+  {
+    "token": "unit (yield from 1 lb ready-to-cook chicken)",
+    "count": 106,
+    "tr": "واحد (حاصل 1 پوند جوجه آماده پختن)"
+  },
+  {
+    "token": "jar",
+    "count": 131,
+    "tr": "شیشه"
+  },
+  {
+    "token": "piece",
+    "count": 147,
+    "tr": "قطعه"
+  },
+  {
+    "token": "fillet",
+    "count": 162,
+    "tr": "فیله"
+  },
+  {
+    "token": "tsp",
+    "count": 171,
+    "tr": "قاشق چای‌خوری"
+  },
+  {
+    "token": "roast",
+    "count": 185,
+    "tr": "کباب"
+  },
+  {
+    "token": "slice",
+    "count": 186,
+    "tr": "برش"
+  },
+  {
+    "token": "piece, cooked, excluding refuse (yield from 1 lb raw meat with refuse)",
+    "count": 212,
+    "tr": "قطعه پخته شده، به استثنای قسمت های غیر قابل مصرف (از 1 پوند گوشت خام با اضافات)"
+  },
+  {
+    "token": "serving",
+    "count": 265,
+    "tr": "وعده"
+  },
+  {
+    "token": "steak",
+    "count": 280,
+    "tr": "استیک"
+  },
+  {
+    "token": "lb",
+    "count": 281,
+    "tr": "پوند"
+  },
+  {
+    "token": "fl oz",
+    "count": 492,
+    "tr": "اونس سیال"
+  },
+  {
+    "token": "tbsp",
+    "count": 548,
+    "tr": "قاشق غذاخوری"
+  },
+  {
+    "token": "cup",
+    "count": 1691,
+    "tr": "لیوان"
+  },
+  {
+    "token": "oz",
+    "count": 3166,
+    "tr": "اونس"
+  }
+]
