@@ -4,7 +4,7 @@
  */
 
 import { UserSchema } from '@Models/user.model'
-import { Image, Pagination, LanguageCode, Translation, TranslationInput } from '@Types/common'
+import { Image, Pagination, LanguageCode, Translation, TranslationInput, Ref } from '@Types/common'
 import { NutritionalData } from '@Types/food'
 import { TAG_TYPE } from '@Types/tag'
 import { RecipeAuthor } from '@Types/user'
@@ -13,7 +13,6 @@ import { GraphQLUpload } from 'apollo-server'
 import { Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
-import { Ref } from 'typegoose'
 import mongoose from '@Config/connections/mongoose'
 import { FoodSchema } from '@Models/food.model'
 
