@@ -53,8 +53,7 @@ export default class RecipeService {
   async list(variables: ListRecipesArgs = {page: 1, size: 10}) {
     const query: any = {}
     if (variables.nameSearchQuery) {
-      let reg = new RegExp(variables.nameSearchQuery)
-      query['title.text'] = { $regex: reg, $options: 'i' }
+      query['title.text'] = { $regex: variables.nameSearchQuery, $options: 'i' }
     }
 
     if (variables.lastId) {
