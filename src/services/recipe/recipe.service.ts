@@ -50,7 +50,7 @@ export default class RecipeService {
     return recipe
   }
 
-  async list(variables: ListRecipesArgs) {
+  async list(variables: ListRecipesArgs = {page: 1, size: 10}) {
     if (!variables.page) {
       variables.page = 1
     }
