@@ -51,9 +51,16 @@ export default class RecipeService {
   }
 
   async list(variables: ListRecipesArgs) {
-    const q: { title?: any, createdAt?: any } = {}
+    if (!variables.page) {
+      variables.page = 1
+    }
+    if (!variables.size) {
+      variables.size = 10
+    }
+    const query: any = {}
     if (variables.nameSearchQuery) {
-      q.title = { $regex: variables.nameSearchQuery }
+      let reg = new RegExp(variables.nameSearchQuery)
+      query['title.text'] = { $regex: reg, $options: 'i' }
     }
 
     if (variables.lastId) {
@@ -62,18 +69,18 @@ export default class RecipeService {
       const recipe = await RecipeModel.findById(variables.lastId)
       if (!recipe) throw new Errors.NotFound('recipe not found')
 
-      q.createdAt = { $lt: recipe.createdAt }
+      query.createdAt = { $lt: recipe.createdAt }
     }
 
-    const recipes = await RecipeModel.find(q)
+    const recipes = await RecipeModel.find(query)
       .sort({
         createdAt: -1,
       })
       .limit(variables.size)
-      .skip(variables.page * variables.size)
+      .skip((variables.page - 1) * variables.size)
       .populate('author')
       .exec()
-    const totalCount = await RecipeModel.count(q)
+    const totalCount = await RecipeModel.count(query)
 
     return {
       recipes,

@@ -332,14 +332,14 @@ export class RecipeInput {
 
 @ArgsType()
 export class ListRecipesArgs {
-  @Field()
+  @Field({ nullable: true })
   @Min(1)
-  page: number
+  page?: number
 
-  @Field()
+  @Field({ nullable: true })
   @Min(1)
   @Max(30)
-  size: number
+  size?: number
 
   @Field({ nullable: true })
   lastId?: string
