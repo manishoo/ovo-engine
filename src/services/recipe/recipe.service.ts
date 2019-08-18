@@ -51,12 +51,6 @@ export default class RecipeService {
   }
 
   async list(variables: ListRecipesArgs = {page: 1, size: 10}) {
-    if (!variables.page) {
-      variables.page = 1
-    }
-    if (!variables.size) {
-      variables.size = 10
-    }
     const query: any = {}
     if (variables.nameSearchQuery) {
       let reg = new RegExp(variables.nameSearchQuery)
