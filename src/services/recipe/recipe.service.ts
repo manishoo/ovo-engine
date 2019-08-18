@@ -122,8 +122,7 @@ export default class RecipeService {
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
         let ingredient: Partial<Ingredient> = {}
         if (ingredientInput.weight) {
-          // @ts-ignore
-          output.weight = mongoose.Types.ObjectId(ingredientInput.weight)
+          ingredient.weight = mongoose.Types.ObjectId(ingredientInput.weight)
         } else {
           if (!ingredientInput.customUnit || !ingredientInput.gramWeight) {
             throw new Errors.UserInput('incomplete data', { 'customUnit': 'custom unit is mandatory', 'gramWeight': 'gram weight is mandatory' })

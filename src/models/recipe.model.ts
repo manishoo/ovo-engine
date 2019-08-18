@@ -5,9 +5,9 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
-import { Image, Translation, LanguageCode } from '@Types/common'
+import { Image, Translation, LanguageCode, Ref } from '@Types/common'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
-import { arrayProp, prop, Ref, Typegoose } from 'typegoose'
+import { arrayProp, prop, Typegoose } from 'typegoose'
 import { NutritionalData } from '@Types/food';
 
 
