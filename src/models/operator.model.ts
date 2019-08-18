@@ -7,10 +7,19 @@ import mongoose from '@Config/connections/mongoose'
 import { PersistedPassword } from '@Types/auth'
 import { Role, Status } from '@Types/common'
 import { Operator } from '@Types/operator'
-import { instanceMethod, InstanceType, prop, Typegoose } from 'typegoose'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { instanceMethod, InstanceType, plugin, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
 
 
+export interface OperatorSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class OperatorSchema extends Typegoose implements Operator {
   id: string
   @prop({ unique: true, required: true })

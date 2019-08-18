@@ -6,9 +6,18 @@
 import mongoose from '@Config/connections/mongoose'
 import { LanguageCode, Translation } from '@Types/common'
 import { Content, CONTENT_TYPE, Synonym } from '@Types/content'
-import { instanceMethod, prop, Typegoose } from 'typegoose'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { instanceMethod, plugin, prop, Typegoose } from 'typegoose'
 
 
+export interface ContentSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class ContentSchema extends Typegoose implements Content {
   _id: mongoose.Schema.Types.ObjectId
   id: string

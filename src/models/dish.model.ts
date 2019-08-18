@@ -8,9 +8,18 @@ import { UserSchema } from '@Models/user.model'
 import { Dish } from '@Types/dish'
 import { MealItem } from '@Types/eating'
 import { User } from '@Types/user'
-import { prop, Ref, Typegoose } from 'typegoose'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { plugin, prop, Ref, Typegoose } from 'typegoose'
 
 
+export interface DishSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class DishSchema extends Typegoose implements Dish {
   id: string
   @prop()

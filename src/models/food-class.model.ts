@@ -7,7 +7,8 @@ import mongoose from '@Config/connections/mongoose'
 import { Image, LanguageCode, Translation } from '@Types/common'
 import { FOOD_CLASS_CATEGORY, FOOD_CLASS_TYPES, FoodClass, FoodClassTaxonomy } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
-import { instanceMethod, prop, Typegoose } from 'typegoose'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { instanceMethod, plugin, prop, Typegoose } from 'typegoose'
 
 
 class FoodGroupSchema extends Typegoose implements FoodGroup {
@@ -18,6 +19,14 @@ class FoodGroupSchema extends Typegoose implements FoodGroup {
   name: Translation[]
 }
 
+export interface FoodClassSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class FoodClassSchema extends Typegoose implements FoodClass {
   readonly _id: mongoose.Schema.Types.ObjectId
   readonly id: string

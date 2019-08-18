@@ -8,9 +8,18 @@ import { FoodClassSchema } from '@Models/food-class.model'
 import { Translation } from '@Types/common'
 import { Food, FoodContent } from '@Types/food'
 import { Weight } from '@Types/weight'
-import { prop, Ref, Typegoose } from 'typegoose'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { plugin, prop, Ref, Typegoose } from 'typegoose'
 
 
+export interface FoodSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class FoodSchema extends Typegoose implements Food {
   readonly _id: mongoose.Schema.Types.ObjectId
   readonly id: string

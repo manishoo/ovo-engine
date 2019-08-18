@@ -8,10 +8,20 @@ import { UserSchema } from '@Models/user.model'
 import { Image, Video } from '@Types/common'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
 import { User } from '@Types/user'
-import { arrayProp, prop, Ref, Typegoose } from 'typegoose'
+import mongooseDelete from 'mongoose-delete'
+import { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { arrayProp, plugin, prop, Ref, Typegoose } from 'typegoose'
 import uuid from 'uuid'
 
 
+export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class RecipeSchema extends Typegoose implements Recipe {
   _id: string
   id: string
