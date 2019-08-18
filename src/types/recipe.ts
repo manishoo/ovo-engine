@@ -12,7 +12,7 @@ import { TAG_TYPE } from '@Types/tag'
 import { RecipeAuthor } from '@Types/user'
 import { Weight } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
-import { Max, Min } from 'class-validator'
+import { Max, Min, ArrayNotEmpty } from 'class-validator'
 import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
 
@@ -269,6 +269,7 @@ export class IngredientInput {
   gramWeight?: number
 
   @Field(type => [TranslationInput], { nullable: true })
+  @ArrayNotEmpty()
   name?: TranslationInput[]
 
   @Field({ nullable: true })
@@ -285,6 +286,7 @@ export class InstructionInput {
   step: number
 
   @Field(type => [TranslationInput])
+  @ArrayNotEmpty()
   text: TranslationInput[]
 
   @Field(type => [TranslationInput], { nullable: true })
@@ -297,6 +299,7 @@ export class InstructionInput {
 @InputType()
 export class RecipeInput {
   @Field(type => [TranslationInput])
+  @ArrayNotEmpty()
   title: TranslationInput[]
 
   @Field(type => [IngredientInput])

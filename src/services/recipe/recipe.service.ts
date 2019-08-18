@@ -12,7 +12,6 @@ import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
 import { Ingredient, ListRecipesArgs, Recipe, RecipeInput } from '@Types/recipe'
 import Errors from '@Utils/errors'
-import { processUpload } from '@Utils/upload/utils'
 import { __ } from 'i18n'
 import mongoose from 'mongoose'
 import shortid from 'shortid'
@@ -96,10 +95,10 @@ export default class RecipeService {
     let coverImage: Image | undefined = undefined
 
     const slugAddedId = shortid.generate()
-
+    const generatedSlug = `${slug(data.title[0].text)}-${slugAddedId}`
     if (data.coverImage) {
       coverImage = {
-        url: await processUpload(data.coverImage, `${slug(data.title[0].text)}-${slugAddedId}`, 'recipes'),
+        url: await this.uploadService.processUpload(data.coverImage, `${generatedSlug}`, 'recipes'),
       }
     }
 
@@ -112,7 +111,7 @@ export default class RecipeService {
         cookTime: data.timing.cookTime,
         prepTime: data.timing.prepTime,
       },
-      slug: `${slug(data.title[0].text)}-${slugAddedId}`,
+      slug: `${generatedSlug}`,
       description: data.description,
       author: author._id,
       instructions: data.instructions.map(instructionInput => ({
@@ -205,7 +204,7 @@ export default class RecipeService {
     }
     if (data.coverImage) {
       recipe.coverImage = {
-        url: await processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
+        url: await this.uploadService.processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
       }
     }
     /*
