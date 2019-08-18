@@ -7,16 +7,17 @@ import { RecipeModel } from '@Models/recipe.model'
 import { transformRecipe } from '@Services/recipe/transformers/recipe.transformer'
 import TagService from '@Services/tag/tag.service'
 import { Image, LanguageCode } from '@Types/common'
-import { ListRecipesArgs, Recipe, RecipeInput } from '@Types/recipe'
+import { ListRecipesArgs, Recipe, RecipeInput, Ingredient, IngredientInput } from '@Types/recipe'
 import Errors from '@Utils/errors'
 import { processUpload } from '@Utils/upload/utils'
 import { __ } from 'i18n'
 import mongoose from 'mongoose'
 import shortid from 'shortid'
 import { Service } from 'typedi'
-import uuid from 'uuid/v1'
 import { UserModel } from '@Models/user.model';
 import UploadService from '@Services/upload/upload.service'
+import slug = require('slug');
+import { FoodModel } from '@Models/food.model';
 
 
 @Service()
@@ -87,13 +88,10 @@ export default class RecipeService {
     }
   }
 
-  async create(data: RecipeInput, lang: LanguageCode, userId?: string) {
-    let authorObjectId
-    if (userId) {
-      const author = await UserModel.findById(userId)
-      if (!author) throw new Errors.NotFound('author not found')
-      authorObjectId = author._id
-    }
+  async create(data: RecipeInput, lang: LanguageCode, userId: string): Promise<Recipe> {
+
+    const author = await UserModel.findById(userId)
+    if (!author) throw new Errors.NotFound('author not found')
 
     let coverImage: Image | undefined = undefined
 
@@ -101,86 +99,62 @@ export default class RecipeService {
 
     if (data.coverImage) {
       coverImage = {
-        url: await processUpload(data.coverImage, `${data.slug}-${slugAddedId}`, 'recipes'),
+        url: await processUpload(data.coverImage, `${slug(data.title[0].text)}-${slugAddedId}`, 'recipes'),
       }
     }
 
-    const id = uuid()
-
     const recipe: Partial<Recipe> = {
-      // thumbnail: undefined,
-      // video: undefined,
-      // tags: undefined,
       coverImage,
       title: data.title,
       serving: data.serving,
-      /*
       timing: {
-        totalTime: data.totalTime,
-        cookTime: data.cookTime,
-        prepTime: data.prepTime,
+        totalTime: data.timing.totalTime,
+        cookTime: data.timing.cookTime,
+        prepTime: data.timing.prepTime,
       },
-      */
-      slug: `${data.slug}-${slugAddedId}`,
+      slug: `${slug(data.title[0].text)}-${slugAddedId}`,
       description: data.description,
-      author: authorObjectId,
+      author: author._id,
       instructions: data.instructions.map(instructionInput => ({
         text: instructionInput.text,
         step: instructionInput.step,
       })),
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
-        //TODO check weights
-
-        let name
-        if (ingredientInput.name) {
-          name = ingredientInput.name
+        let output: Partial<Ingredient> = {}
+        if (ingredientInput.weight) {
+          // @ts-ignore
+          output.weight = mongoose.Types.ObjectId(ingredientInput.weight)
+        } else {
+          if (!ingredientInput.customUnit || !ingredientInput.gramWeight) {
+            throw new Errors.UserInput('incomplete data', { 'customUnit': 'custom unit is mandatory', 'gramWeight': 'gram weight is mandatory' })
+          }
+          output.gramWeight = ingredientInput.gramWeight
+          output.customUnit = ingredientInput.customUnit
         }
-        if (!name) throw new Errors.Validation('ingredient name not provided')
 
-        return {
-          name,
-          amount: ingredientInput.amount,
-          description: ingredientInput.description,
-          unit: ingredientInput.customUnit,
-          weightId: ingredientInput.weight,
-          foodId: ingredientInput.food,
+        if (!ingredientInput.food) {
+          if (!ingredientInput.name) {
+            throw new Errors.UserInput('incomplete data', { 'name': 'either food or name should be entered' })
+          }
+          output.name = ingredientInput.name
+        } else {
+          if (!mongoose.Types.ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
+          const food = await FoodModel.findById(ingredientInput.food)
+          if (!food) throw new Errors.NotFound('food not found')
+
+          // @ts-ignore
+          output.food = mongoose.Types.ObjectId(ingredientInput.food)
+          output.name = food.name
         }
+        output.amount = ingredientInput.amount
+        output.description = ingredientInput.description
+
+        return <Ingredient>output
       })),
     }
-
-    const createdRecipe = await RecipeModel.create(recipe)
-
-    const savedRecipe = await RecipeModel.findById(createdRecipe._id)
-      .populate('author')
-      .exec()
-
-    if (!savedRecipe) throw new Errors.System('failed to create the recipe')
-    return transformRecipe(savedRecipe, userId)
-  }
-
-  async createRecipe(recipe: RecipeInput, language: LanguageCode, userId: string): Promise<Recipe> {
-
-    const author = await UserModel.findById(userId)
-    if (!author) throw new Errors.NotFound('author not found')
-
-    return RecipeModel.create({
-      author: author.id,
-      title: recipe.title,
-      ingredients: recipe.ingredients,
-      instructions: recipe.instructions,
-      serving: recipe.serving,
-      timing: recipe.timing,
-      slug: recipe.slug,
-      description: recipe.description,
-      coverImage: {
-        url: recipe.coverImage ? await this.uploadService.processUpload(recipe.coverImage, 'full', `images/recipes/${recipe.slug}`) : null
-      },
-      thumbnail: {
-        url: recipe.thumbnail ? await this.uploadService.processUpload(recipe.thumbnail, 'thumb', `images/recipes/${recipe.slug}`) :
-          recipe.coverImage ? await this.uploadService.processUpload(recipe.coverImage, 'thumb', `images/recipes/${recipe.slug}`) : null
-      },
-      languages: [language],
-    })
+    let createdRecipe = await RecipeModel.create(recipe)
+    createdRecipe.author = author
+    return createdRecipe
   }
 
   async delete(id: string, userId?: string, operatorId?: string) {

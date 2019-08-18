@@ -55,11 +55,11 @@ export default class RecipeResolver {
 
   @Authorized(UserRole.user)
   @Mutation(returns => Recipe)
-  async createRecipe(
+  async create(
     @Arg('recipe') recipe: RecipeInput,
     @Ctx() ctx: Context,
   ) {
-    return this.recipeService.createRecipe(recipe, ctx.lang, ctx.user!.id)
+    return this.recipeService.create(recipe, ctx.lang, ctx.user!.id)
   }
 
   @Authorized()

@@ -46,13 +46,13 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   tags?: RecipeTag[]
   @prop()
-  updatedAt: Date
+  updatedAt?: Date
   @prop()
   languages: LanguageCode[]
   @prop()
   reviews?: Review[]
+  @prop()
   createdAt: Date
-
 }
 
 export const RecipeModel = new RecipeSchema().getModelForClass(RecipeSchema, {

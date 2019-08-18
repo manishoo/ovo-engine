@@ -21,10 +21,13 @@ import { FoodSchema } from '@Models/food.model'
 @ObjectType()
 export class RecipeTag {
   _id?: Types.ObjectId
+  
   @Field()
   slug: string
+  
   @Field({ nullable: true })
   title?: string
+  
   @Field()
   type: TAG_TYPE
 }
@@ -32,10 +35,13 @@ export class RecipeTag {
 @InputType()
 export class RecipeTagInput {
   _id?: Types.ObjectId
+  
   @Field()
   slug: string
+  
   @Field({ nullable: true })
   title?: string
+  
   @Field()
   type: TAG_TYPE
 }
@@ -73,7 +79,10 @@ export class Ingredient {
   amount: number
 
   @Field({ nullable: true })
-  unit?: string
+  customUnit?: string
+
+  @Field({ nullable: true })
+  gramWeight?: number
 
   @Field(type => Image, { nullable: true })
   thumbnail?: Image
@@ -81,14 +90,11 @@ export class Ingredient {
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
 
-  @Field({ nullable: true })
-  gramWeight?: number
-
   @Field(type => String, { nullable: true })
   food?: Ref<FoodSchema>
 
-  @Field({ nullable: true })
-  weight?: Weight
+  @Field(type => String, { nullable: true })
+  weight?: Ref<Weight>
 }
 
 @ObjectType()
@@ -119,12 +125,16 @@ export class Instruction {
 export class Comment {
   @Field(type => String)
   text: string
+  
   @Field(type => Int)
   timestamp: number
+  
   @Field(type => Image)
   image?: Image
+  
   @Field(type => [String])
   likes?: string[]
+  
   @Field(type => String)
   userId: Ref<UserSchema>
 }
@@ -133,16 +143,22 @@ export class Comment {
 export class Review {
   @Field(type => String)
   text: string
+  
   @Field(type => Int)
   timestamp: number
+  
   @Field(type => Image)
   image?: Image
+  
   @Field(type => [String])
   likes?: string[]
+  
   @Field(type => String)
   userId: Ref<UserSchema>
+  
   @Field(type => Int)
   rating: number
+  
   @Field(type => Comment)
   comments?: Comment[]
 }
@@ -151,10 +167,13 @@ export class Review {
 export class RecipeOrigin {
   @Field()
   source: string
+  
   @Field({ nullable: true })
   sourceUrl?: string
+  
   @Field({ nullable: true })
   authorName?: string
+  
   @Field({ nullable: true })
   url?: string
 
@@ -165,44 +184,63 @@ export class RecipeOrigin {
 export class Recipe {
   @Field()
   readonly id: string
+  
   @Field(type => [Translation])
   title: Translation[]
+  
   @Field(type => [Ingredient])
   ingredients: Ingredient[]
+  
   @Field(type => Int)
   serving: number
+  
   @Field(type => NutritionalData, { nullable: true })
   nutritionalData?: NutritionalData
+  
   @Field()
   slug: string
+  
   @Field(type => Image, { nullable: true })
   coverImage?: Image
+  
   @Field(type => Image, { nullable: true })
   thumbnail?: Image
+  
   @Field(type => [Instruction])
   instructions?: Instruction[]
+  
   @Field(type => [Review], { nullable: true })
   reviews?: Review[]
+  
   @Field(type => Boolean)
   likedByUser: boolean
+  
   @Field(type => Int)
   likesCount: number
+  
   @Field(type => RecipeAuthor)
-  author: Ref<UserSchema>
+  author: Ref<RecipeAuthor>
+  
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
+  
   @Field(type => RecipeTiming)
   timing: RecipeTiming
+  
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
+  
   @Field(type => [RecipeTag], { nullable: true })
   tags?: RecipeTag[]
+  
   @Field(type => LanguageCode, { nullable: true })
   languages: LanguageCode[]
+  
   @Field(type => Date)
   createdAt: Date
+  
   @Field(type => Date)
-  updatedAt: Date
+  updatedAt?: Date
 
   readonly _id: mongoose.Types.ObjectId
   likes: Ref<UserSchema>[]
@@ -212,6 +250,7 @@ export class Recipe {
 export class RecipesListResponse {
   @Field(type => [Recipe])
   recipes: Recipe[]
+  
   @Field(type => Pagination)
   pagination: Pagination
 }
@@ -219,15 +258,23 @@ export class RecipesListResponse {
 @InputType()
 export class IngredientInput {
   @Field(type => String, { nullable: true })
-  food?: Ref<FoodSchema>
+  food?: string
+  
   @Field()
   amount: number
+  
   @Field({ nullable: true })
   customUnit?: string
+  
+  @Field({ nullable: true })
+  gramWeight?: number
+  
   @Field(type => [TranslationInput], { nullable: true })
   name?: TranslationInput[]
+  
   @Field({ nullable: true })
-  weight?: WeightInput
+  weight?: string
+  
   @Field(type => [TranslationInput], { nullable: true })
   description?: TranslationInput[]
 }
@@ -237,10 +284,13 @@ export class InstructionInput {
   @Field()
   @Min(1)
   step: number
+  
   @Field(type => [TranslationInput])
   text: TranslationInput[]
+  
   @Field(type => [TranslationInput], { nullable: true })
   note?: TranslationInput[]
+  
   @Field(type => GraphQLUpload, { nullable: true })
   Image?: any
 }
@@ -249,22 +299,31 @@ export class InstructionInput {
 export class RecipeInput {
   @Field(type => [TranslationInput])
   title: TranslationInput[]
+  
   @Field(type => [IngredientInput])
   ingredients: IngredientInput[]
+  
   @Field(type => [InstructionInput])
   instructions: InstructionInput[]
+  
   @Field()
   serving: number
+  
   @Field(type => RecipeTimingInput)
   timing: RecipeTimingInput
+  
   @Field()
-  slug: string
+  slug?: string
+  
   @Field(type => [TranslationInput], { nullable: true })
   description: [TranslationInput]
+  
   @Field(type => GraphQLUpload, { nullable: true })
   coverImage?: any
+  
   @Field(type => GraphQLUpload, { nullable: true })
   thumbnail?: any
+  
   @Field(type => [RecipeTagInput], { nullable: true })
   tags?: RecipeTagInput[]
 }
