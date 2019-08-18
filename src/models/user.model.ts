@@ -46,8 +46,8 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
   }
 })
 export class UserSchema extends Typegoose implements User {
-  @prop({ default: uuid })
-  publicId?: string
+  @prop()
+  readonly id?: string
 
   /**
    * login credentials

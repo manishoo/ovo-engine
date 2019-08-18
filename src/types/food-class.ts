@@ -50,6 +50,8 @@ export class FoodClass {
   imageUrl?: Image
   @Field(type => Image, { nullable: true })
   thumbnailUrl?: Image
+  @Field(type => String, { nullable: true })
+  defaultFood?: mongoose.Types.ObjectId
 
   origId: number
   nameScientific?: string

@@ -58,6 +58,8 @@ export class FoodClassSchema extends Typegoose implements FoodClass {
   ncbiTaxonomyId?: number
   @prop()
   taxonomies: FoodClassTaxonomy[]
+  @prop()
+  defaultFood?: mongoose.Types.ObjectId
 
   @instanceMethod
   getName(locale: LanguageCode): string | undefined {
