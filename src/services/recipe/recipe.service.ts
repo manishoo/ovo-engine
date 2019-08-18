@@ -143,7 +143,6 @@ export default class RecipeService {
           const food = await FoodModel.findById(ingredientInput.food)
           if (!food) throw new Errors.NotFound('food not found')
 
-          // @ts-ignore
           ingredient.food = mongoose.Types.ObjectId(ingredientInput.food)
           ingredient.name = food.name
         }
