@@ -3,21 +3,21 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
+import { UserModel } from '@Models/user.model'
 import { transformRecipe } from '@Services/recipe/transformers/recipe.transformer'
 import TagService from '@Services/tag/tag.service'
+import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
-import { ListRecipesArgs, Recipe, RecipeInput, Ingredient, IngredientInput } from '@Types/recipe'
+import { Ingredient, ListRecipesArgs, Recipe, RecipeInput } from '@Types/recipe'
 import Errors from '@Utils/errors'
 import { processUpload } from '@Utils/upload/utils'
 import { __ } from 'i18n'
 import mongoose from 'mongoose'
 import shortid from 'shortid'
+import slug from 'slug'
 import { Service } from 'typedi'
-import { UserModel } from '@Models/user.model';
-import UploadService from '@Services/upload/upload.service'
-import slug = require('slug');
-import { FoodModel } from '@Models/food.model';
 
 
 @Service()
@@ -125,7 +125,10 @@ export default class RecipeService {
           ingredient.weight = mongoose.Types.ObjectId(ingredientInput.weight)
         } else {
           if (!ingredientInput.customUnit || !ingredientInput.gramWeight) {
-            throw new Errors.UserInput('incomplete data', { 'customUnit': 'custom unit is mandatory', 'gramWeight': 'gram weight is mandatory' })
+            throw new Errors.UserInput('incomplete data', {
+              'customUnit': 'custom unit is mandatory',
+              'gramWeight': 'gram weight is mandatory'
+            })
           }
           ingredient.gramWeight = ingredientInput.gramWeight
           ingredient.customUnit = ingredientInput.customUnit
