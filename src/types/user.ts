@@ -6,7 +6,7 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { UserRole } from '@Types/common'
+import { UserRole, Image } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
@@ -175,6 +175,25 @@ export class User {
   @Field(type => [Event], { nullable: true })
   path?: Event[]
   timeZone?: string
+}
+
+@ObjectType()
+export class RecipeAuthor {
+  _id?: mongoose.Schema.Types.ObjectId
+  @Field()
+  id?: string
+  @Field()
+  username: string
+  @Field({ nullable: true })
+  firstName?: string
+  @Field({ nullable: true })
+  middleName?: string
+  @Field({ nullable: true })
+  lastName?: string
+  @Field({ nullable: true })
+  bio?: string
+  @Field(type => Image, { nullable: true })
+  imageUrl?: Image
 }
 
 @InputType()

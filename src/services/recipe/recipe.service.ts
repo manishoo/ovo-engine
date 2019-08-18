@@ -3,28 +3,28 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
+import { UserModel } from '@Models/user.model'
 import { transformRecipe } from '@Services/recipe/transformers/recipe.transformer'
 import TagService from '@Services/tag/tag.service'
-import UserService from '@Services/user/user.service'
+import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
-import { ListRecipesArgs, Recipe, RecipeInput } from '@Types/recipe'
+import { Ingredient, ListRecipesArgs, Recipe, RecipeInput } from '@Types/recipe'
 import Errors from '@Utils/errors'
-import { processUpload } from '@Utils/upload/utils'
 import { __ } from 'i18n'
 import mongoose from 'mongoose'
 import shortid from 'shortid'
+import slug from 'slug'
 import { Service } from 'typedi'
-import uuid from 'uuid/v1'
-import { UserModel } from '@Models/user.model';
 
 
 @Service()
 export default class RecipeService {
   constructor(
     // service injection
-    private readonly userService: UserService,
     private readonly tagService: TagService,
+    private readonly uploadService: UploadService,
   ) {
     // noop
   }
@@ -87,74 +87,74 @@ export default class RecipeService {
     }
   }
 
-  async create(data: RecipeInput, lang: LanguageCode, userId?: string) {
-    let authorObjectId
-    if (userId) {
-      const author = await UserModel.findById(userId)
-      if(!author) throw new Errors.NotFound('author not found')
-      authorObjectId = author._id
-    }
+  async create(data: RecipeInput, lang: LanguageCode, userId: string): Promise<Recipe> {
+
+    const author = await UserModel.findById(userId)
+    if (!author) throw new Errors.NotFound('author not found')
 
     let coverImage: Image | undefined = undefined
 
     const slugAddedId = shortid.generate()
-
+    const generatedSlug = `${slug(data.title[0].text)}-${slugAddedId}`
     if (data.coverImage) {
       coverImage = {
-        url: await processUpload(data.coverImage, `${data.slug}-${slugAddedId}`, 'recipes'),
+        url: await this.uploadService.processUpload(data.coverImage, `${generatedSlug}`, 'recipes'),
       }
     }
 
-    const id = uuid()
-
     const recipe: Partial<Recipe> = {
-      // thumbnail: undefined,
-      // video: undefined,
-      // tags: undefined,
-      publicId: id,
       coverImage,
       title: data.title,
-      yield: data.yield,
+      serving: data.serving,
       timing: {
-        totalTime: data.totalTime,
-        cookTime: data.cookTime,
-        prepTime: data.prepTime,
+        totalTime: data.timing.totalTime,
+        cookTime: data.timing.cookTime,
+        prepTime: data.timing.prepTime,
       },
-      slug: `${data.slug}-${slugAddedId}`,
+      slug: `${generatedSlug}`,
       description: data.description,
-      author: authorObjectId,
+      author: author._id,
       instructions: data.instructions.map(instructionInput => ({
         text: instructionInput.text,
         step: instructionInput.step,
       })),
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
-        //TODO check weights
-
-        let name
-        if (ingredientInput.name) {
-          name = ingredientInput.name
+        let ingredient: Partial<Ingredient> = {}
+        if (ingredientInput.weight) {
+          ingredient.weight = mongoose.Types.ObjectId(ingredientInput.weight)
+        } else {
+          if (!ingredientInput.customUnit || !ingredientInput.gramWeight) {
+            throw new Errors.UserInput('incomplete data', {
+              'customUnit': 'custom unit is mandatory',
+              'gramWeight': 'gram weight is mandatory'
+            })
+          }
+          ingredient.gramWeight = ingredientInput.gramWeight
+          ingredient.customUnit = ingredientInput.customUnit
         }
-        if (!name) throw new Errors.Validation('ingredient name not provided')
 
-        return {
-          name,
-          amount: ingredientInput.amount,
-          description: ingredientInput.description,
-          unit: ingredientInput.customUnit,
-          weightId: ingredientInput.weightId,
-          foodId: ingredientInput.foodId,
+        if (!ingredientInput.food) {
+          if (!ingredientInput.name) {
+            throw new Errors.UserInput('incomplete data', { 'name': 'either food or name should be entered' })
+          }
+          ingredient.name = ingredientInput.name
+        } else {
+          if (!mongoose.Types.ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
+          const food = await FoodModel.findById(ingredientInput.food)
+          if (!food) throw new Errors.NotFound('food not found')
+
+          ingredient.food = mongoose.Types.ObjectId(ingredientInput.food)
+          ingredient.name = food.name
         }
+        ingredient.amount = ingredientInput.amount
+        ingredient.description = ingredientInput.description
+
+        return <Ingredient>ingredient
       })),
     }
-
-    const createdRecipe = await RecipeModel.create(recipe)
-
-    const savedRecipe = await RecipeModel.findById(createdRecipe._id)
-      .populate('author')
-      .exec()
-
-    if (!savedRecipe) throw new Errors.System('failed to create the recipe')
-    return transformRecipe(savedRecipe, userId)
+    let createdRecipe = await RecipeModel.create(recipe)
+    createdRecipe.author = author
+    return createdRecipe
   }
 
   async delete(id: string, userId?: string, operatorId?: string) {
@@ -187,8 +187,8 @@ export default class RecipeService {
           name: ingredient.name,
           amount: ingredient.amount,
           unit: ingredient.customUnit,
-          foodId: ingredient.foodId,
-          weightId: ingredient.weightId,
+          foodId: ingredient.food,
+          weightId: ingredient.weight,
           description: ingredient.description,
         }
       })
@@ -203,9 +203,10 @@ export default class RecipeService {
     }
     if (data.coverImage) {
       recipe.coverImage = {
-        url: await processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
+        url: await this.uploadService.processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
       }
     }
+    /*
     if (data.totalTime) {
       recipe.timing = {
         ...recipe.timing,
@@ -227,6 +228,7 @@ export default class RecipeService {
     if (data.yield) {
       recipe.yield = data.yield
     }
+    */
     if (data.slug) {
       const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ publicId: { $ne: publicId }, slug: data.slug })
 
@@ -234,6 +236,7 @@ export default class RecipeService {
 
       recipe.slug = data.slug
     }
+    /*
     if (data.tags) {
       recipe.tags = await Promise.all(data.tags.map(async slug => {
         const t = await this.tagService.findBySlug(slug) // TODO we should probably only make one request to db
@@ -246,6 +249,7 @@ export default class RecipeService {
         }
       }))
     }
+    */
 
     await recipe.save()
 
@@ -254,7 +258,7 @@ export default class RecipeService {
 
   async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
     return this.update(recipePublicId, {
-      tags: tagSlugs,
+      //tags: tagSlugs,
     }, LanguageCode.en, userId)
   }
 }
