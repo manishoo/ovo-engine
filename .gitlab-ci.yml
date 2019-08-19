@@ -5,9 +5,9 @@ stages:
 build app image:
   stage: build
   image: docker:latest
-  only:
-    - develop
-    - master
+#  only:
+#    - develop
+#    - master
   services:
     - docker:dind
   variables:
