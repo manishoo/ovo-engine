@@ -160,9 +160,9 @@ export default class RecipeService {
   async delete(id: string, userId?: string, operatorId?: string) {
     if (!userId && !operatorId) throw new Errors.Forbidden('not allowed')
 
-    const query: any = { publicId: id }
+    const query: any = { _id: id }
     if (userId) {
-      query.author = new mongoose.Schema.Types.ObjectId(userId)
+      query.author = mongoose.Types.ObjectId(userId)
     }
     const { ok } = await RecipeModel.remove(query)
     if (!ok) throw new Errors.System('something went wrong')
