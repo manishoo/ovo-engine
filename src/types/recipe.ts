@@ -353,5 +353,8 @@ export class ListRecipesArgs {
   @Field({ nullable: true })
   userId?: string
 
+  @Field(type => [String], {nullable: true})
+  tags?: string[]
+
   viewerUserId?: string
 }

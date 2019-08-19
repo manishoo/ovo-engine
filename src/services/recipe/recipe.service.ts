@@ -51,6 +51,11 @@ export default class RecipeService {
 
   async list(variables: ListRecipesArgs = { page: 1, size: 10 }) {
     const query: any = {}
+
+    if(variables.tags){
+      query['tags'] = {$in: variables.tags}
+    }
+
     if (variables.nameSearchQuery) {
       query['title.text'] = { $regex: variables.nameSearchQuery, $options: 'i' }
     }
@@ -63,7 +68,7 @@ export default class RecipeService {
 
       query.createdAt = { $lt: recipe.createdAt }
     }
-
+    
     const recipes = await RecipeModel.find(query)
       .sort({
         createdAt: -1,

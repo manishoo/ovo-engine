@@ -36,7 +36,7 @@ export default class RecipeResolver {
   @Authorized(UserRole.user)
   @Query(returns => RecipesListResponse)
   async recipes(
-    @Args() { page, size, lastId, nameSearchQuery, userId }: ListRecipesArgs,
+    @Args() { page, size, lastId, nameSearchQuery, userId, tags }: ListRecipesArgs,
     @Ctx() ctx: Context,
   ) {
     let viewerUserId
@@ -51,6 +51,7 @@ export default class RecipeResolver {
       nameSearchQuery,
       userId: userId || viewerUserId,
       viewerUserId,
+      tags,
     })
   }
 
