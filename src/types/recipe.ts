@@ -8,7 +8,7 @@ import { FoodSchema } from '@Models/food.model'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { NutritionalData } from '@Types/food'
-import { TAG_TYPE, Tag } from '@Types/tag'
+import { TagType, Tag } from '@Types/tag'
 import { RecipeAuthor } from '@Types/user'
 import { Weight } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
@@ -24,11 +24,11 @@ export class RecipeTag {
   @Field()
   slug: string
 
-  @Field({ nullable: true })
-  title?: string
+  @Field(type => [Translation], { nullable: true })
+  title?: Translation[]
 
   @Field()
-  type: TAG_TYPE
+  type: TagType
 }
 
 @InputType()
@@ -38,11 +38,11 @@ export class RecipeTagInput {
   @Field()
   slug: string
 
-  @Field({ nullable: true })
-  title?: string
+  @Field(type => [TranslationInput], { nullable: true })
+  title?: TranslationInput[]
 
   @Field()
-  type: TAG_TYPE
+  type: TagType
 }
 
 @ObjectType()

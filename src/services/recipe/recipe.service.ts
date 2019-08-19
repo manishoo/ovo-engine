@@ -6,7 +6,6 @@
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
-import { transformRecipe } from '@Services/recipe/transformers/recipe.transformer'
 import TagService from '@Services/tag/tag.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
@@ -234,20 +233,25 @@ export default class RecipeService {
     }
 
     if (data.tags) {
-      let tags: string[] = []
-      data.tags.map(async tag => {
+      
+      let tags: any = []
+      await Promise.all(data.tags.map(async tag => {
+        if(!mongoose.Types.ObjectId.isValid(tag)) throw new Errors.Validation('invalid tag id')
         let validateTag = await this.tagService.validate(tag)
         if (!validateTag) throw new Errors.NotFound('tag not found')
 
-        tags.push(tag)
-      })
+        tags.push(mongoose.Types.ObjectId(tag))
+        
+      }))
+      
+      recipe.tags = tags
+      
     }
 
-    await recipe.save()
     recipe.likesCount = recipe.likes.length
     recipe.likedByUser = userId ? !!recipe.likes.find(p => String(p) === userId) : false
 
-    return recipe
+    return recipe.save()
   }
 
   async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {

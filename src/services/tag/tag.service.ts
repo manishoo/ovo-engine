@@ -8,6 +8,8 @@ import { LanguageCode } from '@Types/common'
 import { Tag, TagInput } from '@Types/tag'
 import Errors from '@Utils/errors'
 import { Service } from 'typedi'
+import shortid = require('shortid');
+import slug = require('slug');
 
 
 @Service()
@@ -22,6 +24,9 @@ export default class TagService {
   }
 
   async create(data: TagInput, lang: LanguageCode): Promise<Tag> {
+    if (!data.slug) {
+      data.slug = `${slug(data.title[0].text)}-${shortid.generate()}`
+    }
     const tag = new TagModel({
       origInfo: data.info,
       origLang: lang,

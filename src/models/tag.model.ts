@@ -4,8 +4,8 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { LanguageCode } from '@Types/common'
-import { Tag, TAG_TYPE } from '@Types/tag'
+import { LanguageCode, Translation } from '@Types/common'
+import { Tag, TagType } from '@Types/tag'
 import { prop, Typegoose } from 'typegoose'
 
 
@@ -13,13 +13,13 @@ export class TagSchema extends Typegoose implements Tag {
   @prop({ required: true })
   slug: string // only English: quick-bite
   @prop({ required: true })
-  origTitle: string // translation: سریع‌الحلقوم | Quick bite
+  origTitle: Translation[] // translation: سریع‌الحلقوم | Quick bite
   @prop()
-  origInfo?: string // info about the tag
+  origInfo?: Translation[] // info about the tag
+  @prop()
+  origLang?: LanguageCode // translation: سریع‌الحلقوم | Quick bite
   @prop({ required: true })
-  origLang: LanguageCode // translation: سریع‌الحلقوم | Quick bite
-  @prop({ required: true })
-  type: TAG_TYPE // recipe, cuisine, etc.
+  type: TagType // recipe, cuisine, etc.
 
   createdAt?: Date
   updatedAt?: Date
