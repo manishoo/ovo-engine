@@ -10,6 +10,7 @@ import { NutritionalData } from '@Types/food'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, plugin, prop, Typegoose } from 'typegoose'
+import { Tag } from '@Types/tag'
 
 
 export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -53,7 +54,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   origin?: RecipeOrigin
   @prop()
-  tags?: RecipeTag[]
+  tags?: Ref<Tag>[]
   @prop()
   updatedAt?: Date
   @prop()

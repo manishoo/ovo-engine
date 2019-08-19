@@ -16,6 +16,11 @@ export default class TagService {
     return TagModel.find()
   }
 
+  async validate(tag: string): Promise<Tag | null> {
+
+    return TagModel.findById(tag)
+  }
+
   async create(data: TagInput, lang: LanguageCode): Promise<Tag> {
     const tag = new TagModel({
       origInfo: data.info,

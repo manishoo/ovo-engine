@@ -10,7 +10,7 @@ import { transformRecipe } from '@Services/recipe/transformers/recipe.transforme
 import TagService from '@Services/tag/tag.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
-import { Ingredient, ListRecipesArgs, Recipe, RecipeInput } from '@Types/recipe'
+import { Ingredient, ListRecipesArgs, Recipe, RecipeInput, Instruction } from '@Types/recipe'
 import Errors from '@Utils/errors'
 import { __ } from 'i18n'
 import mongoose from 'mongoose'
@@ -169,11 +169,11 @@ export default class RecipeService {
     return true
   }
 
-  async update(publicId: string, data: Partial<RecipeInput>, lang: LanguageCode, userId?: string) {
-    const recipe = await RecipeModel.findOne({ publicId })
+  async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, userId?: string) {
+    const recipe = await RecipeModel.findOne({ _id: recipeId })
       .populate('author')
       .exec()
-    if (!recipe) throw new Errors.NotFound(__('notFound'))
+    if (!recipe) throw new Errors.NotFound('recipe not found')
 
     if (data.title) {
       recipe.title = data.title
@@ -186,74 +186,68 @@ export default class RecipeService {
         return {
           name: ingredient.name,
           amount: ingredient.amount,
-          unit: ingredient.customUnit,
-          foodId: ingredient.food,
-          weightId: ingredient.weight,
+          customUnit: ingredient.customUnit,
+          gramWeight: ingredient.gramWeight,
           description: ingredient.description,
+          food: mongoose.Types.ObjectId(ingredient.food),
+          weight: mongoose.Types.ObjectId(ingredient.weight),
+          thumbnail: ingredient.thumbnail,
         }
       })
     }
     if (data.instructions) {
-      recipe.instructions = data.instructions.map(ingredient => {
-        return {
-          step: ingredient.step,
-          text: ingredient.text,
+      recipe.instructions = await Promise.all(data.instructions.map(async steps => {
+        let instruction: Partial<Instruction> = {}
+        if (steps.image) {
+          instruction.image = {
+            url: await this.uploadService.processUpload(steps.image, 'full', `images/recipes/${recipe._id}/instructions/${(steps.step).toString()}`)
+          }
         }
-      })
+        instruction.step = steps.step
+        instruction.text = steps.text
+        instruction.notes = steps.note
+        return <Instruction>instruction
+      }))
     }
     if (data.coverImage) {
       recipe.coverImage = {
         url: await this.uploadService.processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
       }
     }
-    /*
-    if (data.totalTime) {
+    if (data.timing) {
       recipe.timing = {
-        ...recipe.timing,
-        totalTime: data.totalTime
+        totalTime: data.timing.totalTime,
+        cookTime: data.timing.cookTime,
+        prepTime: data.timing.prepTime
       }
     }
-    if (data.prepTime) {
-      recipe.timing = {
-        ...recipe.timing,
-        prepTime: data.prepTime
-      }
+    if (data.serving) {
+      recipe.serving = data.serving
     }
-    if (data.cookTime) {
-      recipe.timing = {
-        ...recipe.timing,
-        cookTime: data.cookTime
-      }
-    }
-    if (data.yield) {
-      recipe.yield = data.yield
-    }
-    */
-    if (data.slug) {
-      const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ publicId: { $ne: publicId }, slug: data.slug })
 
-      if (foundRecipeWithTheSameSlug) throw new Errors.Validation('recipe with the smae slug exists')
+    if (data.slug) {
+      const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ _id: { $ne: recipeId }, slug: data.slug })
+
+      if (foundRecipeWithTheSameSlug) throw new Errors.Validation('recipe with the same slug exists')
 
       recipe.slug = data.slug
     }
-    /*
-    if (data.tags) {
-      recipe.tags = await Promise.all(data.tags.map(async slug => {
-        const t = await this.tagService.findBySlug(slug) // TODO we should probably only make one request to db
 
-        return {
-          _id: t._id,
-          slug: t.slug,
-          title: t.title,
-          type: t.type,
-        }
-      }))
+    if (data.tags) {
+      let tags: string[] = []
+      data.tags.map(async tag => {
+        let validateTag = await this.tagService.validate(tag)
+        if (!validateTag) throw new Errors.NotFound('tag not found')
+
+        tags.push(tag)
+      })
     }
-    */
 
     await recipe.save()
+    recipe.likesCount = recipe.likes.length
+    recipe.likedByUser = userId ? !!recipe.likes.find(p => String(p) === userId) : false
 
-    return transformRecipe(recipe, userId, true, lang)
+    return recipe
   }
 
   async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
