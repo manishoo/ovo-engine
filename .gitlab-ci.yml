@@ -7,6 +7,7 @@ build app image:
   image: docker:latest
   only:
     - develop
+    - master
   services:
     - docker:dind
   variables:
@@ -41,4 +42,31 @@ deploy to staging:
     - docker pull registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA
     - docker tag registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA registry.gitlab.com/ouranos-studio/solarys:staging
     - docker push registry.gitlab.com/ouranos-studio/solarys:staging
-    - ssh mostafa@5.9.188.245 "sh deploy-staging.sh"
+    - ssh mostafa@5.9.188.245 "sh staging/back/deploy.sh"
+
+
+deploy to production:
+  stage: deploy
+  image: docker:latest
+  when: manual
+#  only:
+#    - master
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+  environment:
+    name: production
+  before_script:
+    - apk --update add openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$STAGING_SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA
+    - docker tag registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA registry.gitlab.com/ouranos-studio/solarys:production
+    - docker push registry.gitlab.com/ouranos-studio/solarys:production
+    - ssh mostafa@5.9.188.245 "sh production/back/deploy.sh"
