@@ -159,13 +159,18 @@ export default class RecipeService {
 
   async delete(id: string, userId?: string, operatorId?: string) {
     if (!userId && !operatorId) throw new Errors.Forbidden('not allowed')
+    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid recipe ID')
 
-    const query: any = { publicId: id }
+    const query: any = { _id: id }
     if (userId) {
-      query.author = new mongoose.Schema.Types.ObjectId(userId)
+      query.author = mongoose.Types.ObjectId(userId)
     }
-    const { ok } = await RecipeModel.remove(query)
-    if (!ok) throw new Errors.System('something went wrong')
+    const recipe = await RecipeModel.findOne(query)
+    if (!recipe) throw new Errors.NotFound('recipe not found')
+
+    const removedRecipe = await recipe.remove()
+    if (!removedRecipe) throw new Errors.System('something went wrong')
+
     return true
   }
 

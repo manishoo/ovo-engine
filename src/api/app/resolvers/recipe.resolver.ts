@@ -78,7 +78,7 @@ export default class RecipeResolver {
   async deleteRecipe(
     @Arg('recipeId') recipeId: string,
     @Ctx() ctx: Context,
-  ): Promise<Boolean> {
+  ) {
     return this.recipeService.delete(recipeId, ctx.user!.id)
   }
 
