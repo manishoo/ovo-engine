@@ -5,9 +5,9 @@ stages:
 build app image:
   stage: build
   image: docker:latest
-#  only:
-#    - develop
-#    - master
+  only:
+    - develop
+    - master
   services:
     - docker:dind
   variables:
@@ -42,15 +42,15 @@ deploy to staging:
     - docker pull registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA
     - docker tag registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA registry.gitlab.com/ouranos-studio/solarys:staging
     - docker push registry.gitlab.com/ouranos-studio/solarys:staging
-    - ssh mostafa@5.9.188.245 "sh staging/back/deploy.sh"
+    - ssh mostafa@5.9.188.245 "sh staging/solarys/deploy.sh"
 
 
 deploy to production:
   stage: deploy
   image: docker:latest
   when: manual
-#  only:
-#    - master
+  only:
+    - master
   services:
     - docker:dind
   variables:
@@ -69,4 +69,4 @@ deploy to production:
     - docker pull registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA
     - docker tag registry.gitlab.com/ouranos-studio/solarys:$CI_COMMIT_SHORT_SHA registry.gitlab.com/ouranos-studio/solarys:production
     - docker push registry.gitlab.com/ouranos-studio/solarys:production
-    - ssh mostafa@5.9.188.245 "sh production/back/deploy.sh"
+    - ssh mostafa@5.9.188.245 "sh production/solarys/deploy.sh"
