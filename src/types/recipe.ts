@@ -306,18 +306,19 @@ export class RecipeInput {
   title: TranslationInput[]
 
   @Field(type => [IngredientInput])
+  @ArrayNotEmpty()
   ingredients: IngredientInput[]
 
   @Field(type => [InstructionInput])
   instructions: InstructionInput[]
 
-  @Field()
+  @Field(type => Int)
   serving: number
 
   @Field(type => RecipeTimingInput)
   timing: RecipeTimingInput
 
-  @Field()
+  @Field({ nullable: true })
   slug?: string
 
   @Field(type => [TranslationInput], { nullable: true })
@@ -353,7 +354,7 @@ export class ListRecipesArgs {
   @Field({ nullable: true })
   userId?: string
 
-  @Field(type => [String], {nullable: true})
+  @Field(type => [String], { nullable: true })
   tags?: string[]
 
   viewerUserId?: string

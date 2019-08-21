@@ -13,11 +13,9 @@ export class TagSchema extends Typegoose implements Tag {
   @prop({ required: true })
   slug: string // only English: quick-bite
   @prop({ required: true })
-  origTitle: Translation[] // translation: سریع‌الحلقوم | Quick bite
+  title: Translation[] // translation: سریع‌الحلقوم | Quick bite
   @prop()
-  origInfo?: Translation[] // info about the tag
-  @prop()
-  origLang?: LanguageCode // translation: سریع‌الحلقوم | Quick bite
+  info?: Translation[] // info about the tag
   @prop({ required: true })
   type: TagType // recipe, cuisine, etc.
 

@@ -52,7 +52,7 @@ export default class RecipeService {
   async list(variables: ListRecipesArgs = { page: 1, size: 10 }) {
     const query: any = {}
 
-    if(variables.tags){
+    if(variables.tags){    
       query['tags'] = {$in: variables.tags}
     }
 
@@ -179,6 +179,13 @@ export default class RecipeService {
       .exec()
     if (!recipe) throw new Errors.NotFound('recipe not found')
 
+    if (data.slug) {
+      const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ _id: { $ne: recipeId }, slug: data.slug })
+
+      if (foundRecipeWithTheSameSlug) throw new Errors.Validation('recipe with the same slug exists')
+
+      recipe.slug = data.slug
+    }
     if (data.title) {
       recipe.title = data.title
     }
@@ -200,16 +207,16 @@ export default class RecipeService {
       })
     }
     if (data.instructions) {
-      recipe.instructions = await Promise.all(data.instructions.map(async steps => {
+      recipe.instructions = await Promise.all(data.instructions.map(async instructionInput => {
         let instruction: Partial<Instruction> = {}
-        if (steps.image) {
+        if (instructionInput.image) {
           instruction.image = {
-            url: await this.uploadService.processUpload(steps.image, 'full', `images/recipes/${recipe._id}/instructions/${(steps.step).toString()}`)
+            url: await this.uploadService.processUpload(instructionInput.image, 'full', `images/recipes/${recipe._id}/instructions/${(instructionInput.step).toString()}`)
           }
         }
-        instruction.step = steps.step
-        instruction.text = steps.text
-        instruction.notes = steps.note
+        instruction.step = instructionInput.step
+        instruction.text = instructionInput.text
+        instruction.notes = instructionInput.note
         return <Instruction>instruction
       }))
     }
@@ -229,32 +236,21 @@ export default class RecipeService {
       recipe.serving = data.serving
     }
 
-    if (data.slug) {
-      const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ _id: { $ne: recipeId }, slug: data.slug })
-
-      if (foundRecipeWithTheSameSlug) throw new Errors.Validation('recipe with the same slug exists')
-
-      recipe.slug = data.slug
-    }
-
     if (data.tags) {
       
       let tags: any = []
       await Promise.all(data.tags.map(async tag => {
         if(!mongoose.Types.ObjectId.isValid(tag)) throw new Errors.Validation('invalid tag id')
-        let validateTag = await this.tagService.validate(tag)
+        let validateTag = await this.tagService.tag(tag)
         if (!validateTag) throw new Errors.NotFound('tag not found')
 
-        tags.push(mongoose.Types.ObjectId(tag))
-        
+        //tags.push(mongoose.Types.ObjectId(tag))
+        tags.push(tag)
       }))
       
       recipe.tags = tags
-      
+     
     }
-
-    recipe.likesCount = recipe.likes.length
-    recipe.likedByUser = userId ? !!recipe.likes.find(p => String(p) === userId) : false
 
     return recipe.save()
   }

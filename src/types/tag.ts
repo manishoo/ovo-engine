@@ -6,6 +6,7 @@
 import { LanguageCode, TranslationInput, Translation } from '@Types/common'
 import { Types } from 'mongoose'
 import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
+import { ArrayNotEmpty } from 'class-validator'
 
 
 export enum TagType {
@@ -27,10 +28,11 @@ export class TagInput {
   @Field({ nullable: true })
   slug?: string
   @Field(type => [TranslationInput])
+  @ArrayNotEmpty()
   title: TranslationInput[]
   @Field(type => [TranslationInput], { nullable: true })
   info?: TranslationInput[]
-  @Field()
+  @Field(type => TagType)
   type: TagType
 }
 
@@ -45,9 +47,6 @@ export class Tag {
   info?: Translation[]
   @Field()
   type: TagType
-  origTitle: Translation[]
-  origInfo?: Translation[]
-  origLang?: LanguageCode
   createdAt?: Date
   updatedAt?: Date
 }

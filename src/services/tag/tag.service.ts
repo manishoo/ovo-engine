@@ -8,8 +8,8 @@ import { LanguageCode } from '@Types/common'
 import { Tag, TagInput } from '@Types/tag'
 import Errors from '@Utils/errors'
 import { Service } from 'typedi'
-import shortid = require('shortid');
-import slug = require('slug');
+import shortid = require('shortid')
+import slug = require('slug')
 
 
 @Service()
@@ -18,19 +18,23 @@ export default class TagService {
     return TagModel.find()
   }
 
-  async validate(tag: string): Promise<Tag | null> {
+  async tag(tag: string): Promise<Tag | null> {
 
     return TagModel.findById(tag)
   }
 
   async create(data: TagInput, lang: LanguageCode): Promise<Tag> {
+    let q: any = {}
+    q['title.text'] = data.title[0].text
+    const validateTag = await TagModel.findOne(q)
+    if (validateTag) throw new Errors.UserInput('This tag already exists', { 'title text': 'This title already exists' })
+
     if (!data.slug) {
       data.slug = `${slug(data.title[0].text)}-${shortid.generate()}`
     }
     const tag = new TagModel({
-      origInfo: data.info,
-      origLang: lang,
-      origTitle: data.title,
+      info: data.info,
+      title: data.title,
       slug: data.slug,
       type: data.type,
     })

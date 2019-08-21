@@ -24,8 +24,6 @@ export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
 export class RecipeSchema extends Typegoose implements Recipe {
   _id: mongoose.Types.ObjectId
   id: string
-  likedByUser: boolean
-  likesCount: number
 
   @prop({ required: true })
   title: Translation[]
@@ -63,6 +61,13 @@ export class RecipeSchema extends Typegoose implements Recipe {
   reviews?: Review[]
   @prop()
   createdAt: Date
+
+  get likesCount(): number {
+    return this.likes.length
+  }
+  get likedByUser(): boolean {
+    return this.id ? !!this.likes.find(p => String(p) === this.id) : false
+  }
 }
 
 export const RecipeModel = new RecipeSchema().getModelForClass(RecipeSchema, {
