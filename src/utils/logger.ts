@@ -4,9 +4,7 @@
  */
 
 export const logError = (location: string) => (error: Error) => {
-	console.error(`${location} ====>`, error)
+  console.error(`${location} ====>`, error)
 }
 
-export default {
-
-}
+export default {}

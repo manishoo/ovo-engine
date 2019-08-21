@@ -1,48 +1,60 @@
-// /*
-//  * import-translated-weights.ts
-//  * Copyright: Ouranos Studio 2019. All rights reserved.
-//  */
-//
-// import uniqueTokens from './weight-uniqueTokens-1.json'
-// import {WeightTr} from '~/dao/models'
-// import {LANGUAGE_CODES} from '~/constants/enums'
-// import {weightTrAttribute} from '~/dao/models/foods/db.js'
-//
-// export default async function main() {
-// 	await WeightTr.destroy({where: {lang: LANGUAGE_CODES.fa}})
-// 	const weightTrs = await WeightTr.findAll()
-//
-// 	const arrays = []
-// 	const size = 1000
-//
-// 	while (weightTrs.length > 0)
-// 		arrays.push(weightTrs.splice(0, size))
-//
-// 	for (let i = 0; i < arrays.length; i++) {
-// 		const weightTrsToSave: weightTrAttribute[] = []
-// 		const wtrs = arrays[i]
-//
-// 		await Promise.all(wtrs.map(async wtr => {
-// 			let description
-// 			const found = uniqueTokens.find(p => p.token === wtr.description)
-// 			if (found && found.tr) {
-// 				description = found.tr
-// 			}
-//
-// 			if (description) {
-// 				// @ts-ignore
-// 				weightTrsToSave.push({
-// 					weightId: wtr.weightId,
-// 					lang: LANGUAGE_CODES.fa,
-// 					description,
-// 				})
-// 			}
-// 		}))
-// 		console.log('weightTrsToSave', weightTrsToSave)
-// 		await WeightTr.bulkCreate(weightTrsToSave)
-// 	}
-// }
-//
-// // main()
-// // 	.then(() => process.exit(0))
-// // 	.catch((e) => console.error(e))
+/*
+ * import-translated-weights.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
+import { FoodModel } from '../src/models/food.model'
+import { LanguageCode, Translation } from '../src/types/common'
+import weightTokens from './weight-unique-tokens-fa.json'
+
+
+function getEnTranslation(tr: Translation[]) {
+  if (tr.length === 0) return
+
+  const enTr = tr.find(t => t.locale === LanguageCode.en)
+  if (enTr) {
+    return enTr.text
+  }
+
+  return
+}
+
+async function translateWeights() {
+  const foods = await FoodModel.find()
+
+  for (let food of foods) {
+    food.weights = food.weights.map(weight => {
+      const foundWeight = weightTokens.find(p => p.token === getEnTranslation(weight.name))
+
+      if (!foundWeight) {
+        console.error('Weight not found: ' + getEnTranslation(weight.name))
+        return weight
+      }
+      if (!foundWeight.tr) throw new Error('Weight translation not found')
+
+      const enName = getEnTranslation(weight.name)
+      if (!enName) throw new Error('no en')
+
+      weight.name = [
+        {
+          locale: LanguageCode.en,
+          text: enName,
+        },
+        {
+          locale: LanguageCode.fa,
+          text: foundWeight.tr,
+        }
+      ]
+
+      return weight
+    })
+
+    await FoodModel.updateOne({_id: food._id}, food)
+    // await food.save()
+    process.stdout.write('.')
+  }
+}
+
+export default async function main() {
+  return translateWeights()
+}

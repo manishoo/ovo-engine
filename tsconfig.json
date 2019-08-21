@@ -1,35 +1,54 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2016",
     "module": "commonjs",
     "lib": [ "es2015" ],
+
     "strict": true,
-    "outDir": "build",
+    "allowJs": true,
+
+    "allowUnreachableCode": true,
+    "allowUnusedLabels": false,
+
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "baseUrl": "./",
     "removeComments": true,
     "experimentalDecorators": true,
+
     "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
+
     "noImplicitThis": false,
     "skipLibCheck": true,
+
+    "baseUrl": "./",
+    "outDir": "build",
+
     "paths": {
-      "~/*": [
-        "src/*"
-      ],
-      "@services/*": [
+      "@Services/*": [
         "src/services/*"
       ],
-      "@dao/*": [
-        "src/dao/*"
+      "@Models": [
+        "src/models/index"
       ],
-      "@utils/*": [
+      "@Models/*": [
+        "src/models/*"
+      ],
+      "@Utils/*": [
         "src/utils/*"
       ],
-      "@config": [
+      "@Config": [
         "src/config"
+      ],
+      "@Config/*": [
+        "src/config/*"
+      ],
+      "@Loaders/*": [
+        "src/loaders/*"
+      ],
+      "@Types/*": [
+        "src/types/*"
       ]
     }
   },

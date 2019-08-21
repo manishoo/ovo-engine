@@ -3,139 +3,97 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import RecipeRepo from '@dao/repositories/recipe.repository'
-import {MealPlan} from '@dao/models/meal-plan.model'
-import UserRepo from '@dao/repositories/user.repository'
-import FoodRepo from '@dao/repositories/food.repository'
-import {LANGUAGE_CODES, MEAL_ITEM_TYPES} from '~/constants/enums'
-import {Recipe} from '@dao/models/recipe.model'
-// import FoodRepo from '@dao/repositories/food.repository'
-// import MealPlanner from './meal-planner'
-// import {MealItem} from '@dao/types'
-// import {getEditDistance} from '@utils/levenshtein'
-import MealPlanner from './meal-planner'
-import {Food, MealItem} from '@dao/types'
-import {getEditDistance} from '@utils/levenshtein'
+import { FoodClassModel } from '@Models/food-class.model'
+import { FoodModel } from '@Models/food.model'
+import { Food, FoodInput, FoodsListResponse } from '@Types/food'
+import { WeightInput } from '@Types/weight'
+import Errors from '@Utils/errors'
+import mongoose from 'mongoose'
+import { Service } from 'typedi'
 
-interface MealPlanOptions {
-	name: string
+
+@Service()
+export default class FoodService {
+  constructor(
+    // service injection
+  ) {
+    // noop
+  }
+
+  async listFoods(page: number, size: number, foodClassID?: string): Promise<FoodsListResponse> {
+    let query: any = {}
+    if (foodClassID) {
+      query['foodClass'] = new mongoose.Types.ObjectId(foodClassID)
+    }
+
+    const foods = await FoodModel.find(query)
+      .limit(size)
+      .skip(size * (page - 1))
+
+    const counts = await FoodModel.countDocuments(query)
+
+    return {
+      foods,
+      pagination: {
+        page,
+        size,
+        totalCount: counts,
+        totalPages: Math.ceil(counts / size),
+        hasNext: page !== Math.ceil(counts / size),
+      }
+    }
+  }
+
+  async updateFood(foodId: string, inputFood: FoodInput): Promise<Food | null> {
+    if (!mongoose.Types.ObjectId.isValid(foodId)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
+
+    const food = await FoodModel.findById(foodId)
+    if (!food) throw new Errors.NotFound('food not found')
+
+    let weights: WeightInput[] = []
+    inputFood.weights.map(weight => {
+      if (weight.id) {
+        weights.push(weight)
+      } else {
+        weight['id'] = String(new mongoose.Types.ObjectId())
+        weights.push(weight)
+      }
+    })
+
+    food.name = inputFood.name
+    food.weights = weights
+
+    return food.save()
+  }
+
+  async deleteFood(foodID: string): Promise<Food> {
+    if (!mongoose.Types.ObjectId.isValid(foodID)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
+
+    const food = await FoodModel.findByIdAndDelete(foodID)
+    if (!food) throw new Errors.NotFound('food not found')
+
+    return food
+  }
+
+  async createFood(foodClassID: string, food: FoodInput): Promise<Food> {
+    if (!mongoose.Types.ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
+
+    const foodClass = await FoodClassModel.findById(foodClassID)
+    if (!foodClass) throw new Errors.NotFound('food class not foudn')
+
+    let weights: WeightInput[] = []
+    food.weights.map(weight => {
+      weight['id'] = String(new mongoose.Types.ObjectId())
+      weights.push(weight)
+    })
+    const foodInput = new FoodModel({
+      name: food.name,
+      weights,
+      description: food.description,
+      foodClass,
+    })
+
+    return foodInput.save()
+  }
+
 }
-
-class FoodService {
-	async getRecipe(slug: string, userId?: string): Promise<Recipe> {
-		return RecipeRepo.findById(slug, userId)
-	}
-
-	async getFood(id: string): Promise<Food> {
-		return FoodRepo.findFoodByPublicId(id, LANGUAGE_CODES.en) // TODO fixme
-	}
-
-	async getFoodVariety(id: string): Promise<Food> {
-		return FoodRepo.findFoodVarietyByPublicId(id, LANGUAGE_CODES.en)
-	}
-
-	async generateMealPlan(userId: string): Promise<MealPlan> {
-		const user = await UserRepo.findById(userId)
-		if (!user.meals) throw new Error('no meals')
-
-		const plan = await MealPlanner.generateMealPlan(user.meals)
-		// const plans = user.mealPlans ? [...user.mealPlans, plan._id] : [plan._id]
-		// console.log('==============>', p)
-		user.mealPlans = user.mealPlans ? [...user.mealPlans, plan._id] : [plan._id]
-		await UserRepo.modify(userId, user)
-		// do something
-		return plan
-	}
-
-	async getUserMealPlan(userId: string, lang: LANGUAGE_CODES): Promise<MealPlan> {
-		const c = await UserRepo.getUserMealPlan(userId, lang)
-		console.log('========', c)
-		return c
-	}
-
-	// async generateMealPlan(userId, options) {
-	// 	const user = await UserRepo.findById(userId)
-	// 	const plan = new MealPlan()
-	// 	plan.name = options.name
-	//
-	// 	if (user.meals.length == 0) {
-	// 		throw Error(__('userHasNoMeals'))
-	// 	}
-	//
-	// 	for (const day in WEEKDAYS) {
-	// 		// @ts-ignore
-	// 		plan[day] = {
-	// 			meals: []
-	// 		}
-	// 		for (const meal of user.meals) {
-	// 			// @ts-ignore
-	// 			plan[day].meals.push({
-	// 				...meal,
-	// 				// TODO fill food
-	// 			})
-	// 		}
-	// 	}
-	//
-	// 	return MealPlanRepo.create(plan)
-	// },
-
-	private async _searchFoods(q: string, lang: LANGUAGE_CODES): Promise<Food[]> {
-		// FIXME better search
-		let foods = await FoodRepo.findFoodVariety({
-			query: q,
-			limit: 5,
-			lang,
-			shouldIncludeNutrients: true,
-		})
-
-		return foods.foods
-	}
-
-	private async _searchRecipes(q: string): Promise<Recipe[]> {
-		let recipes = await RecipeRepo.find(5, 0, q)
-
-		return recipes.recipes
-	}
-
-	async searchMealItems(q: string, foodTypes: MEAL_ITEM_TYPES[], lang: LANGUAGE_CODES): Promise<MealItem[]> {
-		// search through foods and recipes
-		const foods = foodTypes.find(p => p === MEAL_ITEM_TYPES.food) ? await this._searchFoods(q, lang) : []
-		// FIXME handle language in recipes search
-		const recipes = foodTypes.find(p => p === MEAL_ITEM_TYPES.recipe) ? await this._searchRecipes(q) : []
-
-		const mealItems: MealItem[] = []
-
-		foods.forEach((food: Food) => {
-			mealItems.push({
-				title: food.name,
-				subtitle: food.foodGroup ? food.foodGroup.map(fg => fg.name).join(', ') : '',
-				thumbnail: food.image ? food.image : undefined,
-				id: food.id,
-				type: MEAL_ITEM_TYPES.food,
-				weights: food.weights,
-				nutritionalData: food.nutrients,
-				// varieties: food.varieties,
-				// subtitle: food.,
-			})
-		})
-
-		recipes.forEach((recipe: Recipe) => {
-			mealItems.push({
-				title: recipe.title,
-				thumbnail: recipe.thumbnail ? recipe.thumbnail : undefined,
-				id: recipe.id,
-				type: MEAL_ITEM_TYPES.recipe,
-				// subtitle: food.,
-			})
-		})
-
-		mealItems.sort((a, b) => getEditDistance(q, a.title || ''))
-		mealItems.splice(10)
-
-		return mealItems
-	}
-}
-
-const foodService = new FoodService()
-
-export default foodService
