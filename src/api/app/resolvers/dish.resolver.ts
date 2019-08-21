@@ -5,9 +5,10 @@
 
 import DishService from '@Services/dish/dish.service'
 import { Dish, DishInput, DishListResponse } from '@Types/dish'
-import { Arg, Authorized, Ctx, Int, Query, Resolver } from 'type-graphql'
+import { Arg, Authorized, Ctx, Int, Query, Resolver, Mutation } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
+import { UserRole } from '@Types/common'
 
 
 @Service()
@@ -18,6 +19,15 @@ export default class DishResolver {
     private readonly dishService: DishService
   ) {
     // noop
+  }
+
+  @Authorized(UserRole.user)
+  @Mutation(returns => Dish)
+  async createDish(
+    @Arg('dish') dish: DishInput,
+    @Ctx() ctx: Context,
+  ) {
+    return this.dishService.create(dish)
   }
 
   @Authorized()
@@ -55,14 +65,5 @@ export default class DishResolver {
     @Ctx() ctx: Context,
   ): Promise<Dish> {
     return this.dishService.update(id, data)
-  }
-
-  @Authorized()
-  @Query(returns => Dish)
-  createDish(
-    @Arg('data') data: DishInput,
-    @Ctx() ctx: Context,
-  ): Promise<Dish> {
-    return this.dishService.create(data)
   }
 }
