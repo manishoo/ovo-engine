@@ -8,6 +8,7 @@ import { Field, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
+import { Weight, WeightInput } from './weight';
 
 
 export enum DISH_ITEM_TYPES {
@@ -66,10 +67,13 @@ export class DishItem {
   unit: number
 
   @Field(type => String, { nullable: true })
-  foodId?: Ref<Food>
+  food?: Ref<Food>
 
   @Field(type => String, { nullable: true })
-  RecipeId?: Ref<Recipe>
+  recipe?: Ref<Recipe>
+
+  @Field({ nullable: true })
+  weight: string
 }
 
 @InputType()
@@ -78,8 +82,11 @@ export class DishItemInput {
   unit: number
 
   @Field(type => String, { nullable: true })
-  foodId?: Ref<Food>
+  food?: Ref<Food>
 
   @Field(type => String, { nullable: true })
-  recipeId?: Ref<Recipe>
+  recipe?: Ref<Recipe>
+
+  @Field({ nullable: true })
+  weight: string
 }

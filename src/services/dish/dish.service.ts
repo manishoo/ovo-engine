@@ -11,7 +11,6 @@ import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 
-
 const DEFAULT_PAGE_SIZE = 25
 
 @Service()
@@ -27,33 +26,37 @@ export default class DishService {
       dish.description = dishInput.description
     }
     let dishItems = await Promise.all(dishInput.items.map(async item => {
-      if (item.foodId && item.recipeId) {
-        throw new Errors.UserInput('Wrong input', { 'foodId': 'Only one of the following fields can be used', 'recipeId': 'Only one of the following fields can be used' })
+      if (item.food && item.recipe) {
+        throw new Errors.UserInput('Wrong input', { 'food': 'Only one of the following fields can be used', 'recipe': 'Only one of the following fields can be used' })
       }
-      if (!item.foodId && !item.recipeId) {
-        throw new Errors.UserInput('Wrong input', { 'foodId': 'One of the items should be used', 'recipeId': 'One of the items should be used' })
+      if (!item.food && !item.recipe) {
+        throw new Errors.UserInput('Wrong input', { 'food': 'One of the items should be used', 'recipe': 'One of the items should be used' })
       }
 
-      if (item.foodId) {
-        if (!mongoose.Types.ObjectId.isValid(item.foodId.toString())) throw new Errors.Validation('Invalid food id')
+      if (item.food) {
+        if (!item.weight) throw new Errors.Validation('Weight is mandatory')
+        if (!mongoose.Types.ObjectId.isValid(item.food.toString())) throw new Errors.Validation('Invalid food id')
 
-        const food = await FoodModel.findById(item.foodId.toString())
+        const food = await FoodModel.findById(item.food.toString())
         if (!food) throw new Errors.NotFound('food not found')
+        const foundWeight = food.weights.find(w => w.id === item.weight)
+        if(!foundWeight) throw new Errors.UserInput('Wront weight', {'weight': 'This weight is not available for the following food'})
 
         return {
           unit: item.unit,
-          foodId: food.id,
+          food: food.id,
+          weight: item.weight,
         }
       }
-      if (item.recipeId) {
-        if (!mongoose.Types.ObjectId.isValid(item.recipeId.toString())) throw new Errors.Validation('Invalid recipe id')
+      if (item.recipe) {
+        if (!mongoose.Types.ObjectId.isValid(item.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
 
-        const recipe = await RecipeModel.findById(item.recipeId.toString())
+        const recipe = await RecipeModel.findById(item.recipe.toString())
         if (!recipe) throw new Errors.NotFound('recipe not found')
 
         return {
           unit: item.unit,
-          recipeId: recipe.id,
+          recipe: recipe.id,
         }
       }
 
