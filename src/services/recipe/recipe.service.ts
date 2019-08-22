@@ -16,14 +16,14 @@ import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
-import { TagModel } from '@Models/tag.model';
+import { TagModel } from '@Models/tag.model'
+import { transformRecipe } from './transformers/recipe.transformer'
 
 
 @Service()
 export default class RecipeService {
   constructor(
     // service injection
-    private readonly tagService: TagService,
     private readonly uploadService: UploadService,
   ) {
     // noop
@@ -80,7 +80,7 @@ export default class RecipeService {
       .populate('author')
       .exec()
     recipes.map(recipe => {
-      recipe.userLikedRecipe = recipe.likedByUser(me._id.toString())
+      transformRecipe(recipe, me._id.toString())
     })
     const totalCount = await RecipeModel.count(query)
 
@@ -255,7 +255,7 @@ export default class RecipeService {
       recipe.tags = tags
 
     }
-    recipe.userLikedRecipe = recipe.likedByUser(userId!)
+    transformRecipe(recipe, userId)
 
     return recipe.save()
   }

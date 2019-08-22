@@ -6,9 +6,10 @@
 import { LanguageCode } from '@Types/common'
 import { Recipe } from '@Types/recipe'
 import { InstanceType } from 'typegoose'
+import { RecipeSchema } from '@Models/recipe.model'
 
 
-export async function transformRecipe(recipe: InstanceType<Recipe>, userId?: string, full: boolean = false, lang: LanguageCode = LanguageCode.en): Promise<Recipe> {
+export async function transformRecipee(recipe: InstanceType<Recipe>, userId?: string, full: boolean = false, lang: LanguageCode = LanguageCode.en): Promise<Recipe> {
   recipe = recipe.toObject()
   recipe.likesCount = recipe.likes.length
   //recipe.likedByUser = userId ? !!recipe.likes.find(p => String(p) === userId) : false
@@ -38,5 +39,11 @@ export async function transformRecipe(recipe: InstanceType<Recipe>, userId?: str
     }))
   }
 
+  return recipe
+}
+
+
+export function transformRecipe(recipe: InstanceType<RecipeSchema>, userId?: string) {
+  recipe.userLikedRecipe = recipe.likedByUser(userId!)
   return recipe
 }
