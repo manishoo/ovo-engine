@@ -36,7 +36,7 @@ export default class RecipeResolver {
   @Authorized(UserRole.user)
   @Query(returns => RecipesListResponse)
   async recipes(
-    @Args() { page, size, lastId, nameSearchQuery, userId }: ListRecipesArgs,
+    @Args() { page, size, lastId, nameSearchQuery, userId, tags }: ListRecipesArgs,
     @Ctx() ctx: Context,
   ) {
     let viewerUserId
@@ -51,6 +51,7 @@ export default class RecipeResolver {
       nameSearchQuery,
       userId: userId || viewerUserId,
       viewerUserId,
+      tags,
     })
   }
 
@@ -66,11 +67,11 @@ export default class RecipeResolver {
   @Authorized()
   @Mutation(returns => Recipe)
   async updateRecipe(
-    @Arg('recipeId') recipePublicId: string,
+    @Arg('recipeId') recipeId: string,
     @Arg('recipe') recipe: RecipeInput,
     @Ctx() ctx: Context,
-  ): Promise<Recipe> {
-    return this.recipeService.update(recipePublicId, recipe, ctx.lang, ctx.user!.id)
+  ) {
+    return this.recipeService.update(recipeId, recipe, ctx.lang, ctx.user!.id)
   }
 
   @Authorized()
