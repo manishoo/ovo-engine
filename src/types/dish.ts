@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { UserSchema } from '@Models/user.model'
 import { Pagination } from '@Types/common'
-import { MealItem } from '@Types/eating'
-import { User } from '@Types/user'
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
+import { Food } from '@Types/food'
+import { Recipe } from '@Types/recipe'
+import { Weight, WeightInput } from './weight';
 
 
 export enum DISH_ITEM_TYPES {
@@ -24,17 +24,6 @@ export class DishListResponse {
   pagination: Pagination
 }
 
-@InputType()
-export class DishItemInput {
-  @Field({ nullable: true })
-  unit?: string
-  @Field()
-  amount: number
-  @Field()
-  foodId?: string
-
-}
-
 @ObjectType()
 export class Dish {
   @Field()
@@ -46,16 +35,48 @@ export class Dish {
   @Field({ nullable: true })
   description?: string
 
-  @Field(type => User, { nullable: true })
-  author?: Ref<UserSchema> | User
-
-  @Field(type => [MealItem])
-  items: MealItem[]
+  @Field(type => [DishItem])
+  items: DishItem[]
 }
 
 @InputType()
 export class DishInput {
+  @Field({ nullable: true })
+  name?: string
+
+  @Field({ nullable: true })
+  description?: string
+
+  @Field(type => [DishItemInput])
+  items: DishItemInput[]
+}
+
+@ObjectType()
+export class DishItem {
   @Field()
-  title: string
-  // TODO complete
+  amount: number
+
+  @Field(type => String, { nullable: true })
+  food?: Ref<Food>
+
+  @Field(type => String, { nullable: true })
+  recipe?: Ref<Recipe>
+
+  @Field({ nullable: true })
+  weight?: string
+}
+
+@InputType()
+export class DishItemInput {
+  @Field()
+  amount: number
+
+  @Field(type => String, { nullable: true })
+  food?: Ref<Food>
+
+  @Field(type => String, { nullable: true })
+  recipe?: Ref<Recipe>
+
+  @Field({ nullable: true })
+  weight?: string
 }
