@@ -11,7 +11,7 @@ import { InstanceType } from 'typegoose'
 export async function transformRecipe(recipe: InstanceType<Recipe>, userId?: string, full: boolean = false, lang: LanguageCode = LanguageCode.en): Promise<Recipe> {
   recipe = recipe.toObject()
   recipe.likesCount = recipe.likes.length
-  recipe.likedByUser = userId ? !!recipe.likes.find(p => String(p) === userId) : false
+  //recipe.likedByUser = userId ? !!recipe.likes.find(p => String(p) === userId) : false
 
   if (Object(recipe.author).hasOwnProperty('publicId')) {
     //recipe.author = transformRecipeUser(recipe.author as User)

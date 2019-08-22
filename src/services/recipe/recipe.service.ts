@@ -9,7 +9,7 @@ import { UserModel } from '@Models/user.model'
 import TagService from '@Services/tag/tag.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
-import { Ingredient, ListRecipesArgs, Recipe, RecipeInput, Instruction } from '@Types/recipe'
+import { Ingredient, ListRecipesArgs, Recipe, RecipeInput, Instruction, RecipesListResponse } from '@Types/recipe'
 import Errors from '@Utils/errors'
 import { __ } from 'i18n'
 import mongoose from 'mongoose'
@@ -50,11 +50,11 @@ export default class RecipeService {
     return recipe
   }
 
-  async list(variables: ListRecipesArgs = { page: 1, size: 10 }) {
+  async list(variables: ListRecipesArgs = { page: 1, size: 10 }): Promise<RecipesListResponse> {
     const query: any = {}
 
-    if(variables.tags){    
-      query['tags'] = {$in: variables.tags}
+    if (variables.tags) {
+      query['tags'] = { $in: variables.tags }
     }
 
     if (variables.nameSearchQuery) {
@@ -79,6 +79,10 @@ export default class RecipeService {
       .exec()
     const totalCount = await RecipeModel.count(query)
 
+    recipes.map(recipe => {
+      recipe.likesCount
+      recipe.userLikedRecipe = recipe.likedByUser(recipe.author.toString())
+    })
     return {
       recipes,
       pagination: {
@@ -237,19 +241,21 @@ export default class RecipeService {
     }
 
     if (data.tags) {
-      
+
       let tags: any = []
       await Promise.all(data.tags.map(async tag => {
-        if(!mongoose.Types.ObjectId.isValid(tag)) throw new Errors.Validation('invalid tag id')
+        if (!mongoose.Types.ObjectId.isValid(tag)) throw new Errors.Validation('invalid tag id')
         let validateTag = await TagModel.findById(tag)
         if (!validateTag) throw new Errors.NotFound('tag not found')
 
         tags.push(tag)
       }))
-      
+
       recipe.tags = tags
-     
+
     }
+    recipe.userLikedRecipe = recipe.likedByUser(userId!)
+    recipe.likesCount
 
     return recipe.save()
   }

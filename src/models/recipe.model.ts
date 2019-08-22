@@ -62,13 +62,14 @@ export class RecipeSchema extends Typegoose implements Recipe {
   reviews?: Review[]
   @prop()
   createdAt: Date
-
+  userLikedRecipe: boolean
+  @prop()
   get likesCount(): number {
     return this.likes.length
   }
   @instanceMethod
-  likedByUser(user: User): boolean {
-    return user.id ? !!this.likes.find(p => String(p) === user.id) : false
+  likedByUser(userId: string): boolean {
+    return userId ? !!this.likes.find(p => String(p) === userId) : false
   }
 }
 
