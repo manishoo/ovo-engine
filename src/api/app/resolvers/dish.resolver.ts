@@ -4,8 +4,8 @@
  */
 
 import DishService from '@Services/dish/dish.service'
-import { Dish, DishInput, DishListResponse } from '@Types/dish'
-import { Arg, Authorized, Ctx, Int, Query, Resolver, Mutation } from 'type-graphql'
+import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
+import { Arg, Authorized, Ctx, Query, Resolver, Mutation, Args } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
 import { UserRole } from '@Types/common'
@@ -27,17 +27,16 @@ export default class DishResolver {
     @Arg('dish') dish: DishInput,
     @Ctx() ctx: Context,
   ) {
-    return this.dishService.create(dish)
+    return this.dishService.create(dish, ctx.user!.id)
   }
 
-  @Authorized()
+  @Authorized(UserRole.user)
   @Query(returns => DishListResponse)
-  dishes(
-    @Arg('page', type => Int) page: number,
-    @Arg('size', type => Int) size: number,
+  async dishes(
+    @Args() { page, size, authorId }: ListDishesArgs,
     @Ctx() ctx: Context,
-  ): Promise<DishListResponse> {
-    return this.dishService.list(page, size)
+  ) {
+    return this.dishService.list({ page, size, authorId })
   }
 
   @Query(returns => Dish)

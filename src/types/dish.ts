@@ -4,11 +4,12 @@
  */
 
 import { Pagination } from '@Types/common'
-import { Field, InputType, ObjectType } from 'type-graphql'
+import { Field, InputType, ObjectType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { Weight, WeightInput } from './weight';
+import { User } from './user'
+import { Min, Max } from 'class-validator'
 
 
 export enum DISH_ITEM_TYPES {
@@ -37,6 +38,9 @@ export class Dish {
 
   @Field(type => [DishItem])
   items: DishItem[]
+
+  @Field(type => String, { nullable: true })
+  author?: Ref<User>
 }
 
 @InputType()
@@ -49,6 +53,9 @@ export class DishInput {
 
   @Field(type => [DishItemInput])
   items: DishItemInput[]
+
+  @Field(type => String, { nullable: true })
+  author?: string
 }
 
 @ObjectType()
@@ -79,4 +86,20 @@ export class DishItemInput {
 
   @Field({ nullable: true })
   weight?: string
+}
+
+@ArgsType()
+export class ListDishesArgs {
+  @Field({ nullable: true })
+  @Min(1)
+  page?: number
+
+  @Field({ nullable: true })
+  @Min(1)
+  @Max(30)
+
+  size?: number
+
+  @Field({ nullable: true })
+  authorId?: string
 }
