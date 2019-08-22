@@ -100,14 +100,16 @@ export default class DishService {
     }
   }
 
-  async delete(id: string): Promise<boolean> {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('Invalid  id')
+  async delete(id: string, userId: string): Promise<Dish> {
+    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
 
-    // TODO can only delete own dish
+    let dish = await DishModel.findById(id)
+    if (!dish) throw new Errors.NotFound('dish not found')
 
-    await DishModel.remove({ _id: mongoose.Types.ObjectId(id) })
+    if (dish.author !== userId) throw new Errors.Forbidden('removing fail. you inly can delete your dishes')
 
-    return true
+    return dish.delete()
+
   }
 
   async update(id: string, dishInput: DishInput): Promise<Dish> {
