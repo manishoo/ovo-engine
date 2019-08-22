@@ -10,6 +10,7 @@ import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import { User } from './user'
 import { Min, Max } from 'class-validator'
+import { UserSchema } from '@Models/user.model';
 
 
 export enum DISH_ITEM_TYPES {
@@ -40,7 +41,7 @@ export class Dish {
   items: DishItem[]
 
   @Field(type => String, { nullable: true })
-  author?: Ref<User>
+  author?: Ref<UserSchema>
 }
 
 @InputType()
