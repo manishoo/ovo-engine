@@ -69,7 +69,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   }
   @instanceMethod
   likedByUser(userId: string): boolean {
-    return userId ? !!this.likes.find(p => String(p) === userId) : false
+    return !!this.likes.find(p => String(p) === userId)
   }
 }
 
