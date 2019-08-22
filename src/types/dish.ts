@@ -24,16 +24,6 @@ export class DishListResponse {
   pagination: Pagination
 }
 
-@InputType()
-export class DishItemInputs {
-  @Field({ nullable: true })
-  unit?: string
-  @Field()
-  amount: number
-  @Field()
-  foodId?: string
-}
-
 @ObjectType()
 export class Dish {
   @Field()
@@ -64,7 +54,7 @@ export class DishInput {
 @ObjectType()
 export class DishItem {
   @Field()
-  unit: number
+  amount: number
 
   @Field(type => String, { nullable: true })
   food?: Ref<Food>
@@ -73,13 +63,13 @@ export class DishItem {
   recipe?: Ref<Recipe>
 
   @Field({ nullable: true })
-  weight: string
+  weight?: string
 }
 
 @InputType()
 export class DishItemInput {
   @Field()
-  unit: number
+  amount: number
 
   @Field(type => String, { nullable: true })
   food?: Ref<Food>
@@ -88,5 +78,5 @@ export class DishItemInput {
   recipe?: Ref<Recipe>
 
   @Field({ nullable: true })
-  weight: string
+  weight?: string
 }

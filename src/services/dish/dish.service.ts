@@ -25,37 +25,36 @@ export default class DishService {
     if (dishInput.description) {
       dish.description = dishInput.description
     }
-    let dishItems = await Promise.all(dishInput.items.map(async item => {
-      if (item.food && item.recipe) {
+    let dishItems = await Promise.all(dishInput.items.map(async dishItemInput => {
+      if (dishItemInput.food && dishItemInput.recipe) {
         throw new Errors.UserInput('Wrong input', { 'food': 'Only one of the following fields can be used', 'recipe': 'Only one of the following fields can be used' })
       }
-      if (!item.food && !item.recipe) {
+      if (!dishItemInput.food && !dishItemInput.recipe) {
         throw new Errors.UserInput('Wrong input', { 'food': 'One of the items should be used', 'recipe': 'One of the items should be used' })
       }
 
-      if (item.food) {
-        if (!item.weight) throw new Errors.Validation('Weight is mandatory')
-        if (!mongoose.Types.ObjectId.isValid(item.food.toString())) throw new Errors.Validation('Invalid food id')
+      if (dishItemInput.food) {
+        if (!mongoose.Types.ObjectId.isValid(dishItemInput.food.toString())) throw new Errors.Validation('Invalid food id')
 
-        const food = await FoodModel.findById(item.food.toString())
+        const food = await FoodModel.findById(dishItemInput.food.toString())
         if (!food) throw new Errors.NotFound('food not found')
-        const foundWeight = food.weights.find(w => w.id === item.weight)
+        const foundWeight = food.weights.find(w => w.id === dishItemInput.weight)
         if(!foundWeight) throw new Errors.UserInput('Wront weight', {'weight': 'This weight is not available for the following food'})
 
         return {
-          unit: item.unit,
+          amount: dishItemInput.amount,
           food: food.id,
-          weight: item.weight,
+          weight: dishItemInput.weight,
         }
       }
-      if (item.recipe) {
-        if (!mongoose.Types.ObjectId.isValid(item.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
+      if (dishItemInput.recipe) {
+        if (!mongoose.Types.ObjectId.isValid(dishItemInput.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
 
-        const recipe = await RecipeModel.findById(item.recipe.toString())
+        const recipe = await RecipeModel.findById(dishItemInput.recipe.toString())
         if (!recipe) throw new Errors.NotFound('recipe not found')
 
         return {
-          unit: item.unit,
+          amount: dishItemInput.amount,
           recipe: recipe.id,
         }
       }
