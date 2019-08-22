@@ -138,6 +138,18 @@ export class SocialNetworks {
 }
 
 @InputType()
+export class SocialNetworksInput {
+  @Field({ nullable: true })
+  instagram?: string
+  @Field({ nullable: true })
+  twitter?: string
+  @Field({ nullable: true })
+  pinterest?: string
+  @Field({ nullable: true })
+  website?: string
+}
+
+@InputType()
 export class TranslationInput {
   @Field(type => LanguageCode)
   locale: LanguageCode
