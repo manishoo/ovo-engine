@@ -38,8 +38,10 @@ export default class DishService {
 
         const food = await FoodModel.findById(dishItemInput.food.toString())
         if (!food) throw new Errors.NotFound('food not found')
-        const foundWeight = food.weights.find(w => w.id === dishItemInput.weight)
-        if(!foundWeight) throw new Errors.UserInput('Wront weight', {'weight': 'This weight is not available for the following food'})
+        if (dishItemInput.weight) {
+          const foundWeight = food.weights.find(w => w.id === dishItemInput.weight)
+          if (!foundWeight) throw new Errors.UserInput('Wront weight', { 'weight': 'This weight is not available for the following food' })
+        }
 
         return {
           amount: dishItemInput.amount,
