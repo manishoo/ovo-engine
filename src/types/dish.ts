@@ -4,11 +4,10 @@
  */
 
 import { Pagination } from '@Types/common'
-import { Field, InputType, ObjectType } from 'type-graphql'
+import { Field, InputType, ObjectType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { Weight, WeightInput } from './weight';
 
 
 export enum DISH_ITEM_TYPES {
@@ -79,4 +78,13 @@ export class DishItemInput {
 
   @Field({ nullable: true })
   weight?: string
+}
+
+@ArgsType()
+export class DishInputArgs {
+  @Field({ nullable: true })
+  id?: string
+
+  @Field({ nullable: true })
+  slug?: string
 }

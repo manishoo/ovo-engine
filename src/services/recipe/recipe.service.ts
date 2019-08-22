@@ -6,7 +6,6 @@
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
-import TagService from '@Services/tag/tag.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
 import { Ingredient, ListRecipesArgs, Recipe, RecipeInput, Instruction, RecipesListResponse } from '@Types/recipe'
