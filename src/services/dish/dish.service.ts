@@ -110,16 +110,25 @@ export default class DishService {
     return true
   }
 
-  async update(id: string, dishInput: DishInput): Promise<Dish> {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('Invalid  id')
+  async update(id: string, dishInput: DishInput, userId: string): Promise<Dish> {
+    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
 
-    const dish = await DishModel.findById(id)
-    if (!dish) throw new Errors.NotFound('Dish not found')
+    let dish = await DishModel.findById(id)
+    if (!dish) throw new Errors.NotFound('dish not found')
+    if (dish.author !== userId) throw new Errors.Forbidden('update fail. you only can update your own dishes')
 
-    // TODO can only update own dish
+    dish.name = dishInput.name
+    dish.description = dishInput.description
+    dish.items = dishInput.items.map(inputItem => {
 
-    // TODO complete
+      return {
+        amount: inputItem.amount,
+        food: inputItem.food,
+        recipe: inputItem.recipe,
+        weight: inputItem.weight
+      }
+    })
 
-    return dish
+    return dish.save()
   }
 }

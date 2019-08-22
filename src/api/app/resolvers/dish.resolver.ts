@@ -57,13 +57,13 @@ export default class DishResolver {
     return this.dishService.delete(id)
   }
 
-  @Authorized()
-  @Query(returns => Dish)
-  updateDish(
+  @Authorized(UserRole.user)
+  @Mutation(returns => Dish)
+  async updateDish(
     @Arg('id') id: string,
     @Arg('data') data: DishInput,
     @Ctx() ctx: Context,
-  ): Promise<Dish> {
-    return this.dishService.update(id, data)
+  ) {
+    return this.dishService.update(id, data, ctx.user!.id)
   }
 }
