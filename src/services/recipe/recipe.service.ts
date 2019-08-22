@@ -52,6 +52,8 @@ export default class RecipeService {
 
   async list(variables: ListRecipesArgs = { page: 1, size: 10 }): Promise<RecipesListResponse> {
     const query: any = {}
+    const me = await UserModel.findById(variables.userId)
+    if (!me) throw new Errors.System('something went wrong')
 
     if (variables.tags) {
       query['tags'] = { $in: variables.tags }
@@ -77,6 +79,9 @@ export default class RecipeService {
       .skip((variables.page - 1) * variables.size)
       .populate('author')
       .exec()
+    recipes.map(recipe => {
+      recipe.userLikedRecipe = recipe.likedByUser(me._id.toString())
+    })
     const totalCount = await RecipeModel.count(query)
 
     return {
@@ -251,7 +256,6 @@ export default class RecipeService {
 
     }
     recipe.userLikedRecipe = recipe.likedByUser(userId!)
-    recipe.likesCount
 
     return recipe.save()
   }
