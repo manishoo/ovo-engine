@@ -79,13 +79,10 @@ export default class RecipeService {
       .skip((variables.page - 1) * variables.size)
       .populate('author')
       .exec()
-    recipes.map(recipe => {
-      transformRecipe(recipe, me._id.toString())
-    })
     const totalCount = await RecipeModel.count(query)
 
     return {
-      recipes,
+      recipes: recipes.map(recipe => transformRecipe(recipe, me._id.toString())),
       pagination: {
         page: variables.page,
         size: variables.size,
@@ -255,9 +252,8 @@ export default class RecipeService {
       recipe.tags = tags
 
     }
-    transformRecipe(recipe, userId)
 
-    return recipe.save()
+    return transformRecipe(await recipe.save(), userId)
   }
 
   async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
