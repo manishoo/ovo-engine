@@ -79,10 +79,6 @@ export default class RecipeService {
       .exec()
     const totalCount = await RecipeModel.count(query)
 
-    recipes.map(recipe => {
-      recipe.likesCount
-      recipe.userLikedRecipe = recipe.likedByUser(recipe.author.toString())
-    })
     return {
       recipes,
       pagination: {
