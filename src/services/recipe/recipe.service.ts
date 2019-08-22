@@ -160,7 +160,7 @@ export default class RecipeService {
     }
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe.author = author
-    return createdRecipe
+    return transformRecipe(createdRecipe, userId)
   }
 
   async delete(id: string, userId?: string, operatorId?: string) {
