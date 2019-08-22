@@ -9,8 +9,9 @@ import { Image, LanguageCode, Ref, Translation } from '@Types/common'
 import { NutritionalData } from '@Types/food'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { arrayProp, plugin, prop, Typegoose } from 'typegoose'
+import { arrayProp, plugin, prop, Typegoose, instanceMethod } from 'typegoose'
 import { Tag } from '@Types/tag'
+import { User } from '@Types/user';
 
 
 export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -65,8 +66,9 @@ export class RecipeSchema extends Typegoose implements Recipe {
   get likesCount(): number {
     return this.likes.length
   }
-  get likedByUser(): boolean {
-    return this.id ? !!this.likes.find(p => String(p) === this.id) : false
+  @instanceMethod
+  likedByUser(user: User): boolean {
+    return user.id ? !!this.likes.find(p => String(p) === user.id) : false
   }
 }
 

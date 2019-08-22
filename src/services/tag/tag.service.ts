@@ -18,11 +18,6 @@ export default class TagService {
     return TagModel.find()
   }
 
-  async tag(tag: string): Promise<Tag | null> {
-
-    return TagModel.findById(tag)
-  }
-
   async create(data: TagInput, lang: LanguageCode): Promise<Tag> {
     let q: any = {}
     q['title.text'] = data.title[0].text

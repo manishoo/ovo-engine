@@ -16,6 +16,7 @@ import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
+import { TagModel } from '@Models/tag.model';
 
 
 @Service()
@@ -240,10 +241,9 @@ export default class RecipeService {
       let tags: any = []
       await Promise.all(data.tags.map(async tag => {
         if(!mongoose.Types.ObjectId.isValid(tag)) throw new Errors.Validation('invalid tag id')
-        let validateTag = await this.tagService.tag(tag)
+        let validateTag = await TagModel.findById(tag)
         if (!validateTag) throw new Errors.NotFound('tag not found')
 
-        //tags.push(mongoose.Types.ObjectId(tag))
         tags.push(tag)
       }))
       
@@ -256,7 +256,6 @@ export default class RecipeService {
 
   async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
     return this.update(recipePublicId, {
-      //tags: tagSlugs,
     }, LanguageCode.en, userId)
   }
 }
