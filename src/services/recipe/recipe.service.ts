@@ -68,7 +68,6 @@ export default class RecipeService {
 
       query.createdAt = { $lt: recipe.createdAt }
     }
-    
     const recipes = await RecipeModel.find(query)
       .sort({
         createdAt: -1,
