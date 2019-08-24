@@ -9,7 +9,7 @@ import { Ref } from 'typegoose'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import { Author } from './user'
-import { Min, Max } from 'class-validator'
+import { Min, Max, ArrayNotEmpty } from 'class-validator'
 import mongoose from 'mongoose'
 
 
@@ -39,6 +39,7 @@ export class Dish {
   description?: string
 
   @Field(type => [DishItem])
+  @ArrayNotEmpty()
   items: DishItem[]
 
   @Field(type => Author)
@@ -54,6 +55,7 @@ export class DishInput {
   description?: string
 
   @Field(type => [DishItemInput])
+  @ArrayNotEmpty()
   items: DishItemInput[]
 }
 
