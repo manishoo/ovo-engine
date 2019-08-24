@@ -4,19 +4,23 @@
  */
 
 import { DishModel } from '@Models/dish.model'
-import { Dish, DishInput, DishListResponse } from '@Types/dish'
+import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
-
-const DEFAULT_PAGE_SIZE = 25
+import { UserModel } from '@Models/user.model'
+import { createPagination } from '@Utils/generate-pagination'
 
 @Service()
 export default class DishService {
 
-  async create(dishInput: DishInput): Promise<Dish> {
+  async create(dishInput: DishInput, userId: string): Promise<Dish> {
+    if (!mongoose.Types.ObjectId.isValid(userId)) throw new Errors.Validation('invalid user id')
+    let me = await UserModel.findById(userId)
+    if (!me) throw new Errors.NotFound('User not found')
+
     let dish: Partial<Dish> = {}
 
     if (dishInput.name) {
@@ -25,8 +29,10 @@ export default class DishService {
     if (dishInput.description) {
       dish.description = dishInput.description
     }
+    dish.author = me._id
     let dishItems = await Promise.all(dishInput.items.map(async dishItemInput => {
       if (dishItemInput.food && dishItemInput.recipe) {
+
         throw new Errors.UserInput('Wrong input', { 'food': 'Only one of the following fields can be used', 'recipe': 'Only one of the following fields can be used' })
       }
       if (!dishItemInput.food && !dishItemInput.recipe) {
@@ -62,52 +68,71 @@ export default class DishService {
       }
 
     }))
-    return DishModel.create({
+    const createDish = await DishModel.create({
       ...dish,
-      items: dishItems
+      items: dishItems,
     })
+    createDish.author = me
 
+    return createDish
   }
 
-  async get(id: string): Promise<Dish> {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.UserInput('Invalid id', { id: 'Incorrect id' })
+  async get(id?: string, slug?: string): Promise<Dish> {
+    let query: any = {}
 
-    const dish = await DishModel.findById(id)
-    if (!dish) throw new Errors.NotFound('Dish not found')
+    if (id) {
+      if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
+      query._id = id
+    } else if (slug) {
+      query.slug = slug
+    } else {
+      throw new Errors.UserInput('id or slug should be entered', { 'id': 'you should enter at least on of the following arguments. id, slug', 'slug': 'you should enter at least on of the following arguments. id, slug' })
+    }
+    let dish = await DishModel.findOne(query)
+      .populate('author')
+      .exec()
+    if (!dish) throw new Errors.NotFound('dish not found')
 
     return dish
   }
 
-  async list(page: number = 1, size: number = DEFAULT_PAGE_SIZE): Promise<DishListResponse> {
-    const counts = await DishModel.countDocuments()
+  async list(variables: ListDishesArgs): Promise<DishListResponse> {
+    if (!variables.page) variables.page = 1
+    if (!variables.size) variables.size = 10
 
-    if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
-    if (page < 1) page = 1
+    let query: any = {}
 
-    const dishes = await DishModel.find()
-      .limit(size)
-      .skip(size * (page - 1))
+    if (variables.authorId) {
+      if (!mongoose.Types.ObjectId.isValid(variables.authorId)) throw new Errors.Validation('Invalid author id')
+      let author = await UserModel.findById(variables.authorId)
+      if (!author) throw new Errors.NotFound('Author not found')
+      query['author'] = author._id
+    }
+    const counts = await DishModel.countDocuments(query)
+
+    const dishes = await DishModel.find(query)
+      .limit(variables.size)
+      .skip(variables.size * (variables.page - 1))
+      .populate('author')
+      .exec()
 
     return {
       dishes,
-      pagination: {
-        page,
-        size,
-        totalCount: counts,
-        totalPages: Math.ceil(counts / size),
-        hasNext: page !== Math.ceil(counts / size)
-      },
+      pagination: createPagination(variables.page, variables.size, counts),
     }
+
   }
 
-  async delete(id: string): Promise<boolean> {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('Invalid  id')
+  async delete(id: string, userId: string): Promise<Dish> {
+    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
 
-    // TODO can only delete own dish
+    let dish = await DishModel.findById(id)
+    if (!dish) throw new Errors.NotFound('dish not found')
 
-    await DishModel.remove({ _id: mongoose.Types.ObjectId(id) })
+    if (dish.author.toString() !== userId) throw new Errors.Forbidden('You can only delete your own dishes')
 
-    return true
+    return dish.delete()
+
   }
 
   async update(id: string, dishInput: DishInput, userId: string): Promise<Dish> {

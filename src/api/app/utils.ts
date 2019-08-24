@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LanguageCode, Status, UserRole } from '@Types/common'
+import { LanguageCode, Status, UserRole, Pagination } from '@Types/common'
 import { Request } from 'express'
 import { AuthChecker } from 'type-graphql'
 

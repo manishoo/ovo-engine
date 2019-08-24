@@ -4,8 +4,8 @@
  */
 
 import DishService from '@Services/dish/dish.service'
-import { Dish, DishInput, DishListResponse } from '@Types/dish'
-import { Arg, Authorized, Ctx, Int, Query, Resolver, Mutation } from 'type-graphql'
+import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
+import { Arg, Authorized, Ctx, Query, Resolver, Mutation, Args } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
 import { UserRole } from '@Types/common'
@@ -27,34 +27,34 @@ export default class DishResolver {
     @Arg('dish') dish: DishInput,
     @Ctx() ctx: Context,
   ) {
-    return this.dishService.create(dish)
+    return this.dishService.create(dish, ctx.user!.id)
   }
 
-  @Authorized()
+  @Authorized(UserRole.user)
   @Query(returns => DishListResponse)
-  dishes(
-    @Arg('page', type => Int) page: number,
-    @Arg('size', type => Int) size: number,
+  async dishes(
+    @Args() { page, size, authorId }: ListDishesArgs,
     @Ctx() ctx: Context,
-  ): Promise<DishListResponse> {
-    return this.dishService.list(page, size)
+  ) {
+    return this.dishService.list({ page, size, authorId })
   }
-
+  @Authorized(UserRole.user)
   @Query(returns => Dish)
-  dish(
-    @Arg('id') id: string,
+  async dish(
     @Ctx() ctx: Context,
-  ): Promise<Dish> {
-    return this.dishService.get(id)
+    @Arg('id', { nullable: true }) id?: string,
+    @Arg('slug', { nullable: true }) slug?: string,
+  ) {
+    return this.dishService.get(id, slug)
   }
 
-  @Authorized()
-  @Query(returns => Boolean)
-  deleteDish(
+  @Authorized(UserRole.user)
+  @Query(returns => Dish)
+  async deleteDish(
     @Arg('id') id: string,
     @Ctx() ctx: Context,
-  ): Promise<boolean> {
-    return this.dishService.delete(id)
+  ) {
+    return this.dishService.delete(id, ctx.user!.id)
   }
 
   @Authorized(UserRole.user)
