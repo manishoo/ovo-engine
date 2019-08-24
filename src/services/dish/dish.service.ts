@@ -72,11 +72,9 @@ export default class DishService {
       ...dish,
       items: dishItems,
     })
-    const createdDish = await DishModel.findById(createDish.id).populate('author')
-    if (!createdDish) throw new Errors.System('something went wrong')
+    createDish.author = me
 
-    return createdDish
-
+    return createDish
   }
 
   async get(id: string): Promise<Dish> {
