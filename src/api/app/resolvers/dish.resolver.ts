@@ -49,7 +49,7 @@ export default class DishResolver {
   }
 
   @Authorized(UserRole.user)
-  @Query(returns => Dish)
+  @Mutation(returns => Dish)
   async deleteDish(
     @Arg('id') id: string,
     @Ctx() ctx: Context,

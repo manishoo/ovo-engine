@@ -13,6 +13,7 @@ import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
 
+
 @Service()
 export default class DishService {
 
@@ -130,8 +131,10 @@ export default class DishService {
     if (!dish) throw new Errors.NotFound('dish not found')
 
     if (dish.author.toString() !== userId) throw new Errors.Forbidden('You can only delete your own dishes')
+    const deleted = await dish.delete()
+    if (!deleted) throw new Errors.System('something went wrong')
 
-    return dish.delete()
+    return dish
 
   }
 
