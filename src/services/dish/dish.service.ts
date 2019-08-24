@@ -115,7 +115,7 @@ export default class DishService {
 
     let dish = await DishModel.findById(id)
     if (!dish) throw new Errors.NotFound('dish not found')
-    if (dish.author !== userId) throw new Errors.Forbidden('update fail. you only can update your own dishes')
+    if (dish.author.toString() !== userId) throw new Errors.Forbidden('update failed. you only can update your own dishes')
 
     dish.name = dishInput.name
     dish.description = dishInput.description
