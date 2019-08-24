@@ -4,7 +4,7 @@
  */
 
 import DishService from '@Services/dish/dish.service'
-import { Dish, DishInput, DishListResponse, DishInputArgs, ListDishesArgs } from '@Types/dish'
+import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
 import { Arg, Authorized, Ctx, Query, Resolver, Mutation, Args } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
@@ -41,10 +41,11 @@ export default class DishResolver {
   @Authorized(UserRole.user)
   @Query(returns => Dish)
   async dish(
-    @Args() { id, slug }: DishInputArgs,
     @Ctx() ctx: Context,
+    @Arg('id', { nullable: true }) id?: string,
+    @Arg('slug', { nullable: true }) slug?: string,
   ) {
-    return this.dishService.get({ id, slug })
+    return this.dishService.get(id, slug)
   }
 
   @Authorized()

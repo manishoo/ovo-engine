@@ -88,14 +88,6 @@ export class DishItemInput {
 }
 
 @ArgsType()
-export class DishInputArgs {
-  @Field({ nullable: true })
-  id?: string
-
-  @Field({ nullable: true })
-  slug?: string
-}
-
 export class ListDishesArgs {
   @Field({ nullable: true })
   @Min(1)

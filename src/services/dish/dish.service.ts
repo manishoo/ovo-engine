@@ -4,7 +4,7 @@
  */
 
 import { DishModel } from '@Models/dish.model'
-import { Dish, DishInput, DishListResponse, DishInputArgs, ListDishesArgs } from '@Types/dish'
+import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
@@ -77,18 +77,20 @@ export default class DishService {
     return createDish
   }
 
-  async get(variables: DishInputArgs): Promise<Dish> {
+  async get(id?: string, slug?: string): Promise<Dish> {
     let query: any = {}
 
-    if (variables.id) {
-      if (!mongoose.Types.ObjectId.isValid(variables.id)) throw new Errors.Validation('invalid dish id')
-      query._id = variables.id
-    } else if (variables.slug) {
-      query.slug = variables.slug
+    if (id) {
+      if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
+      query._id = id
+    } else if (slug) {
+      query.slug = slug
     } else {
       throw new Errors.UserInput('id or slug should be entered', { 'id': 'you should enter at least on of the following arguments. id, slug', 'slug': 'you should enter at least on of the following arguments. id, slug' })
     }
     let dish = await DishModel.findOne(query)
+    .populate('author')
+    .exec()
     if (!dish) throw new Errors.NotFound('dish not found')
 
     return dish
