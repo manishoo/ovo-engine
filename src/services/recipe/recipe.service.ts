@@ -15,7 +15,7 @@ import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
-import { createPagination } from 'src/api/app/utils'
+import { createPagination } from '@Utils/generate-pagination'
 import { TagModel } from '@Models/tag.model'
 import { transformRecipe } from './transformers/recipe.transformer'
 
