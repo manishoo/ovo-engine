@@ -17,6 +17,7 @@ import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
+import { createPagination } from 'src/api/app/utils';
 
 
 @Service()
@@ -77,13 +78,7 @@ export default class RecipeService {
 
     return {
       recipes,
-      pagination: {
-        page: variables.page,
-        size: variables.size,
-        totalCount,
-        totalPages: Math.ceil(totalCount / variables.size),
-        hasNext: variables.page !== Math.ceil(totalCount / variables.size),
-      },
+      pagination: createPagination(variables.page, variables.size, totalCount),
     }
   }
 
