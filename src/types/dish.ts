@@ -11,7 +11,6 @@ import { Recipe } from '@Types/recipe'
 import { Author } from './user'
 import { Min, Max } from 'class-validator'
 import mongoose from 'mongoose'
-import { UserSchema } from '@Models/user.model';
 
 
 export enum DISH_ITEM_TYPES {

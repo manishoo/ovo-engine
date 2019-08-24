@@ -77,11 +77,21 @@ export default class DishService {
     return createDish
   }
 
-  async get(id: string): Promise<Dish> {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.UserInput('Invalid id', { id: 'Incorrect id' })
+  async get(id?: string, slug?: string): Promise<Dish> {
+    let query: any = {}
 
-    const dish = await DishModel.findById(id)
-    if (!dish) throw new Errors.NotFound('Dish not found')
+    if (id) {
+      if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
+      query._id = id
+    } else if (slug) {
+      query.slug = slug
+    } else {
+      throw new Errors.UserInput('id or slug should be entered', { 'id': 'you should enter at least on of the following arguments. id, slug', 'slug': 'you should enter at least on of the following arguments. id, slug' })
+    }
+    let dish = await DishModel.findOne(query)
+      .populate('author')
+      .exec()
+    if (!dish) throw new Errors.NotFound('dish not found')
 
     return dish
   }

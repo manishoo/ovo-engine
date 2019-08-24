@@ -38,13 +38,14 @@ export default class DishResolver {
   ) {
     return this.dishService.list({ page, size, authorId })
   }
-
+  @Authorized(UserRole.user)
   @Query(returns => Dish)
-  dish(
-    @Arg('id') id: string,
+  async dish(
     @Ctx() ctx: Context,
-  ): Promise<Dish> {
-    return this.dishService.get(id)
+    @Arg('id', { nullable: true }) id?: string,
+    @Arg('slug', { nullable: true }) slug?: string,
+  ) {
+    return this.dishService.get(id, slug)
   }
 
   @Authorized(UserRole.user)
