@@ -8,7 +8,7 @@ import { Field, InputType, ObjectType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { User } from './user'
+import { User, Author } from './user'
 import { Min, Max } from 'class-validator'
 import { UserSchema } from '@Models/user.model';
 
@@ -40,8 +40,8 @@ export class Dish {
   @Field(type => [DishItem])
   items: DishItem[]
 
-  @Field(type => String, { nullable: true })
-  author?: Ref<UserSchema>
+  @Field(type => Author)
+  author: Ref<Author>
 }
 
 @InputType()
@@ -54,9 +54,6 @@ export class DishInput {
 
   @Field(type => [DishItemInput])
   items: DishItemInput[]
-
-  @Field(type => String, { nullable: true })
-  author?: string
 }
 
 @ObjectType()
@@ -98,7 +95,6 @@ export class ListDishesArgs {
   @Field({ nullable: true })
   @Min(1)
   @Max(30)
-
   size?: number
 
   @Field({ nullable: true })

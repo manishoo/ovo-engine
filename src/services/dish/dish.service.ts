@@ -11,8 +11,7 @@ import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
-import { createPagination } from 'src/api/app/utils';
-
+import { createPagination } from 'src/api/app/utils'
 
 @Service()
 export default class DishService {
@@ -69,10 +68,14 @@ export default class DishService {
       }
 
     }))
-    return DishModel.create({
+    const createDish = await DishModel.create({
       ...dish,
       items: dishItems,
     })
+    const createdDish = await DishModel.findById(createDish.id).populate('author')
+    if (!createdDish) throw new Errors.System('something went wrong')
+
+    return createdDish
 
   }
 
@@ -102,12 +105,14 @@ export default class DishService {
     const dishes = await DishModel.find(query)
       .limit(variables.size)
       .skip(variables.size * (variables.page - 1))
+      .populate('author')
+      .exec()
 
     return {
       dishes,
       pagination: createPagination(variables.page, variables.size, counts),
     }
-    
+
   }
 
   async delete(id: string): Promise<boolean> {

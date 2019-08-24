@@ -9,7 +9,7 @@ import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { NutritionalData } from '@Types/food'
 import { TAG_TYPE } from '@Types/tag'
-import { RecipeAuthor } from '@Types/user'
+import { Author } from '@Types/user'
 import { Weight } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
 import { Max, Min, ArrayNotEmpty } from 'class-validator'
@@ -217,8 +217,8 @@ export class Recipe {
   @Field(type => Int)
   likesCount: number
 
-  @Field(type => RecipeAuthor)
-  author: Ref<RecipeAuthor>
+  @Field(type => Author)
+  author: Ref<Author>
 
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]

@@ -4,8 +4,7 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { Dish, DishItemInput, DishItem } from '@Types/dish'
-import { User } from '@Types/user'
+import { Dish, DishItem } from '@Types/dish'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Ref, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model';
@@ -27,7 +26,7 @@ export class DishSchema extends Typegoose implements Dish {
   description?: string
   @prop()
   items: DishItem[]
-  @prop()
+  @prop({ ref: UserSchema })
   author: Ref<UserSchema>
 }
 

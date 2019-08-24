@@ -178,7 +178,7 @@ export class User {
 }
 
 @ObjectType()
-export class RecipeAuthor {
+export class Author {
   _id?: mongoose.Schema.Types.ObjectId
   @Field()
   id?: string
