@@ -47,13 +47,13 @@ export default class DishResolver {
     return this.dishService.get(id)
   }
 
-  @Authorized()
-  @Query(returns => Boolean)
-  deleteDish(
+  @Authorized(UserRole.user)
+  @Query(returns => Dish)
+  async deleteDish(
     @Arg('id') id: string,
     @Ctx() ctx: Context,
-  ): Promise<boolean> {
-    return this.dishService.delete(id)
+  ) {
+    return this.dishService.delete(id, ctx.user!.id)
   }
 
   @Authorized()
