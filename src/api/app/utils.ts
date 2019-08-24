@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LanguageCode, Status, UserRole } from '@Types/common'
+import { LanguageCode, Status, UserRole, Pagination } from '@Types/common'
 import { Request } from 'express'
 import { AuthChecker } from 'type-graphql'
 
@@ -30,3 +30,14 @@ const authChecker: AuthChecker<Context> = (
 }
 
 export { authChecker }
+
+export function createPagination(page: number, size: number, count: number): Pagination {
+
+  return{
+    page: page,
+    size: size,
+    totalCount: count,
+    totalPages: Math.ceil(count / size),
+    hasNext: page !== Math.ceil(count / size)
+  }
+}

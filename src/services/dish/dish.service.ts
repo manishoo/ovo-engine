@@ -11,6 +11,7 @@ import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
+import { createPagination } from 'src/api/app/utils';
 
 
 @Service()
@@ -104,14 +105,9 @@ export default class DishService {
 
     return {
       dishes,
-      pagination: {
-        page: variables.page,
-        size: variables.size,
-        totalCount: counts,
-        totalPages: Math.ceil(counts / variables.size),
-        hasNext: variables.page !== Math.ceil(counts / variables.size)
-      },
+      pagination: createPagination(variables.page, variables.size, counts),
     }
+    
   }
 
   async delete(id: string): Promise<boolean> {
