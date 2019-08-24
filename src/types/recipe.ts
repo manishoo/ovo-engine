@@ -8,8 +8,8 @@ import { FoodSchema } from '@Models/food.model'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { NutritionalData } from '@Types/food'
+import { Author } from '@Types/user'
 import { TagType, Tag } from '@Types/tag'
-import { RecipeAuthor, User } from '@Types/user'
 import { Weight } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
 import { Max, Min, ArrayNotEmpty } from 'class-validator'
@@ -181,6 +181,7 @@ export class RecipeOrigin {
 
 @ObjectType()
 export class Recipe {
+  readonly _id: mongoose.Types.ObjectId
   @Field()
   readonly id: string
 
@@ -215,8 +216,8 @@ export class Recipe {
   @Field(type => Int)
   likesCount: number
 
-  @Field(type => RecipeAuthor)
-  author: Ref<RecipeAuthor>
+  @Field(type => Author)
+  author: Ref<Author>
 
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
@@ -240,7 +241,6 @@ export class Recipe {
   updatedAt?: Date
   @Field({ nullable: true })
   userLikedRecipe?: boolean
-  readonly _id: mongoose.Types.ObjectId
   likes: Ref<UserSchema>[]
 }
 

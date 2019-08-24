@@ -10,6 +10,7 @@ import { WeightInput } from '@Types/weight'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
+import { createPagination } from 'src/api/app/utils';
 
 
 @Service()
@@ -34,13 +35,7 @@ export default class FoodService {
 
     return {
       foods,
-      pagination: {
-        page,
-        size,
-        totalCount: counts,
-        totalPages: Math.ceil(counts / size),
-        hasNext: page !== Math.ceil(counts / size),
-      }
+      pagination: createPagination(page, size, counts),
     }
   }
 

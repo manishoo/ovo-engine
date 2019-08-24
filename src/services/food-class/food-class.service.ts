@@ -11,6 +11,7 @@ import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-cl
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
+import { createPagination } from 'src/api/app/utils';
 
 
 @Service()
@@ -50,13 +51,7 @@ export default class FoodClassService {
 
     return {
       foodClasses,
-      pagination: {
-        page,
-        size,
-        totalCount: counts,
-        totalPages: Math.ceil(counts / size),
-        hasNext: page !== Math.ceil(counts / size)
-      }
+      pagination: createPagination(page, size, counts),
     }
   }
 

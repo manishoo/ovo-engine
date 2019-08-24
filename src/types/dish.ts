@@ -4,11 +4,14 @@
  */
 
 import { Pagination } from '@Types/common'
-import { Field, InputType, ObjectType } from 'type-graphql'
+import { Field, InputType, ObjectType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { Weight, WeightInput } from './weight';
+import { Author } from './user'
+import { Min, Max } from 'class-validator'
+import mongoose from 'mongoose'
+import { UserSchema } from '@Models/user.model';
 
 
 export enum DISH_ITEM_TYPES {
@@ -26,8 +29,9 @@ export class DishListResponse {
 
 @ObjectType()
 export class Dish {
+  _id?: mongoose.Schema.Types.ObjectId
   @Field()
-  id: string
+  id?: string
 
   @Field({ nullable: true })
   name?: string
@@ -37,6 +41,9 @@ export class Dish {
 
   @Field(type => [DishItem])
   items: DishItem[]
+
+  @Field(type => Author)
+  author: Ref<Author>
 }
 
 @InputType()
@@ -79,4 +86,19 @@ export class DishItemInput {
 
   @Field({ nullable: true })
   weight?: string
+}
+
+@ArgsType()
+export class ListDishesArgs {
+  @Field({ nullable: true })
+  @Min(1)
+  page?: number
+
+  @Field({ nullable: true })
+  @Min(1)
+  @Max(30)
+  size?: number
+
+  @Field({ nullable: true })
+  authorId?: string
 }
