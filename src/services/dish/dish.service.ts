@@ -154,7 +154,6 @@ export default class DishService {
     dish.name = dishInput.name
     dish.description = dishInput.description
     dish.items = dishInput.items.map(inputItem => {
-
       return {
         amount: inputItem.amount,
         food: inputItem.food,
