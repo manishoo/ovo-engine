@@ -11,7 +11,7 @@ import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-cl
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
-import { createPagination } from 'src/api/app/utils';
+import { createPagination } from '@Utils/generate-pagination'
 
 
 @Service()
