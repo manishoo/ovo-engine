@@ -10,8 +10,10 @@ import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
-import { UserModel } from '@Models/user.model'
+import { UserModel, UserSchema } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
+import { Author } from '@Types/user'
+
 
 @Service()
 export default class DishService {
@@ -123,7 +125,7 @@ export default class DishService {
 
   }
 
-  async delete(id: string, userId: string): Promise<Dish> {
+  async delete(id: string, userId: string): Promise<string> {
     if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
 
     let dish = await DishModel.findById(id)
@@ -131,20 +133,36 @@ export default class DishService {
 
     if (dish.author.toString() !== userId) throw new Errors.Forbidden('You can only delete your own dishes')
 
-    return dish.delete()
+    const deleted = await dish.delete()
+    if (!deleted) throw new Errors.System('something went wrong')
+
+    return dish.id
 
   }
 
-  async update(id: string, dishInput: DishInput): Promise<Dish> {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('Invalid  id')
+  async update(id: string, dishInput: DishInput, userId: string): Promise<Dish> {
+    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
 
-    const dish = await DishModel.findById(id)
-    if (!dish) throw new Errors.NotFound('Dish not found')
+    let dish = await DishModel.findById(id)
+      .populate('author')
+      .exec()
 
-    // TODO can only update own dish
+    if (!dish) throw new Errors.NotFound('dish not found')
+    const author = dish.author as Author
+    if (author.id !== userId) throw new Errors.Forbidden('update failed. you only can update your own dishes')
 
-    // TODO complete
+    dish.name = dishInput.name
+    dish.description = dishInput.description
+    dish.items = dishInput.items.map(inputItem => {
+      return {
+        amount: inputItem.amount,
+        food: inputItem.food,
+        recipe: inputItem.recipe,
+        weight: inputItem.weight,
+        auhtor: dish!.author,
+      }
+    })
 
-    return dish
+    return dish.save()
   }
 }
