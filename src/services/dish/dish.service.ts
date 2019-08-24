@@ -106,7 +106,7 @@ export default class DishService {
     let dish = await DishModel.findById(id)
     if (!dish) throw new Errors.NotFound('dish not found')
 
-    if (dish.author.toString() !== userId) throw new Errors.Forbidden('removing fail. you inly can delete your dishes')
+    if (dish.author.toString() !== userId) throw new Errors.Forbidden('You can only delete your own dishes')
 
     return dish.delete()
 
