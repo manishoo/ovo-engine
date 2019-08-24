@@ -89,8 +89,8 @@ export default class DishService {
       throw new Errors.UserInput('id or slug should be entered', { 'id': 'you should enter at least on of the following arguments. id, slug', 'slug': 'you should enter at least on of the following arguments. id, slug' })
     }
     let dish = await DishModel.findOne(query)
-    .populate('author')
-    .exec()
+      .populate('author')
+      .exec()
     if (!dish) throw new Errors.NotFound('dish not found')
 
     return dish
