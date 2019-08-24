@@ -10,8 +10,9 @@ import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
-import { UserModel } from '@Models/user.model'
+import { UserModel, UserSchema } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
+import { Author } from '@Types/user'
 
 
 @Service()
@@ -124,17 +125,18 @@ export default class DishService {
 
   }
 
-  async delete(id: string, userId: string): Promise<Dish> {
+  async delete(id: string, userId: string): Promise<string> {
     if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
 
     let dish = await DishModel.findById(id)
     if (!dish) throw new Errors.NotFound('dish not found')
 
     if (dish.author.toString() !== userId) throw new Errors.Forbidden('You can only delete your own dishes')
+
     const deleted = await dish.delete()
     if (!deleted) throw new Errors.System('something went wrong')
 
-    return dish
+    return dish.id
 
   }
 
@@ -142,8 +144,12 @@ export default class DishService {
     if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid dish id')
 
     let dish = await DishModel.findById(id)
+      .populate('author')
+      .exec()
+
     if (!dish) throw new Errors.NotFound('dish not found')
-    if (dish.author.toString() !== userId) throw new Errors.Forbidden('update failed. you only can update your own dishes')
+    const author = dish.author as Author
+    if (author.id !== userId) throw new Errors.Forbidden('update failed. you only can update your own dishes')
 
     dish.name = dishInput.name
     dish.description = dishInput.description
@@ -153,7 +159,8 @@ export default class DishService {
         amount: inputItem.amount,
         food: inputItem.food,
         recipe: inputItem.recipe,
-        weight: inputItem.weight
+        weight: inputItem.weight,
+        auhtor: dish!.author,
       }
     })
 
