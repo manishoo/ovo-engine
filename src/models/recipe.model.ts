@@ -7,11 +7,10 @@ import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Ref, Translation } from '@Types/common'
 import { NutritionalData } from '@Types/food'
-import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
+import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTiming, Review } from '@Types/recipe'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, plugin, prop, Typegoose, instanceMethod } from 'typegoose'
 import { Tag } from '@Types/tag'
-import { User } from '@Types/user';
 
 
 export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {

@@ -4,19 +4,23 @@
  */
 
 import { DishModel } from '@Models/dish.model'
-import { Dish, DishInput, DishListResponse, DishInputArgs } from '@Types/dish'
+import { Dish, DishInput, DishListResponse, DishInputArgs, ListDishesArgs } from '@Types/dish'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
-
-const DEFAULT_PAGE_SIZE = 25
+import { UserModel } from '@Models/user.model'
+import { createPagination } from '@Utils/generate-pagination'
 
 @Service()
 export default class DishService {
 
-  async create(dishInput: DishInput): Promise<Dish> {
+  async create(dishInput: DishInput, userId: string): Promise<Dish> {
+    if (!mongoose.Types.ObjectId.isValid(userId)) throw new Errors.Validation('invalid user id')
+    let me = await UserModel.findById(userId)
+    if (!me) throw new Errors.NotFound('User not found')
+
     let dish: Partial<Dish> = {}
 
     if (dishInput.name) {
@@ -25,8 +29,10 @@ export default class DishService {
     if (dishInput.description) {
       dish.description = dishInput.description
     }
+    dish.author = me._id
     let dishItems = await Promise.all(dishInput.items.map(async dishItemInput => {
       if (dishItemInput.food && dishItemInput.recipe) {
+
         throw new Errors.UserInput('Wrong input', { 'food': 'Only one of the following fields can be used', 'recipe': 'Only one of the following fields can be used' })
       }
       if (!dishItemInput.food && !dishItemInput.recipe) {
@@ -62,10 +68,13 @@ export default class DishService {
       }
 
     }))
-    return DishModel.create({
+    const createDish = await DishModel.create({
       ...dish,
-      items: dishItems
+      items: dishItems,
     })
+    createDish.author = me
+
+    return createDish
   }
 
   async get(variables: DishInputArgs): Promise<Dish> {
@@ -85,26 +94,31 @@ export default class DishService {
     return dish
   }
 
-  async list(page: number = 1, size: number = DEFAULT_PAGE_SIZE): Promise<DishListResponse> {
-    const counts = await DishModel.countDocuments()
+  async list(variables: ListDishesArgs): Promise<DishListResponse> {
+    if (!variables.page) variables.page = 1
+    if (!variables.size) variables.size = 10
 
-    if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
-    if (page < 1) page = 1
+    let query: any = {}
 
-    const dishes = await DishModel.find()
-      .limit(size)
-      .skip(size * (page - 1))
+    if (variables.authorId) {
+      if (!mongoose.Types.ObjectId.isValid(variables.authorId)) throw new Errors.Validation('Invalid author id')
+      let author = await UserModel.findById(variables.authorId)
+      if (!author) throw new Errors.NotFound('Author not found')
+      query['author'] = author._id
+    }
+    const counts = await DishModel.countDocuments(query)
+
+    const dishes = await DishModel.find(query)
+      .limit(variables.size)
+      .skip(variables.size * (variables.page - 1))
+      .populate('author')
+      .exec()
 
     return {
       dishes,
-      pagination: {
-        page,
-        size,
-        totalCount: counts,
-        totalPages: Math.ceil(counts / size),
-        hasNext: page !== Math.ceil(counts / size)
-      },
+      pagination: createPagination(variables.page, variables.size, counts),
     }
+
   }
 
   async delete(id: string): Promise<boolean> {

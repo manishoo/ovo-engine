@@ -4,11 +4,11 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { UserSchema } from '@Models/user.model'
-import { Dish, DishItemInput, DishItem } from '@Types/dish'
-import { User } from '@Types/user'
+import { Dish, DishItem } from '@Types/dish'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Ref, Typegoose } from 'typegoose'
+import { UserSchema } from './user.model';
+import { Author } from '@Types/user';
 
 
 export interface DishSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -20,13 +20,15 @@ export interface DishSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 export class DishSchema extends Typegoose implements Dish {
-  id: string
+  readonly id?: string
   @prop()
   name?: string
   @prop()
   description?: string
   @prop()
   items: DishItem[]
+  @prop({ ref: UserSchema })
+  author: Ref<Author>
 }
 
 export const DishModel = new DishSchema().getModelForClass(DishSchema, {

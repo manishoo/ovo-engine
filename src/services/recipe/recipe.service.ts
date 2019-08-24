@@ -15,6 +15,7 @@ import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
+import { createPagination } from '@Utils/generate-pagination'
 import { TagModel } from '@Models/tag.model'
 import { transformRecipe } from './transformers/recipe.transformer'
 
@@ -81,14 +82,8 @@ export default class RecipeService {
     const totalCount = await RecipeModel.count(query)
 
     return {
-      recipes: recipes.map(recipe => transformRecipe(recipe, me._id.toString())),
-      pagination: {
-        page: variables.page,
-        size: variables.size,
-        totalCount,
-        totalPages: Math.ceil(totalCount / variables.size),
-        hasNext: variables.page !== Math.ceil(totalCount / variables.size),
-      },
+      recipes,
+      pagination: createPagination(variables.page, variables.size, totalCount),
     }
   }
 
