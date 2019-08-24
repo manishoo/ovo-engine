@@ -8,8 +8,8 @@ import { FoodSchema } from '@Models/food.model'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { NutritionalData } from '@Types/food'
-import { TAG_TYPE } from '@Types/tag'
 import { Author } from '@Types/user'
+import { TagType, Tag } from '@Types/tag'
 import { Weight } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
 import { Max, Min, ArrayNotEmpty } from 'class-validator'
@@ -24,11 +24,11 @@ export class RecipeTag {
   @Field()
   slug: string
 
-  @Field({ nullable: true })
-  title?: string
+  @Field(type => [Translation], { nullable: true })
+  title?: Translation[]
 
   @Field()
-  type: TAG_TYPE
+  type: TagType
 }
 
 @InputType()
@@ -38,11 +38,11 @@ export class RecipeTagInput {
   @Field()
   slug: string
 
-  @Field({ nullable: true })
-  title?: string
+  @Field(type => [TranslationInput], { nullable: true })
+  title?: TranslationInput[]
 
   @Field()
-  type: TAG_TYPE
+  type: TagType
 }
 
 @ObjectType()
@@ -211,8 +211,6 @@ export class Recipe {
   @Field(type => [Review], { nullable: true })
   reviews?: Review[]
 
-  @Field(type => Boolean)
-  likedByUser: boolean
 
   @Field(type => Int)
   likesCount: number
@@ -229,8 +227,8 @@ export class Recipe {
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
 
-  @Field(type => [RecipeTag], { nullable: true })
-  tags?: RecipeTag[]
+  @Field(type => String, { nullable: true })
+  tags?: Ref<Tag>[]
 
   @Field(type => LanguageCode, { nullable: true })
   languages: LanguageCode[]
@@ -240,7 +238,8 @@ export class Recipe {
 
   @Field(type => Date)
   updatedAt?: Date
-
+  @Field({ nullable: true })
+  userLikedRecipe?: boolean
   readonly _id: mongoose.Types.ObjectId
   likes: Ref<UserSchema>[]
 }
@@ -277,6 +276,9 @@ export class IngredientInput {
 
   @Field(type => [TranslationInput], { nullable: true })
   description?: TranslationInput[]
+
+  @Field(type => GraphQLUpload, { nullable: true })
+  thumbnail?: any
 }
 
 @InputType()
@@ -293,7 +295,7 @@ export class InstructionInput {
   note?: TranslationInput[]
 
   @Field(type => GraphQLUpload, { nullable: true })
-  Image?: any
+  image?: any
 }
 
 @InputType()
@@ -303,18 +305,19 @@ export class RecipeInput {
   title: TranslationInput[]
 
   @Field(type => [IngredientInput])
+  @ArrayNotEmpty()
   ingredients: IngredientInput[]
 
   @Field(type => [InstructionInput])
   instructions: InstructionInput[]
 
-  @Field()
+  @Field(type => Int)
   serving: number
 
   @Field(type => RecipeTimingInput)
   timing: RecipeTimingInput
 
-  @Field()
+  @Field({ nullable: true })
   slug?: string
 
   @Field(type => [TranslationInput], { nullable: true })
@@ -326,8 +329,8 @@ export class RecipeInput {
   @Field(type => GraphQLUpload, { nullable: true })
   thumbnail?: any
 
-  @Field(type => [RecipeTagInput], { nullable: true })
-  tags?: RecipeTagInput[]
+  @Field(type => [String], { nullable: true })
+  tags?: string[]
 }
 
 @ArgsType()
@@ -349,6 +352,9 @@ export class ListRecipesArgs {
 
   @Field({ nullable: true })
   userId?: string
+
+  @Field(type => [String], { nullable: true })
+  tags?: string[]
 
   viewerUserId?: string
 }

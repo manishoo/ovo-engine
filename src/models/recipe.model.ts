@@ -9,7 +9,9 @@ import { Image, LanguageCode, Ref, Translation } from '@Types/common'
 import { NutritionalData } from '@Types/food'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTag, RecipeTiming, Review } from '@Types/recipe'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { arrayProp, plugin, prop, Typegoose } from 'typegoose'
+import { arrayProp, plugin, prop, Typegoose, instanceMethod } from 'typegoose'
+import { Tag } from '@Types/tag'
+import { User } from '@Types/user';
 
 
 export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -23,8 +25,6 @@ export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
 export class RecipeSchema extends Typegoose implements Recipe {
   _id: mongoose.Types.ObjectId
   id: string
-  likedByUser: boolean
-  likesCount: number
 
   @prop({ required: true })
   title: Translation[]
@@ -53,7 +53,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   origin?: RecipeOrigin
   @prop()
-  tags?: RecipeTag[]
+  tags?: Ref<Tag>[]
   @prop()
   updatedAt?: Date
   @prop()
@@ -62,6 +62,15 @@ export class RecipeSchema extends Typegoose implements Recipe {
   reviews?: Review[]
   @prop()
   createdAt: Date
+  userLikedRecipe: boolean
+  @prop()
+  get likesCount(): number {
+    return this.likes.length
+  }
+  @instanceMethod
+  likedByUser(userId: string): boolean {
+    return !!this.likes.find(p => String(p) === userId)
+  }
 }
 
 export const RecipeModel = new RecipeSchema().getModelForClass(RecipeSchema, {
