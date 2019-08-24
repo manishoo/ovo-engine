@@ -8,9 +8,9 @@ import { Field, InputType, ObjectType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { User, Author } from './user'
+import { Author } from './user'
 import { Min, Max } from 'class-validator'
-import { UserSchema } from '@Models/user.model';
+import mongoose from 'mongoose'
 
 
 export enum DISH_ITEM_TYPES {
@@ -28,8 +28,9 @@ export class DishListResponse {
 
 @ObjectType()
 export class Dish {
+  _id?: mongoose.Schema.Types.ObjectId
   @Field()
-  id: string
+  id?: string
 
   @Field({ nullable: true })
   name?: string

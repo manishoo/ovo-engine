@@ -19,7 +19,7 @@ export interface DishSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 export class DishSchema extends Typegoose implements Dish {
-  id: string
+  readonly id?: string
   @prop()
   name?: string
   @prop()

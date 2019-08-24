@@ -46,7 +46,6 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
   }
 })
 export class UserSchema extends Typegoose implements User {
-  @prop()
   readonly id?: string
 
   /**

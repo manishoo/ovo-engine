@@ -181,6 +181,7 @@ export class RecipeOrigin {
 
 @ObjectType()
 export class Recipe {
+  readonly _id: mongoose.Types.ObjectId
   @Field()
   readonly id: string
 
@@ -240,7 +241,6 @@ export class Recipe {
   updatedAt?: Date
   @Field({ nullable: true })
   userLikedRecipe?: boolean
-  readonly _id: mongoose.Types.ObjectId
   likes: Ref<UserSchema>[]
 }
 
