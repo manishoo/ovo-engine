@@ -40,7 +40,7 @@ export class TimelineMealInput {
   @Field(type => Date)
   time: Date
 
-  @Field(type => Dish)
+  @Field(type => String)
   dish: Ref<DishSchema>
 }
 
