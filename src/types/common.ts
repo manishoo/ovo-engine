@@ -132,6 +132,9 @@ export class Translation {
   @prop({ required: true })
   @Field()
   text: string
+  @Field({ nullable: true })
+  @prop({ default: true })
+  verified?: boolean
 }
 
 @InputType()
@@ -140,6 +143,8 @@ export class TranslationInput {
   locale: LanguageCode
   @Field()
   text: string
+  @Field({ nullable: true })
+  verified?: boolean
 }
 
 export declare type Ref<T> = T | mongoose.Types.ObjectId;
