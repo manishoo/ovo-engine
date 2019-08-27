@@ -8,11 +8,12 @@ import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { Status, UserRole } from '@Types/common'
-import { User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import { User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, Me, UserInfo } from '@Types/user'
 import Errors from '@Utils/errors'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
+import mongoose from 'mongoose'
 
 
 @Service()
@@ -84,13 +85,6 @@ export default class UserService {
     }
   }
 
-  async getUserInfo(id: string): Promise<User> {
-    const user = await UserModel.findById(id)
-    if (!user) throw new Errors.NotFound('user not found!')
-
-    return user
-  }
-
   async update(userInput: UserUpdateInput, userId: string): Promise<User> {
     let user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('user not found')
@@ -109,6 +103,53 @@ export default class UserService {
     user.gender = userInput.gender
 
     return user.save()
+  }
 
+  async userProfile(userId: string, id: string): Promise<Me | UserInfo> {
+    if (!mongoose.Types.ObjectId.isValid(userId)) throw new Errors.Validation('Invalid user id')
+
+    let user = await UserModel.findById(userId)
+    if (!user) throw new Errors.NotFound('User not found')
+
+    let userInfo = {} as Me
+
+    if (userId === id) {
+      userInfo = {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        email: user.email,
+        firstName: user.firstName,
+        middleName: user.middleName,
+        lastName: user.lastName,
+        bio: user.bio,
+        phoneNumber: user.phoneNumber,
+        imageUrl: user.imageUrl,
+        socialNetworks: user.socialNetworks,
+        caloriesPerDay: user.caloriesPerDay,
+        height: user.height,
+        weight: user.weight,
+        age: user.age,
+        bodyFat: user.bodyFat,
+        gender: user.gender,
+        foodAllergies: user.foodAllergies,
+        household: user.household,
+        activityLevel: user.activityLevel,
+        path: user.path,
+      }
+    } else {
+      userInfo = {
+        id: user.id,
+        username: user.username,
+        firstName: user.firstName,
+        middleName: user.middleName,
+        lastName: user.lastName,
+        bio: user.bio,
+        imageUrl: user.imageUrl,
+        socialNetworks: user.socialNetworks,
+      } as UserInfo
+    }
+
+    return userInfo
   }
 }

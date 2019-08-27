@@ -254,3 +254,71 @@ export class UserAuthResponse {
   @Field()
   session: string
 }
+
+@ObjectType()
+export class Me {
+  _id?: mongoose.Schema.Types.ObjectId
+  @Field()
+  id?: string
+  @Field()
+  username: string
+  @Field(type => UserRole)
+  role?: UserRole
+  @Field()
+  @IsEmail()
+  email?: string
+  @Field({ nullable: true })
+  firstName?: string
+  @Field({ nullable: true })
+  middleName?: string
+  @Field({ nullable: true })
+  lastName?: string
+  @Field({ nullable: true })
+  bio?: string
+  @Field({ nullable: true })
+  @IsPhoneNumber('any')
+  phoneNumber?: string
+  @Field(type => Image, { nullable: true })
+  imageUrl?: Image
+  @Field(type => SocialNetworks, { nullable: true })
+  socialNetworks?: SocialNetworks
+  @Field(type => Float, { nullable: true })
+  caloriesPerDay?: number
+  @Field({ nullable: true })
+  height?: Height
+  @Field({ nullable: true })
+  weight?: WeightUnit
+  @Field({ nullable: true })
+  age?: number
+  @Field(type => Int, { nullable: true })
+  bodyFat?: number
+  @Field({ nullable: true })
+  gender?: Gender
+  foodAllergies?: string[]
+  household?: Ref<Household>
+  activityLevel?: Activity
+  @Field(type => [Event], { nullable: true })
+  path?: Event[]
+}
+
+@ObjectType()
+export class UserInfo {
+  _id?: mongoose.Schema.Types.ObjectId
+  @Field()
+  id?: string
+  @Field()
+  username: string
+  @Field({ nullable: true })
+  firstName?: string
+  @Field({ nullable: true })
+  middleName?: string
+  @Field({ nullable: true })
+  lastName?: string
+  @Field({ nullable: true })
+  bio?: string
+  @Field(type => Image, { nullable: true })
+  imageUrl?: Image
+  @Field(type => SocialNetworks, { nullable: true })
+  socialNetworks?: SocialNetworks
+
+}
