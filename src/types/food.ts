@@ -10,7 +10,6 @@ import { Weight, WeightInput } from '@Types/weight'
 import mongoose from 'mongoose'
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
-import { type } from 'os';
 
 
 @ObjectType()
