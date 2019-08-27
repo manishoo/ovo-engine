@@ -7,7 +7,7 @@ import { OperatorModel } from '@Models/operator.model'
 import AuthService from '@Services/auth/auth.service'
 import OperatorService from '@Services/operator/operator.service'
 import { AuthResponse } from '@Types/auth'
-import { Role } from '@Types/common'
+import { OperatorRole } from '@Types/common'
 import { Operator, OperatorResponse } from '@Types/operator'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
@@ -46,7 +46,7 @@ export default class OperatorResolver {
     return s
   }
 
-  @Authorized(Role.admin)
+  @Authorized(OperatorRole.admin)
   @Query(returns => [Operator])
   async operators(
     @Ctx() ctx: Context,
@@ -54,7 +54,7 @@ export default class OperatorResolver {
     return this.operatorService.getOperatorsList()
   }
 
-  @Authorized(Role.admin)
+  @Authorized(OperatorRole.admin)
   @Mutation(returns => OperatorResponse)
   async createOperator(
     @Arg('username') username: string,
@@ -64,7 +64,7 @@ export default class OperatorResolver {
     return this.operatorService.create(username, password)
   }
 
-  @Authorized(Role.admin)
+  @Authorized(OperatorRole.admin)
   @Mutation(returns => Operator)
   async deleteOperator(
     @Arg('id') operatorID: string,

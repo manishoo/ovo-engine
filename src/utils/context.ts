@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LanguageCode, Status, UserRole, Role } from '@Types/common'
+import { LanguageCode, Status, UserRole, OperatorRole } from '@Types/common'
 import { Request } from 'express'
 
 export interface Context {
@@ -13,6 +13,6 @@ export interface Context {
     id: string,
     status: Status,
     lang: LanguageCode,
-    role: UserRole | Role
+    role: UserRole | OperatorRole
   },
 }

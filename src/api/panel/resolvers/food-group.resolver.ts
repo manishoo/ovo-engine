@@ -4,7 +4,7 @@
  */
 
 import FoodGroupService from '@Services/food-group/food-group.service'
-import { Role, TranslationInput } from '@Types/common'
+import { OperatorRole, TranslationInput } from '@Types/common'
 import { FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
@@ -21,7 +21,7 @@ export default class FoodGroupResolver {
     // noop
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Query(returns => ParentFoodGroup)
   async foodGroup(
     @Arg('id', type => String) id: string,
@@ -30,7 +30,7 @@ export default class FoodGroupResolver {
     return this.foodGroupService.getFoodGroup(id)
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Query(returns => [ParentFoodGroup])
   async foodGroups(
     @Ctx() ctx: Context,
@@ -38,7 +38,7 @@ export default class FoodGroupResolver {
     return this.foodGroupService.listFoodGroups()
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Mutation(returns => ParentFoodGroup)
   async createFoodGroup(
     @Arg('name', type => [TranslationInput]) name: TranslationInput[],
@@ -47,7 +47,7 @@ export default class FoodGroupResolver {
     return this.foodGroupService.addFoodGroup(name, parentFoodGroup)
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Mutation(returns => Boolean)
   async deleteFoodGroup(
     @Arg('id') foodGroupID: string,
@@ -55,7 +55,7 @@ export default class FoodGroupResolver {
     return this.foodGroupService.removeFoodGroup(foodGroupID)
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Mutation(returns => ParentFoodGroup)
   async editFoodGroup(
     @Arg('foodGroup') foodGroup: FoodGroupInput,

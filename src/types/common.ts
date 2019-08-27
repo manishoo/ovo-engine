@@ -24,13 +24,13 @@ export enum Status {
   inactive = 'INACTIVE',
 }
 
-export enum Role {
+export enum OperatorRole {
   admin = 'ADMIN',
   operator = 'OPERATOR',
 }
 
-registerEnumType(Role, {
-  name: 'Role',
+registerEnumType(OperatorRole, {
+  name: 'OperatorRole',
   description: 'Operator roles'
 })
 

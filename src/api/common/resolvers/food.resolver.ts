@@ -4,7 +4,7 @@
  */
 
 import FoodService from '@Services/food/food.service'
-import { Role, UserRole } from '@Types/common'
+import { OperatorRole, UserRole } from '@Types/common'
 import { Food, FoodInput, FoodsListResponse } from '@Types/food'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
@@ -21,7 +21,7 @@ export default class FoodResolver {
     // noop
   }
 
-  @Authorized([Role.operator, UserRole.user])
+  @Authorized([OperatorRole.operator, UserRole.user])
   @Query(returns => FoodsListResponse)
   async foods(
     @Arg('page', { defaultValue: 1 }) page: number,
@@ -32,7 +32,7 @@ export default class FoodResolver {
     return this.foodService.listFoods(page, size, foodClassID)
   }
 
-  @Authorized([Role.operator, UserRole.user])
+  @Authorized([OperatorRole.operator, UserRole.user])
   @Mutation(returns => Food)
   async updateFood(
     @Arg('foodId') foodId: string,
@@ -42,7 +42,7 @@ export default class FoodResolver {
     return this.foodService.updateFood(foodId, food)
   }
 
-  @Authorized([Role.operator, UserRole.user])
+  @Authorized([OperatorRole.operator, UserRole.user])
   @Mutation(returns => Food)
   async deleteFood(
     @Arg('foodId') foodID: string,
@@ -51,7 +51,7 @@ export default class FoodResolver {
     return this.foodService.deleteFood(foodID)
   }
 
-  @Authorized([Role.operator, UserRole.user])
+  @Authorized([OperatorRole.operator, UserRole.user])
   @Mutation(returns => Food)
   async createFood(
     @Arg('foodClassId') foodClassID: string,
