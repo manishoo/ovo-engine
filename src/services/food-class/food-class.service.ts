@@ -7,7 +7,7 @@ import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { FoodModel } from '@Models/food.model'
 import UploadService from '@Services/upload/upload.service'
-import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-class'
+import { FoodClass, FoodClassInput, FoodClassListResponse, ListFoodClassesArgs } from '@Types/food-class'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
@@ -23,15 +23,15 @@ export default class FoodClassService {
     // noop
   }
 
-  async listFoodClasses(page: number, size: number, foodGroupID?: string, nameSearchQuery?: string): Promise<FoodClassListResponse> {
+  async listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified }: ListFoodClassesArgs): Promise<FoodClassListResponse> {
     let query: any = {}
 
-    if (foodGroupID) {
+    if (foodGroupId) {
       query['foodGroup._id'] = {
         /**
          * Search group and subgroups
          * */
-        $in: [mongoose.Types.ObjectId(foodGroupID), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupID }))]
+        $in: [mongoose.Types.ObjectId(foodGroupId), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
       }
     }
 
