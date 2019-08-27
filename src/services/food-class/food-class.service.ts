@@ -40,6 +40,69 @@ export default class FoodClassService {
       query['name.text'] = { $regex: reg, $options: 'i' }
     }
 
+    if (typeof verified === 'boolean') {
+      const aggregations: any[] = []
+      if (verified) {
+        query['name'] = {
+          $not: {
+            $elemMatch: {
+              verified: !verified,
+            }
+          }
+        }
+        aggregations.push(
+          {
+            $project: {
+              foodClass: '$foodClass',
+              isNameVerified: { $allElementsTrue: ['$name.verified'] },
+              isWeightsVerified: {
+                $cond: {
+                  if: { $gt: [{ $size: '$weights' }, 0] },
+                  then: { $allElementsTrue: ['$weights.name.verified'] },
+                  else: true,
+                }
+              },
+            },
+          },
+          {
+            $match: {
+              isNameVerified: true,
+              isWeightsVerified: true,
+            }
+          },
+        )
+      } else {
+        query['name.verified'] = !verified
+        aggregations.push({
+          $match: {
+            $or: [
+              { 'name.verified': { $ne: true } },
+              { 'weights.name.title.verified': { $ne: true } },
+            ]
+          }
+        })
+      }
+
+      const foodClasses = await FoodModel.aggregate([
+        ...aggregations,
+        {
+          $group: {
+            _id: '$foodClass',
+          }
+        },
+        {
+          $skip: size * (page - 1),
+        },
+        {
+          $limit: size,
+        }
+      ])
+
+      query['_id'] = {
+        $in: foodClasses.map(i => i._id)
+      }
+    }
+
     const counts = await FoodClassModel.countDocuments(query)
 
     if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
