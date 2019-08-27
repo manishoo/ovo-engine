@@ -132,7 +132,7 @@ export class Translation {
   @prop({ required: true })
   @Field()
   text: string
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: true })
   @prop({ default: true })
   verified?: boolean
 }
@@ -143,7 +143,7 @@ export class TranslationInput {
   locale: LanguageCode
   @Field()
   text: string
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: true })
   verified?: boolean
 }
 
