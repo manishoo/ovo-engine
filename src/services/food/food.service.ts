@@ -74,7 +74,7 @@ export default class FoodService {
     if (!mongoose.Types.ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
     const foodClass = await FoodClassModel.findById(foodClassID)
-    if (!foodClass) throw new Errors.NotFound('food class not foudn')
+    if (!foodClass) throw new Errors.NotFound('food class not found')
 
     let weights: WeightInput[] = []
     food.weights.map(weight => {
@@ -86,6 +86,7 @@ export default class FoodService {
       weights,
       description: food.description,
       foodClass,
+      nutritionalData: food.nutrientData,
     })
 
     return foodInput.save()

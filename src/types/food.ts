@@ -10,10 +10,19 @@ import { Weight, WeightInput } from '@Types/weight'
 import mongoose from 'mongoose'
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
+import { type } from 'os';
 
 
 @ObjectType()
 export class NutrientData {
+  @Field()
+  content: number
+  @Field()
+  unit: string
+}
+
+@InputType()
+export class NutrientDataInput {
   @Field()
   content: number
   @Field()
@@ -58,6 +67,46 @@ export class NutritionalData {
   calories?: NutrientData
   @Field({ nullable: true })
   caloriesFromFat?: NutrientData
+}
+
+@InputType()
+export class NutritionalDataInput {
+  @Field({ nullable: true })
+  saturatedFat?: NutrientDataInput
+  @Field({ nullable: true })
+  polyUnsaturatedFat?: NutrientDataInput
+  @Field({ nullable: true })
+  monoUnsaturatedFat?: NutrientDataInput
+  @Field({ nullable: true })
+  unsaturatedFat?: NutrientDataInput
+  @Field({ nullable: true })
+  cholesterol?: NutrientDataInput
+  @Field({ nullable: true })
+  sodium?: NutrientDataInput
+  @Field({ nullable: true })
+  potassium?: NutrientDataInput
+  @Field({ nullable: true })
+  totalFat?: NutrientDataInput
+  @Field({ nullable: true })
+  totalCarbohydrates?: NutrientDataInput
+  @Field({ nullable: true })
+  dietaryFiber?: NutrientDataInput
+  @Field({ nullable: true })
+  sugars?: NutrientDataInput
+  @Field({ nullable: true })
+  protein?: NutrientDataInput
+  @Field({ nullable: true })
+  vitaminC?: NutrientDataInput
+  @Field({ nullable: true })
+  vitaminA?: NutrientDataInput
+  @Field({ nullable: true })
+  calcium?: NutrientDataInput
+  @Field({ nullable: true })
+  iron?: NutrientDataInput
+  @Field({ nullable: true })
+  calories?: NutrientDataInput
+  @Field({ nullable: true })
+  caloriesFromFat?: NutrientDataInput
 }
 
 @ObjectType()
@@ -181,6 +230,7 @@ export class Food {
   origFoodId?: string
   foodClass: Ref<FoodClassSchema>
   contents: FoodContent[]
+  nutrientData?: NutritionalData
 }
 
 @InputType()
@@ -191,4 +241,6 @@ export class FoodInput {
   description?: TranslationInput[]
   @Field(type => [WeightInput])
   weights: WeightInput[]
+  @Field(type => NutritionalDataInput, { nullable: true })
+  nutrientData?: NutritionalDataInput
 }
