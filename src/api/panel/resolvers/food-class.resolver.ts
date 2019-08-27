@@ -8,7 +8,7 @@ import { Role } from '@Types/common'
 import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-class'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '../utils'
+import { Context } from '@Utils/context'
 
 
 @Service()

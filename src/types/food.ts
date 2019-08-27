@@ -230,7 +230,7 @@ export class Food {
   origFoodId?: string
   foodClass: Ref<FoodClassSchema>
   contents: FoodContent[]
-  nutrientData?: NutritionalData
+  nutritionalData?: NutritionalData
 }
 
 @InputType()

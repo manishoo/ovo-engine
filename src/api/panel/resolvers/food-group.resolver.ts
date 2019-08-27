@@ -8,7 +8,7 @@ import { Role, TranslationInput } from '@Types/common'
 import { FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '../utils'
+import { Context } from '@Utils/context'
 
 
 @Service()

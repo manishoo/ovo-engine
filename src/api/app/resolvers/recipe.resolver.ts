@@ -9,7 +9,7 @@ import { ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Type
 import { Tag } from '@Types/tag'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '../utils'
+import { Context } from '@Utils/context'
 import { UserRole } from '@Types/common'
 
 
