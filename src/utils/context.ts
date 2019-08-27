@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LanguageCode, Status, UserRole, Role } from '../types/common' //TODO fix alias
+import { LanguageCode, Status, UserRole, Role } from '@Types/common'
 import { Request } from 'express'
 
 export interface Context {

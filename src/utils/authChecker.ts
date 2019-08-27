@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Context } from './context'
+import { Context } from '@Utils/context'
 import { Role } from '../types/common'
 import { AuthChecker } from 'type-graphql'
 
