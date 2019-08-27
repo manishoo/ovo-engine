@@ -6,7 +6,7 @@
 import mongoose from '@Config/connections/mongoose'
 import { FoodClassSchema } from '@Models/food-class.model'
 import { Translation } from '@Types/common'
-import { Food, FoodContent, NutritionalData } from '@Types/food'
+import { Food, FoodContent, Nutrition } from '@Types/food'
 import { Weight } from '@Types/weight'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Ref, Typegoose } from 'typegoose'
@@ -35,7 +35,7 @@ export class FoodSchema extends Typegoose implements Food {
   @prop({ default: [], required: true })
   contents: FoodContent[]
   @prop()
-  nutritionalData?: NutritionalData
+  nutrition?: Nutrition
   @prop({ default: [], required: true })
   weights: Weight[]
 }

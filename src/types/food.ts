@@ -13,7 +13,7 @@ import { Ref } from 'typegoose'
 
 
 @ObjectType()
-export class NutrientData {
+export class NutrientUnit {
   @Field()
   content: number
   @Field()
@@ -21,7 +21,7 @@ export class NutrientData {
 }
 
 @InputType()
-export class NutrientDataInput {
+export class NutrientUnitInput {
   @Field()
   content: number
   @Field()
@@ -29,83 +29,83 @@ export class NutrientDataInput {
 }
 
 @ObjectType()
-export class NutritionalData {
+export class Nutrition {
   @Field({ nullable: true })
-  saturatedFat?: NutrientData
+  saturatedFat?: NutrientUnit
   @Field({ nullable: true })
-  polyUnsaturatedFat?: NutrientData
+  polyUnsaturatedFat?: NutrientUnit
   @Field({ nullable: true })
-  monoUnsaturatedFat?: NutrientData
+  monoUnsaturatedFat?: NutrientUnit
   @Field({ nullable: true })
-  unsaturatedFat?: NutrientData
+  unsaturatedFat?: NutrientUnit
   @Field({ nullable: true })
-  cholesterol?: NutrientData
+  cholesterol?: NutrientUnit
   @Field({ nullable: true })
-  sodium?: NutrientData
+  sodium?: NutrientUnit
   @Field({ nullable: true })
-  potassium?: NutrientData
+  potassium?: NutrientUnit
   @Field({ nullable: true })
-  totalFat?: NutrientData
+  totalFat?: NutrientUnit
   @Field({ nullable: true })
-  totalCarbohydrates?: NutrientData
+  totalCarbohydrates?: NutrientUnit
   @Field({ nullable: true })
-  dietaryFiber?: NutrientData
+  dietaryFiber?: NutrientUnit
   @Field({ nullable: true })
-  sugars?: NutrientData
+  sugars?: NutrientUnit
   @Field({ nullable: true })
-  protein?: NutrientData
+  protein?: NutrientUnit
   @Field({ nullable: true })
-  vitaminC?: NutrientData
+  vitaminC?: NutrientUnit
   @Field({ nullable: true })
-  vitaminA?: NutrientData
+  vitaminA?: NutrientUnit
   @Field({ nullable: true })
-  calcium?: NutrientData
+  calcium?: NutrientUnit
   @Field({ nullable: true })
-  iron?: NutrientData
+  iron?: NutrientUnit
   @Field({ nullable: true })
-  calories?: NutrientData
+  calories?: NutrientUnit
   @Field({ nullable: true })
-  caloriesFromFat?: NutrientData
+  caloriesFromFat?: NutrientUnit
 }
 
 @InputType()
-export class NutritionalDataInput {
+export class NutritionInput {
   @Field({ nullable: true })
-  saturatedFat?: NutrientDataInput
+  saturatedFat?: NutrientUnitInput
   @Field({ nullable: true })
-  polyUnsaturatedFat?: NutrientDataInput
+  polyUnsaturatedFat?: NutrientUnitInput
   @Field({ nullable: true })
-  monoUnsaturatedFat?: NutrientDataInput
+  monoUnsaturatedFat?: NutrientUnitInput
   @Field({ nullable: true })
-  unsaturatedFat?: NutrientDataInput
+  unsaturatedFat?: NutrientUnitInput
   @Field({ nullable: true })
-  cholesterol?: NutrientDataInput
+  cholesterol?: NutrientUnitInput
   @Field({ nullable: true })
-  sodium?: NutrientDataInput
+  sodium?: NutrientUnitInput
   @Field({ nullable: true })
-  potassium?: NutrientDataInput
+  potassium?: NutrientUnitInput
   @Field({ nullable: true })
-  totalFat?: NutrientDataInput
+  totalFat?: NutrientUnitInput
   @Field({ nullable: true })
-  totalCarbohydrates?: NutrientDataInput
+  totalCarbohydrates?: NutrientUnitInput
   @Field({ nullable: true })
-  dietaryFiber?: NutrientDataInput
+  dietaryFiber?: NutrientUnitInput
   @Field({ nullable: true })
-  sugars?: NutrientDataInput
+  sugars?: NutrientUnitInput
   @Field({ nullable: true })
-  protein?: NutrientDataInput
+  protein?: NutrientUnitInput
   @Field({ nullable: true })
-  vitaminC?: NutrientDataInput
+  vitaminC?: NutrientUnitInput
   @Field({ nullable: true })
-  vitaminA?: NutrientDataInput
+  vitaminA?: NutrientUnitInput
   @Field({ nullable: true })
-  calcium?: NutrientDataInput
+  calcium?: NutrientUnitInput
   @Field({ nullable: true })
-  iron?: NutrientDataInput
+  iron?: NutrientUnitInput
   @Field({ nullable: true })
-  calories?: NutrientDataInput
+  calories?: NutrientUnitInput
   @Field({ nullable: true })
-  caloriesFromFat?: NutrientDataInput
+  caloriesFromFat?: NutrientUnitInput
 }
 
 @ObjectType()
@@ -117,7 +117,7 @@ export class FoodVariety {
   @Field({ nullable: true })
   description?: string
   @Field({ nullable: true })
-  nutrients?: NutritionalData
+  nutrients?: Nutrition
   @Field(type => [Weight], { nullable: true })
   weights?: Weight[]
   @Field()
@@ -229,7 +229,7 @@ export class Food {
   origFoodId?: string
   foodClass: Ref<FoodClassSchema>
   contents: FoodContent[]
-  nutritionalData?: NutritionalData
+  Nutrition?: Nutrition
 }
 
 @InputType()
@@ -240,6 +240,6 @@ export class FoodInput {
   description?: TranslationInput[]
   @Field(type => [WeightInput])
   weights: WeightInput[]
-  @Field(type => NutritionalDataInput, { nullable: true })
-  nutrientData?: NutritionalDataInput
+  @Field(type => NutritionInput, { nullable: true })
+  nutrition?: NutritionInput
 }

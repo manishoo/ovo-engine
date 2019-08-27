@@ -4,7 +4,7 @@
  */
 
 import { Image } from '@Types/common'
-import { NutritionalData } from '@Types/food'
+import { Nutrition } from '@Types/food'
 import { Weight } from '@Types/weight'
 import { Field, ID, Int, ObjectType } from 'type-graphql'
 import { prop } from 'typegoose'
@@ -44,8 +44,8 @@ export class MealItem {
   @Field({ nullable: true })
   weightId?: string
 
-  @Field(type => NutritionalData, { nullable: true })
-  nutritionalData?: NutritionalData
+  @Field(type => Nutrition, { nullable: true })
+  Nutrition?: Nutrition
 
   @Field()
   slug?: string

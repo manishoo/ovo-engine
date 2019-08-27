@@ -86,7 +86,7 @@ export default class FoodService {
       weights,
       description: food.description,
       foodClass,
-      nutritionalData: food.nutrientData,
+      nutrition: food.nutrition,
     })
 
     return foodInput.save()

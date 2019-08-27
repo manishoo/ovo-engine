@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { NutritionalData } from '@Types/food'
+import { Nutrition } from '@Types/food'
 import * as Sequelize from 'sequelize'
 
 // table: compoundSubstituents
@@ -447,7 +447,7 @@ export interface foodVarietyAttribute {
   origFoodId: string;
   origFoodName: string;
   origDb: string;
-  nutritionalData: NutritionalData;
+  Nutrition: Nutrition;
   createdAt?: Date;
   updatedAt?: Date;
   creatorId?: number;
