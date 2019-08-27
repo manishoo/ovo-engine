@@ -4,10 +4,11 @@
  */
 
 import DishService from '@Services/dish/dish.service'
-import { Dish, DishInput, DishListResponse } from '@Types/dish'
-import { Arg, Authorized, Ctx, Int, Query, Resolver } from 'type-graphql'
+import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
+import { Arg, Authorized, Ctx, Query, Resolver, Mutation, Args } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
+import { UserRole } from '@Types/common'
 
 
 @Service()
@@ -20,49 +21,49 @@ export default class DishResolver {
     // noop
   }
 
-  @Authorized()
+  @Authorized(UserRole.user)
+  @Mutation(returns => Dish)
+  async createDish(
+    @Arg('dish') dish: DishInput,
+    @Ctx() ctx: Context,
+  ) {
+    return this.dishService.create(dish, ctx.user!.id)
+  }
+
+  @Authorized(UserRole.user)
   @Query(returns => DishListResponse)
-  dishes(
-    @Arg('page', type => Int) page: number,
-    @Arg('size', type => Int) size: number,
+  async dishes(
+    @Args() { page, size, authorId }: ListDishesArgs,
     @Ctx() ctx: Context,
-  ): Promise<DishListResponse> {
-    return this.dishService.list(page, size)
+  ) {
+    return this.dishService.list({ page, size, authorId })
+  }
+  @Authorized(UserRole.user)
+  @Query(returns => Dish)
+  async dish(
+    @Ctx() ctx: Context,
+    @Arg('id', { nullable: true }) id?: string,
+    @Arg('slug', { nullable: true }) slug?: string,
+  ) {
+    return this.dishService.get(id, slug)
   }
 
-  @Query(returns => Dish)
-  dish(
+  @Authorized(UserRole.user)
+  @Mutation(returns => Dish)
+  async deleteDish(
     @Arg('id') id: string,
     @Ctx() ctx: Context,
-  ): Promise<Dish> {
-    return this.dishService.get(id)
+  ) {
+    return this.dishService.delete(id, ctx.user!.id)
   }
 
-  @Authorized()
-  @Query(returns => Boolean)
-  deleteDish(
-    @Arg('id') id: string,
-    @Ctx() ctx: Context,
-  ): Promise<boolean> {
-    return this.dishService.delete(id)
-  }
-
-  @Authorized()
-  @Query(returns => Dish)
-  updateDish(
+  @Authorized(UserRole.user)
+  @Mutation(returns => Dish)
+  async updateDish(
     @Arg('id') id: string,
     @Arg('data') data: DishInput,
     @Ctx() ctx: Context,
-  ): Promise<Dish> {
-    return this.dishService.update(id, data)
-  }
-
-  @Authorized()
-  @Query(returns => Dish)
-  createDish(
-    @Arg('data') data: DishInput,
-    @Ctx() ctx: Context,
-  ): Promise<Dish> {
-    return this.dishService.create(data)
+  ) {
+    return this.dishService.update(id, data, ctx.user!.id)
   }
 }
