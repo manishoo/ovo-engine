@@ -133,7 +133,7 @@ export enum MealType {
 
 registerEnumType(MealType, {
   name: 'MealType',
-  description: 'alendar meal types'
+  description: 'Meal types'
 })
 
 @ObjectType()
