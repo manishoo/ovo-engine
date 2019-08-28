@@ -3,7 +3,7 @@ import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-de
 import { plugin, prop, Ref, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model'
 import { Day, CalendarMeal } from '@Types/calendar'
-import mongoose from '@Config/connections/mongoose'
+import mongoose from 'mongoose'
 
 
 export interface DaySchema extends SoftDeleteModel<SoftDeleteDocument> {

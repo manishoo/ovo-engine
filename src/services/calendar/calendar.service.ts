@@ -24,8 +24,6 @@ export default class CalendarService {
     let day: Partial<Day> = {}
 
     query.user = mongoose.Types.ObjectId(userId)
-
-    query.user = mongoose.Types.ObjectId(userId)
     const calendar = await CalendarModel.find(query)
 
     return {
