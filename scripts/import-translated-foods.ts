@@ -30,10 +30,15 @@ function addFaTranslation(translations: Translation[]) {
   if (!tr) throw new Error('no farsi translation found')
 
   return [
-    ...translations,
+    {
+      locale: LanguageCode.en,
+      text: enTranslation,
+      verified: true,
+    },
     {
       locale: LanguageCode.fa,
       text: tr.tr,
+      verified: false,
     }
   ]
 }

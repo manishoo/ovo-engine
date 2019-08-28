@@ -7,8 +7,9 @@ import { Image, Pagination, Translation, TranslationInput } from '@Types/common'
 
 import { FoodGroup } from '@Types/food-group'
 import { GraphQLUpload } from 'apollo-server'
+import { Max, Min } from 'class-validator'
 import mongoose from 'mongoose'
-import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
+import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 
 
 export enum FOOD_CLASS_TYPES {
@@ -88,4 +89,25 @@ export class FoodClassListResponse {
   foodClasses: FoodClass[]
   @Field(type => Pagination)
   pagination: Pagination
+}
+
+@ArgsType()
+export class ListFoodClassesArgs {
+  @Field({ defaultValue: 1 })
+  @Min(1)
+  page: number
+
+  @Field({ defaultValue: 10 })
+  @Min(1)
+  @Max(30)
+  size: number
+
+  @Field({ nullable: true })
+  foodGroupId?: string
+
+  @Field({ nullable: true })
+  nameSearchQuery?: string
+
+  @Field({ nullable: true })
+  verified?: boolean
 }
