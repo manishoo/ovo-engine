@@ -28,6 +28,7 @@ export default async ({ app, resolverPath, context, authChecker, platformPath }:
       ],
       container: Container,
       globalMiddlewares: [ErrorInterceptor],
+      dateScalarMode: "isoDate",
     }).catch(e => console.error(e)),
     context,
     playground: process.env.NODE_ENV === 'development',

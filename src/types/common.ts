@@ -24,13 +24,13 @@ export enum Status {
   inactive = 'INACTIVE',
 }
 
-export enum Role {
+export enum OperatorRole {
   admin = 'ADMIN',
   operator = 'OPERATOR',
 }
 
-registerEnumType(Role, {
-  name: 'Role',
+registerEnumType(OperatorRole, {
+  name: 'OperatorRole',
   description: 'Operator roles'
 })
 
@@ -123,6 +123,18 @@ export class Item {
   @Field()
   value: string
 }
+
+export enum MealType {
+  breakfast = 'breakfast',
+  lunch = 'lunch',
+  dinner = 'dinner',
+  snack = 'snack',
+}
+
+registerEnumType(MealType, {
+  name: 'MealType',
+  description: 'Meal types'
+})
 
 @ObjectType()
 export class Translation {

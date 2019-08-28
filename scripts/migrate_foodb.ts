@@ -240,7 +240,7 @@
 // 						origFoodId: content.origFoodId,
 // 						origFoodName: content.origFoodCommonName,
 // 						publicId: uuid(),
-// 						nutritionalData: {},
+// 						Nutrition: {},
 // 					}
 // 					foodVarieties.push(fv)
 // 					allFoodVarieties.push(fv)
