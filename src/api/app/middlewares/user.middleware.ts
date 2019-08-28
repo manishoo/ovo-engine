@@ -22,7 +22,6 @@ export default async (req: Request) => {
     if (session && typeof session == 'string') {
       const userService = Container.get(UserService)
       const user = await userService.findBySession(session)
-      console.log('user', user)
       if (!user) {
         return null
       }
