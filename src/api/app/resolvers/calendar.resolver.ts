@@ -13,7 +13,7 @@ import { Day, CalendarResponse } from '@Types/calendar'
 
 @Service()
 @Resolver(of => Day)
-export default class ClaendarResolver {
+export default class CalendarResolver {
   constructor(
     // service injection
     private readonly CalendarService: CalendarService
