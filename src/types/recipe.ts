@@ -195,7 +195,7 @@ export class Recipe {
   serving: number
 
   @Field(type => Nutrition, { nullable: true })
-  Nutrition?: Nutrition
+  nutrition?: Nutrition
 
   @Field()
   slug: string
