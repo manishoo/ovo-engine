@@ -4,6 +4,7 @@ import { Ref } from "typegoose"
 import { User } from "@Types/user"
 import { DishSchema } from "@Models/dish.model"
 import { Dish } from "./dish"
+import { Pagination } from "./common";
 
 
 export enum TimelineMealType {
@@ -25,7 +26,7 @@ export class TimelineMeal {
   type: TimelineMealType
 
   @Field()
-  time: Date
+  time: string
 
   @Field(type => Dish)
   dish: Ref<DishSchema>
@@ -47,8 +48,8 @@ export class TimelineMealInput {
 @ObjectType()
 export class TimeLine {
 
-  @Field(type => Date)
-  date: Date
+  @Field(type => String)
+  date: string
 
   @Field(type => User)
   user: Ref<UserSchema>
@@ -57,3 +58,12 @@ export class TimeLine {
   meals: TimelineMeal[]
 }
 
+@ObjectType()
+export class TimelineResponse {
+
+  @Field(type => [TimeLine])
+  timeline: TimeLine[]
+
+  @Field(type => Pagination)
+  pagination: Pagination
+}

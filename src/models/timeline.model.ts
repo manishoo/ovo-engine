@@ -16,7 +16,7 @@ export interface TimelineSchema extends SoftDeleteModel<SoftDeleteDocument> {
 })
 export class TimelineSchema extends Typegoose implements TimeLine {
   @prop()
-  date: Date
+  date: string
 
   @prop({ ref: UserSchema })
   user: Ref<UserSchema>
