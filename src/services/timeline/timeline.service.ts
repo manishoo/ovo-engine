@@ -23,7 +23,7 @@ export default class TimelineService {
     let query: any = {}
     let day: Partial<TimeLine> = {}
 
-    query.user = new mongoose.Schema.Types.ObjectId(userId)
+    query.user = mongoose.Types.ObjectId(userId)
 
     query.user = mongoose.Types.ObjectId(userId)
     const timeline = await TimelineModel.find(query)
