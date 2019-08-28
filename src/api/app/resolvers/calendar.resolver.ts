@@ -7,7 +7,7 @@ import CalendarService from '@Services/calendar/calendar.service'
 import { UserRole } from '@Types/common'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '../utils'
+import { Context } from '@Utils/context'
 import { Day, CalendarResponse } from '@Types/calendar'
 
 
