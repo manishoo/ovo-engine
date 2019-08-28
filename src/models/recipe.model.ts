@@ -32,7 +32,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop({ required: true })
   serving: number
   @prop()
-  Nutrition?: Nutrition
+  nutrition?: Nutrition
   @prop()
   slug: string
   @prop()

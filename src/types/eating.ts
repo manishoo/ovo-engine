@@ -45,7 +45,7 @@ export class MealItem {
   weightId?: string
 
   @Field(type => Nutrition, { nullable: true })
-  Nutrition?: Nutrition
+  nutrition?: Nutrition
 
   @Field()
   slug?: string
