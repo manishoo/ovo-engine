@@ -7,7 +7,7 @@ import mongoose from '@Config/connections/mongoose'
 import { FoodSchema } from '@Models/food.model'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
-import { NutritionalData } from '@Types/food'
+import { Nutrition } from '@Types/food'
 import { Author } from '@Types/user'
 import { TagType, Tag } from '@Types/tag'
 import { Weight } from '@Types/weight'
@@ -194,8 +194,8 @@ export class Recipe {
   @Field(type => Int)
   serving: number
 
-  @Field(type => NutritionalData, { nullable: true })
-  nutritionalData?: NutritionalData
+  @Field(type => Nutrition, { nullable: true })
+  nutrition?: Nutrition
 
   @Field()
   slug: string
