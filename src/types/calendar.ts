@@ -62,7 +62,7 @@ export class Day {
 export class CalendarResponse {
 
   @Field(type => [Day])
-  Calendar: Day[]
+  calendar: Day[]
 
   @Field(type => Pagination)
   pagination: Pagination
