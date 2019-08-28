@@ -447,7 +447,7 @@ export interface foodVarietyAttribute {
   origFoodId: string;
   origFoodName: string;
   origDb: string;
-  Nutrition: Nutrition;
+  nutrition: Nutrition;
   createdAt?: Date;
   updatedAt?: Date;
   creatorId?: number;

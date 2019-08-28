@@ -41,7 +41,7 @@ module.exports = function (sequelize: sequelize.Sequelize, DataTypes: DataTypes)
       type: DataTypes.STRING(255),
       field: 'orig_db'
     },
-    Nutrition: {
+    nutrition: {
       type: DataTypes.JSON,
       allowNull: false,
       field: 'nutritional_data'
