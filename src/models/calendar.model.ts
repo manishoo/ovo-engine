@@ -16,7 +16,7 @@ export interface DaySchema extends SoftDeleteModel<SoftDeleteDocument> {
 })
 export class DaySchema extends Typegoose implements Day {
   @prop()
-  date: string
+  date: Date
 
   @prop({ ref: UserSchema })
   user: Ref<UserSchema>

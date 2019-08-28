@@ -1,23 +1,10 @@
-import { ObjectType, Field, registerEnumType, InputType } from "type-graphql"
+import { ObjectType, Field, InputType } from "type-graphql"
 import { UserSchema } from "@Models/user.model"
 import { Ref } from "typegoose"
 import { User } from "@Types/user"
 import { DishSchema } from "@Models/dish.model"
 import { Dish } from "./dish"
-import { Pagination } from "./common";
-
-
-export enum MealType {
-  breakfast = 'breakfast',
-  lunch = 'lunch',
-  dinner = 'dinner',
-  snack = 'snack',
-}
-
-registerEnumType(MealType, {
-  name: 'MealType',
-  description: 'alendar meal types'
-})
+import { Pagination, MealType } from "@Types/common"
 
 @ObjectType()
 export class CalendarMeal {
@@ -62,7 +49,7 @@ export class Day {
 export class CalendarResponse {
 
   @Field(type => [Day])
-  Calendar: Day[]
+  calendar: Day[]
 
   @Field(type => Pagination)
   pagination: Pagination

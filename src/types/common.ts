@@ -124,6 +124,18 @@ export class Item {
   value: string
 }
 
+export enum MealType {
+  breakfast = 'breakfast',
+  lunch = 'lunch',
+  dinner = 'dinner',
+  snack = 'snack',
+}
+
+registerEnumType(MealType, {
+  name: 'MealType',
+  description: 'alendar meal types'
+})
+
 @ObjectType()
 export class Translation {
   @prop({ enum: LanguageCode, required: true })

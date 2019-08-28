@@ -4,7 +4,7 @@
  */
 
 import { Service } from 'typedi'
-import { CalendarResponse, MealType, Day, CalendarMeal } from '@Types/calendar'
+import { CalendarResponse, Day, CalendarMeal } from '@Types/calendar'
 import { CalendarModel } from '@Models/calendar.model'
 import mongoose, { mongo } from 'mongoose'
 import { createPagination } from '@Utils/generate-pagination'
