@@ -52,4 +52,12 @@ export default class UserResolver {
   ) {
     return this.userService.getUserInfo(ctx.user!.id)
   }
+
+  @Query(returns => Boolean)
+  async usernameExists(
+    @Arg('username') username: string,
+    @Ctx() ctx: Context,
+  ) {
+    return this.userService.doesUsernameExist(username)
+  }
 }
