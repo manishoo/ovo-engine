@@ -26,7 +26,7 @@ export class CalendarMeal {
   type: MealType
 
   @Field()
-  time: string
+  time: Date
 
   @Field(type => Dish)
   dish: Ref<DishSchema>
@@ -48,8 +48,8 @@ export class CalendarMealInput {
 @ObjectType()
 export class Day {
 
-  @Field(type => String)
-  date: string
+  @Field(type => Date)
+  date: Date
 
   @Field(type => User)
   user: Ref<UserSchema>
