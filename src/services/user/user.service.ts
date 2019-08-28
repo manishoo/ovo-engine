@@ -24,7 +24,6 @@ export default class UserService {
     // noop
   }
 
-
   async findBySession(session: string) {
     const key = `user:session:${session}`
     const userDataJSONString = await redis.get(key)
@@ -109,6 +108,11 @@ export default class UserService {
     user.gender = userInput.gender
 
     return user.save()
+  }
 
+  async doesUsernameExist(username: string): Promise<boolean> {
+    const user = await UserModel.findOne({ username })
+
+    return !!user
   }
 }
