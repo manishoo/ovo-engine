@@ -7,23 +7,23 @@ import { Dish } from "./dish"
 import { Pagination } from "./common";
 
 
-export enum TimelineMealType {
+export enum MealType {
   breakfast = 'breakfast',
   lunch = 'lunch',
   dinner = 'dinner',
   snack = 'snack',
 }
 
-registerEnumType(TimelineMealType, {
-  name: 'TimelineMealType',
-  description: 'Timeline meal types'
+registerEnumType(MealType, {
+  name: 'MealType',
+  description: 'alendar meal types'
 })
 
 @ObjectType()
-export class TimelineMeal {
+export class CalendarMeal {
 
-  @Field(type => TimelineMealType)
-  type: TimelineMealType
+  @Field(type => MealType)
+  type: MealType
 
   @Field()
   time: string
@@ -33,10 +33,10 @@ export class TimelineMeal {
 }
 
 @InputType()
-export class TimelineMealInput {
+export class CalendarMealInput {
 
-  @Field(type => TimelineMealType)
-  type: TimelineMealType
+  @Field(type => MealType)
+  type: MealType
 
   @Field(type => Date)
   time: Date
@@ -46,7 +46,7 @@ export class TimelineMealInput {
 }
 
 @ObjectType()
-export class TimeLine {
+export class Day {
 
   @Field(type => String)
   date: string
@@ -54,15 +54,15 @@ export class TimeLine {
   @Field(type => User)
   user: Ref<UserSchema>
 
-  @Field(type => [TimelineMeal])
-  meals: TimelineMeal[]
+  @Field(type => [CalendarMeal])
+  meals: CalendarMeal[]
 }
 
 @ObjectType()
-export class TimelineResponse {
+export class CalendarResponse {
 
-  @Field(type => [TimeLine])
-  timeline: TimeLine[]
+  @Field(type => [Day])
+  Calendar: Day[]
 
   @Field(type => Pagination)
   pagination: Pagination

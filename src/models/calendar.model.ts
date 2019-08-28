@@ -2,11 +2,11 @@
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Ref, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model'
-import { TimeLine, TimelineMeal } from '@Types/timeline'
+import { Day, CalendarMeal } from '@Types/calendar'
 import mongoose from '@Config/connections/mongoose'
 
 
-export interface TimelineSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface DaySchema extends SoftDeleteModel<SoftDeleteDocument> {
 }
 
 @plugin(mongooseDelete, {
@@ -14,7 +14,7 @@ export interface TimelineSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedBy: true,
   overrideMethods: true,
 })
-export class TimelineSchema extends Typegoose implements TimeLine {
+export class DaySchema extends Typegoose implements Day {
   @prop()
   date: string
 
@@ -22,13 +22,13 @@ export class TimelineSchema extends Typegoose implements TimeLine {
   user: Ref<UserSchema>
 
   @prop()
-  meals: TimelineMeal[]
+  meals: CalendarMeal[]
 }
 
-export const TimelineModel = new TimelineSchema().getModelForClass(TimelineSchema, {
+export const CalendarModel = new DaySchema().getModelForClass(DaySchema, {
   existingMongoose: mongoose,
   schemaOptions: {
-    collection: 'timeline',
+    collection: 'days',
     timestamps: true,
     emitIndexErrors: true,
     validateBeforeSave: true,

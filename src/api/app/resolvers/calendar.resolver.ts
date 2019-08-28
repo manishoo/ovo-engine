@@ -3,29 +3,29 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import TimelineService from '@Services/timeline/timeline.service'
+import CalendarService from '@Services/calendar/calendar.service'
 import { UserRole } from '@Types/common'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '../utils'
-import { TimeLine, TimelineResponse } from '@Types/timeline'
+import { Day, CalendarResponse } from '@Types/calendar'
 
 
 @Service()
-@Resolver(of => TimeLine)
-export default class UserResolver {
+@Resolver(of => Day)
+export default class ClaendarResolver {
   constructor(
     // service injection
-    private readonly timelineService: TimelineService
+    private readonly CalendarService: CalendarService
   ) {
     // noop
   }
 
   @Authorized(UserRole.user)
-  @Query(returns => TimelineResponse)
-  async timeline(
+  @Query(returns => CalendarResponse)
+  async calendar(
     @Ctx() ctx: Context,
   ) {
-    return this.timelineService.timeline(ctx.user!.id)
+    return this.CalendarService.listDays(ctx.user!.id)
   }
 }

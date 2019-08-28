@@ -1,35 +1,35 @@
 /*
- * timeline.service.ts
+ * Calendar.service.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import { Service } from 'typedi'
-import { TimelineResponse, TimelineMealType, TimeLine, TimelineMeal } from '@Types/timeline'
-import { TimelineModel } from '@Models/timeline.model'
+import { CalendarResponse, MealType, Day, CalendarMeal } from '@Types/calendar'
+import { CalendarModel } from '@Models/calendar.model'
 import mongoose, { mongo } from 'mongoose'
 import { createPagination } from '@Utils/generate-pagination'
-import { DishModel } from '@Models/dish.model';
+
 
 @Service()
-export default class TimelineService {
+export default class CalendarService {
   constructor(
     // service injection
   ) {
     // noop
   }
 
-  async timeline(userId: string): Promise<TimelineResponse> {
+  async listDays(userId: string): Promise<CalendarResponse> {
 
     let query: any = {}
-    let day: Partial<TimeLine> = {}
+    let day: Partial<Day> = {}
 
     query.user = mongoose.Types.ObjectId(userId)
 
     query.user = mongoose.Types.ObjectId(userId)
-    const timeline = await TimelineModel.find(query)
+    const calendar = await CalendarModel.find(query)
 
     return {
-      timeline,
+      calendar,
       pagination: createPagination(1, 30, 30)
     }
 
