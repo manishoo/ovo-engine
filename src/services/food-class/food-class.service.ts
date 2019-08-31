@@ -35,13 +35,24 @@ export default class FoodClassService {
       }
     }
 
-    if (nameSearchQuery) {
-      let reg = new RegExp(nameSearchQuery)
-      query['name.text'] = { $regex: reg, $options: 'i' }
-    }
-
-    if (typeof verified === 'boolean') {
+    if (verified || nameSearchQuery) {
       const aggregations: any[] = []
+
+      if (nameSearchQuery) {
+        aggregations.push({
+          $match: {
+            name: {
+              $elemMatch: {
+                text: {
+                  $regex: nameSearchQuery,
+                  $options: 'i',
+                },
+              }
+            }
+          }
+        })
+      }
+
       if (verified) {
         query['name'] = {
           $not: {
@@ -71,16 +82,6 @@ export default class FoodClassService {
             }
           },
         )
-      } else {
-        query['name.verified'] = !verified
-        aggregations.push({
-          $match: {
-            $or: [
-              { 'name.verified': { $ne: true } },
-              { 'weights.name.title.verified': { $ne: true } },
-            ]
-          }
-        })
       }
 
       const foodClasses = await FoodModel.aggregate([

@@ -6,9 +6,9 @@
 import FoodClassService from '@Services/food-class/food-class.service'
 import { OperatorRole } from '@Types/common'
 import { FoodClass, FoodClassInput, FoodClassListResponse, ListFoodClassesArgs } from '@Types/food-class'
+import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '@Utils/context'
 
 
 @Service()
