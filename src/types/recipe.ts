@@ -8,11 +8,11 @@ import { FoodSchema } from '@Models/food.model'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { Nutrition } from '@Types/food'
+import { Tag, TagType } from '@Types/tag'
 import { Author } from '@Types/user'
-import { TagType, Tag } from '@Types/tag'
 import { Weight } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
-import { Max, Min, ArrayNotEmpty } from 'class-validator'
+import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
 
@@ -212,7 +212,6 @@ export class Recipe {
   @Field(type => [Review], { nullable: true })
   reviews?: Review[]
 
-
   @Field(type => Int)
   likesCount: number
 
@@ -335,14 +334,14 @@ export class RecipeInput {
 
 @ArgsType()
 export class ListRecipesArgs {
-  @Field()
+  @Field({ nullable: true })
   @Min(1)
-  page: number
+  page?: number
 
-  @Field()
+  @Field({ nullable: true })
   @Min(1)
   @Max(30)
-  size: number
+  size?: number
 
   @Field({ nullable: true })
   lastId?: string
