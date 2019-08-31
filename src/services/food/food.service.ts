@@ -85,7 +85,7 @@ export default class FoodService {
       name: food.name,
       weights,
       description: food.description,
-      foodClass,
+      foodClass: foodClass._id,
       nutrition: food.nutrition,
     })
 
