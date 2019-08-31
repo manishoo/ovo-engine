@@ -4,7 +4,7 @@
  */
 
 import { DishModel } from '@Models/dish.model'
-import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
+import { Dish, DishInput, DishListResponse, ListDishesArgs, DishItemInput, DishItem } from '@Types/dish'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
@@ -32,44 +32,9 @@ export default class DishService {
       dish.description = dishInput.description
     }
     dish.author = me._id
-    let dishItems = await Promise.all(dishInput.items.map(async dishItemInput => {
-      if (dishItemInput.food && dishItemInput.recipe) {
 
-        throw new Errors.UserInput('Wrong input', { 'food': 'Only one of the following fields can be used', 'recipe': 'Only one of the following fields can be used' })
-      }
-      if (!dishItemInput.food && !dishItemInput.recipe) {
-        throw new Errors.UserInput('Wrong input', { 'food': 'One of the items should be used', 'recipe': 'One of the items should be used' })
-      }
+    let dishItems = await this.generateDishItemList(dishInput.items)
 
-      if (dishItemInput.food) {
-        if (!mongoose.Types.ObjectId.isValid(dishItemInput.food.toString())) throw new Errors.Validation('Invalid food id')
-
-        const food = await FoodModel.findById(dishItemInput.food.toString())
-        if (!food) throw new Errors.NotFound('food not found')
-        if (dishItemInput.weight) {
-          const foundWeight = food.weights.find(w => w.id === dishItemInput.weight)
-          if (!foundWeight) throw new Errors.UserInput('Wront weight', { 'weight': 'This weight is not available for the following food' })
-        }
-
-        return {
-          amount: dishItemInput.amount,
-          food: food.id,
-          weight: dishItemInput.weight,
-        }
-      }
-      if (dishItemInput.recipe) {
-        if (!mongoose.Types.ObjectId.isValid(dishItemInput.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
-
-        const recipe = await RecipeModel.findById(dishItemInput.recipe.toString())
-        if (!recipe) throw new Errors.NotFound('recipe not found')
-
-        return {
-          amount: dishItemInput.amount,
-          recipe: recipe.id,
-        }
-      }
-
-    }))
     const createDish = await DishModel.create({
       ...dish,
       items: dishItems,
@@ -164,5 +129,47 @@ export default class DishService {
     })
 
     return dish.save()
+  }
+
+  async generateDishItemList(dishInputItems: DishItemInput[]): Promise<DishItem[]> {
+    return Promise.all(dishInputItems.map(async dishItemInput => {
+      if (dishItemInput.food && dishItemInput.recipe) {
+
+        throw new Errors.UserInput('Wrong input', { 'food': 'Only one of the following fields can be used', 'recipe': 'Only one of the following fields can be used' })
+      }
+      if (!dishItemInput.food && !dishItemInput.recipe) {
+        throw new Errors.UserInput('Wrong input', { 'food': 'One of the items should be used', 'recipe': 'One of the items should be used' })
+      }
+
+      if (dishItemInput.food) {
+        if (!mongoose.Types.ObjectId.isValid(dishItemInput.food.toString())) throw new Errors.Validation('Invalid food id')
+
+        const food = await FoodModel.findById(dishItemInput.food.toString())
+        if (!food) throw new Errors.NotFound('food not found')
+        if (dishItemInput.weight) {
+
+          const foundWeight = food.weights.find(w => w.id!.toString() === dishItemInput.weight)
+          if (!foundWeight) throw new Errors.UserInput('Wront weight', { 'weight': 'This weight is not available for the following food' })
+        }
+
+        return {
+          amount: dishItemInput.amount,
+          food: food.id,
+          weight: dishItemInput.weight,
+        }
+      } else if (dishItemInput.recipe) {
+        if (!mongoose.Types.ObjectId.isValid(dishItemInput.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
+
+        const recipe = await RecipeModel.findById(dishItemInput.recipe.toString())
+        if (!recipe) throw new Errors.NotFound('recipe not found')
+
+        return {
+          amount: dishItemInput.amount,
+          recipe: recipe.id,
+        }
+      }
+
+      throw new Errors.System('Something went wrong')
+    }))
   }
 }
