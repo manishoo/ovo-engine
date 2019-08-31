@@ -8,7 +8,7 @@
 // import FoodGroup from '~/models/foods/food-group.model'
 // import FoodTr, { FoodTrAttribute } from '~/models/foods/food-translation.model'
 // import Food, { FoodAttribute } from '~/models/foods/food.model'
-// import NutrientData, { nutrientDataAttribute } from '~/models/foods/nutrient-data.model'
+// import NutrientUnit, { NutrientUnitAttribute } from '~/models/foods/nutrient-data.model'
 // import Nutrient, { nutrientAttribute } from '~/models/foods/nutrient.model'
 // import Weight, { weightAttribute as wAttr } from '~/models/foods/weight.model'
 // import WeightTr, { weightTrAttribute } from '~/models/foods/weights-translation.model'
@@ -238,7 +238,7 @@
 // 		await Food.sync({ force })
 // 		await FoodTr.sync({ force })
 // 		await Nutrient.sync({ force })
-// 		await NutrientData.sync({ force })
+// 		await NutrientUnit.sync({ force })
 // 		await Weight.sync({ force })
 // 		await WeightTr.sync({ force })
 // 		console.error('failed, try again')

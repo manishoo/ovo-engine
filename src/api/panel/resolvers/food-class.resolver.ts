@@ -4,11 +4,11 @@
  */
 
 import FoodClassService from '@Services/food-class/food-class.service'
-import { Role } from '@Types/common'
-import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-class'
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { OperatorRole } from '@Types/common'
+import { FoodClass, FoodClassInput, FoodClassListResponse, ListFoodClassesArgs } from '@Types/food-class'
+import { Context } from '@Utils/context'
+import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '../utils'
 
 
 @Service()
@@ -21,7 +21,7 @@ export default class FoodClassResolver {
     // noop
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Query(returns => FoodClass)
   async foodClass(
     @Arg('id') foodClassID: string,
@@ -30,19 +30,16 @@ export default class FoodClassResolver {
     return this.foodClassService.getFoodClass(foodClassID)
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Query(returns => FoodClassListResponse)
   async foodClasses(
-    @Arg('page', { defaultValue: 1 }) page: number,
-    @Arg('size', { defaultValue: 10 }) size: number,
+    @Args() { page, size, foodGroupId, nameSearchQuery, verified }: ListFoodClassesArgs,
     @Ctx() ctx: Context,
-    @Arg('foodGroupId', { nullable: true }) foodGroupID?: string,
-    @Arg('nameSearchQuery', { nullable: true }) nameSearchQuery?: string,
   ) {
-    return this.foodClassService.listFoodClasses(page, size, foodGroupID, nameSearchQuery)
+    return this.foodClassService.listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified })
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Mutation(returns => FoodClass)
   async updateFoodClass(
     @Arg('id') foodClassId: string,
@@ -52,7 +49,7 @@ export default class FoodClassResolver {
     return this.foodClassService.editFoodClass(foodClassId, foodClass)
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Mutation(returns => String)
   async deleteFoodClass(
     @Arg('id') foodClassID: string,
@@ -61,7 +58,7 @@ export default class FoodClassResolver {
     return this.foodClassService.deleteFoodClass(foodClassID)
   }
 
-  @Authorized(Role.operator)
+  @Authorized(OperatorRole.operator)
   @Mutation(returns => FoodClass)
   async createFoodClass(
     @Arg('foodClass') foodClass: FoodClassInput,

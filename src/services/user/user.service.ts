@@ -10,6 +10,7 @@ import UploadService from '@Services/upload/upload.service'
 import { Status, UserRole } from '@Types/common'
 import { User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, Me, UserInfo } from '@Types/user'
 import Errors from '@Utils/errors'
+import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
@@ -55,7 +56,7 @@ export default class UserService {
     const checkUser = await UserModel.findOne({ username: user.username })
     if (checkUser) throw new Errors.UserInput('user creation error', { username: 'This username already exists' })
 
-    let newUser = await UserModel.create({
+    let newUser = await UserModel.create(<Partial<User>>{
       username: user.username,
       persistedPassword: await generateHashPassword(user.password),
       role: UserRole.user,
@@ -63,6 +64,10 @@ export default class UserService {
       firstName: user.firstName,
       middleName: user.middleName,
       lastName: user.lastName,
+      imageUrl: {
+        url: generateAvatarUrl(user.username),
+        source: 'generated-avatar'
+      }
     })
     return {
       user: newUser,
@@ -72,11 +77,11 @@ export default class UserService {
 
   async loginUser(user: UserLoginArgs): Promise<UserAuthResponse> {
     const checkUser = await UserModel.findOne({ username: user.username })
-    if (!checkUser) throw new Errors.NotFound('user not found')
+    if (!checkUser) throw new Errors.UserInput('Wrong username or password', { username: 'Wrong username or password', password: 'Wrong username or password' })
 
     const validatePassword = await verifyPassword(checkUser.persistedPassword, user.password)
 
-    if (!validatePassword) throw new Errors.UserInput('wrong username or password', { password: 'wrong password' })
+    if (!validatePassword) throw new Errors.UserInput('Wrong username or password', { username: 'Wrong username or password', password: 'Wrong username or password' })
 
     return {
       user: checkUser,

@@ -7,7 +7,7 @@ import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { FoodModel } from '@Models/food.model'
 import UploadService from '@Services/upload/upload.service'
-import { FoodClass, FoodClassInput, FoodClassListResponse } from '@Types/food-class'
+import { FoodClass, FoodClassInput, FoodClassListResponse, ListFoodClassesArgs } from '@Types/food-class'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
@@ -23,21 +23,85 @@ export default class FoodClassService {
     // noop
   }
 
-  async listFoodClasses(page: number, size: number, foodGroupID?: string, nameSearchQuery?: string): Promise<FoodClassListResponse> {
+  async listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified }: ListFoodClassesArgs): Promise<FoodClassListResponse> {
     let query: any = {}
 
-    if (foodGroupID) {
+    if (foodGroupId) {
       query['foodGroup._id'] = {
         /**
          * Search group and subgroups
          * */
-        $in: [mongoose.Types.ObjectId(foodGroupID), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupID }))]
+        $in: [mongoose.Types.ObjectId(foodGroupId), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
       }
     }
 
-    if (nameSearchQuery) {
-      let reg = new RegExp(nameSearchQuery)
-      query['name.text'] = { $regex: reg, $options: 'i' }
+    if (verified || nameSearchQuery) {
+      const aggregations: any[] = []
+
+      if (nameSearchQuery) {
+        aggregations.push({
+          $match: {
+            name: {
+              $elemMatch: {
+                text: {
+                  $regex: nameSearchQuery,
+                  $options: 'i',
+                },
+              }
+            }
+          }
+        })
+      }
+
+      if (verified) {
+        query['name'] = {
+          $not: {
+            $elemMatch: {
+              verified: !verified,
+            }
+          }
+        }
+        aggregations.push(
+          {
+            $project: {
+              foodClass: '$foodClass',
+              isNameVerified: { $allElementsTrue: ['$name.verified'] },
+              isWeightsVerified: {
+                $cond: {
+                  if: { $gt: [{ $size: '$weights' }, 0] },
+                  then: { $allElementsTrue: ['$weights.name.verified'] },
+                  else: true,
+                }
+              },
+            },
+          },
+          {
+            $match: {
+              isNameVerified: true,
+              isWeightsVerified: true,
+            }
+          },
+        )
+      }
+
+      const foodClasses = await FoodModel.aggregate([
+        ...aggregations,
+        {
+          $group: {
+            _id: '$foodClass',
+          }
+        },
+        {
+          $skip: size * (page - 1),
+        },
+        {
+          $limit: size,
+        }
+      ])
+
+      query['_id'] = {
+        $in: foodClasses.map(i => i._id)
+      }
     }
 
     const counts = await FoodClassModel.countDocuments(query)

@@ -7,7 +7,7 @@ import DishService from '@Services/dish/dish.service'
 import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
 import { Arg, Authorized, Ctx, Query, Resolver, Mutation, Args } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '../utils'
+import { Context } from '@Utils/context'
 import { UserRole } from '@Types/common'
 
 

@@ -5,7 +5,7 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { PersistedPassword } from '@Types/auth'
-import { Role, Status } from '@Types/common'
+import { OperatorRole, Status } from '@Types/common'
 import { Operator } from '@Types/operator'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { instanceMethod, InstanceType, plugin, prop, Typegoose } from 'typegoose'
@@ -30,8 +30,8 @@ export class OperatorSchema extends Typegoose implements Operator {
   session: string
   @prop({ required: true, enum: Status, default: Status.active })
   status?: string
-  @prop({ required: true, enum: Role, default: Role.operator })
-  role?: Role
+  @prop({ required: true, enum: OperatorRole, default: OperatorRole.operator })
+  role?: OperatorRole
 
   @instanceMethod
   transform(this: InstanceType<Operator>) {
