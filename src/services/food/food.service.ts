@@ -58,6 +58,10 @@ export default class FoodService {
     food.name = inputFood.name
     food.weights = weights
 
+    if (inputFood.nutrition) {
+      food.nutrition = inputFood.nutrition
+    }
+
     return food.save()
   }
 
