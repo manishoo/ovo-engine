@@ -34,8 +34,8 @@ export class FoodSchema extends Typegoose implements Food {
   foodClass: Ref<FoodClassSchema>
   @prop({ default: [], required: true })
   contents: FoodContent[]
-  @prop()
-  nutrition?: Nutrition
+  @prop({ default: {} })
+  nutrition: Nutrition
   @prop({ default: [], required: true })
   weights: Weight[]
 }
