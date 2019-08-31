@@ -5,11 +5,12 @@
 
 import { CalendarModel } from '@Models/calendar.model'
 import DishService from '@Services/dish/dish.service'
-import { CalendarMeal, CalendarMealInput, CalendarResponse, Day } from '@Types/calendar'
+import { CalendarResponse, Day } from '@Types/calendar'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
+import { Meal, MealInput } from '@Types/eating';
 
 
 @Service()
@@ -35,19 +36,19 @@ export default class CalendarService {
     }
   }
 
-  async logDay(dishInput: CalendarMealInput, userId: string): Promise<Day> {
+  async logDay(dishInput: MealInput, userId: string): Promise<Day> {
 
     if (!dishInput.time) {
       dishInput.time = new Date()
     }
 
-    let meal: CalendarMeal = {
+    let meal: Meal = {
       type: dishInput.type,
       time: dishInput.time,
-      dish: await this.dishService.generateDishItemList(dishInput.dish),
+      items: await this.dishService.generateDishItemList(dishInput.items),
     }
 
-    let days = await CalendarModel.aggregate([
+    let userActiveDays = await CalendarModel.aggregate([
       {
         $match: {
           user: mongoose.Types.ObjectId(userId)
@@ -65,19 +66,20 @@ export default class CalendarService {
       }
     ])
 
-    let dayId = null, day
-    days.map(day => {
+    let dayId = null
+    let day
+    userActiveDays.map(activeDay => {
 
       if (
-        (day._id.year == dishInput.time!.getFullYear()) &&
-        (day._id.month == dishInput.time!.getMonth() + 1) &&
-        (day._id.day == dishInput.time!.getDate())) {
-        dayId = day.items[0]
+        (activeDay._id.year == dishInput.time!.getFullYear()) &&
+        (activeDay._id.month == dishInput.time!.getMonth() + 1) &&
+        (activeDay._id.day == dishInput.time!.getDate())) {
+        dayId = activeDay.items[0]
       }
     })
 
     if (!dayId) {
-      let calendarMeal: Partial<CalendarMeal[]> = []
+      let calendarMeal: Partial<Meal[]> = []
       calendarMeal.push(meal)
       day = new CalendarModel({
         date: dishInput.time,
