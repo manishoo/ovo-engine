@@ -5,7 +5,14 @@
 
 import UserService from '@Services/user/user.service'
 import { UserRole } from '@Types/common'
-import { User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, UserInfo, Me } from '@Types/user'
+import {
+  BaseUser,
+  User,
+  UserAuthResponse,
+  UserLoginArgs,
+  UserRegistrationInput,
+  UserUpdateInput
+} from '@Types/user'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '@Utils/context'
@@ -47,7 +54,7 @@ export default class UserResolver {
   }
 
   @Authorized(UserRole.user)
-  @Query(returns => Me)
+  @Query(returns => User)
   async me(
     @Ctx() ctx: Context,
   ) {
@@ -55,7 +62,7 @@ export default class UserResolver {
   }
 
   @Authorized(UserRole.user)
-  @Query(returns => UserInfo)
+  @Query(returns => BaseUser)
   async user(
     @Arg('userId') userId: string,
     @Ctx() ctx: Context,

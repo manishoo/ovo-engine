@@ -8,13 +8,13 @@ import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { Status, UserRole } from '@Types/common'
-import { User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, Me, UserInfo } from '@Types/user'
+import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
-import { Service } from 'typedi'
 import mongoose from 'mongoose'
+import { Service } from 'typedi'
 
 
 @Service()
@@ -77,11 +77,17 @@ export default class UserService {
 
   async loginUser(user: UserLoginArgs): Promise<UserAuthResponse> {
     const checkUser = await UserModel.findOne({ username: user.username })
-    if (!checkUser) throw new Errors.UserInput('Wrong username or password', { username: 'Wrong username or password', password: 'Wrong username or password' })
+    if (!checkUser) throw new Errors.UserInput('Wrong username or password', {
+      username: 'Wrong username or password',
+      password: 'Wrong username or password'
+    })
 
     const validatePassword = await verifyPassword(checkUser.persistedPassword, user.password)
 
-    if (!validatePassword) throw new Errors.UserInput('Wrong username or password', { username: 'Wrong username or password', password: 'Wrong username or password' })
+    if (!validatePassword) throw new Errors.UserInput('Wrong username or password', {
+      username: 'Wrong username or password',
+      password: 'Wrong username or password'
+    })
 
     return {
       user: checkUser,
@@ -109,13 +115,13 @@ export default class UserService {
     return user.save()
   }
 
-  async userProfile(userId: string, id: string): Promise<Me | UserInfo> {
+  async userProfile(userId: string, id: string): Promise<User | BaseUser> {
     if (!mongoose.Types.ObjectId.isValid(userId)) throw new Errors.Validation('Invalid user id')
 
     let user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('User not found')
 
-    let userInfo = {} as Me
+    let userInfo: User | BaseUser
 
     if (userId === id) {
       userInfo = {
@@ -140,7 +146,7 @@ export default class UserService {
         household: user.household,
         activityLevel: user.activityLevel,
         path: user.path,
-      }
+      } as User
     } else {
       userInfo = {
         id: user.id,
@@ -151,7 +157,7 @@ export default class UserService {
         bio: user.bio,
         imageUrl: user.imageUrl,
         socialNetworks: user.socialNetworks,
-      } as UserInfo
+      } as BaseUser
     }
 
     return userInfo
