@@ -5,18 +5,17 @@
 
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
+import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
-import { Ingredient, ListRecipesArgs, Recipe, RecipeInput, Instruction, RecipesListResponse } from '@Types/recipe'
+import { Ingredient, Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
 import Errors from '@Utils/errors'
-import { __ } from 'i18n'
+import { createPagination } from '@Utils/generate-pagination'
 import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
-import { createPagination } from '@Utils/generate-pagination'
-import { TagModel } from '@Models/tag.model'
 import { transformRecipe } from './transformers/recipe.transformer'
 
 
@@ -50,7 +49,14 @@ export default class RecipeService {
     return recipe
   }
 
-  async list(variables: ListRecipesArgs = { page: 1, size: 10 }): Promise<RecipesListResponse> {
+  async list(variables: ListRecipesArgs): Promise<RecipesListResponse> {
+    if (!variables.size) {
+      variables.size = 10
+    }
+    if (!variables.page) {
+      variables.page = 1
+    }
+
     const query: any = {}
     const me = await UserModel.findById(variables.userId)
     if (!me) throw new Errors.System('something went wrong')
@@ -256,7 +262,6 @@ export default class RecipeService {
   }
 
   async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
-    return this.update(recipePublicId, {
-    }, LanguageCode.en, userId)
+    return this.update(recipePublicId, {}, LanguageCode.en, userId)
   }
 }
