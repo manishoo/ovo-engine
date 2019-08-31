@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Service } from 'typedi'
-import { CalendarResponse, Day, CalendarMeal, CalendarMealInput } from '@Types/calendar'
 import { CalendarModel } from '@Models/calendar.model'
-import mongoose from 'mongoose'
-import { createPagination } from '@Utils/generate-pagination'
-import Errors from '@Utils/errors';
 import DishService from '@Services/dish/dish.service'
+import { CalendarMeal, CalendarMealInput, CalendarResponse, Day } from '@Types/calendar'
+import Errors from '@Utils/errors'
+import { createPagination } from '@Utils/generate-pagination'
+import mongoose from 'mongoose'
+import { Service } from 'typedi'
 
 
 @Service()
@@ -55,17 +55,23 @@ export default class CalendarService {
       },
       {
         $group: {
-          _id: { month: { $month: { date: '$date' } }, day: { $dayOfMonth: { date: '$date' } }, year: { $year: { date: '$date' } } },
-          items: { $addToSet: "$_id" }
+          _id: {
+            month: { $month: { date: '$date' } },
+            day: { $dayOfMonth: { date: '$date' } },
+            year: { $year: { date: '$date' } }
+          },
+          items: { $addToSet: '$_id' }
         }
       }
     ])
 
-    var dayId = null,
-      day
+    let dayId = null, day
     days.map(day => {
 
-      if (day._id.year == dishInput.time!.getFullYear() && day._id.month == dishInput.time!.getMonth() + 1 && day._id.day == dishInput.time!.getDate()) {
+      if (
+        (day._id.year == dishInput.time!.getFullYear()) &&
+        (day._id.month == dishInput.time!.getMonth() + 1) &&
+        (day._id.day == dishInput.time!.getDate())) {
         dayId = day.items[0]
       }
     })
