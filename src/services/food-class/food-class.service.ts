@@ -7,11 +7,14 @@ import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { FoodModel } from '@Models/food.model'
 import UploadService from '@Services/upload/upload.service'
+import { LanguageCode, Translation } from '@Types/common'
 import { FoodClass, FoodClassInput, FoodClassListResponse, ListFoodClassesArgs } from '@Types/food-class'
 import Errors from '@Utils/errors'
+import { createPagination } from '@Utils/generate-pagination'
+// @ts-ignore
+import levenSort from 'leven-sort'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
-import { createPagination } from '@Utils/generate-pagination'
 
 
 @Service()
@@ -90,12 +93,6 @@ export default class FoodClassService {
           $group: {
             _id: '$foodClass',
           }
-        },
-        {
-          $skip: size * (page - 1),
-        },
-        {
-          $limit: size,
         }
       ])
 
@@ -104,14 +101,31 @@ export default class FoodClassService {
       }
     }
 
-    const counts = await FoodClassModel.countDocuments(query)
+    let counts = await FoodClassModel.countDocuments(query)
 
     if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
     if (page < 1) page = 1
 
-    const foodClasses = await FoodClassModel.find(query)
-      .limit(size)
-      .skip(size * (page - 1))
+    let foodClasses: FoodClass[] = []
+
+    if (nameSearchQuery) {
+      /**
+       * Sort FoodClasses by how close their name is to {nameSearchQuery}
+       * */
+      const dbFoodClasses = await FoodClassModel.find(query)
+
+      counts = dbFoodClasses.length
+      const sortedArray = levenSort(dbFoodClasses.map(i => ({
+        id: i._id,
+        name: getEnTranslation(i.name),
+      })), nameSearchQuery, 'name')
+      foodClasses = sortedArray.map((i: any) => dbFoodClasses.find(a => a._id.toString() === i.id.toString()))
+      foodClasses = foodClasses.slice((size) * (page - 1), ((size) * (page - 1)) + (size - 1))
+    } else {
+      foodClasses = await FoodClassModel.find(query)
+        .limit(size)
+        .skip(size * (page - 1))
+    }
 
     return {
       foodClasses,
@@ -199,4 +213,15 @@ export default class FoodClassService {
 
     return foodClass.save()
   }
+}
+
+function getEnTranslation(tr: Translation[]) {
+  if (tr.length === 0) return
+
+  const enTr = tr.find(t => t.locale === LanguageCode.en)
+  if (enTr) {
+    return enTr.text
+  }
+
+  return
 }
