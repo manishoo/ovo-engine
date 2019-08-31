@@ -36,6 +36,6 @@ export default class CalendarResolver {
     @Arg('meal', type => MealInput) mealInput: MealInput,
     @Ctx() ctx: Context,
   ) {
-    return this.calendarService.logDay(mealInput, ctx.user!.id)
+    return this.calendarService.logMeal(mealInput, ctx.user!.id)
   }
 }

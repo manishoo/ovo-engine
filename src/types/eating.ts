@@ -30,8 +30,8 @@ export class MealInput {
   @Field(type => MealType)
   type: MealType
 
-  @Field(type => Date, { nullable: true })
-  time?: Date
+  @Field(type => Date)
+  time: Date
 
   @Field(type => [DishItemInput])
   @ArrayNotEmpty()

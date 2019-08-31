@@ -36,11 +36,7 @@ export default class CalendarService {
     }
   }
 
-  async logDay(dishInput: MealInput, userId: string): Promise<Day> {
-
-    if (!dishInput.time) {
-      dishInput.time = new Date()
-    }
+  async logMeal(dishInput: MealInput, userId: string): Promise<Day> {
 
     let meal: Meal = {
       type: dishInput.type,

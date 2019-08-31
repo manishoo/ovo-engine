@@ -157,7 +157,7 @@ export default class DishService {
           food: food.id,
           weight: dishItemInput.weight,
         }
-      }else if (dishItemInput.recipe) {
+      } else if (dishItemInput.recipe) {
         if (!mongoose.Types.ObjectId.isValid(dishItemInput.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
 
         const recipe = await RecipeModel.findById(dishItemInput.recipe.toString())
@@ -167,14 +167,9 @@ export default class DishService {
           amount: dishItemInput.amount,
           recipe: recipe.id,
         }
-      }else{
-        //this will never be executed. but it should be here cause there'd be an error
-        return {
-          amount: 0,
-          recipe: ""
-        }
       }
 
+      throw new Errors.System('Something went wrong')
     }))
   }
 }
