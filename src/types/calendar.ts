@@ -2,9 +2,9 @@ import { ObjectType, Field, InputType } from "type-graphql"
 import { UserSchema } from "@Models/user.model"
 import { Ref } from "typegoose"
 import { User } from "@Types/user"
-import { DishSchema } from "@Models/dish.model"
-import { Dish } from "./dish"
+import { DishItemInput, DishItem } from "@Types/dish"
 import { Pagination, MealType } from "@Types/common"
+import { ArrayNotEmpty } from "class-validator"
 
 @ObjectType()
 export class CalendarMeal {
@@ -12,11 +12,13 @@ export class CalendarMeal {
   @Field(type => MealType)
   type: MealType
 
-  @Field()
-  time: Date
+  @Field({ nullable: true })
+  time?: Date
 
-  @Field(type => Dish)
-  dish: Ref<DishSchema>
+  @Field(type => [DishItem])
+  @ArrayNotEmpty()
+  dish: DishItem[]
+
 }
 
 @InputType()
@@ -25,11 +27,13 @@ export class CalendarMealInput {
   @Field(type => MealType)
   type: MealType
 
-  @Field(type => Date)
-  time: Date
+  @Field(type => Date, { nullable: true })
+  time?: Date
 
-  @Field(type => String)
-  dish: Ref<DishSchema>
+  @Field(type => [DishItemInput])
+  @ArrayNotEmpty()
+  dish: DishItemInput[]
+
 }
 
 @ObjectType()

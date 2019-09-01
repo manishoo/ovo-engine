@@ -8,7 +8,7 @@ import { UserRole } from '@Types/common'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '@Utils/context'
-import { Day, CalendarResponse } from '@Types/calendar'
+import { Day, CalendarResponse, CalendarMealInput } from '@Types/calendar'
 
 
 @Service()
@@ -16,7 +16,7 @@ import { Day, CalendarResponse } from '@Types/calendar'
 export default class CalendarResolver {
   constructor(
     // service injection
-    private readonly CalendarService: CalendarService
+    private readonly calendarService: CalendarService
   ) {
     // noop
   }
@@ -26,6 +26,15 @@ export default class CalendarResolver {
   async calendar(
     @Ctx() ctx: Context,
   ) {
-    return this.CalendarService.listDays(ctx.user!.id)
+    return this.calendarService.listDays(ctx.user!.id)
+  }
+
+  @Authorized(UserRole.user)
+  @Mutation(returns => Day)
+  async logDay(
+    @Arg('dish') dishInput: CalendarMealInput,
+    @Ctx() ctx: Context,
+  ) {
+    return this.calendarService.logDay(dishInput, ctx.user!.id)
   }
 }
