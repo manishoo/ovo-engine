@@ -12,6 +12,7 @@ COPY gulpfile.js .
 
 RUN npm install
 RUN npm run build
+RUN ls build
 
 RUN rm -rf src
 RUN rm package.json
