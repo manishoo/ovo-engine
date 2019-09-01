@@ -63,10 +63,10 @@ export default class CalendarService {
 
     var dayId = null,
       day
-    days.map(tt => {
+    days.map(day => {
 
-      if (tt._id.year == dishInput.time!.getFullYear() && tt._id.month == dishInput.time!.getMonth() + 1 && tt._id.day == dishInput.time!.getDate()) {
-        dayId = tt.items[0]
+      if (day._id.year == dishInput.time!.getFullYear() && day._id.month == dishInput.time!.getMonth() + 1 && day._id.day == dishInput.time!.getDate()) {
+        dayId = day.items[0]
       }
     })
 
