@@ -7,7 +7,7 @@ import config from '@Config'
 import redis from '@Config/connections/redis'
 import { OperatorModel } from '@Models/operator.model'
 import { AuthResponse } from '@Types/auth'
-import { Status } from '@Types/common'
+import { OperatorRole, Status } from '@Types/common'
 import { Operator } from '@Types/operator'
 import Errors from '@Utils/errors'
 import { generateHashPassword } from '@Utils/password-manager'
@@ -28,7 +28,7 @@ export default class OperatorService {
     return null
   }
 
-  async create(username: string, password: string): Promise<AuthResponse> {
+  async create(username: string, password: string, role?: OperatorRole): Promise<AuthResponse> {
     const checkOperator = await this.findByUsername(username)
     if (checkOperator) throw new Errors.UserInput('Operator creation error', { username: 'This username already exists' })
 
@@ -36,6 +36,7 @@ export default class OperatorService {
     const operator = await OperatorModel.create({
       username,
       persistedPassword: hashedPassword,
+      role,
     })
     return {
       operator,

@@ -9,11 +9,11 @@ import OperatorService from '@Services/operator/operator.service'
 import { AuthResponse } from '@Types/auth'
 import { OperatorRole } from '@Types/common'
 import { Operator, OperatorResponse } from '@Types/operator'
+import { Context } from '@Utils/context'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '@Utils/context'
 
 
 @Service()
@@ -59,9 +59,10 @@ export default class OperatorResolver {
   async createOperator(
     @Arg('username') username: string,
     @Arg('password') password: string,
+    @Arg('role', type => OperatorRole, { nullable: true }) role: OperatorRole,
     @Ctx() ctx: Context,
   ) {
-    return this.operatorService.create(username, password)
+    return this.operatorService.create(username, password, role)
   }
 
   @Authorized(OperatorRole.admin)
