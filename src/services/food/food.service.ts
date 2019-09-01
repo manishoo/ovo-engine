@@ -10,6 +10,7 @@ import { WeightInput } from '@Types/weight'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
+import { createPagination } from '@Utils/generate-pagination'
 
 
 @Service()
@@ -34,13 +35,7 @@ export default class FoodService {
 
     return {
       foods,
-      pagination: {
-        page,
-        size,
-        totalCount: counts,
-        totalPages: Math.ceil(counts / size),
-        hasNext: page !== Math.ceil(counts / size),
-      }
+      pagination: createPagination(page, size, counts),
     }
   }
 
@@ -63,6 +58,10 @@ export default class FoodService {
     food.name = inputFood.name
     food.weights = weights
 
+    if (inputFood.nutrition) {
+      food.nutrition = inputFood.nutrition
+    }
+
     return food.save()
   }
 
@@ -79,7 +78,7 @@ export default class FoodService {
     if (!mongoose.Types.ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
     const foodClass = await FoodClassModel.findById(foodClassID)
-    if (!foodClass) throw new Errors.NotFound('food class not foudn')
+    if (!foodClass) throw new Errors.NotFound('food class not found')
 
     let weights: WeightInput[] = []
     food.weights.map(weight => {
@@ -90,7 +89,8 @@ export default class FoodService {
       name: food.name,
       weights,
       description: food.description,
-      foodClass,
+      foodClass: foodClass._id,
+      nutrition: food.nutrition,
     })
 
     return foodInput.save()

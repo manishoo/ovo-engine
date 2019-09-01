@@ -4,10 +4,11 @@
  */
 
 import TagService from '@Services/tag/tag.service'
-import { Tag } from '@Types/tag'
-import { Ctx, Query, Resolver } from 'type-graphql'
+import { Tag, TagType, TagInput } from '@Types/tag'
+import { Ctx, Query, Resolver, Mutation, Arg, Authorized } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '../utils'
+import { Context } from '@Utils/context'
+import { UserRole } from '@Types/common';
 
 
 @Service()
@@ -20,10 +21,20 @@ export default class TagResolver {
     // noop
   }
 
+  @Authorized(UserRole.user)
   @Query(returns => [Tag])
   async tags(
     @Ctx() ctx: Context,
-  ): Promise<Tag[]> {
+  ) {
     return this.tagService.list()
+  }
+
+  @Authorized(UserRole.user)
+  @Mutation(returns => Tag)
+  async addTag(
+    @Arg('tag') tagData: TagInput,
+    @Ctx() ctx: Context,
+  ) {
+    return this.tagService.create(tagData, ctx.lang)
   }
 }

@@ -4,6 +4,7 @@
  */
 
 import { MiddlewareFn } from 'type-graphql'
+import Errors from '@Utils/errors';
 
 
 export const ErrorInterceptor: MiddlewareFn<any> = async ({ context, info }, next) => {
@@ -11,6 +12,9 @@ export const ErrorInterceptor: MiddlewareFn<any> = async ({ context, info }, nex
     return await next()
   } catch (err) {
     // TODO something
+    if (err.validationErrors) {
+      throw new Errors.Validation('Invalid input provided')
+    }
 
     // rethrow the error
     throw err

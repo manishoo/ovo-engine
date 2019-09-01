@@ -6,7 +6,7 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { UserRole, Image } from '@Types/common'
+import { Image, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
@@ -121,14 +121,30 @@ export class SocialNetworksInput {
 }
 
 @ObjectType()
-export class User {
+export class BaseUser {
   _id?: mongoose.Schema.Types.ObjectId
   @Field()
   id?: string
   @Field()
-  publicId?: string
-  @Field()
   username: string
+  @Field({ nullable: true })
+  firstName?: string
+  @Field({ nullable: true })
+  middleName?: string
+  @Field({ nullable: true })
+  lastName?: string
+  @Field({ nullable: true })
+  bio?: string
+  @Field(type => Image, { nullable: true })
+  imageUrl: Image
+}
+
+@ObjectType()
+export class Author extends BaseUser {
+}
+
+@ObjectType()
+export class User extends BaseUser {
   persistedPassword: PersistedPassword
   @Field()
   session?: string
@@ -138,18 +154,8 @@ export class User {
   @IsEmail()
   email: string
   @Field({ nullable: true })
-  firstName?: string
-  @Field({ nullable: true })
-  middleName?: string
-  @Field({ nullable: true })
-  lastName?: string
-  @Field({ nullable: true })
-  bio?: string
-  @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
-  @Field(type => GraphQLUpload, { nullable: true })
-  imageUrl?: any
   @Field(type => SocialNetworks, { nullable: true })
   socialNetworks?: SocialNetworks
   @Field(type => Float, { nullable: true })
@@ -175,25 +181,6 @@ export class User {
   @Field(type => [Event], { nullable: true })
   path?: Event[]
   timeZone?: string
-}
-
-@ObjectType()
-export class RecipeAuthor {
-  _id?: mongoose.Schema.Types.ObjectId
-  @Field()
-  id?: string
-  @Field()
-  username: string
-  @Field({ nullable: true })
-  firstName?: string
-  @Field({ nullable: true })
-  middleName?: string
-  @Field({ nullable: true })
-  lastName?: string
-  @Field({ nullable: true })
-  bio?: string
-  @Field(type => Image, { nullable: true })
-  imageUrl?: Image
 }
 
 @InputType()

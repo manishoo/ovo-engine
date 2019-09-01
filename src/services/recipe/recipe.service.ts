@@ -5,25 +5,24 @@
 
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
+import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
-import { transformRecipe } from '@Services/recipe/transformers/recipe.transformer'
-import TagService from '@Services/tag/tag.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode } from '@Types/common'
-import { Ingredient, ListRecipesArgs, Recipe, RecipeInput } from '@Types/recipe'
+import { Ingredient, Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
 import Errors from '@Utils/errors'
-import { __ } from 'i18n'
+import { createPagination } from '@Utils/generate-pagination'
 import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
+import { transformRecipe } from './transformers/recipe.transformer'
 
 
 @Service()
 export default class RecipeService {
   constructor(
     // service injection
-    private readonly tagService: TagService,
     private readonly uploadService: UploadService,
   ) {
     // noop
@@ -50,8 +49,22 @@ export default class RecipeService {
     return recipe
   }
 
-  async list(variables: ListRecipesArgs = { page: 1, size: 10 }) {
+  async list(variables: ListRecipesArgs): Promise<RecipesListResponse> {
+    if (!variables.size) {
+      variables.size = 10
+    }
+    if (!variables.page) {
+      variables.page = 1
+    }
+
     const query: any = {}
+    const me = await UserModel.findById(variables.userId)
+    if (!me) throw new Errors.System('something went wrong')
+
+    if (variables.tags) {
+      query['tags'] = { $in: variables.tags }
+    }
+
     if (variables.nameSearchQuery) {
       query['title.text'] = { $regex: variables.nameSearchQuery, $options: 'i' }
     }
@@ -64,7 +77,6 @@ export default class RecipeService {
 
       query.createdAt = { $lt: recipe.createdAt }
     }
-
     const recipes = await RecipeModel.find(query)
       .sort({
         createdAt: -1,
@@ -77,13 +89,7 @@ export default class RecipeService {
 
     return {
       recipes,
-      pagination: {
-        page: variables.page,
-        size: variables.size,
-        totalCount,
-        totalPages: Math.ceil(totalCount / variables.size),
-        hasNext: variables.page !== Math.ceil(totalCount / variables.size),
-      },
+      pagination: createPagination(variables.page, variables.size, totalCount),
     }
   }
 
@@ -154,7 +160,7 @@ export default class RecipeService {
     }
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe.author = author
-    return createdRecipe
+    return transformRecipe(createdRecipe, userId)
   }
 
   async delete(id: string, userId?: string, operatorId?: string) {
@@ -174,12 +180,19 @@ export default class RecipeService {
     return true
   }
 
-  async update(publicId: string, data: Partial<RecipeInput>, lang: LanguageCode, userId?: string) {
-    const recipe = await RecipeModel.findOne({ publicId })
+  async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, userId?: string) {
+    const recipe = await RecipeModel.findOne({ _id: recipeId })
       .populate('author')
       .exec()
-    if (!recipe) throw new Errors.NotFound(__('notFound'))
+    if (!recipe) throw new Errors.NotFound('recipe not found')
 
+    if (data.slug) {
+      const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ _id: { $ne: recipeId }, slug: data.slug })
+
+      if (foundRecipeWithTheSameSlug) throw new Errors.Validation('recipe with the same slug exists')
+
+      recipe.slug = data.slug
+    }
     if (data.title) {
       recipe.title = data.title
     }
@@ -191,79 +204,64 @@ export default class RecipeService {
         return {
           name: ingredient.name,
           amount: ingredient.amount,
-          unit: ingredient.customUnit,
-          foodId: ingredient.food,
-          weightId: ingredient.weight,
+          customUnit: ingredient.customUnit,
+          gramWeight: ingredient.gramWeight,
           description: ingredient.description,
+          food: mongoose.Types.ObjectId(ingredient.food),
+          weight: mongoose.Types.ObjectId(ingredient.weight),
+          thumbnail: ingredient.thumbnail,
         }
       })
     }
     if (data.instructions) {
-      recipe.instructions = data.instructions.map(ingredient => {
-        return {
-          step: ingredient.step,
-          text: ingredient.text,
+      recipe.instructions = await Promise.all(data.instructions.map(async instructionInput => {
+        let instruction: Partial<Instruction> = {}
+        if (instructionInput.image) {
+          instruction.image = {
+            url: await this.uploadService.processUpload(instructionInput.image, 'full', `images/recipes/${recipe._id}/instructions/${(instructionInput.step).toString()}`)
+          }
         }
-      })
+        instruction.step = instructionInput.step
+        instruction.text = instructionInput.text
+        instruction.notes = instructionInput.note
+        return <Instruction>instruction
+      }))
     }
     if (data.coverImage) {
       recipe.coverImage = {
         url: await this.uploadService.processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
       }
     }
-    /*
-    if (data.totalTime) {
+    if (data.timing) {
       recipe.timing = {
-        ...recipe.timing,
-        totalTime: data.totalTime
+        totalTime: data.timing.totalTime,
+        cookTime: data.timing.cookTime,
+        prepTime: data.timing.prepTime
       }
     }
-    if (data.prepTime) {
-      recipe.timing = {
-        ...recipe.timing,
-        prepTime: data.prepTime
-      }
+    if (data.serving) {
+      recipe.serving = data.serving
     }
-    if (data.cookTime) {
-      recipe.timing = {
-        ...recipe.timing,
-        cookTime: data.cookTime
-      }
-    }
-    if (data.yield) {
-      recipe.yield = data.yield
-    }
-    */
-    if (data.slug) {
-      const foundRecipeWithTheSameSlug = await RecipeModel.findOne({ publicId: { $ne: publicId }, slug: data.slug })
 
-      if (foundRecipeWithTheSameSlug) throw new Errors.Validation('recipe with the smae slug exists')
-
-      recipe.slug = data.slug
-    }
-    /*
     if (data.tags) {
-      recipe.tags = await Promise.all(data.tags.map(async slug => {
-        const t = await this.tagService.findBySlug(slug) // TODO we should probably only make one request to db
 
-        return {
-          _id: t._id,
-          slug: t.slug,
-          title: t.title,
-          type: t.type,
-        }
+      let tags: any = []
+      await Promise.all(data.tags.map(async tag => {
+        if (!mongoose.Types.ObjectId.isValid(tag)) throw new Errors.Validation('invalid tag id')
+        let validateTag = await TagModel.findById(tag)
+        if (!validateTag) throw new Errors.NotFound('tag not found')
+
+        tags.push(tag)
       }))
+
+      recipe.tags = tags
+
     }
-    */
 
-    await recipe.save()
-
-    return transformRecipe(recipe, userId, true, lang)
+    return transformRecipe(await recipe.save(), userId)
   }
 
   async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
-    return this.update(recipePublicId, {
-      //tags: tagSlugs,
-    }, LanguageCode.en, userId)
+    return this.update(recipePublicId, {}, LanguageCode.en, userId)
   }
 }
