@@ -6,9 +6,8 @@
 import { Service } from 'typedi'
 import { CalendarResponse, Day, CalendarMeal, CalendarMealInput } from '@Types/calendar'
 import { CalendarModel } from '@Models/calendar.model'
-import mongoose, { mongo } from 'mongoose'
+import mongoose from 'mongoose'
 import { createPagination } from '@Utils/generate-pagination'
-import { LOADIPHLPAPI } from 'dns';
 import Errors from '@Utils/errors';
 import DishService from '@Services/dish/dish.service'
 
