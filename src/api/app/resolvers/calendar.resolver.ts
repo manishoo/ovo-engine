@@ -23,11 +23,13 @@ export default class CalendarResolver {
   }
 
   @Authorized(UserRole.user)
-  @Query(returns => CalendarResponse)
+  @Query(returns => [Day])
   async calendar(
+    @Arg('start') startDate: Date,
+    @Arg('end') endDate: Date,
     @Ctx() ctx: Context,
   ) {
-    return this.calendarService.listDays(ctx.user!.id)
+    return this.calendarService.listDays(ctx.user!.id, startDate, endDate)
   }
 
   @Authorized(UserRole.user)

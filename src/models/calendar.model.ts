@@ -24,6 +24,11 @@ export class DaySchema extends Typegoose implements Day {
 
   @prop()
   meals: Meal[]
+
+  @prop()
+  createdAt: Date
+  @prop()
+  updatedAt?: Date
 }
 
 export const CalendarModel = new DaySchema().getModelForClass(DaySchema, {
