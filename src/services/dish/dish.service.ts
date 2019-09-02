@@ -10,10 +10,10 @@ import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
-import { UserModel, UserSchema } from '@Models/user.model'
+import { UserModel } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
 import { Author } from '@Types/user'
-import { Food } from '@Types/food';
+import { Food } from '@Types/food'
 
 
 @Service()
