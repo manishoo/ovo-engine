@@ -132,7 +132,6 @@ export default class DishService {
           let food = item.food as Food
           item.weight = food.weights.find(w => w.id == item.weight)
         }
-
       })
     })
 
@@ -181,7 +180,27 @@ export default class DishService {
       }
     })
 
-    return dish.save()
+    let savedDish = await dish.save()
+    const populatedDish = await DishModel.findById(savedDish._id)
+      .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
+      .exec()
+    if (!populatedDish) throw new Errors.System('Something went wrong')
+
+    populatedDish.items.map(item => {
+      if (item.food && item.weight) {
+        let food = item.food as Food
+        item.weight = food.weights.find(w => w.id == item.weight)
+      }
+    })
+    return populatedDish
   }
 
   async generateDishItemList(dishInputItems: DishItemInput[]): Promise<DishItem[]> {
