@@ -26,7 +26,7 @@ export default class CalendarResolver {
   @Query(returns => [Day])
   async calendar(
     @Arg('startDate') startDate: Date,
-    @Arg('end') endDate: Date,
+    @Arg('endDate') endDate: Date,
     @Ctx() ctx: Context,
   ) {
     return this.calendarService.listDays(ctx.user!.id, startDate, endDate)
