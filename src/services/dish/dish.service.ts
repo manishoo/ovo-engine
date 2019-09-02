@@ -13,6 +13,7 @@ import { RecipeModel } from '@Models/recipe.model'
 import { UserModel, UserSchema } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
 import { Author } from '@Types/user'
+import { Food } from '@Types/food';
 
 
 @Service()
@@ -115,7 +116,25 @@ export default class DishService {
       .limit(variables.size)
       .skip(variables.size * (variables.page - 1))
       .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
       .exec()
+
+    dishes.map(dish => {
+      dish.items.map(item => {
+        if (item.food) {
+          let food = item.food as Food
+          item.weight = food.weights.find(w => w.id == item.weight)
+        }
+
+      })
+    })
 
     return {
       dishes,
