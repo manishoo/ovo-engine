@@ -4,10 +4,15 @@ import { Ref } from "typegoose"
 import { User } from "@Types/user"
 import { Pagination } from "@Types/common"
 import { Meal } from "@Types/eating"
+import mongoose from 'mongoose'
 
 
 @ObjectType()
 export class Day {
+  _id?: mongoose.Schema.Types.ObjectId
+  @Field()
+  id?: string
+
   @Field(type => Date)
   date: Date
 

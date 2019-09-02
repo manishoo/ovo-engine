@@ -56,6 +56,9 @@ export default class UserService {
     const checkUser = await UserModel.findOne({ username: user.username })
     if (checkUser) throw new Errors.UserInput('user creation error', { username: 'This username already exists' })
 
+    const checkEmail = await UserModel.findOne({ email: user.email })
+    if (checkEmail) throw new Errors.UserInput('user creation error', { username: 'This email is already in use' })
+
     let newUser = await UserModel.create(<Partial<User>>{
       username: user.username,
       persistedPassword: await generateHashPassword(user.password),

@@ -76,6 +76,8 @@ export class FoodClassInput {
   foodGroupId: string
   @Field(type => FOOD_CLASS_TYPES)
   foodType: FOOD_CLASS_TYPES
+  @Field(type => String, { nullable: true })
+  defaultFood?: string
 
   @Field(type => GraphQLUpload, { nullable: true })
   imageUrl?: any

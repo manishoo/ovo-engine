@@ -9,7 +9,7 @@ import { DishItem, DishItemInput } from '@Types/dish'
 import { ArrayNotEmpty } from 'class-validator'
 import { Weight } from './weight';
 import { Nutrition } from './food';
-import { prop } from 'typegoose';
+import { prop, Typegoose } from 'typegoose';
 
 
 @ObjectType()

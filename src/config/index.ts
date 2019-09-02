@@ -11,11 +11,12 @@ dotenv.config()
 export default {
   appUrl: process.env.APP_URL || '127.0.0.1',
   appPort: Number(process.env.APP_PORT),
-  get appFullAddressForExternalUse() {
-    return `http://${this.appUrl}:${this.appPort}`
-  },
   panelUrl: process.env.PANEL_URL || '127.0.0.1',
   panelPort: Number(process.env.PANEL_PORT),
+
+  get appFullAddressForExternalUse() {
+    return process.env.CORE_APP_ADDRESS || `http://${this.appUrl}:${this.appPort}`
+  },
 
   graphQLPath: process.env.GRAPHQL_PATH || 'gql',
   graphQLPath_APP: process.env.GRAPHQL_PATH_APP || 'gql',
