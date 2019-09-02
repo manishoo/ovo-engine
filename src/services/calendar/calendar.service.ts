@@ -5,13 +5,13 @@
 
 import { CalendarModel } from '@Models/calendar.model'
 import DishService from '@Services/dish/dish.service'
-import { Day } from '@Types/calendar'
+import { CalendarResponse, Day } from '@Types/calendar'
 import Errors from '@Utils/errors'
+import { createPagination } from '@Utils/generate-pagination'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { Meal, MealInput } from '@Types/eating'
-import { RecipeModel } from '@Models/recipe.model'
-import { FoodModel } from '@Models/food.model'
+import { DishItem, DishInput } from '@Types/dish';
 
 
 @Service()
@@ -29,15 +29,7 @@ export default class CalendarService {
     query.date = { $gt: startDate, $lt: endDate }
     query.user = mongoose.Types.ObjectId(userId)
 
-    const calendar = await CalendarModel.find(query)
-      .populate({
-        path: 'meals.items.recipe',
-        model: RecipeModel
-      })
-      .populate({
-        path: 'meals.items.food',
-        model: FoodModel,
-      })
+    const calendar = await CalendarModel.find(query).populate('food').populate('recipe')
 
     return calendar
   }
@@ -67,7 +59,7 @@ export default class CalendarService {
         }
       }
     ])
-
+    
     let dayId = null
     let day
     userActiveDays.map(activeDay => {
@@ -88,7 +80,7 @@ export default class CalendarService {
       dayCreationDate.setUTCHours(0)
       dayCreationDate.setHours(0)
       dayCreationDate.setUTCMinutes(0)
-
+      
       day = new CalendarModel({
         date: dayCreationDate,
         user: userId,
