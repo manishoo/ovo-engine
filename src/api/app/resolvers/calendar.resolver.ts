@@ -8,7 +8,7 @@ import { UserRole } from '@Types/common'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '@Utils/context'
-import { Day, CalendarResponse } from '@Types/calendar'
+import { Day } from '@Types/calendar'
 import { MealInput } from '@Types/eating'
 
 
