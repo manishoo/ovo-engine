@@ -57,7 +57,7 @@ export default class RecipeResolver {
 
   @Authorized(UserRole.user)
   @Mutation(returns => Recipe)
-  async create(
+  async createRecipe(
     @Arg('recipe') recipe: RecipeInput,
     @Ctx() ctx: Context,
   ) {
