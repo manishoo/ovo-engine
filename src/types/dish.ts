@@ -64,10 +64,10 @@ export class DishItem {
   @Field()
   amount: number
 
-  @Field(type => String, { nullable: true })
+  @Field(type => Food, { nullable: true })
   food?: Ref<Food>
 
-  @Field(type => String, { nullable: true })
+  @Field(type => Recipe, { nullable: true })
   recipe?: Ref<Recipe>
 
   @Field({ nullable: true })
