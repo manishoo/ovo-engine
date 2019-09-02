@@ -75,8 +75,24 @@ export default class DishService {
     }
     let dish = await DishModel.findOne(query)
       .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
       .exec()
     if (!dish) throw new Errors.NotFound('dish not found')
+    await Promise.all(dish.items.map(async item => {
+      if (item.food && item.weight) {
+        let food = await FoodModel.findById(item.food)
+        if (food) {
+          item.weight = food.weights.find(w => w.id == item.weight)
+        }
+      }
+    }))
 
     return dish
   }
