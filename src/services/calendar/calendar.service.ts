@@ -10,7 +10,8 @@ import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
-import { Meal, MealInput } from '@Types/eating';
+import { Meal, MealInput } from '@Types/eating'
+import { DishItem, DishInput } from '@Types/dish';
 
 
 @Service()
@@ -22,18 +23,15 @@ export default class CalendarService {
     // noop
   }
 
-  async listDays(userId: string): Promise<CalendarResponse> {
-
+  async listDays(userId: string, startDate: Date, endDate: Date): Promise<Day[]> {
     let query: any = {}
-    let day: Partial<Day> = {}
 
+    query.date = { $gt: startDate, $lt: endDate }
     query.user = mongoose.Types.ObjectId(userId)
-    const calendar = await CalendarModel.find(query)
 
-    return {
-      calendar,
-      pagination: createPagination(1, 30, 30)
-    }
+    const calendar = await CalendarModel.find(query).populate('food').populate('recipe')
+
+    return calendar
   }
 
   async logMeal(dishInput: MealInput, userId: string): Promise<Day> {
@@ -61,24 +59,30 @@ export default class CalendarService {
         }
       }
     ])
-
+    
     let dayId = null
     let day
     userActiveDays.map(activeDay => {
-
       if (
         (activeDay._id.year == dishInput.time!.getFullYear()) &&
         (activeDay._id.month == dishInput.time!.getMonth() + 1) &&
         (activeDay._id.day == dishInput.time!.getDate())) {
         dayId = activeDay.items[0]
       }
+
     })
 
     if (!dayId) {
       let calendarMeal: Partial<Meal[]> = []
       calendarMeal.push(meal)
+      let dayCreationDate = new Date(dishInput.time)
+
+      dayCreationDate.setUTCHours(0)
+      dayCreationDate.setHours(0)
+      dayCreationDate.setUTCMinutes(0)
+      
       day = new CalendarModel({
-        date: dishInput.time,
+        date: dayCreationDate,
         user: userId,
         meals: calendarMeal
       })
