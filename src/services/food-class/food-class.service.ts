@@ -168,6 +168,7 @@ export default class FoodClassService {
     foodClass.foodGroup = foodGroup
     foodClass.description = foodClassInput.description
     foodClass.slug = foodClassInput.slug
+    foodClass.defaultFood = mongoose.Types.ObjectId(foodClassInput.defaultFood)
 
     return foodClass.save()
   }
