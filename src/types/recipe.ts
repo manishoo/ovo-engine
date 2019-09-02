@@ -7,7 +7,7 @@ import mongoose from '@Config/connections/mongoose'
 import { FoodSchema } from '@Models/food.model'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
-import { Nutrition } from '@Types/food'
+import { Food, Nutrition } from '@Types/food'
 import { Tag, TagType } from '@Types/tag'
 import { Author } from '@Types/user'
 import { Weight } from '@Types/weight'
@@ -89,10 +89,10 @@ export class Ingredient {
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
 
-  @Field(type => String, { nullable: true })
+  @Field(type => Food, { nullable: true })
   food?: Ref<FoodSchema>
 
-  @Field(type => String, { nullable: true })
+  @Field(type => Weight, { nullable: true })
   weight?: Ref<Weight>
 }
 
