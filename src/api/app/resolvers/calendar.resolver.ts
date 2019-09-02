@@ -25,7 +25,7 @@ export default class CalendarResolver {
   @Authorized(UserRole.user)
   @Query(returns => [Day])
   async calendar(
-    @Arg('start') startDate: Date,
+    @Arg('startDate') startDate: Date,
     @Arg('end') endDate: Date,
     @Ctx() ctx: Context,
   ) {
