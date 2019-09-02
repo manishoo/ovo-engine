@@ -41,6 +41,24 @@ export default class DishService {
     })
     createDish.author = me
 
+    await Promise.all(createDish.items.map(async item => {
+      if (item.food) {
+        let food = await FoodModel.findById(item.food)
+        if (food) {
+          item.food = food
+          if (item.weight) {
+            item.weight = food.weights.find(w => w.id == item.weight)
+          }
+        }
+      }
+      if (item.recipe) {
+        let recipe = await RecipeModel.findById(item.recipe)
+        if (recipe) {
+          item.recipe = recipe
+        }
+      }
+    }))
+
     return createDish
   }
 
