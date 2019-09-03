@@ -5,9 +5,9 @@
 
 import FoodService from '@Services/food/food.service'
 import { OperatorRole, UserRole } from '@Types/common'
-import { Food, FoodInput, FoodsListResponse } from '@Types/food'
+import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
 import { Context } from '@Utils/context'
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 
 
@@ -24,12 +24,10 @@ export default class FoodResolver {
   @Authorized([OperatorRole.operator, UserRole.user])
   @Query(returns => FoodsListResponse)
   async foods(
-    @Arg('page', { defaultValue: 1 }) page: number,
-    @Arg('size', { defaultValue: 10 }) size: number,
+    @Args() { page, size, foodClassId, nameSearchQuery }: FoodListArgs,
     @Ctx() ctx: Context,
-    @Arg('foodClassId', { nullable: true }) foodClassID?: string,
   ) {
-    return this.foodService.listFoods(page, size, foodClassID)
+    return this.foodService.listFoods({ page, size, foodClassId, nameSearchQuery })
   }
 
   @Authorized([OperatorRole.operator, UserRole.user])
