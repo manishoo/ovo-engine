@@ -6,7 +6,7 @@
 import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Ref, Translation } from '@Types/common'
-import { NutritionalData } from '@Types/food'
+import { Nutrition } from '@Types/food'
 import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTiming, Review } from '@Types/recipe'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, plugin, prop, Typegoose, instanceMethod } from 'typegoose'
@@ -32,7 +32,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop({ required: true })
   serving: number
   @prop()
-  nutritionalData?: NutritionalData
+  nutrition?: Nutrition
   @prop()
   slug: string
   @prop()

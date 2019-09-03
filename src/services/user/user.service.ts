@@ -8,10 +8,12 @@ import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { Status, UserRole } from '@Types/common'
-import { User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
 import Errors from '@Utils/errors'
+import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
+import mongoose from 'mongoose'
 import { Service } from 'typedi'
 
 
@@ -23,7 +25,6 @@ export default class UserService {
   ) {
     // noop
   }
-
 
   async findBySession(session: string) {
     const key = `user:session:${session}`
@@ -55,7 +56,10 @@ export default class UserService {
     const checkUser = await UserModel.findOne({ username: user.username })
     if (checkUser) throw new Errors.UserInput('user creation error', { username: 'This username already exists' })
 
-    let newUser = await UserModel.create({
+    const checkEmail = await UserModel.findOne({ email: user.email })
+    if (checkEmail) throw new Errors.UserInput('user creation error', { username: 'This email is already in use' })
+
+    let newUser = await UserModel.create(<Partial<User>>{
       username: user.username,
       persistedPassword: await generateHashPassword(user.password),
       role: UserRole.user,
@@ -63,6 +67,10 @@ export default class UserService {
       firstName: user.firstName,
       middleName: user.middleName,
       lastName: user.lastName,
+      imageUrl: {
+        url: generateAvatarUrl(user.username),
+        source: 'generated-avatar'
+      }
     })
     return {
       user: newUser,
@@ -72,23 +80,22 @@ export default class UserService {
 
   async loginUser(user: UserLoginArgs): Promise<UserAuthResponse> {
     const checkUser = await UserModel.findOne({ username: user.username })
-    if (!checkUser) throw new Errors.NotFound('user not found')
+    if (!checkUser) throw new Errors.UserInput('Wrong username or password', {
+      username: 'Wrong username or password',
+      password: 'Wrong username or password'
+    })
 
     const validatePassword = await verifyPassword(checkUser.persistedPassword, user.password)
 
-    if (!validatePassword) throw new Errors.UserInput('wrong username or password', { password: 'wrong password' })
+    if (!validatePassword) throw new Errors.UserInput('Wrong username or password', {
+      username: 'Wrong username or password',
+      password: 'Wrong username or password'
+    })
 
     return {
       user: checkUser,
       session: checkUser.session,
     }
-  }
-
-  async getUserInfo(id: string): Promise<User> {
-    const user = await UserModel.findById(id)
-    if (!user) throw new Errors.NotFound('user not found!')
-
-    return user
   }
 
   async update(userInput: UserUpdateInput, userId: string): Promise<User> {
@@ -109,6 +116,60 @@ export default class UserService {
     user.gender = userInput.gender
 
     return user.save()
-
   }
+
+  async userProfile(userId: string, id: string): Promise<User | BaseUser> {
+    if (!mongoose.Types.ObjectId.isValid(userId)) throw new Errors.Validation('Invalid user id')
+
+    let user = await UserModel.findById(userId)
+    if (!user) throw new Errors.NotFound('User not found')
+
+    let userInfo: User | BaseUser
+
+    if (userId === id) {
+      userInfo = {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        email: user.email,
+        firstName: user.firstName,
+        middleName: user.middleName,
+        lastName: user.lastName,
+        bio: user.bio,
+        phoneNumber: user.phoneNumber,
+        imageUrl: user.imageUrl,
+        socialNetworks: user.socialNetworks,
+        caloriesPerDay: user.caloriesPerDay,
+        height: user.height,
+        weight: user.weight,
+        age: user.age,
+        bodyFat: user.bodyFat,
+        gender: user.gender,
+        foodAllergies: user.foodAllergies,
+        household: user.household,
+        activityLevel: user.activityLevel,
+        path: user.path,
+      } as User
+    } else {
+      userInfo = {
+        id: user.id,
+        username: user.username,
+        firstName: user.firstName,
+        middleName: user.middleName,
+        lastName: user.lastName,
+        bio: user.bio,
+        imageUrl: user.imageUrl,
+        socialNetworks: user.socialNetworks,
+      } as BaseUser
+    }
+
+    return userInfo
+  }
+
+  async doesUsernameExist(username: string): Promise<boolean> {
+    const user = await UserModel.findOne({ username })
+
+    return !!user
+  }
+
 }

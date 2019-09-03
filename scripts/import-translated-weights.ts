@@ -39,10 +39,12 @@ async function translateWeights() {
         {
           locale: LanguageCode.en,
           text: enName,
+          verified: true,
         },
         {
           locale: LanguageCode.fa,
           text: foundWeight.tr,
+          verified: false,
         }
       ]
 

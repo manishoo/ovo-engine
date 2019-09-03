@@ -11,7 +11,7 @@ import healthCheckLoader from '@Loaders/health-check.loader'
 import chalk from 'chalk'
 import express, { Request } from 'express'
 import operatorMiddleware from './middlewares/operator.middleware'
-import { authChecker } from './utils'
+import { authChecker } from '@Utils/authChecker'
 
 
 global.Promise = require('bluebird')

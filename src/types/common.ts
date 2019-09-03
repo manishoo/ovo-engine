@@ -24,13 +24,13 @@ export enum Status {
   inactive = 'INACTIVE',
 }
 
-export enum Role {
+export enum OperatorRole {
   admin = 'ADMIN',
   operator = 'OPERATOR',
 }
 
-registerEnumType(Role, {
-  name: 'Role',
+registerEnumType(OperatorRole, {
+  name: 'OperatorRole',
   description: 'Operator roles'
 })
 
@@ -124,6 +124,18 @@ export class Item {
   value: string
 }
 
+export enum MealType {
+  breakfast = 'breakfast',
+  lunch = 'lunch',
+  dinner = 'dinner',
+  snack = 'snack',
+}
+
+registerEnumType(MealType, {
+  name: 'MealType',
+  description: 'Meal types'
+})
+
 @ObjectType()
 export class Translation {
   @prop({ enum: LanguageCode, required: true })
@@ -132,6 +144,9 @@ export class Translation {
   @prop({ required: true })
   @Field()
   text: string
+  @Field({ nullable: true, defaultValue: true })
+  @prop({ default: true })
+  verified?: boolean
 }
 
 @InputType()
@@ -140,6 +155,8 @@ export class TranslationInput {
   locale: LanguageCode
   @Field()
   text: string
+  @Field({ nullable: true, defaultValue: true })
+  verified?: boolean
 }
 
 export declare type Ref<T> = T | mongoose.Types.ObjectId;

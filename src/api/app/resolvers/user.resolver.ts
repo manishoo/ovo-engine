@@ -5,10 +5,17 @@
 
 import UserService from '@Services/user/user.service'
 import { UserRole } from '@Types/common'
-import { User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import {
+  BaseUser,
+  User,
+  UserAuthResponse,
+  UserLoginArgs,
+  UserRegistrationInput,
+  UserUpdateInput
+} from '@Types/user'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '../utils'
+import { Context } from '@Utils/context'
 
 
 @Service()
@@ -36,6 +43,7 @@ export default class UserResolver {
     return this.userService.loginUser({ username, password })
   }
 
+  @Authorized(UserRole.user)
   @Mutation(returns => User)
   async updateUser(
     @Arg('id') userId: string,
@@ -50,6 +58,23 @@ export default class UserResolver {
   async me(
     @Ctx() ctx: Context,
   ) {
-    return this.userService.getUserInfo(ctx.user!.id)
+    return this.userService.userProfile(ctx.user!.id, ctx.user!.id)
+  }
+
+  @Authorized(UserRole.user)
+  @Query(returns => BaseUser)
+  async user(
+    @Arg('userId') userId: string,
+    @Ctx() ctx: Context,
+  ) {
+    return this.userService.userProfile(userId, ctx.user!.id)
+  }
+
+  @Query(returns => Boolean)
+  async usernameExists(
+    @Arg('username') username: string,
+    @Ctx() ctx: Context,
+  ) {
+    return this.userService.doesUsernameExist(username)
   }
 }

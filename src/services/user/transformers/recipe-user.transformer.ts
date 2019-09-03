@@ -8,7 +8,7 @@ import { User } from '@Types/user'
 
 export function transformRecipeUser(user: User): Partial<User> {
   return {
-    id: user.publicId,
+    id: user.id,
     username: user.username,
     firstName: user.firstName,
     lastName: user.lastName,
