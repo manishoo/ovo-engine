@@ -5,7 +5,7 @@
 
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
-import { Food, FoodInput, FoodsListResponse } from '@Types/food'
+import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
 import { WeightInput } from '@Types/weight'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
@@ -21,10 +21,16 @@ export default class FoodService {
     // noop
   }
 
-  async listFoods(page: number, size: number, foodClassID?: string): Promise<FoodsListResponse> {
+  async listFoods({page, size, foodClassId, nameSearchQuery}: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
-    if (foodClassID) {
-      query['foodClass'] = new mongoose.Types.ObjectId(foodClassID)
+    if (foodClassId) {
+      query['foodClass'] = new mongoose.Types.ObjectId(foodClassId)
+    }
+    if (nameSearchQuery) {
+      query['name.text'] = {
+        $regex: nameSearchQuery,
+        $options: 'i',
+      }
     }
 
     const foods = await FoodModel.find(query)
