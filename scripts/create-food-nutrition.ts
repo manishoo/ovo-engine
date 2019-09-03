@@ -91,8 +91,6 @@ async function main() {
 
       food = createFoodNutritionObject(food)
       food = await food.save()
-      console.log(food.nutrition)
-
     }))
   }
 }
