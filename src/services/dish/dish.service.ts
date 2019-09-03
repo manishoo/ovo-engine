@@ -14,6 +14,7 @@ import { UserModel } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
 import { Author } from '@Types/user'
 import { Food } from '@Types/food'
+import { transformDish } from './transformes/dish.transformer';
 
 
 @Service()
@@ -41,26 +42,20 @@ export default class DishService {
       items: dishItems,
     })
     createDish.author = me
+    let createdDish = await DishModel.findById(createDish._id)
+      .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
+      .exec()
+    if (!createdDish) throw new Errors.System('Something went wrong')
 
-    await Promise.all(createDish.items.map(async item => {
-      if (item.food) {
-        let food = await FoodModel.findById(item.food)
-        if (food) {
-          item.food = food
-          if (item.weight) {
-            item.weight = food.weights.find(w => w.id == item.weight)
-          }
-        }
-      }
-      if (item.recipe) {
-        let recipe = await RecipeModel.findById(item.recipe)
-        if (recipe) {
-          item.recipe = recipe
-        }
-      }
-    }))
-
-    return createDish
+    return transformDish(createdDish)
   }
 
   async get(id?: string, slug?: string): Promise<Dish> {
@@ -86,16 +81,8 @@ export default class DishService {
       })
       .exec()
     if (!dish) throw new Errors.NotFound('dish not found')
-    await Promise.all(dish.items.map(async item => {
-      if (item.food && item.weight) {
-        let food = await FoodModel.findById(item.food)
-        if (food) {
-          item.weight = food.weights.find(w => w.id == item.weight)
-        }
-      }
-    }))
 
-    return dish
+    return transformDish(dish)
   }
 
   async list(variables: ListDishesArgs): Promise<DishListResponse> {
@@ -127,12 +114,7 @@ export default class DishService {
       .exec()
 
     dishes.map(dish => {
-      dish.items.map(item => {
-        if (item.food) {
-          let food = item.food as Food
-          item.weight = food.weights.find(w => w.id == item.weight)
-        }
-      })
+      transformDish(dish)
     })
 
     return {
@@ -194,13 +176,7 @@ export default class DishService {
       .exec()
     if (!populatedDish) throw new Errors.System('Something went wrong')
 
-    populatedDish.items.map(item => {
-      if (item.food && item.weight) {
-        let food = item.food as Food
-        item.weight = food.weights.find(w => w.id == item.weight)
-      }
-    })
-    return populatedDish
+    return transformDish(populatedDish)
   }
 
   async generateDishItemList(dishInputItems: DishItemInput[]): Promise<DishItem[]> {
