@@ -15,6 +15,7 @@ import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
+import { Typegoose } from 'typegoose'
 
 
 @ObjectType()
@@ -70,7 +71,12 @@ export class RecipeTimingInput {
 }
 
 @ObjectType()
-export class Ingredient {
+export class Ingredient extends Typegoose {
+  readonly _id: mongoose.Types.ObjectId
+
+  @Field()
+  readonly id: string
+
   @Field(type => [Translation], { nullable: true })
   name?: Translation[]
 
