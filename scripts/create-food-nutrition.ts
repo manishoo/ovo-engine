@@ -82,7 +82,7 @@ function createFoodNutritionObject(food: InstanceType<FoodSchema>): InstanceType
 }
 
 async function main() {
-  console.log('---> Script started <---')
+  console.log('Script started.')
 
   let foods = await FoodModel.find()
 
@@ -95,4 +95,7 @@ async function main() {
   }
 }
 
-main().then(() => process.exit(0))
+main().then(() => {
+  console.log('Script done running.')
+  process.exit(0)
+})
