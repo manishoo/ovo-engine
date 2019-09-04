@@ -32,8 +32,6 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop({ required: true })
   serving: number
   @prop()
-  nutrition?: Nutrition
-  @prop()
   slug: string
   @prop()
   coverImage?: Image
@@ -49,6 +47,8 @@ export class RecipeSchema extends Typegoose implements Recipe {
   description?: Translation[]
   @prop()
   timing: RecipeTiming
+  @prop()
+  nutrition?: Nutrition
   @prop()
   origin?: RecipeOrigin
   @prop()
