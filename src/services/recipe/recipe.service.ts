@@ -167,7 +167,7 @@ export default class RecipeService {
     }
 
 
-    recipe.nutritions = calculateTotalNutrition(recipe.ingredients!)
+    recipe.nutrition = calculateTotalNutrition(recipe.ingredients!)
 
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe.author = author
@@ -271,7 +271,7 @@ export default class RecipeService {
       recipe.tags = tags
 
     }
-    recipe.nutritions = calculateTotalNutrition(recipe.ingredients)
+    recipe.nutrition = calculateTotalNutrition(recipe.ingredients)
 
     return transformRecipe(await recipe.save(), userId)
   }

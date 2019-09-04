@@ -48,7 +48,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   timing: RecipeTiming
   @prop()
-  nutritions?: Nutrition
+  nutrition?: Nutrition
   @prop()
   origin?: RecipeOrigin
   @prop()

@@ -8,12 +8,14 @@ export function calculateTotalNutrition(ingredients: Ingredient[]): Nutrition {
 
   ingredients.map(ingredient => {
     function calc(food: Food, fieldName: string) {
+
       if (food.nutrition[fieldName]) {
         let baseNutritionAmount = 0
         if (totalNutrition[fieldName]) {
           baseNutritionAmount = totalNutrition[fieldName]!.amount
         }
-        totalNutrition.carbs = {
+
+        totalNutrition[fieldName] = {
           amount: baseNutritionAmount + (food.nutrition[fieldName]!.amount / 100 * ingredient.amount),
           unit: food.nutrition[fieldName]!.unit
         }
@@ -31,7 +33,7 @@ export function calculateTotalNutrition(ingredients: Ingredient[]): Nutrition {
         /**
          * Convert kj to kcal
          * */
-        if (food.nutrition.calories.unit == 'kj') {
+        if (food.nutrition.calories.unit == 'kJ') {
           cal = food.nutrition.calories.amount * 239
         } else {
           cal = food.nutrition.calories.amount
