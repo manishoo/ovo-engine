@@ -200,9 +200,6 @@ export class Recipe {
   @Field(type => Int)
   serving: number
 
-  @Field(type => Nutrition, { nullable: true })
-  nutrition?: Nutrition
-
   @Field()
   slug: string
 
@@ -229,6 +226,9 @@ export class Recipe {
 
   @Field(type => RecipeTiming)
   timing: RecipeTiming
+
+  @Field(type => Nutrition, { nullable: true })
+  nutrition?: Nutrition
 
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin

@@ -34,6 +34,8 @@ export class NutrientUnitInput {
 
 @ObjectType()
 export class Nutrition {
+  [k: string]: NutrientUnit | undefined
+
   @Field({ nullable: true })
   saturatedFat?: NutrientUnit
   @Field({ nullable: true })

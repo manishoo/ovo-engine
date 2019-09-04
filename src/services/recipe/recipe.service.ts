@@ -17,6 +17,7 @@ import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
+import { calculateTotalNutrition } from './utils/calculate-total-nutrition'
 
 
 @Service()
@@ -126,6 +127,7 @@ export default class RecipeService {
       })),
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
         let ingredient: Partial<Ingredient> = {}
+
         if (ingredientInput.weight) {
           ingredient.weight = mongoose.Types.ObjectId(ingredientInput.weight)
         } else {
@@ -149,8 +151,13 @@ export default class RecipeService {
           const food = await FoodModel.findById(ingredientInput.food)
           if (!food) throw new Errors.NotFound('food not found')
 
-          ingredient.food = mongoose.Types.ObjectId(ingredientInput.food)
+          ingredient.food = food
           ingredient.name = food.name
+
+          if (ingredient.weight) {
+            ingredient.weight = food.weights.find(w => w.id!.toString() == ingredient.weight!.toString())
+          }
+
         }
         ingredient.amount = ingredientInput.amount
         ingredient.description = ingredientInput.description
@@ -158,8 +165,15 @@ export default class RecipeService {
         return <Ingredient>ingredient
       })),
     }
+
+
+    recipe.nutrition = calculateTotalNutrition(recipe.ingredients!)
+
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe.author = author
+
+
+
     return transformRecipe(createdRecipe, userId)
   }
 
@@ -257,6 +271,7 @@ export default class RecipeService {
       recipe.tags = tags
 
     }
+    recipe.nutrition = calculateTotalNutrition(recipe.ingredients)
 
     return transformRecipe(await recipe.save(), userId)
   }
