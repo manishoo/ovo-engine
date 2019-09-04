@@ -1,58 +1,61 @@
-import { Ingredient } from "@Types/recipe"
-import { Nutrition, Food } from "@Types/food"
-import { Weight } from "@Types/weight"
+import { Food, Nutrition } from '@Types/food'
+import { Ingredient } from '@Types/recipe'
+import { Weight } from '@Types/weight'
 
 
 export function calculateTotalNutrition(ingredients: Ingredient[]): Nutrition {
-
   let totalNutrition: Partial<Nutrition> = {}
 
-  ingredients.map(item => {
-    if (item.food) {
-      let food = item.food as Food
+  ingredients.map(ingredient => {
+    function calc(food: Food, fieldName: string) {
+      if (food.nutrition[fieldName]) {
+        let baseNutritionAmount = 0
+        if (totalNutrition[fieldName]) {
+          baseNutritionAmount = totalNutrition[fieldName]!.amount
+        }
+        totalNutrition.carbs = {
+          amount: baseNutritionAmount + (food.nutrition[fieldName]!.amount / 100 * ingredient.amount),
+          unit: food.nutrition[fieldName]!.unit
+        }
+      }
+    }
+
+    if (ingredient.food) {
+      let food = ingredient.food as Food
+
+      Object.keys(food.nutrition).map(nutritionKey => calc(food, nutritionKey))
+
       if (food.nutrition.calories) {
         let cal
-        if (food.nutrition.calories.unit == 'Kj') {
+
+        /**
+         * Convert kj to kcal
+         * */
+        if (food.nutrition.calories.unit == 'kj') {
           cal = food.nutrition.calories.amount * 239
         } else {
           cal = food.nutrition.calories.amount
         }
+
+        /**
+         * If custom gramWeight was provided, use it, otherwise use
+         * weight.gramWeight
+         * */
         let gramPerWeight = 0
-        let weight = item.weight as Weight
-        if (!item.weight && item.gramWeight) {
-          gramPerWeight = item.gramWeight
+        let weight = ingredient.weight as Weight
+        if (!ingredient.weight && ingredient.gramWeight) {
+          gramPerWeight = ingredient.gramWeight
         } else {
           gramPerWeight = weight.gramWeight / weight.amount
         }
+
         let baseCal = 0
         if (totalNutrition.calories) {
           baseCal = totalNutrition.calories.amount
         }
         totalNutrition.calories = {
-          amount: baseCal + Math.round((cal / 100) * item.amount * gramPerWeight),
-          unit: 'Kcal',
-        }
-      }
-
-      if (food.nutrition.proteins) {
-        let protein = 0
-        if (totalNutrition.proteins) {
-          protein = totalNutrition.proteins.amount
-        }
-        totalNutrition.proteins = {
-          amount: protein + (food.nutrition.proteins.amount / 100 * item.amount),
-          unit: 'g'
-        }
-      }
-
-      if (food.nutrition.carbs) {
-        let carbs = 0
-        if (totalNutrition.carbs) {
-          carbs = totalNutrition.carbs.amount
-        }
-        totalNutrition.carbs = {
-          amount: carbs + (food.nutrition.carbs.amount / 100 * item.amount),
-          unit: 'g'
+          amount: baseCal + Math.round((cal / 100) * ingredient.amount * gramPerWeight),
+          unit: 'kcal',
         }
       }
     }
