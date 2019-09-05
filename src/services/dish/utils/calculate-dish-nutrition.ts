@@ -1,6 +1,6 @@
 import { DishItem } from "@Types/dish"
 import { Nutrition, Food } from "@Types/food"
-import { Recipe, RecipeInput } from "@Types/recipe"
+import { Recipe } from "@Types/recipe"
 
 
 export function calculateDishNutrition(items: DishItem[]): Nutrition {
