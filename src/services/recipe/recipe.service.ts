@@ -214,18 +214,21 @@ export default class RecipeService {
       recipe.description = data.description
     }
     if (data.ingredients) {
-      recipe.ingredients = data.ingredients.map(ingredient => {
+      recipe.ingredients = await Promise.all(data.ingredients.map(async ingredient => {
+        let food = await FoodModel.findById(ingredient.food)
+        if (!food) throw new Errors.System('Something went wrong')
+
         return {
           name: ingredient.name,
           amount: ingredient.amount,
           customUnit: ingredient.customUnit,
           gramWeight: ingredient.gramWeight,
-          description: ingredient.description,
-          food: mongoose.Types.ObjectId(ingredient.food),
-          weight: mongoose.Types.ObjectId(ingredient.weight),
           thumbnail: ingredient.thumbnail,
+          description: ingredient.description,
+          food: food,
+          weight: food.weights.find(w => w.id == ingredient.weight),
         }
-      })
+      }))
     }
     if (data.instructions) {
       recipe.instructions = await Promise.all(data.instructions.map(async instructionInput => {
