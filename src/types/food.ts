@@ -8,7 +8,7 @@ import { Image, LanguageCode, NameAndId, Pagination, Translation, TranslationInp
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { Weight, WeightInput } from '@Types/weight'
 import mongoose from 'mongoose'
-import { Field, ID, InputType, ObjectType } from 'type-graphql'
+import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
 
 
@@ -34,6 +34,8 @@ export class NutrientUnitInput {
 
 @ObjectType()
 export class Nutrition {
+  [k: string]: NutrientUnit | undefined
+
   @Field({ nullable: true })
   saturatedFat?: NutrientUnit
   @Field({ nullable: true })
@@ -200,6 +202,7 @@ export class Nutrition {
 
 @InputType()
 export class NutritionInput {
+  [k: string]: NutrientUnit | undefined
   @Field({ nullable: true })
   saturatedFat?: NutrientUnitInput
   @Field({ nullable: true })
@@ -499,4 +502,16 @@ export class FoodInput {
   weights: WeightInput[]
   @Field(type => NutritionInput, { nullable: true })
   nutrition?: NutritionInput
+}
+
+@ArgsType()
+export class FoodListArgs {
+  @Field({ nullable: true, defaultValue: 1 })
+  page: number
+  @Field({ nullable: true, defaultValue: 10 })
+  size: number
+  @Field({ nullable: true })
+  foodClassId: string
+  @Field({ nullable: true })
+  nameSearchQuery: string
 }

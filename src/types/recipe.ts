@@ -15,6 +15,7 @@ import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
+import { Typegoose } from 'typegoose'
 
 
 @ObjectType()
@@ -194,9 +195,6 @@ export class Recipe {
   @Field(type => Int)
   serving: number
 
-  @Field(type => Nutrition, { nullable: true })
-  nutrition?: Nutrition
-
   @Field()
   slug: string
 
@@ -223,6 +221,9 @@ export class Recipe {
 
   @Field(type => RecipeTiming)
   timing: RecipeTiming
+
+  @Field(type => Nutrition, { nullable: true })
+  nutrition?: Nutrition
 
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
