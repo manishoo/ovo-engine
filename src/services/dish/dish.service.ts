@@ -129,6 +129,7 @@ export default class DishService {
         auhtor: dish!.author,
       }
     })
+    dish.nutrition = calculateDishNutrition(dish.items)
 
     return dish.save()
   }
