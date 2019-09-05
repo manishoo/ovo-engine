@@ -1,6 +1,6 @@
 import { DishItem } from "@Types/dish"
 import { Nutrition, Food } from "@Types/food"
-import { Recipe } from "@Types/recipe"
+import { Recipe, RecipeInput } from "@Types/recipe"
 
 
 export function calculateDishNutrition(items: DishItem[]): Nutrition {
@@ -8,7 +8,7 @@ export function calculateDishNutrition(items: DishItem[]): Nutrition {
 
   items.map(dishItem => {
 
-    function calc(fieldName: string, unit: string) {
+    function calc(fieldName: string) {
       if (dishItem.recipe) {
         let recipe = dishItem.recipe as Recipe
         if (recipe.nutrition && recipe.nutrition[fieldName]) {
@@ -18,7 +18,7 @@ export function calculateDishNutrition(items: DishItem[]): Nutrition {
           }
           totalNutrition[fieldName] = {
             amount: baseNut + recipe.nutrition[fieldName]!.amount * dishItem.amount,
-            unit: unit,
+            unit: recipe.nutrition[fieldName]!.unit,
           }
         }
       } else {
@@ -30,7 +30,7 @@ export function calculateDishNutrition(items: DishItem[]): Nutrition {
           }
           totalNutrition[fieldName] = {
             amount: baseNut + (food.nutrition[fieldName]!.amount / 100 * dishItem.amount),
-            unit: unit,
+            unit: food.nutrition[fieldName]!.unit,
           }
         }
       }
@@ -68,9 +68,10 @@ export function calculateDishNutrition(items: DishItem[]): Nutrition {
       }
     }
 
-    calc('proteins', 'g')
-    calc('carbs', 'g')
-    calc('sodium', 'mg')
+    let rf
+    dishItem.recipe ? rf = dishItem.recipe as Recipe : rf = dishItem.food as Food
+    Object.keys(rf!.nutrition!).map(nutritionName => calc(nutritionName))
+
     calculateCalories()
 
   })
