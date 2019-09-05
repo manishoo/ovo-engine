@@ -7,6 +7,7 @@ import { FoodClassSchema } from '@Models/food-class.model'
 import { Image, LanguageCode, NameAndId, Pagination, Translation, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { Weight, WeightInput } from '@Types/weight'
+import { GraphQLUpload } from 'apollo-server'
 import mongoose from 'mongoose'
 import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
@@ -203,6 +204,7 @@ export class Nutrition {
 @InputType()
 export class NutritionInput {
   [k: string]: NutrientUnit | undefined
+
   @Field({ nullable: true })
   saturatedFat?: NutrientUnitInput
   @Field({ nullable: true })
@@ -490,6 +492,10 @@ export class Food {
   contents: FoodContent[]
   @Field(type => Nutrition)
   nutrition: Nutrition
+  @Field(type => Image)
+  imageUrl?: Image
+  @Field(type => Image)
+  thumbnailUrl?: Image
 }
 
 @InputType()
@@ -502,6 +508,10 @@ export class FoodInput {
   weights: WeightInput[]
   @Field(type => NutritionInput, { nullable: true })
   nutrition?: NutritionInput
+  @Field(type => GraphQLUpload, { nullable: true })
+  imageUrl?: any
+  @Field(type => GraphQLUpload, { nullable: true })
+  thumbnailUrl?: any
 }
 
 @ArgsType()
