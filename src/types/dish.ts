@@ -11,6 +11,7 @@ import { Recipe } from '@Types/recipe'
 import { Author } from './user'
 import { Min, Max, ArrayNotEmpty } from 'class-validator'
 import mongoose from 'mongoose'
+import { Weight } from './weight'
 
 
 export enum DISH_ITEM_TYPES {
@@ -70,8 +71,8 @@ export class DishItem {
   @Field(type => Recipe, { nullable: true })
   recipe?: Ref<Recipe>
 
-  @Field({ nullable: true })
-  weight?: string
+  @Field(type => Weight, { nullable: true })
+  weight?: Weight | string
 }
 
 @InputType()
