@@ -149,18 +149,18 @@ export default class FoodClassService {
 
     if (foodClassInput.imageUrl) {
       foodClass.imageUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/foods/${foodClassInput.slug}`)
+        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/food-classes/${foodClassInput.slug}`)
       }
       if (!foodClassInput.thumbnailUrl) {
         foodClass.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
         }
       }
     }
 
     if (foodClassInput.thumbnailUrl) {
       foodClass.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
       }
     }
 
@@ -197,18 +197,18 @@ export default class FoodClassService {
 
     if (foodClassInput.imageUrl) {
       foodClass.imageUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/foods/${foodClassInput.slug}`)
+        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/food-classes/${foodClassInput.slug}`)
       }
       if (!foodClassInput.thumbnailUrl) {
         foodClass.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
         }
       }
     }
 
     if (foodClassInput.thumbnailUrl) {
       foodClass.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
       }
     }
 
