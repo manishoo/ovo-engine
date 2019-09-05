@@ -14,7 +14,8 @@ import { UserModel } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
 import { Author } from '@Types/user'
 import { calculateDishNutrition } from './utils/calculate-dish-nutrition'
-
+import { Food } from '@Types/food'
+import { transformDish } from './transformes/dish.transformer'
 
 @Service()
 export default class DishService {
