@@ -71,12 +71,7 @@ export class RecipeTimingInput {
 }
 
 @ObjectType()
-export class Ingredient extends Typegoose {
-  readonly _id: mongoose.Types.ObjectId
-
-  @Field()
-  readonly id: string
-
+export class Ingredient {
   @Field(type => [Translation], { nullable: true })
   name?: Translation[]
 
