@@ -13,9 +13,9 @@ import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
 import { Author } from '@Types/user'
+import { calculateDishNutrition } from './utils/calculate-dish-nutrition'
 import { Food } from '@Types/food'
-import { transformDish } from './transformes/dish.transformer';
-
+import { transformDish } from './transformes/dish.transformer'
 
 @Service()
 export default class DishService {
@@ -40,6 +40,7 @@ export default class DishService {
     const createDish = await DishModel.create({
       ...dish,
       items: dishItems,
+      nutrition: calculateDishNutrition(dishItems)
     })
     createDish.author = me
     let createdDish = await DishModel.findById(createDish._id)
@@ -161,6 +162,7 @@ export default class DishService {
         auhtor: dish!.author,
       }
     })
+    dish.nutrition = calculateDishNutrition(dish.items)
 
     let savedDish = await dish.save()
     const populatedDish = await DishModel.findById(savedDish._id)
@@ -202,7 +204,7 @@ export default class DishService {
 
         return {
           amount: dishItemInput.amount,
-          food: food.id,
+          food: food,
           weight: dishItemInput.weight,
         }
       } else if (dishItemInput.recipe) {
@@ -213,7 +215,7 @@ export default class DishService {
 
         return {
           amount: dishItemInput.amount,
-          recipe: recipe.id,
+          recipe: recipe,
         }
       }
 
