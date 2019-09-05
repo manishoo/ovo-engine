@@ -43,8 +43,20 @@ export default class DishService {
       nutrition: calculateDishNutrition(dishItems)
     })
     createDish.author = me
+    let createdDish = await DishModel.findById(createDish._id)
+      .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
+      .exec()
+    if (!createdDish) throw new Errors.System('Something went wrong')
 
-    return createDish
+    return transformDish(createdDish)
   }
 
   async get(id?: string, slug?: string): Promise<Dish> {
@@ -60,10 +72,18 @@ export default class DishService {
     }
     let dish = await DishModel.findOne(query)
       .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
       .exec()
     if (!dish) throw new Errors.NotFound('dish not found')
 
-    return dish
+    return transformDish(dish)
   }
 
   async list(variables: ListDishesArgs): Promise<DishListResponse> {
@@ -84,7 +104,19 @@ export default class DishService {
       .limit(variables.size)
       .skip(variables.size * (variables.page - 1))
       .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
       .exec()
+
+    dishes.map(dish => {
+      transformDish(dish)
+    })
 
     return {
       dishes,
@@ -132,7 +164,21 @@ export default class DishService {
     })
     dish.nutrition = calculateDishNutrition(dish.items)
 
-    return dish.save()
+    let savedDish = await dish.save()
+    const populatedDish = await DishModel.findById(savedDish._id)
+      .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
+      .exec()
+    if (!populatedDish) throw new Errors.System('Something went wrong')
+
+    return transformDish(populatedDish)
   }
 
   async generateDishItemList(dishInputItems: DishItemInput[]): Promise<DishItem[]> {
