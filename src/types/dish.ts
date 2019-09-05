@@ -6,7 +6,7 @@
 import { Pagination } from '@Types/common'
 import { Field, InputType, ObjectType, ArgsType } from 'type-graphql'
 import { Ref } from 'typegoose'
-import { Food } from '@Types/food'
+import { Food, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import { Author } from './user'
 import { Min, Max, ArrayNotEmpty } from 'class-validator'
@@ -41,6 +41,9 @@ export class Dish {
   @Field(type => [DishItem])
   @ArrayNotEmpty()
   items: DishItem[]
+
+  @Field(type => Nutrition, { nullable: true })
+  nutrition?: Nutrition
 
   @Field(type => Author)
   author: Ref<Author>

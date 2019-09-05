@@ -10,9 +10,10 @@ import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
-import { UserModel, UserSchema } from '@Models/user.model'
+import { UserModel } from '@Models/user.model'
 import { createPagination } from '@Utils/generate-pagination'
 import { Author } from '@Types/user'
+import { calculateDishNutrition } from './utils/calculate-dish-nutrition'
 
 
 @Service()
@@ -38,6 +39,7 @@ export default class DishService {
     const createDish = await DishModel.create({
       ...dish,
       items: dishItems,
+      nutrition: calculateDishNutrition(dishItems)
     })
     createDish.author = me
 
@@ -154,7 +156,7 @@ export default class DishService {
 
         return {
           amount: dishItemInput.amount,
-          food: food.id,
+          food: food,
           weight: dishItemInput.weight,
         }
       } else if (dishItemInput.recipe) {
@@ -165,7 +167,7 @@ export default class DishService {
 
         return {
           amount: dishItemInput.amount,
-          recipe: recipe.id,
+          recipe: recipe,
         }
       }
 
