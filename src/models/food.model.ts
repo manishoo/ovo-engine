@@ -27,6 +27,8 @@ export class FoodSchema extends Typegoose implements Food {
   @prop({ required: true })
   name: Translation[]
   @prop()
+  description?: Translation[]
+  @prop()
   origFoodId?: string
   @prop()
   origDb?: string
