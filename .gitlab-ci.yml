@@ -4,12 +4,12 @@ stages:
 
 build app image:
   stage: build
-  image: docker:18-git
+  image: docker:latest
   only:
     - develop
     - master
   services:
-    - docker:18-dind
+    - docker:dind
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
@@ -20,12 +20,12 @@ build app image:
 
 deploy to staging:
   stage: deploy
-  image: docker:18-git
+  image: docker:latest
   when: manual
   only:
     - develop
   services:
-    - docker:18-dind
+    - docker:dind
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
@@ -47,12 +47,12 @@ deploy to staging:
 
 deploy to production:
   stage: deploy
-  image: docker:18-git
+  image: docker:latest
   when: manual
   only:
     - master
   services:
-    - docker:18-dind
+    - docker:dind
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
