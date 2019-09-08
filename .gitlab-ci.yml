@@ -9,7 +9,7 @@ build app image:
     - develop
     - master
   services:
-    - docker:dind
+    - docker:18.09-dind
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
@@ -25,7 +25,7 @@ deploy to staging:
   only:
     - develop
   services:
-    - docker:dind
+    - docker:18.09-dind
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
@@ -52,7 +52,7 @@ deploy to production:
   only:
     - master
   services:
-    - docker:dind
+    - docker:18.09-dind
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
