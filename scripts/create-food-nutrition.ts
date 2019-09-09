@@ -3,7 +3,7 @@ import { Nutrition } from '../src/types/food'
 import { InstanceType } from 'typegoose'
 
 function getCalories(content: any, nutrition: Nutrition) {
-  if (content.content.toString() === '5d4e9f53236bfe3c44a0a341') { //calorie 
+  if (content.origContentName.toString() === 'Energy') {
 
     nutrition.calories = {
       id: '5d4e9f53236bfe3c44a0a341',
@@ -14,7 +14,7 @@ function getCalories(content: any, nutrition: Nutrition) {
 }
 
 function getFats(content: any, nutrition: Nutrition) {
-  if (content.content.toString() === '5d4e9f53236bfe3c44a0a31c') { //fat 
+  if (content.origContentName.toString() === 'Fat') {
 
     nutrition.fats = {
       id: '5d4e9f53236bfe3c44a0a31c',
@@ -25,7 +25,7 @@ function getFats(content: any, nutrition: Nutrition) {
 }
 
 function getProteins(content: any, nutrition: Nutrition) {
-  if (content.content.toString() === '5d4e9f53236bfe3c44a0a31d') { //protein 
+  if (content.origContentName.toString() === 'Proteins') {
 
     nutrition.proteins = {
       id: '5d4e9f53236bfe3c44a0a31d',
@@ -36,7 +36,7 @@ function getProteins(content: any, nutrition: Nutrition) {
 }
 
 function getCarbs(content: any, nutrition: Nutrition) {
-  if (content.content.toString() === '5d4e9f53236bfe3c44a0a31e') { //carbs 
+  if (content.origContentName.toString() === 'Carbohydrate') {
 
     nutrition.carbs = {
       id: '5d4e9f53236bfe3c44a0a31e',
@@ -47,7 +47,7 @@ function getCarbs(content: any, nutrition: Nutrition) {
 }
 
 function getSodium(content: any, nutrition: Nutrition) {
-  if (content.content.toString() === '5d4e7dc3a8721d5dd5a13844') { //sodium 
+  if (content.origContentName.toString() === 'Sodium') {
 
     nutrition.sodium = {
       id: '5d4e7dc3a8721d5dd5a13844',
