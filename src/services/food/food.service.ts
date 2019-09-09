@@ -23,7 +23,7 @@ export default class FoodService {
     // noop
   }
 
-  async listFoods({page, size, foodClassId, nameSearchQuery}: FoodListArgs): Promise<FoodsListResponse> {
+  async listFoods({ page, size, foodClassId, nameSearchQuery }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
     if (foodClassId) {
       query['foodClass'] = new mongoose.Types.ObjectId(foodClassId)
@@ -84,7 +84,9 @@ export default class FoodService {
     food.weights = weights
 
     if (foodInput.nutrition) {
-      food.nutrition = foodInput.nutrition
+      food.nutrition = {
+        ...foodInput.nutrition
+      }
     }
 
     return food.save()
@@ -133,6 +135,12 @@ export default class FoodService {
     if (foodInput.thumbnailUrl) {
       food.thumbnailUrl = {
         url: await this.uploadService.processUpload(foodInput.thumbnailUrl, 'thumb', `images/foods/${food.id}`)
+      }
+    }
+
+    if (foodInput.nutrition) {
+      food.nutrition = {
+        ...foodInput.nutrition
       }
     }
 
