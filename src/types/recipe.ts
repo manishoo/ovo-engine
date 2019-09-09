@@ -91,7 +91,7 @@ export class Ingredient {
   description?: Translation[]
 
   @Field(type => Food, { nullable: true })
-  food?: Ref<FoodSchema>
+  food?: FoodSchema
 
   @Field(type => Weight, { nullable: true })
   weight?: Ref<Weight>

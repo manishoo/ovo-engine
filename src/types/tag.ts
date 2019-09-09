@@ -16,6 +16,7 @@ export enum TagType {
   recipe = 'recipe',
   ingredient = 'ingredient',
   occasion = 'occasion',
+  other = 'other',
 }
 
 registerEnumType(TagType, {
@@ -45,7 +46,7 @@ export class Tag {
   title?: Translation[]
   @Field(type => [Translation], { nullable: true })
   info?: Translation[]
-  @Field()
+  @Field(type => TagType)
   type: TagType
   createdAt?: Date
   updatedAt?: Date

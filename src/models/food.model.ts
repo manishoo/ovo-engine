@@ -22,7 +22,7 @@ export interface FoodSchema extends SoftDeleteModel<SoftDeleteDocument> {
 })
 export class FoodSchema extends Typegoose implements Food {
   readonly _id: mongoose.Schema.Types.ObjectId
-  readonly id: string
+  id: string
 
   @prop({ required: true })
   name: Translation[]
