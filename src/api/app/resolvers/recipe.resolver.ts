@@ -75,7 +75,7 @@ export default class RecipeResolver {
   }
 
   @Authorized()
-  @Mutation(returns => Boolean)
+  @Mutation(returns => String)
   async deleteRecipe(
     @Arg('recipeId') recipeId: string,
     @Ctx() ctx: Context,
