@@ -12,14 +12,19 @@ import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
 import { IsEmail, IsPhoneNumber } from 'class-validator'
 import mongoose from 'mongoose'
-import { ArgsType, Field, Float, InputType, Int, ObjectType } from 'type-graphql'
+import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 import { Ref } from 'typegoose'
 
 
 export enum Gender {
-  male = 'Male',
-  female = 'Female',
+  male = 'male',
+  female = 'female',
 }
+
+registerEnumType(Gender, {
+  name: 'Gender',
+  description: 'Gender'
+})
 
 export enum Activity {
   sed = 'sed',
@@ -156,8 +161,8 @@ export class User extends BaseUser {
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
-  @Field(type => SocialNetworks, { nullable: true })
-  socialNetworks?: SocialNetworks
+  @Field(type => SocialNetworks)
+  socialNetworks: SocialNetworks
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
   @Field({ nullable: true })
@@ -168,7 +173,7 @@ export class User extends BaseUser {
   age?: number
   @Field(type => Int, { nullable: true })
   bodyFat?: number
-  @Field({ nullable: true })
+  @Field(type => Gender, { nullable: true })
   gender?: Gender
   foodAllergies?: string[]
   status?: string
@@ -221,12 +226,12 @@ export class UserUpdateInput {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
-  @Field({ nullable: true })
+  @Field(type => Gender, { nullable: true })
   gender?: Gender
   @Field(type => GraphQLUpload, { nullable: true })
   imageUrl?: any
-  @Field(type => SocialNetworksInput, { nullable: true })
-  socialNetworks?: SocialNetworksInput
+  @Field(type => SocialNetworksInput)
+  socialNetworks: SocialNetworksInput
   @Field({ nullable: true })
   bio?: string
   @Field({ nullable: true })

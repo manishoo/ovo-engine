@@ -73,8 +73,8 @@ export class UserSchema extends Typegoose implements User {
   lastName?: string
   @prop()
   imageUrl: Image
-  @prop()
-  socialNetworks?: SocialNetworks
+  @prop({ default: {} })
+  socialNetworks: SocialNetworks
   @prop()
   bio?: string
   @prop()
