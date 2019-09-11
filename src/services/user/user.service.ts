@@ -122,13 +122,15 @@ export default class UserService {
   async userProfile(id: string, userId?: string, username?: string): Promise<User | BaseUser> {
     let user
 
-    if (userId) {
-      if (!mongoose.Types.ObjectId.isValid(userId)) throw new Errors.Validation('Invalid user id')
-      user = await UserModel.findById(userId)
-    }
-    if (username) {
-      user = await UserModel.findOne({ username })
-    }
+    /**
+     * Find by either id or username
+     * */
+    user = await UserModel.findOne({
+      $or: [
+        { userId: mongoose.Types.ObjectId(userId) },
+        { username },
+      ]
+    })
 
     if (!user) throw new Errors.NotFound('User not found')
 
