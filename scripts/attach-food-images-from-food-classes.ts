@@ -15,11 +15,11 @@ async function main() {
 
     await Promise.all(foods.map(async food => {
       food.imageUrl = {
-        source: 'foodb',
+        source: 'sameAsFoodClass',
         url: `http://foodb.ca/system/foods/pictures/${fc.origId}/full/${fc.origId}.png`
       }
       food.thumbnailUrl = {
-        source: 'foodb',
+        source: 'sameAsFoodClass',
         url: `http://foodb.ca/system/foods/pictures/${fc.origId}/thumb/${fc.origId}.png`
       }
 
