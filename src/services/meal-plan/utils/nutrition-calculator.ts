@@ -14,12 +14,6 @@ export default {
     age: number, // year
     gender: string,
   ): number {
-    console.log('=========>', {
-      height,
-      weight,
-      age,
-      gender,
-    })
     // Mifflin-St Jeor equation
     const baseBMR = 10 * weight + 6.25 * height - 5 * age
 

@@ -47,7 +47,7 @@ export default class RecipeService {
 
     if (!recipe) throw new Errors.NotFound('Recipe not found')
 
-    return recipe
+    return transformRecipe(recipe)
   }
 
   async list(variables: ListRecipesArgs): Promise<RecipesListResponse> {
@@ -59,8 +59,13 @@ export default class RecipeService {
     }
 
     const query: any = {}
-    const me = await UserModel.findById(variables.userId)
-    if (!me) throw new Errors.System('something went wrong')
+
+    if (variables.userId) {
+      const me = await UserModel.findById(variables.userId)
+      if (!me) throw new Errors.System('something went wrong')
+
+      query['author'] = mongoose.Types.ObjectId(variables.userId)
+    }
 
     if (variables.tags) {
       query['tags'] = { $in: variables.tags }
@@ -89,7 +94,7 @@ export default class RecipeService {
     const totalCount = await RecipeModel.count(query)
 
     return {
-      recipes,
+      recipes: recipes.map(recipe => transformRecipe(recipe, variables.viewerUserId)),
       pagination: createPagination(variables.page, variables.size, totalCount),
     }
   }
@@ -128,51 +133,58 @@ export default class RecipeService {
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
         let ingredient: Partial<Ingredient> = {}
 
-        if (ingredientInput.weight) {
-          ingredient.weight = mongoose.Types.ObjectId(ingredientInput.weight)
-        } else {
-          if (!ingredientInput.customUnit || !ingredientInput.gramWeight) {
-            throw new Errors.UserInput('incomplete data', {
-              'customUnit': 'custom unit is mandatory',
-              'gramWeight': 'gram weight is mandatory'
-            })
-          }
-          ingredient.gramWeight = ingredientInput.gramWeight
-          ingredient.customUnit = ingredientInput.customUnit
-        }
-
         if (!ingredientInput.food) {
+          /**
+           * If the ingredient didn't have an associated food
+           * */
           if (!ingredientInput.name) {
             throw new Errors.UserInput('incomplete data', { 'name': 'either food or name should be entered' })
           }
           ingredient.name = ingredientInput.name
         } else {
+          /**
+           * If the ingredient had an associated food
+           * */
           if (!mongoose.Types.ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
           const food = await FoodModel.findById(ingredientInput.food)
           if (!food) throw new Errors.NotFound('food not found')
 
           ingredient.food = food
+          ingredient.thumbnail = food.thumbnailUrl
           ingredient.name = food.name
 
-          if (ingredient.weight) {
-            ingredient.weight = food.weights.find(w => w.id!.toString() == ingredient.weight!.toString())
-          }
+          if (ingredientInput.weight) {
+            const foundWeight = food.weights.find(w => w.id!.toString() == ingredientInput.weight)
+            if (!foundWeight) throw new Errors.Validation('Weight is not valid')
 
+            ingredient.weight = foundWeight
+          } else {
+            ingredient.gramWeight = ingredientInput.gramWeight
+            ingredient.customUnit = ingredientInput.customUnit
+          }
         }
+
         ingredient.amount = ingredientInput.amount
         ingredient.description = ingredientInput.description
 
         return <Ingredient>ingredient
       })),
     }
+    if (data.tags) {
+      let tags: any = []
+      await Promise.all(data.tags.map(async tag => {
+        let validatedTag = await TagModel.findOne({ slug: tag })
+        if (!validatedTag) throw new Errors.NotFound('Tag not found')
 
+        tags.push(tag)
+      }))
 
+      recipe.tags = tags
+    }
     recipe.nutrition = calculateTotalNutrition(recipe.ingredients!)
 
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe.author = author
-
-
 
     return transformRecipe(createdRecipe, userId)
   }
@@ -223,7 +235,7 @@ export default class RecipeService {
           amount: ingredient.amount,
           customUnit: ingredient.customUnit,
           gramWeight: ingredient.gramWeight,
-          thumbnail: ingredient.thumbnail,
+          thumbnail: ingredient.thumbnail || food.thumbnailUrl,
           description: ingredient.description,
           food: food,
           weight: food.weights.find(w => w.id == ingredient.weight),
@@ -261,18 +273,15 @@ export default class RecipeService {
     }
 
     if (data.tags) {
-
       let tags: any = []
       await Promise.all(data.tags.map(async tag => {
-        if (!mongoose.Types.ObjectId.isValid(tag)) throw new Errors.Validation('invalid tag id')
-        let validateTag = await TagModel.findById(tag)
-        if (!validateTag) throw new Errors.NotFound('tag not found')
+        let validatedTag = await TagModel.findOne({ slug: tag })
+        if (!validatedTag) throw new Errors.NotFound('Tag not found')
 
         tags.push(tag)
       }))
 
       recipe.tags = tags
-
     }
     recipe.nutrition = calculateTotalNutrition(recipe.ingredients)
 

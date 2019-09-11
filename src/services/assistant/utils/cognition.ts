@@ -107,7 +107,6 @@ export default class Cognition {
               if (!message.data.value) throw new Errors.Validation('invalid message')
               // TODO VALIDATION
               const activity = message.data.value
-              console.log('activity', activity)
               await keepInMind(t, GUEST_TEMP_FIELDS.activity, activity)
 
               const tempData = await Memory.shortTerm.getGuestTempData(t)
