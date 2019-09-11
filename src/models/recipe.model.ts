@@ -7,10 +7,10 @@ import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, Ref, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
-import { Ingredient, Instruction, Recipe, RecipeOrigin, RecipeTiming, Review } from '@Types/recipe'
-import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { arrayProp, plugin, prop, Typegoose, instanceMethod } from 'typegoose'
+import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, RecipeTiming, Review } from '@Types/recipe'
 import { Tag } from '@Types/tag'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { arrayProp, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
 
 
 export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -50,6 +50,8 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   nutrition?: Nutrition
   @prop()
+  difficulty?: RecipeDifficulty
+  @prop()
   origin?: RecipeOrigin
   @prop()
   tags?: Ref<Tag>[]
@@ -62,10 +64,12 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   createdAt: Date
   userLikedRecipe: boolean
+
   @prop()
   get likesCount(): number {
     return this.likes.length
   }
+
   @instanceMethod
   likedByUser(userId: string): boolean {
     return !!this.likes.find(p => String(p) === userId)

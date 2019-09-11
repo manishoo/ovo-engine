@@ -14,9 +14,20 @@ import { Weight } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
-import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
-import { Typegoose } from 'typegoose'
+import { ArgsType, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
+
+export enum RecipeDifficulty {
+  easy = 'easy',
+  medium = 'medium',
+  hard = 'hard',
+  expert = 'expert',
+}
+
+registerEnumType(RecipeDifficulty, {
+  name: 'RecipeDifficulty',
+  description: 'Recipe difficulty'
+})
 
 @ObjectType()
 export class RecipeTag {
@@ -213,6 +224,9 @@ export class Recipe {
   @Field(type => Int)
   likesCount: number
 
+  @Field(type => RecipeDifficulty, { nullable: true })
+  difficulty?: RecipeDifficulty
+
   @Field(type => Author)
   author: Ref<Author>
 
@@ -316,6 +330,9 @@ export class RecipeInput {
 
   @Field(type => RecipeTimingInput)
   timing: RecipeTimingInput
+
+  @Field(type => RecipeDifficulty, { nullable: true })
+  difficulty?: RecipeDifficulty
 
   @Field({ nullable: true })
   slug?: string
