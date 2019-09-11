@@ -203,7 +203,7 @@ export default class RecipeService {
     const removedRecipe = await recipe.remove()
     if (!removedRecipe) throw new Errors.System('something went wrong')
 
-    return true
+    return removedRecipe.id
   }
 
   async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, userId?: string) {
