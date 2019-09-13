@@ -10,7 +10,7 @@ import { prop, Typegoose } from 'typegoose'
 
 
 export class TagSchema extends Typegoose implements Tag {
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   slug: string // only English: quick-bite
   @prop({ required: true })
   title: Translation[] // translation: سریع‌الحلقوم | Quick bite
