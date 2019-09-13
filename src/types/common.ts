@@ -36,6 +36,7 @@ registerEnumType(OperatorRole, {
 
 export enum UserRole {
   user = 'USER',
+  operator = 'OPERATOR',
 }
 
 registerEnumType(UserRole, {
@@ -97,6 +98,8 @@ export class Image {
 
   @Field()
   url: string
+
+  alt?: string
 }
 
 @ObjectType()

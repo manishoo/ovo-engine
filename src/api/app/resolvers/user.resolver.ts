@@ -54,14 +54,13 @@ export default class UserResolver {
     return this.userService.userProfile(ctx.user!.id, ctx.user!.id)
   }
 
-  @Authorized(UserRole.user)
   @Query(returns => BaseUser)
   async user(
     @Ctx() ctx: Context,
     @Arg('userId', { nullable: true }) userId?: string,
     @Arg('username', { nullable: true }) username?: string,
   ) {
-    return this.userService.userProfile(ctx.user!.id, userId, username)
+    return this.userService.userProfile(ctx.user && ctx.user.id, userId, username)
   }
 
   @Query(returns => Boolean)

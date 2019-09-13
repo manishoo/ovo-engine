@@ -161,7 +161,7 @@ export class User extends BaseUser {
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
-  @Field(type => SocialNetworks)
+  @Field(type => SocialNetworks, {defaultValue: {}})
   socialNetworks: SocialNetworks
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
