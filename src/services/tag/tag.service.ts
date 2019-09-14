@@ -4,7 +4,6 @@
  */
 
 import { TagModel } from '@Models/tag.model'
-import { LanguageCode } from '@Types/common'
 import { Tag, TagInput } from '@Types/tag'
 import Errors from '@Utils/errors'
 import { Service } from 'typedi'
@@ -18,9 +17,9 @@ export default class TagService {
     return TagModel.find()
   }
 
-  async create(data: TagInput, lang: LanguageCode): Promise<Tag> {
+  async create(data: TagInput): Promise<Tag> {
     let q: any = {}
-    q['title.text'] = data.title[0].text
+    q['slug'] = data.slug
     const validateTag = await TagModel.findOne(q)
     if (validateTag) throw new Errors.UserInput('This tag already exists', { 'title text': 'This title already exists' })
 
