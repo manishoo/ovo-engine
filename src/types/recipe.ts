@@ -11,6 +11,7 @@ import { Food, Nutrition } from '@Types/food'
 import { Tag, TagType } from '@Types/tag'
 import { Author } from '@Types/user'
 import { Weight } from '@Types/weight'
+import { ContextUser } from '@Utils/context'
 import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
@@ -373,5 +374,5 @@ export class ListRecipesArgs {
   @Field(type => [String], { nullable: true })
   tags?: string[]
 
-  viewerUserId?: string
+  viewerUser?: ContextUser
 }

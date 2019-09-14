@@ -119,7 +119,7 @@ export default class UserService {
     return user.save()
   }
 
-  async userProfile(id: string, userId?: string, username?: string): Promise<User | BaseUser> {
+  async userProfile(selfId?: string, userId?: string, username?: string): Promise<User | BaseUser> {
     let user
 
     /**
@@ -136,7 +136,7 @@ export default class UserService {
 
     let userInfo: User | BaseUser
 
-    if (userId === id) {
+    if (userId === selfId) {
       userInfo = {
         id: user.id,
         username: user.username,

@@ -39,9 +39,9 @@ export default class RecipeResolver {
     @Args() { page, size, lastId, nameSearchQuery, userId, tags }: ListRecipesArgs,
     @Ctx() ctx: Context,
   ) {
-    let viewerUserId
+    let viewerUser
     if (ctx.user) {
-      viewerUserId = ctx.user.id
+      viewerUser = ctx.user
     }
 
     return this.recipeService.list({
@@ -49,8 +49,8 @@ export default class RecipeResolver {
       size,
       lastId,
       nameSearchQuery,
-      userId: userId || viewerUserId,
-      viewerUserId,
+      userId: userId || (viewerUser ? viewerUser.id : undefined),
+      viewerUser,
       tags,
     })
   }
@@ -71,7 +71,7 @@ export default class RecipeResolver {
     @Arg('recipe') recipe: RecipeInput,
     @Ctx() ctx: Context,
   ) {
-    return this.recipeService.update(recipeId, recipe, ctx.lang, ctx.user!.id)
+    return this.recipeService.update(recipeId, recipe, ctx.lang, ctx.user!)
   }
 
   @Authorized()
@@ -80,7 +80,7 @@ export default class RecipeResolver {
     @Arg('recipeId') recipeId: string,
     @Ctx() ctx: Context,
   ) {
-    return this.recipeService.delete(recipeId, ctx.user!.id)
+    return this.recipeService.delete(recipeId, ctx.user!)
   }
 
   @Authorized()
@@ -90,7 +90,7 @@ export default class RecipeResolver {
     @Arg('tags', type => [String]) tagSlugs: string[],
     @Ctx() ctx: Context,
   ): Promise<Recipe> {
-    return this.recipeService.tag(recipeId, tagSlugs, ctx.user!.id)
+    return this.recipeService.tag(recipeId, tagSlugs, ctx.user!)
   }
 
   @Query(returns => [Tag])
