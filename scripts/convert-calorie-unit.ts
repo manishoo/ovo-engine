@@ -19,7 +19,7 @@ async function convertCalorieUnit(food: InstanceType<FoodSchema>) {
   }
 }
 
-async function main() {
+export default async function main() {
   console.log('Script started running.')
 
   let foodList = await FoodModel.find()
@@ -28,9 +28,3 @@ async function main() {
     await convertCalorieUnit(food)
   }))
 }
-
-main().then(() => {
-  console.log('Script done running.')
-  process.exit(0)
-})
-

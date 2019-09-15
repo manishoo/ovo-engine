@@ -81,6 +81,7 @@ export default class FoodService {
     }
 
     food.name = foodInput.name
+    food.description = foodInput.description
     food.weights = weights
 
     if (foodInput.nutrition) {
