@@ -8,8 +8,9 @@ import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
-import { Image, LanguageCode } from '@Types/common'
+import { Image, LanguageCode, UserRole } from '@Types/common'
 import { Ingredient, Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
+import { ContextUser } from '@Utils/context'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import mongoose from 'mongoose'
@@ -17,6 +18,7 @@ import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
+import { calculateTotalNutrition } from './utils/calculate-total-nutrition'
 
 
 @Service()
@@ -46,7 +48,7 @@ export default class RecipeService {
 
     if (!recipe) throw new Errors.NotFound('Recipe not found')
 
-    return recipe
+    return transformRecipe(recipe)
   }
 
   async list(variables: ListRecipesArgs): Promise<RecipesListResponse> {
@@ -58,8 +60,13 @@ export default class RecipeService {
     }
 
     const query: any = {}
-    const me = await UserModel.findById(variables.userId)
-    if (!me) throw new Errors.System('something went wrong')
+
+    if (variables.userId) {
+      const me = await UserModel.findById(variables.userId)
+      if (!me) throw new Errors.System('something went wrong')
+
+      query['author'] = mongoose.Types.ObjectId(variables.userId)
+    }
 
     if (variables.tags) {
       query['tags'] = { $in: variables.tags }
@@ -88,7 +95,7 @@ export default class RecipeService {
     const totalCount = await RecipeModel.count(query)
 
     return {
-      recipes,
+      recipes: recipes.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),
       pagination: createPagination(variables.page, variables.size, totalCount),
     }
   }
@@ -126,50 +133,70 @@ export default class RecipeService {
       })),
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
         let ingredient: Partial<Ingredient> = {}
-        if (ingredientInput.weight) {
-          ingredient.weight = mongoose.Types.ObjectId(ingredientInput.weight)
-        } else {
-          if (!ingredientInput.customUnit || !ingredientInput.gramWeight) {
-            throw new Errors.UserInput('incomplete data', {
-              'customUnit': 'custom unit is mandatory',
-              'gramWeight': 'gram weight is mandatory'
-            })
-          }
-          ingredient.gramWeight = ingredientInput.gramWeight
-          ingredient.customUnit = ingredientInput.customUnit
-        }
 
         if (!ingredientInput.food) {
+          /**
+           * If the ingredient didn't have an associated food
+           * */
           if (!ingredientInput.name) {
             throw new Errors.UserInput('incomplete data', { 'name': 'either food or name should be entered' })
           }
           ingredient.name = ingredientInput.name
         } else {
+          /**
+           * If the ingredient had an associated food
+           * */
           if (!mongoose.Types.ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
           const food = await FoodModel.findById(ingredientInput.food)
           if (!food) throw new Errors.NotFound('food not found')
 
-          ingredient.food = mongoose.Types.ObjectId(ingredientInput.food)
+          ingredient.food = food
+          ingredient.thumbnail = food.thumbnailUrl
           ingredient.name = food.name
+
+          if (ingredientInput.weight) {
+            const foundWeight = food.weights.find(w => w.id!.toString() == ingredientInput.weight)
+            if (!foundWeight) throw new Errors.Validation('Weight is not valid')
+
+            ingredient.weight = foundWeight
+          } else {
+            ingredient.gramWeight = ingredientInput.gramWeight
+            ingredient.customUnit = ingredientInput.customUnit
+          }
         }
+
         ingredient.amount = ingredientInput.amount
         ingredient.description = ingredientInput.description
 
         return <Ingredient>ingredient
       })),
     }
+    if (data.tags) {
+      let tags: any = []
+      await Promise.all(data.tags.map(async tag => {
+        let validatedTag = await TagModel.findOne({ slug: tag })
+        if (!validatedTag) throw new Errors.NotFound('Tag not found')
+
+        tags.push(tag)
+      }))
+
+      recipe.tags = tags
+    }
+    recipe.nutrition = calculateTotalNutrition(recipe.ingredients!)
+
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe.author = author
+
     return transformRecipe(createdRecipe, userId)
   }
 
-  async delete(id: string, userId?: string, operatorId?: string) {
-    if (!userId && !operatorId) throw new Errors.Forbidden('not allowed')
+  async delete(id: string, user?: ContextUser, operatorId?: string) {
+    if (!user && !operatorId) throw new Errors.Forbidden('not allowed')
     if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid recipe ID')
 
     const query: any = { _id: id }
-    if (userId) {
-      query.author = mongoose.Types.ObjectId(userId)
+    if (user && (user.role !== UserRole.operator)) {
+      query.author = mongoose.Types.ObjectId(user.id)
     }
     const recipe = await RecipeModel.findOne(query)
     if (!recipe) throw new Errors.NotFound('recipe not found')
@@ -177,11 +204,17 @@ export default class RecipeService {
     const removedRecipe = await recipe.remove()
     if (!removedRecipe) throw new Errors.System('something went wrong')
 
-    return true
+    return removedRecipe.id
   }
 
-  async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, userId?: string) {
-    const recipe = await RecipeModel.findOne({ _id: recipeId })
+  async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, user: ContextUser) {
+    const query: any = { _id: recipeId }
+
+    if (user.role !== UserRole.operator) {
+      query['author'] = mongoose.Types.ObjectId(user.id)
+    }
+
+    const recipe = await RecipeModel.findOne(query)
       .populate('author')
       .exec()
     if (!recipe) throw new Errors.NotFound('recipe not found')
@@ -200,18 +233,21 @@ export default class RecipeService {
       recipe.description = data.description
     }
     if (data.ingredients) {
-      recipe.ingredients = data.ingredients.map(ingredient => {
+      recipe.ingredients = await Promise.all(data.ingredients.map(async ingredient => {
+        let food = await FoodModel.findById(ingredient.food)
+        if (!food) throw new Errors.System('Something went wrong')
+
         return {
           name: ingredient.name,
           amount: ingredient.amount,
           customUnit: ingredient.customUnit,
           gramWeight: ingredient.gramWeight,
+          thumbnail: ingredient.thumbnail || food.thumbnailUrl,
           description: ingredient.description,
-          food: mongoose.Types.ObjectId(ingredient.food),
-          weight: mongoose.Types.ObjectId(ingredient.weight),
-          thumbnail: ingredient.thumbnail,
+          food: food,
+          weight: food.weights.find(w => w.id == ingredient.weight),
         }
-      })
+      }))
     }
     if (data.instructions) {
       recipe.instructions = await Promise.all(data.instructions.map(async instructionInput => {
@@ -244,24 +280,22 @@ export default class RecipeService {
     }
 
     if (data.tags) {
-
       let tags: any = []
       await Promise.all(data.tags.map(async tag => {
-        if (!mongoose.Types.ObjectId.isValid(tag)) throw new Errors.Validation('invalid tag id')
-        let validateTag = await TagModel.findById(tag)
-        if (!validateTag) throw new Errors.NotFound('tag not found')
+        let validatedTag = await TagModel.findOne({ slug: tag })
+        if (!validatedTag) throw new Errors.NotFound('Tag not found')
 
         tags.push(tag)
       }))
 
       recipe.tags = tags
-
     }
+    recipe.nutrition = calculateTotalNutrition(recipe.ingredients)
 
-    return transformRecipe(await recipe.save(), userId)
+    return transformRecipe(await recipe.save(), user && user.id)
   }
 
-  async tag(recipePublicId: string, tagSlugs: string[], userId: string): Promise<Recipe> {
-    return this.update(recipePublicId, {}, LanguageCode.en, userId)
+  async tag(recipePublicId: string, tagSlugs: string[], user: ContextUser): Promise<Recipe> {
+    return this.update(recipePublicId, {}, LanguageCode.en, user)
   }
 }

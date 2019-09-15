@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodClassModel } from '../src/models/food-class.model'
-import { FoodModel } from '../src/models/food.model'
-import { LanguageCode, Translation } from '../src/types/common'
+import { FoodClassModel } from '@Models/food-class.model'
+import { FoodModel } from '@Models/food.model'
+import { LanguageCode, Translation } from '@Types/common'
 
 
 function getEnTranslation(tr: Translation[]) {

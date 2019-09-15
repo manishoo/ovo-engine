@@ -107,6 +107,7 @@ export default class UserService {
         url: await this.uploadService.processUpload(userInput.imageUrl, userInput.username, `images/users/${user.id}`)
       }
     }
+
     user.username = userInput.username
     user.firstName = userInput.firstName
     user.lastName = userInput.lastName
@@ -118,15 +119,24 @@ export default class UserService {
     return user.save()
   }
 
-  async userProfile(userId: string, id: string): Promise<User | BaseUser> {
-    if (!mongoose.Types.ObjectId.isValid(userId)) throw new Errors.Validation('Invalid user id')
+  async userProfile(selfId?: string, userId?: string, username?: string): Promise<User | BaseUser> {
+    let user
 
-    let user = await UserModel.findById(userId)
+    /**
+     * Find by either id or username
+     * */
+    user = await UserModel.findOne({
+      $or: [
+        { userId: mongoose.Types.ObjectId(userId) },
+        { username },
+      ]
+    })
+
     if (!user) throw new Errors.NotFound('User not found')
 
     let userInfo: User | BaseUser
 
-    if (userId === id) {
+    if (userId === selfId) {
       userInfo = {
         id: user.id,
         username: user.username,

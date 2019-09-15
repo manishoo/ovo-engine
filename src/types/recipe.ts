@@ -11,11 +11,24 @@ import { Food, Nutrition } from '@Types/food'
 import { Tag, TagType } from '@Types/tag'
 import { Author } from '@Types/user'
 import { Weight } from '@Types/weight'
+import { ContextUser } from '@Utils/context'
 import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
-import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
+import { ArgsType, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
+
+export enum RecipeDifficulty {
+  easy = 'easy',
+  medium = 'medium',
+  hard = 'hard',
+  expert = 'expert',
+}
+
+registerEnumType(RecipeDifficulty, {
+  name: 'RecipeDifficulty',
+  description: 'Recipe difficulty'
+})
 
 @ObjectType()
 export class RecipeTag {
@@ -74,8 +87,8 @@ export class Ingredient {
   @Field(type => [Translation], { nullable: true })
   name?: Translation[]
 
-  @Field()
-  amount: number
+  @Field({ nullable: true })
+  amount?: number
 
   @Field({ nullable: true })
   customUnit?: string
@@ -90,7 +103,7 @@ export class Ingredient {
   description?: Translation[]
 
   @Field(type => Food, { nullable: true })
-  food?: Ref<FoodSchema>
+  food?: FoodSchema
 
   @Field(type => Weight, { nullable: true })
   weight?: Ref<Weight>
@@ -194,9 +207,6 @@ export class Recipe {
   @Field(type => Int)
   serving: number
 
-  @Field(type => Nutrition, { nullable: true })
-  nutrition?: Nutrition
-
   @Field()
   slug: string
 
@@ -215,6 +225,9 @@ export class Recipe {
   @Field(type => Int)
   likesCount: number
 
+  @Field(type => RecipeDifficulty, { nullable: true })
+  difficulty?: RecipeDifficulty
+
   @Field(type => Author)
   author: Ref<Author>
 
@@ -223,6 +236,9 @@ export class Recipe {
 
   @Field(type => RecipeTiming)
   timing: RecipeTiming
+
+  @Field(type => Nutrition, { nullable: true })
+  nutrition?: Nutrition
 
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
@@ -316,6 +332,9 @@ export class RecipeInput {
   @Field(type => RecipeTimingInput)
   timing: RecipeTimingInput
 
+  @Field(type => RecipeDifficulty, { nullable: true })
+  difficulty?: RecipeDifficulty
+
   @Field({ nullable: true })
   slug?: string
 
@@ -355,5 +374,5 @@ export class ListRecipesArgs {
   @Field(type => [String], { nullable: true })
   tags?: string[]
 
-  viewerUserId?: string
+  viewerUser?: ContextUser
 }

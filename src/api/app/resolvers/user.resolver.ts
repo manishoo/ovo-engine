@@ -5,17 +5,10 @@
 
 import UserService from '@Services/user/user.service'
 import { UserRole } from '@Types/common'
-import {
-  BaseUser,
-  User,
-  UserAuthResponse,
-  UserLoginArgs,
-  UserRegistrationInput,
-  UserUpdateInput
-} from '@Types/user'
+import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '@Utils/context'
 
 
 @Service()
@@ -61,13 +54,13 @@ export default class UserResolver {
     return this.userService.userProfile(ctx.user!.id, ctx.user!.id)
   }
 
-  @Authorized(UserRole.user)
   @Query(returns => BaseUser)
   async user(
-    @Arg('userId') userId: string,
     @Ctx() ctx: Context,
+    @Arg('userId', { nullable: true }) userId?: string,
+    @Arg('username', { nullable: true }) username?: string,
   ) {
-    return this.userService.userProfile(userId, ctx.user!.id)
+    return this.userService.userProfile(ctx.user && ctx.user.id, userId, username)
   }
 
   @Query(returns => Boolean)

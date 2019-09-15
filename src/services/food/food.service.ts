@@ -5,26 +5,34 @@
 
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
-import { Food, FoodInput, FoodsListResponse } from '@Types/food'
+import UploadService from '@Services/upload/upload.service'
+import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
 import { WeightInput } from '@Types/weight'
 import Errors from '@Utils/errors'
+import { createPagination } from '@Utils/generate-pagination'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
-import { createPagination } from '@Utils/generate-pagination'
 
 
 @Service()
 export default class FoodService {
   constructor(
     // service injection
+    private readonly uploadService: UploadService
   ) {
     // noop
   }
 
-  async listFoods(page: number, size: number, foodClassID?: string): Promise<FoodsListResponse> {
+  async listFoods({ page, size, foodClassId, nameSearchQuery }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
-    if (foodClassID) {
-      query['foodClass'] = new mongoose.Types.ObjectId(foodClassID)
+    if (foodClassId) {
+      query['foodClass'] = new mongoose.Types.ObjectId(foodClassId)
+    }
+    if (nameSearchQuery) {
+      query['name.text'] = {
+        $regex: nameSearchQuery,
+        $options: 'i',
+      }
     }
 
     const foods = await FoodModel.find(query)
@@ -39,14 +47,14 @@ export default class FoodService {
     }
   }
 
-  async updateFood(foodId: string, inputFood: FoodInput): Promise<Food | null> {
+  async updateFood(foodId: string, foodInput: FoodInput): Promise<Food | null> {
     if (!mongoose.Types.ObjectId.isValid(foodId)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
 
     const food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('food not found')
 
     let weights: WeightInput[] = []
-    inputFood.weights.map(weight => {
+    foodInput.weights.map(weight => {
       if (weight.id) {
         weights.push(weight)
       } else {
@@ -55,11 +63,31 @@ export default class FoodService {
       }
     })
 
-    food.name = inputFood.name
+    if (foodInput.imageUrl) {
+      food.imageUrl = {
+        url: await this.uploadService.processUpload(foodInput.imageUrl, 'full', `images/foods/${food.id}`)
+      }
+      if (!foodInput.thumbnailUrl) {
+        food.thumbnailUrl = {
+          url: await this.uploadService.processUpload(foodInput.imageUrl, 'thumb', `images/foods/${food.id}`)
+        }
+      }
+    }
+
+    if (foodInput.thumbnailUrl) {
+      food.thumbnailUrl = {
+        url: await this.uploadService.processUpload(foodInput.thumbnailUrl, 'thumb', `images/foods/${food.id}`)
+      }
+    }
+
+    food.name = foodInput.name
+    food.description = foodInput.description
     food.weights = weights
 
-    if (inputFood.nutrition) {
-      food.nutrition = inputFood.nutrition
+    if (foodInput.nutrition) {
+      food.nutrition = {
+        ...foodInput.nutrition
+      }
     }
 
     return food.save()
@@ -74,26 +102,50 @@ export default class FoodService {
     return food
   }
 
-  async createFood(foodClassID: string, food: FoodInput): Promise<Food> {
+  async createFood(foodClassID: string, foodInput: FoodInput): Promise<Food> {
     if (!mongoose.Types.ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
     const foodClass = await FoodClassModel.findById(foodClassID)
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     let weights: WeightInput[] = []
-    food.weights.map(weight => {
+    foodInput.weights.map(weight => {
       weight['id'] = String(new mongoose.Types.ObjectId())
       weights.push(weight)
     })
-    const foodInput = new FoodModel({
-      name: food.name,
+
+    const food = new FoodModel({
+      name: foodInput.name,
       weights,
-      description: food.description,
+      description: foodInput.description,
       foodClass: foodClass._id,
-      nutrition: food.nutrition,
+      nutrition: foodInput.nutrition,
     })
 
-    return foodInput.save()
+    if (foodInput.imageUrl) {
+      food.imageUrl = {
+        url: await this.uploadService.processUpload(foodInput.imageUrl, 'full', `images/foods/${food.id}`)
+      }
+      if (!foodInput.thumbnailUrl) {
+        food.thumbnailUrl = {
+          url: await this.uploadService.processUpload(foodInput.imageUrl, 'thumb', `images/foods/${food.id}`)
+        }
+      }
+    }
+
+    if (foodInput.thumbnailUrl) {
+      food.thumbnailUrl = {
+        url: await this.uploadService.processUpload(foodInput.thumbnailUrl, 'thumb', `images/foods/${food.id}`)
+      }
+    }
+
+    if (foodInput.nutrition) {
+      food.nutrition = {
+        ...foodInput.nutrition
+      }
+    }
+
+    return food.save()
   }
 
 }

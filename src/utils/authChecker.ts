@@ -4,8 +4,8 @@
  */
 
 import { Context } from '@Utils/context'
-import { OperatorRole } from '../types/common'
 import { AuthChecker } from 'type-graphql'
+import { OperatorRole, UserRole } from '@Types/common'
 
 
 const authChecker: AuthChecker<Context> = (
@@ -17,7 +17,8 @@ const authChecker: AuthChecker<Context> = (
 
   if (roles.find(role => role === context.user!.role)) return true
 
-  return false
+  return UserRole.operator === context.user!.role ||
+    UserRole.operator === context.user!.role
 }
 
 export { authChecker }

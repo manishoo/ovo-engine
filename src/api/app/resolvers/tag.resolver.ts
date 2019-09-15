@@ -35,6 +35,6 @@ export default class TagResolver {
     @Arg('tag') tagData: TagInput,
     @Ctx() ctx: Context,
   ) {
-    return this.tagService.create(tagData, ctx.lang)
+    return this.tagService.create(tagData)
   }
 }

@@ -147,20 +147,28 @@ export default class FoodClassService {
     const foodClass = await FoodClassModel.findById(foodClassID)
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
+    let foodClassFullImagePath: string | undefined
+    let foodClassThumbImagePath: string | undefined
+
     if (foodClassInput.imageUrl) {
+      foodClassFullImagePath = await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/food-classes/${foodClassInput.slug}`)
       foodClass.imageUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/foods/${foodClassInput.slug}`)
+        url: foodClassFullImagePath,
       }
       if (!foodClassInput.thumbnailUrl) {
+        foodClassThumbImagePath = await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
         foodClass.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+          url: foodClassThumbImagePath
         }
       }
     }
 
     if (foodClassInput.thumbnailUrl) {
+      if (!foodClassThumbImagePath) {
+        foodClassThumbImagePath = await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
+      }
       foodClass.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+        url: foodClassThumbImagePath
       }
     }
 
@@ -170,7 +178,35 @@ export default class FoodClassService {
     foodClass.slug = foodClassInput.slug
     foodClass.defaultFood = mongoose.Types.ObjectId(foodClassInput.defaultFood)
 
-    return foodClass.save()
+    const savedFoodClass = await foodClass.save()
+
+    /**
+     * Replace the images of this food class' relative foods
+     * with the uploaded image if any
+     * */
+    if (foodClassInput.imageUrl) {
+      const foodClassFoods = await FoodModel.find({foodClass: savedFoodClass._id})
+
+      Promise.all(foodClassFoods.map(async food => {
+        if (food.thumbnailUrl && food.thumbnailUrl.source === 'sameAsFoodClass' && foodClassThumbImagePath) {
+          food.thumbnailUrl = {
+            source: 'sameAsFoodClass',
+            url: foodClassThumbImagePath,
+          }
+        }
+
+        if (food.imageUrl && food.imageUrl.source === 'sameAsFoodClass' && foodClassFullImagePath) {
+          food.imageUrl = {
+            source: 'sameAsFoodClass',
+            url: foodClassFullImagePath,
+          }
+        }
+
+        await food.save()
+      }))
+    }
+
+    return savedFoodClass
   }
 
   async deleteFoodClass(foodClassID: string): Promise<String> {
@@ -197,18 +233,18 @@ export default class FoodClassService {
 
     if (foodClassInput.imageUrl) {
       foodClass.imageUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/foods/${foodClassInput.slug}`)
+        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/food-classes/${foodClassInput.slug}`)
       }
       if (!foodClassInput.thumbnailUrl) {
         foodClass.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
         }
       }
     }
 
     if (foodClassInput.thumbnailUrl) {
       foodClass.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/foods/${foodClassInput.slug}`)
+        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
       }
     }
 

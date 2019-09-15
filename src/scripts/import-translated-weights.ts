@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodModel } from '../src/models/food.model'
-import { LanguageCode, Translation } from '../src/types/common'
+import { FoodModel } from '@Models/food.model'
+import { LanguageCode, Translation } from '@Types/common'
 import weightTokens from './weight-unique-tokens-fa.json'
 
 

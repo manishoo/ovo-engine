@@ -3,8 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import Errors from '@Utils/errors'
+import { ValidationError } from 'class-validator'
 import { MiddlewareFn } from 'type-graphql'
-import Errors from '@Utils/errors';
 
 
 export const ErrorInterceptor: MiddlewareFn<any> = async ({ context, info }, next) => {
@@ -13,7 +14,11 @@ export const ErrorInterceptor: MiddlewareFn<any> = async ({ context, info }, nex
   } catch (err) {
     // TODO something
     if (err.validationErrors) {
-      throw new Errors.Validation('Invalid input provided')
+      let userInputErrors: { [k: string]: string } = {}
+      err.validationErrors.map((validationError: ValidationError) => {
+        userInputErrors[validationError.property] = validationError.constraints[Object.keys(validationError.constraints)[0]]
+      })
+      throw new Errors.UserInput('Invalid input provided', userInputErrors)
     }
 
     // rethrow the error
