@@ -97,8 +97,6 @@ export default async function main(userPassword: string) {
         text: [{ text: s, locale: LanguageCode.fa, verified: true }],
         step: i + 1,
       })),
-      // reviews: '',
-      // likesCount: '',
       difficulty,
       author: user.user._id,
       description: [],
@@ -107,7 +105,7 @@ export default async function main(userPassword: string) {
         cookTime: persianJs(rec.cookTime).persianNumber().toString(),
         totalTime: Number(persianJs(rec.prepTime).persianNumber().toString()) + Number(persianJs(rec.cookTime).persianNumber().toString()),
       },
-      // nutrition: '',
+      // nutrition: '', // TODO
       origin: {
         source: 'sarashpazpapion.com',
         sourceUrl: 'https://sarashpazpapion.com',
@@ -115,9 +113,6 @@ export default async function main(userPassword: string) {
       },
       tags: tags.map((t: any) => t._id),
       languages: [LanguageCode.fa],
-      // createdAt: '',
-      // updatedAt: '',
-      // userLikedRecipe: '',
       likes,
       ingredients: rec.ingredients.map((ingredient: any) => {
         let amountDescription: string | undefined
@@ -154,7 +149,6 @@ export default async function main(userPassword: string) {
 
         return {
           amount,
-          // amountDescription,
           customUnit,
           name: [{ text: ingredient.name, locale: LanguageCode.fa, verified: true }],
         } as Ingredient
