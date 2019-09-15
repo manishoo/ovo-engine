@@ -19,4 +19,3 @@ export default async function main(username: string, password: string) {
 	await admin.save()
 }
 
-// main(argv.u || 'admin', String(argv.p || '0000'))
