@@ -3,27 +3,26 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import mongoose from 'mongoose'
-// @ts-ignore
-import persianJs from 'persianjs'
+import { RecipeModel } from '@Models/recipe.model'
+import { TagModel } from '@Models/tag.model'
+import TagService from '@Services/tag/tag.service'
+import UserService from '@Services/user/user.service'
+import { LanguageCode } from '@Types/common'
+import { Ingredient, Recipe, RecipeDifficulty } from '@Types/recipe'
+import { TagType } from '@Types/tag'
 import shortid from 'shortid'
 import { Container } from 'typedi'
-import { RecipeModel } from '../src/models/recipe.model'
-import { TagModel } from '../src/models/tag.model'
-import TagService from '../src/services/tag/tag.service'
-import UserService from '../src/services/user/user.service'
-import { LanguageCode } from '../src/types/common'
-import { Ingredient, Recipe, RecipeDifficulty } from '../src/types/recipe'
-import { TagType } from '../src/types/tag'
 
+
+const persianJs = require('persianjs')
 
 const tagService = Container.get(TagService)
 const userService = Container.get(UserService)
 
 const slug = require('slug')
 
-const r1: any[] = require(process.env.RECIPES_1 || './recipes(1-5000).json')
-const r2: any[] = require(process.env.RECIPES_2 || './recipes(5001-20000).json')
+const r1: any[] = require(process.env.RECIPES_1 || '/Users/mani/Desktop/recipes/recipes(1-5000).json') // './recipes(1-5000).json'
+const r2: any[] = require(process.env.RECIPES_2 || '/Users/mani/Desktop/recipes/recipes(5001-20000).json') // './recipes(5001-20000).json'
 
 export default async function main(userPassword: string) {
   const recipes: any[] = [...r1, ...r2]

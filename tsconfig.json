@@ -54,8 +54,5 @@
   },
   "include": [
     "src"
-  ],
-  "exclude": [
-    "src/scripts"
   ]
 }
