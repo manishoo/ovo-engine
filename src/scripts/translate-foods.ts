@@ -4,11 +4,11 @@
  */
 
 import { Translate } from '@google-cloud/translate'
+import { FoodClassModel } from '@Models/food-class.model'
+import { FoodGroupModel } from '@Models/food-group.model'
+import { FoodModel } from '@Models/food.model'
+import { LanguageCode, Translation } from '@Types/common'
 import fs from 'fs'
-import { FoodClassModel } from '../src/models/food-class.model'
-import { FoodGroupModel } from '../src/models/food-group.model'
-import { FoodModel } from '../src/models/food.model'
-import { LanguageCode, Translation } from '../src/types/common'
 import uni from './food-unique-tokens-fa.json'
 
 

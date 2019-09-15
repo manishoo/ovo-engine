@@ -1,6 +1,7 @@
-import { FoodModel, FoodSchema } from '../src/models/food.model'
-import { Nutrition } from '../src/types/food'
+import { FoodModel, FoodSchema } from '@Models/food.model'
+import { Nutrition } from '@Types/food'
 import { InstanceType } from 'typegoose'
+
 
 function getCalories(content: any, nutrition: Nutrition) {
   if (content.origContentName.toString() === 'Energy') {

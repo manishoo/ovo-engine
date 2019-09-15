@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodClassModel } from '../src/models/food-class.model'
-import { FoodModel } from '../src/models/food.model'
+import { FoodClassModel } from '@Models/food-class.model'
+import { FoodModel } from '@Models/food.model'
 
 
 export default async function main() {

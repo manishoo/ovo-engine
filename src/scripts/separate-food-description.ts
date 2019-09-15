@@ -1,6 +1,6 @@
+import { FoodModel, FoodSchema } from '@Models/food.model'
+import { LanguageCode, Translation } from '@Types/common'
 import { InstanceType } from 'typegoose'
-import { FoodModel, FoodSchema } from '../src/models/food.model'
-import { LanguageCode, Translation } from '../src/types/common'
 
 
 async function separateDescription(food: InstanceType<FoodSchema>) {

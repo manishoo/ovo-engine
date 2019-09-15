@@ -1,5 +1,5 @@
-import { FoodModel, FoodSchema } from '../src/models/food.model'
 import { InstanceType } from 'typegoose'
+import { FoodModel, FoodSchema } from '@Models/food.model'
 
 
 async function convertCalorieUnit(food: InstanceType<FoodSchema>) {
