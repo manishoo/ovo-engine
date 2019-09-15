@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LanguageCode, TranslationInput, Translation } from '@Types/common'
-import { Types } from 'mongoose'
-import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
+import { Translation, TranslationInput } from '@Types/common'
 import { ArrayNotEmpty } from 'class-validator'
+import { Types } from 'mongoose'
+import { Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
 export enum TagType {
@@ -16,6 +16,7 @@ export enum TagType {
   recipe = 'recipe',
   ingredient = 'ingredient',
   occasion = 'occasion',
+  imported = 'imported',
   other = 'other',
 }
 

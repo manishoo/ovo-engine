@@ -7,7 +7,7 @@ import { FoodClassModel } from '../src/models/food-class.model'
 import { FoodModel } from '../src/models/food.model'
 
 
-async function main() {
+export default async function main() {
   const foodClasses = await FoodClassModel.find()
 
   await Promise.all(foodClasses.map(async fc => {
@@ -28,5 +28,3 @@ async function main() {
   }))
 }
 
-main()
-  .then(() => process.exit(0))

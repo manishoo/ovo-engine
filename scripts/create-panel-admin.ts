@@ -10,14 +10,13 @@ import { OperatorRole } from '../src/types/common'
 
 const argv = require('minimist')(process.argv.slice(2))
 
-async function main() {
+export default async function main(username: string, password: string) {
 	const admin = new OperatorModel({
-		username: String(argv.u || 'admin'),
-		persistedPassword: await generateHashPassword(String(argv.p || '0000')),
+		username,
+		persistedPassword: await generateHashPassword(password),
 		role: OperatorRole.admin
 	})
 	await admin.save()
 }
 
-main()
-	.then(() => process.exit(0))
+// main(argv.u || 'admin', String(argv.p || '0000'))

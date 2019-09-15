@@ -87,8 +87,8 @@ export class Ingredient {
   @Field(type => [Translation], { nullable: true })
   name?: Translation[]
 
-  @Field()
-  amount: number
+  @Field({ nullable: true })
+  amount?: number
 
   @Field({ nullable: true })
   customUnit?: string

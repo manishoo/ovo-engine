@@ -11,22 +11,32 @@ import { Container } from 'typedi'
 import { RecipeModel } from '../src/models/recipe.model'
 import { TagModel } from '../src/models/tag.model'
 import TagService from '../src/services/tag/tag.service'
+import UserService from '../src/services/user/user.service'
 import { LanguageCode } from '../src/types/common'
-import { Recipe, RecipeDifficulty } from '../src/types/recipe'
+import { Ingredient, Recipe, RecipeDifficulty } from '../src/types/recipe'
 import { TagType } from '../src/types/tag'
 
 
 const tagService = Container.get(TagService)
+const userService = Container.get(UserService)
 
 const slug = require('slug')
 
-const r1: any[] = require(process.env.RECIPES_1 || './recipes(1-5000).json') // './recipes(1-5000).json'
-const r2: any[] = require(process.env.RECIPES_2 || './recipes(5001-20000).json') // './recipes(5001-20000).json'
+const r1: any[] = require(process.env.RECIPES_1 || '/Users/mani/Desktop/recipes/recipes(1-5000).json') // './recipes(1-5000).json'
+const r2: any[] = require(process.env.RECIPES_2 || '/Users/mani/Desktop/recipes/recipes(5001-20000).json') // './recipes(5001-20000).json'
 
-async function main() {
+export default async function main(userPassword: string) {
   const recipes: any[] = [...r1, ...r2]
 
   await TagModel.deleteMany({})
+  await RecipeModel.deleteMany({})
+  const user = await userService.register({
+    username: 'sarashpazpapion',
+    email: 'sarashpazpapion@gmail.com',
+    firstName: 'Sarashpaz',
+    lastName: 'Papion',
+    password: userPassword,
+  })
 
   for (let rec of recipes) {
     const slugAddedId = shortid.generate()
@@ -36,14 +46,15 @@ async function main() {
      * Create tags
      * */
     const tags = await Promise.all(rec.tags.map(async (tag: any) => {
-      const foundTag = await TagModel.findOne({ slug: tag })
+      const sl = `sarashpazpapion-${slug(tag)}`
+      const foundTag = await TagModel.findOne({ slug: sl })
       if (foundTag) return foundTag
 
       return tagService.create({
-        // info: '',
-        slug: tag,
+        info: [{ text: 'imported from sarashpazpapion', locale: LanguageCode.en, verified: true }],
+        slug: sl,
         title: [{ text: tag, locale: LanguageCode.fa, verified: true }],
-        type: TagType.other,
+        type: TagType.imported,
       })
     }))
 
@@ -68,7 +79,7 @@ async function main() {
      * Likes
      * */
     const stringLikes = persianJs(rec.likes).persianNumber().toString()
-    const likes = new Array(parseFloat(stringLikes) * (stringLikes.includes('k') ? 1000 : 1))
+    const likes = new Array(Math.floor(parseFloat(stringLikes) * (stringLikes.includes('k') ? 1000 : 1)))
 
     await RecipeModel.create({
       title: [{ text: rec.title, locale: LanguageCode.fa, verified: true }],
@@ -89,7 +100,7 @@ async function main() {
       // reviews: '',
       // likesCount: '',
       difficulty,
-      author: mongoose.Types.ObjectId('5d7a220cb875fb99497a8de0'),
+      author: user.user._id,
       description: [],
       timing: {
         prepTime: persianJs(rec.prepTime).persianNumber().toString(),
@@ -100,7 +111,7 @@ async function main() {
       origin: {
         source: 'sarashpazpapion.com',
         sourceUrl: 'https://sarashpazpapion.com',
-        url: '/recipe/12/%D8%AE%D9%88%D8%B1%D8%B4-%D8%A8%D9%87-%D9%82%DB%8C%D9%85%D9%87',
+        url: rec.path,
       },
       tags: tags.map((t: any) => t._id),
       languages: [LanguageCode.fa],
@@ -109,16 +120,46 @@ async function main() {
       // userLikedRecipe: '',
       likes,
       ingredients: rec.ingredients.map((ingredient: any) => {
-        return {
-          amount: 1,
-          name: [{ text: ingredient.name, locale: LanguageCode.fa, verified: true }],
+        let amountDescription: string | undefined
+        let amount: number | undefined
+
+        const customUnit = (persianJs(ingredient.quantity).persianNumber().toString() as string).replace(/[0-9]*(\/.)?(-.)?(\..)? /, (substring => {
+          amountDescription = substring.trim() ? persianJs(substring.trim()).persianNumber().toString() : undefined
+          return ''
+        }))
+
+        if (amountDescription) {
+          if (amountDescription.includes('-')) {
+            amountDescription.replace(/[0-9]/, (substring => {
+              amount = Number(substring.trim())
+              return substring
+            }))
+          } else if (amountDescription && amountDescription.includes('/')) {
+            let s = amountDescription.trim()
+            if (!/[0-9]/.test(s[0])) {
+              s = `0${s}`
+            }
+
+            if (!Number.isNaN(Number(Number(eval(s)).toFixed(2)))) {
+              amount = Number(Number(eval(s)).toFixed(2))
+            }
+          } else if (amountDescription && amountDescription.includes('.')) {
+            amount = eval(amountDescription.trim())
+          } else {
+            if (!Number.isNaN(Number(amountDescription))) {
+              amount = Number(amountDescription)
+            }
+          }
         }
+
+        return {
+          amount,
+          // amountDescription,
+          customUnit,
+          name: [{ text: ingredient.name, locale: LanguageCode.fa, verified: true }],
+        } as Ingredient
       }),
     } as Partial<Recipe>)
     process.stdout.write('.')
   }
 }
-
-main()
-  .then(() => process.exit(0))
-  .catch(e => console.error(e))
