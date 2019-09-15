@@ -4,7 +4,7 @@
  */
 
 import { TagModel } from '@Models/tag.model'
-import { Tag, TagInput } from '@Types/tag'
+import { Tag, TagInput, TagType } from '@Types/tag'
 import Errors from '@Utils/errors'
 import { Service } from 'typedi'
 import shortid = require('shortid')
@@ -14,7 +14,9 @@ import slug = require('slug')
 @Service()
 export default class TagService {
   async list(): Promise<Tag[]> {
-    return TagModel.find()
+    return TagModel.find({
+      type: { $ne: TagType.imported }
+    })
   }
 
   async create(data: TagInput): Promise<Tag> {
