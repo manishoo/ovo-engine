@@ -22,8 +22,8 @@ const userService = Container.get(UserService)
 
 const slug = require('slug')
 
-const r1: any[] = require(process.env.RECIPES_1 || '/Users/mani/Desktop/recipes/recipes(1-5000).json') // './recipes(1-5000).json'
-const r2: any[] = require(process.env.RECIPES_2 || '/Users/mani/Desktop/recipes/recipes(5001-20000).json') // './recipes(5001-20000).json'
+const r1: any[] = require(process.env.RECIPES_1 || './recipes(1-5000).json')
+const r2: any[] = require(process.env.RECIPES_2 || './recipes(5001-20000).json')
 
 export default async function main(userPassword: string) {
   const recipes: any[] = [...r1, ...r2]
