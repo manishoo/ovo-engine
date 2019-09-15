@@ -7,8 +7,9 @@ export function calculateTotalNutrition(ingredients: Ingredient[]): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
   ingredients.map(ingredient => {
-    function calc(food: Food, fieldName: string) {
+    if (!ingredient.amount) return
 
+    function calc(food: Food, fieldName: string) {
       if (food.nutrition[fieldName]) {
         let baseNutritionAmount = 0
         if (totalNutrition[fieldName]) {
@@ -16,7 +17,7 @@ export function calculateTotalNutrition(ingredients: Ingredient[]): Nutrition {
         }
 
         totalNutrition[fieldName] = {
-          amount: baseNutritionAmount + (food.nutrition[fieldName]!.amount / 100 * ingredient.amount),
+          amount: baseNutritionAmount + (food.nutrition[fieldName]!.amount / 100 * ingredient.amount!),
           unit: food.nutrition[fieldName]!.unit
         }
       }
