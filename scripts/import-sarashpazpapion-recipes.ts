@@ -135,8 +135,12 @@ export default async function main(userPassword: string) {
               s = `0${s}`
             }
 
-            if (!Number.isNaN(Number(Number(eval(s)).toFixed(2)))) {
-              amount = Number(Number(eval(s)).toFixed(2))
+            try {
+              if (!Number.isNaN(Number(Number(eval(s)).toFixed(2)))) {
+                amount = Number(Number(eval(s)).toFixed(2))
+              }
+            } catch (e) {
+              //
             }
           } else if (amountDescription && amountDescription.includes('.')) {
             amount = eval(amountDescription.trim())
