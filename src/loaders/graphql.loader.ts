@@ -21,7 +21,6 @@ export default async ({ app, resolverPath, context, authChecker, platformPath }:
    * Configure main app graphql server
    * */
   const graphQLAppServer = new ApolloServer({
-    // @ts-ignore
     schema: await buildSchema({
       authChecker,
       resolvers: [
@@ -32,7 +31,7 @@ export default async ({ app, resolverPath, context, authChecker, platformPath }:
       globalMiddlewares: [ErrorInterceptor],
       dateScalarMode: 'isoDate',
       scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }]
-    }).catch(e => console.error(e)),
+    }),
     context,
     playground: process.env.NODE_ENV === 'development',
     uploads: {
