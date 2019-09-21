@@ -42,7 +42,7 @@
     "sequelize": "^4.42.0",
     "shortid": "^2.2.14",
     "slug": "^1.1.0",
-    "type-graphql": "^0.17.4",
+    "type-graphql": "^0.17.5",
     "typedi": "^0.8.0",
     "typegoose": "^5.9.0",
     "uuid": "^3.3.2",

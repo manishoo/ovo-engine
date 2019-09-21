@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { UserMeal } from '@Types/eating'
+import { DayMeal } from '@Types/calendar'
 import { Field, ObjectType } from 'type-graphql'
 import { prop } from 'typegoose'
 
@@ -27,7 +27,7 @@ export class Event {
   @Field()
   type: 'meal' | 'exercise'
 
-  @Field(type => UserMeal, { nullable: true })
+  @Field(type => DayMeal, { nullable: true })
   @prop()
-  meal?: UserMeal
+  meal?: DayMeal
 }

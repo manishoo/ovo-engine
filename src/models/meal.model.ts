@@ -1,10 +1,10 @@
 /*
- * dish.model.ts
+ * meal.model.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { Dish, DishItem } from '@Types/dish'
+import { Meal, MealItem } from '@Types/meal'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Ref, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model'
@@ -12,7 +12,7 @@ import { Author } from '@Types/user'
 import { Nutrition } from '@Types/food'
 
 
-export interface DishSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface MealSchema extends SoftDeleteModel<SoftDeleteDocument> {
 }
 
 @plugin(mongooseDelete, {
@@ -20,24 +20,24 @@ export interface DishSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedBy: true,
   overrideMethods: true,
 })
-export class DishSchema extends Typegoose implements Dish {
+export class MealSchema extends Typegoose implements Meal {
   readonly id?: string
   @prop()
   name?: string
   @prop()
   description?: string
   @prop()
-  items: DishItem[]
+  items: MealItem[]
   @prop()
   nutrition?: Nutrition
   @prop({ ref: UserSchema })
   author: Ref<Author>
 }
 
-export const DishModel = new DishSchema().getModelForClass(DishSchema, {
+export const MealModel = new MealSchema().getModelForClass(MealSchema, {
   existingMongoose: mongoose,
   schemaOptions: {
-    collection: 'dishes',
+    collection: 'meals',
     timestamps: true,
     emitIndexErrors: true,
     validateBeforeSave: true,

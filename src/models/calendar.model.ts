@@ -1,10 +1,8 @@
-
+import { Day, DayMeal } from '@Types/calendar'
+import mongoose from 'mongoose'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Ref, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model'
-import { Day } from '@Types/calendar'
-import mongoose from 'mongoose'
-import { Meal } from '@Types/eating';
 
 
 export interface DaySchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -23,7 +21,7 @@ export class DaySchema extends Typegoose implements Day {
   user: Ref<UserSchema>
 
   @prop()
-  meals: Meal[]
+  meals: DayMeal[]
 
   @prop()
   createdAt: Date
