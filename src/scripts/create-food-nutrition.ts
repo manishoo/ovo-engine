@@ -1,7 +1,5 @@
-import { FoodModel, FoodSchema } from '@Models/food.model'
+import { FoodModel } from '@Models/food.model'
 import { FoodContent, Nutrition } from '@Types/food'
-import { InstanceType } from 'typegoose'
-
 
 /**
  * Nutrition Fields
@@ -389,22 +387,18 @@ function convertUnit(content: FoodContent): FoodContent {
   }
 }
 
-function createFoodNutritionObject(food: InstanceType<FoodSchema>): InstanceType<FoodSchema> {
+export function createFoodNutritionFromContents(contents: FoodContent[]): Nutrition {
   let nutrition: Partial<Nutrition> = {}
 
-  if (food.contents) {
-    food.contents.map(content => {
-      NUTRITION_ARRAY.map(({ name, field }) => {
-        if (field) {
-          attachContentToNutrition(convertUnit(content), nutrition, name, field)
-        }
-      })
+  contents.map(content => {
+    NUTRITION_ARRAY.map(({ name, field }) => {
+      if (field) {
+        attachContentToNutrition(convertUnit(content), nutrition, name, field)
+      }
     })
-  }
+  })
 
-  food.nutrition = nutrition
-
-  return food
+  return nutrition
 }
 
 export default async function main() {
@@ -414,8 +408,7 @@ export default async function main() {
 
   if (foods) {
     await Promise.all(foods.map(async food => {
-
-      food = createFoodNutritionObject(food)
+      food.nutrition = createFoodNutritionFromContents(food.contents)
       await food.save()
     }))
   }
