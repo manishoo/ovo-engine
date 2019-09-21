@@ -173,6 +173,8 @@ async function migrateFoodClassesAndFoodGroups() {
 }
 
 async function migrateContents() {
+  await mongoContentModel.remove({})
+
   /**
    * Nutrient Migration
    * */
@@ -193,7 +195,6 @@ async function migrateContents() {
    * */
   {
     console.log('Migrating Compound...')
-    await mongoContentModel.remove({})
     const all = await foodbModels.compounds.findAll()
     const arrays = []
     const size = 1000
@@ -283,11 +284,12 @@ async function migrateFoods() {
             amount: Number(foodbContent.origContent),
             citation: foodbContent.citation,
             citationType: foodbContent.citationType,
-            origContentName: content.getName(LanguageCode.en),
+            origContentName: foodbContent.origSourceName,
             origContentType: content.type,
             standardContent: Number(foodbContent.standardContent),
             unit: foodbContent.origUnit,
             content: content._id,
+            origId: foodbContent.sourceId,
           } as FoodContent
         }),
       }

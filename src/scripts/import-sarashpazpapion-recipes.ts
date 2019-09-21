@@ -100,8 +100,8 @@ export default async function main(userPassword: string) {
       author: user.user._id,
       description: [],
       timing: {
-        prepTime: persianJs(rec.prepTime).persianNumber().toString(),
-        cookTime: persianJs(rec.cookTime).persianNumber().toString(),
+        prepTime: Number(persianJs(rec.prepTime).persianNumber().toString()),
+        cookTime: Number(persianJs(rec.cookTime).persianNumber().toString()),
         totalTime: Number(persianJs(rec.prepTime).persianNumber().toString()) + Number(persianJs(rec.cookTime).persianNumber().toString()),
       },
       // nutrition: '', // TODO
