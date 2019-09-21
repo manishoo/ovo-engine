@@ -7,7 +7,6 @@
 
 import attachFoodImagesFromFoodClasses from './attach-food-images-from-food-classes'
 import attachFooDBImagesToDb from './attach-foodb-images-to-db'
-import convertCalorieUnit from './convert-calorie-unit'
 import createFoodNutrition from './create-food-nutrition'
 import createPanelAdmin from './create-panel-admin'
 import deleteFoodDuplicates from './delete-food-duplicates'
@@ -47,9 +46,6 @@ async function main() {
 
   console.log('Running createFoodNutrition...')
   await createFoodNutrition()
-
-  console.log('Running convertCalorieUnit...')
-  await convertCalorieUnit()
 
   console.log('Running createPanelAdmin...')
   await createPanelAdmin('admin', String(argv.p || 'admin'))
