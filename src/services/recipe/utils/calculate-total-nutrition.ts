@@ -44,12 +44,13 @@ export function calculateTotalNutrition(ingredients: Ingredient[]): Nutrition {
          * If custom gramWeight was provided, use it, otherwise use
          * weight.gramWeight
          * */
-        let gramPerWeight = 0
+        let gramPerWeight = 1
         let weight = ingredient.weight as Weight
-        if (!ingredient.weight && ingredient.gramWeight) {
-          gramPerWeight = ingredient.gramWeight
-        } else {
+
+        if (ingredient.weight) {
           gramPerWeight = weight.gramWeight / weight.amount
+        } else if (ingredient.gramWeight) {
+          gramPerWeight = ingredient.gramWeight
         }
 
         let baseCal = 0
