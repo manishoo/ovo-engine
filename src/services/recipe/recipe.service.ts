@@ -18,7 +18,7 @@ import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
-import { calculateTotalNutrition } from './utils/calculate-total-nutrition'
+import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
 
 
 @Service()
@@ -182,7 +182,7 @@ export default class RecipeService {
 
       recipe.tags = tags
     }
-    recipe.nutrition = calculateTotalNutrition(recipe.ingredients!)
+    recipe.nutrition = calculateRecipeNutrition(recipe.ingredients!)
 
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe.author = author
@@ -290,7 +290,7 @@ export default class RecipeService {
 
       recipe.tags = tags
     }
-    recipe.nutrition = calculateTotalNutrition(recipe.ingredients)
+    recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
 
     return transformRecipe(await recipe.save(), user && user.id)
   }

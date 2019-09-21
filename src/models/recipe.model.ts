@@ -47,8 +47,8 @@ export class RecipeSchema extends Typegoose implements Recipe {
   description?: Translation[]
   @prop()
   timing: RecipeTiming
-  @prop()
-  nutrition?: Nutrition
+  @prop({ default: {} })
+  nutrition: Nutrition
   @prop()
   difficulty?: RecipeDifficulty
   @prop()
