@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { UserMeal } from '@Types/eating'
+import { DayMeal } from '@Types/calendar'
 import mongoose from 'mongoose'
 import { Field, ObjectType } from 'type-graphql'
 
@@ -22,8 +22,8 @@ export enum WEEKDAYS {
 export class Day {
   @Field()
   dayName: WEEKDAYS
-  @Field(type => [UserMeal])
-  meals: UserMeal[]
+  @Field(type => [DayMeal])
+  meals: DayMeal[]
 }
 
 @ObjectType()
