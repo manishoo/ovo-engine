@@ -238,7 +238,7 @@ export class Recipe {
   timing: RecipeTiming
 
   @Field(type => Nutrition, { nullable: true })
-  nutrition?: Nutrition
+  nutrition: Nutrition
 
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
