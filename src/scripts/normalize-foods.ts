@@ -30,11 +30,11 @@ async function main() {
   console.log('Running importTranslatedWeights...')
   await importTranslatedWeights()
 
-  console.log('Running attachFoodImagesFromFoodClasses...')
-  await attachFoodImagesFromFoodClasses()
-
   console.log('Running attachFooDBImagesToDb...')
   await attachFooDBImagesToDb()
+
+  console.log('Running attachFoodImagesFromFoodClasses...')
+  await attachFoodImagesFromFoodClasses()
 
   console.log('Running deleteFoodDuplicates...')
   await deleteFoodDuplicates()

@@ -5,6 +5,7 @@
 
 import { FoodClassModel } from '@Models/food-class.model'
 import config from '../config'
+import attachFoodImagesFromFoodClasses from './attach-food-images-from-food-classes'
 
 
 const argv = require('minimist')(process.argv.slice(2))
@@ -53,7 +54,10 @@ export default async function main() {
 if (argv.run) {
   main()
     .then(() => {
-      console.log('FINISHED')
-      process.exit(0)
+      attachFoodImagesFromFoodClasses()
+        .then(() => {
+          console.log('FINISHED')
+          process.exit(0)
+        })
     })
 }
