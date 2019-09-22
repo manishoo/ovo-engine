@@ -52,10 +52,10 @@ async function main() {
   await convertCalorieUnit()
 
   console.log('Running createPanelAdmin...')
-  await createPanelAdmin('admin', String(argv.p || 'admin'))
+  await createPanelAdmin('admin', String(argv.adminPass || 'adminpass'))
 
   console.log('Running importSarashpazpapionRecipes...')
-  await importSarashpazpapionRecipes('i]6s-v:IJW7f')
+  await importSarashpazpapionRecipes(argv.sarashpazpapionPass || 'sarashpazpapionpass')
 
   process.exit(0)
 }

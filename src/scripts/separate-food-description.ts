@@ -28,7 +28,7 @@ async function separateDescription(food: InstanceType<FoodSchema>) {
       locale: foodName.locale
     })
     desc.push({
-      text: description.trim(),
+      text: description.trim().replace('  ', ' '),
       verified: foodName.verified,
       locale: foodName.locale,
     })
