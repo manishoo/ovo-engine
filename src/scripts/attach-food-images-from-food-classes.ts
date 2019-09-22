@@ -14,13 +14,18 @@ export default async function main() {
     const foods = await FoodModel.find({ foodClass: fc._id })
 
     await Promise.all(foods.map(async food => {
-      food.imageUrl = {
-        source: 'sameAsFoodClass',
-        url: `http://foodb.ca/system/foods/pictures/${fc.origId}/full/${fc.origId}.png`
+      if (fc.imageUrl) {
+        food.imageUrl = {
+          source: 'sameAsFoodClass',
+          url: fc.imageUrl.url
+        }
       }
-      food.thumbnailUrl = {
-        source: 'sameAsFoodClass',
-        url: `http://foodb.ca/system/foods/pictures/${fc.origId}/thumb/${fc.origId}.png`
+
+      if (fc.thumbnailUrl) {
+        food.thumbnailUrl = {
+          source: 'sameAsFoodClass',
+          url: fc.thumbnailUrl.url
+        }
       }
 
       return food.save()

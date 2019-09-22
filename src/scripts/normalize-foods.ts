@@ -7,7 +7,6 @@
 
 import attachFoodImagesFromFoodClasses from './attach-food-images-from-food-classes'
 import attachFooDBImagesToDb from './attach-foodb-images-to-db'
-import convertCalorieUnit from './convert-calorie-unit'
 import createFoodNutrition from './create-food-nutrition'
 import createPanelAdmin from './create-panel-admin'
 import deleteFoodDuplicates from './delete-food-duplicates'
@@ -30,11 +29,11 @@ async function main() {
   console.log('Running importTranslatedWeights...')
   await importTranslatedWeights()
 
-  console.log('Running attachFoodImagesFromFoodClasses...')
-  await attachFoodImagesFromFoodClasses()
-
   console.log('Running attachFooDBImagesToDb...')
   await attachFooDBImagesToDb()
+
+  console.log('Running attachFoodImagesFromFoodClasses...')
+  await attachFoodImagesFromFoodClasses()
 
   console.log('Running deleteFoodDuplicates...')
   await deleteFoodDuplicates()
@@ -48,14 +47,11 @@ async function main() {
   console.log('Running createFoodNutrition...')
   await createFoodNutrition()
 
-  console.log('Running convertCalorieUnit...')
-  await convertCalorieUnit()
-
   console.log('Running createPanelAdmin...')
-  await createPanelAdmin('admin', String(argv.p || 'admin'))
+  await createPanelAdmin('admin', String(argv.adminPass || 'adminpass'))
 
   console.log('Running importSarashpazpapionRecipes...')
-  await importSarashpazpapionRecipes('i]6s-v:IJW7f')
+  await importSarashpazpapionRecipes(argv.sarashpazpapionPass || 'sarashpazpapionpass')
 
   process.exit(0)
 }
