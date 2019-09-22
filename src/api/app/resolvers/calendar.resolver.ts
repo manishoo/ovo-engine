@@ -46,9 +46,8 @@ export default class CalendarResolver {
   @Query(returns => [Activity])
   async activities(
     @Ctx() ctc: Context,
-    @Arg('search', { nullable: true }) search?: string,
   ) {
-    return this.calendarService.listActivity(search)
+    return this.calendarService.listActivity()
   }
 
   @Authorized(UserRole.user)

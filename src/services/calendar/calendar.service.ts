@@ -102,13 +102,9 @@ export default class CalendarService {
     return day.save()
   }
 
-  async listActivity(nameSearchQuery?: string): Promise<Activity[]> {
+  async listActivity(): Promise<Activity[]> {
 
-    let query: any = {}
-    if (nameSearchQuery) {
-      query['activityTypeName.text'] = { $regex: nameSearchQuery }
-    }
-    const activities = await ActivityModel.find(query)
+    const activities = await ActivityModel.find()
 
     return activities
   }
