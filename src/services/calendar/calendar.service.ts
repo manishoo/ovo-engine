@@ -7,13 +7,13 @@ import { CalendarModel } from '@Models/calendar.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import MealService from '@Services/meal/meal-service'
-import { Day, ActivityListResponse } from '@Types/calendar'
+import { Day } from '@Types/calendar'
 import { DayMeal, DayMealInput } from '@Types/calendar'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { ActivityModel } from '@Models/activity.model'
-import { createPagination } from '@Utils/generate-pagination'
+import { Activity } from '@Types/activity'
 
 
 @Service()
@@ -102,23 +102,14 @@ export default class CalendarService {
     return day.save()
   }
 
-  async listActivity(page?: number, size?: number): Promise<ActivityListResponse> {
-    if (!size) {
-      size = 20
-    }
-    if (!page) {
-      page = 1
-    }
-    //TODO add query filtering
-    const activities = await ActivityModel.find()
-      .limit(size)
-      .skip(size * (page - 1))
+  async listActivity(nameSearchQuery?: string): Promise<Activity[]> {
 
-    const count = await ActivityModel.countDocuments()
-
-    return {
-      activities,
-      pagination: await createPagination(page, size, count)
+    let query: any = {}
+    if (nameSearchQuery) {
+      query['activityTypeName.text'] = { $regex: nameSearchQuery }
     }
+    const activities = await ActivityModel.find(query)
+
+    return activities
   }
 }

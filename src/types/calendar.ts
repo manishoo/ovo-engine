@@ -83,12 +83,3 @@ export class LogActivityInput {
   @Field(type => Date)
   time: Date
 }
-
-@ObjectType()
-export class ActivityListResponse {
-  @Field(type => [Activity])
-  activities: Activity[]
-
-  @Field(type => Pagination)
-  pagination: Pagination
-}

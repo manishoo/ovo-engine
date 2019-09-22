@@ -46,23 +46,22 @@ export default class CalendarResolver {
   @Query(returns => [Activity])
   async activities(
     @Ctx() ctc: Context,
-    @Arg('page', { nullable: true }) page?: number,
-    @Arg('size', { nullable: true }) size?: number,
+    @Arg('search', { nullable: true }) search?: string,
   ) {
-    return this.calendarService.listActivity(page, size)
+    return this.calendarService.listActivity(search)
   }
 
   @Authorized(UserRole.user)
   @Mutation(returns => [Day])
   async logActivities(
-    @Arg('activity') activity: LogActivityInput[],
+    @Arg('activities') activities: LogActivityInput[],
     @Ctx() ctx: Context,
   ) {
     return [{
-      duration: activity[0].duration,
-      activityType: activity[0].activityTypeName,
-      activityName: activity[0].activityName,
-      time: activity[0].time,
+      duration: activities[0].duration,
+      activityType: activities[0].activityTypeName,
+      activityName: activities[0].activityName,
+      time: activities[0].time,
       totalBurnt: 245,
     }]
   }
