@@ -5,11 +5,12 @@
 
 import CalendarService from '@Services/calendar/calendar.service'
 import { UserRole } from '@Types/common'
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver, Args } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '@Utils/context'
-import { Day } from '@Types/calendar'
+import { Day, LogActivityInput } from '@Types/calendar'
 import { DayMealInput } from '@Types/calendar'
+import { ActivityType, Activity } from '@Types/activity'
 
 
 @Service()
@@ -39,5 +40,20 @@ export default class CalendarResolver {
     @Ctx() ctx: Context,
   ) {
     return this.calendarService.logMeal(mealInput, ctx.user!.id)
+  }
+
+  @Authorized(UserRole.user)
+  @Mutation(returns => Activity)
+  async logActivity(
+    @Arg('activity') activity: LogActivityInput,
+    @Ctx() ctx: Context,
+  ) {
+    return {
+      duration: activity.duration,
+      activityType: activity.activityType,
+      activityName: activity.activityName,
+      time: activity.time,
+      totalBurnt: 245,
+    }
   }
 }

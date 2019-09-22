@@ -6,6 +6,7 @@ import { ArrayNotEmpty } from 'class-validator'
 import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
+import { Activity, ActivityType } from './activity'
 
 
 @ObjectType()
@@ -48,6 +49,12 @@ export class Day {
 
   @Field(type => [DayMeal])
   meals: DayMeal[]
+
+  @Field(type => [Activity], { nullable: true })
+  activities?: Activity[]
+
+  @Field()
+  totalBurnt?: number
 }
 
 @ObjectType()
@@ -57,4 +64,19 @@ export class CalendarResponse {
 
   @Field(type => Pagination)
   pagination: Pagination
+}
+
+@InputType()
+export class LogActivityInput {
+  @Field()
+  activityName: string
+
+  @Field()
+  duration: number
+
+  @Field(type => ActivityType)
+  activityType: ActivityType
+
+  @Field(type => Date)
+  time: Date
 }

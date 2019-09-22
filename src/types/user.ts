@@ -26,7 +26,7 @@ registerEnumType(Gender, {
   description: 'Gender'
 })
 
-export enum Activity {
+export enum ActivityLevel {
   sed = 'sed',
   light = 'light',
   mod = 'mod',
@@ -181,7 +181,7 @@ export class User extends BaseUser {
   mealPlanSettings?: MacroNutrientDistribution
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
-  activityLevel?: Activity
+  activityLevel?: ActivityLevel
   goal?: Goal
   @Field(type => [Event], { nullable: true })
   path?: Event[]

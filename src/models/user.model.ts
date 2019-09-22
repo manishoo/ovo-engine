@@ -11,7 +11,7 @@ import { PersistedPassword } from '@Types/auth'
 import { Image, Status, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import { Activity, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
 import { Length } from 'class-validator'
 import isUUID from 'is-uuid'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
@@ -113,7 +113,7 @@ export class UserSchema extends Typegoose implements User {
   @prop({ ref: Household })
   household?: Ref<Household>
   @prop()
-  activityLevel?: Activity
+  activityLevel?: ActivityLevel
   @prop()
   goal?: Goal
   @prop({ default: [] })
