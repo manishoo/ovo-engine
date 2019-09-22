@@ -10,7 +10,7 @@ import { Service } from 'typedi'
 import { Context } from '@Utils/context'
 import { Day, LogActivityInput } from '@Types/calendar'
 import { DayMealInput } from '@Types/calendar'
-import { ActivityType, Activity } from '@Types/activity'
+import { Activity } from '@Types/activity'
 
 
 @Service()
@@ -43,17 +43,27 @@ export default class CalendarResolver {
   }
 
   @Authorized(UserRole.user)
-  @Mutation(returns => Activity)
-  async logActivity(
-    @Arg('activity') activity: LogActivityInput,
+  @Query(returns => [Activity])
+  async activities(
+    @Ctx() ctc: Context,
+    @Arg('page', { nullable: true }) page?: number,
+    @Arg('size', { nullable: true }) size?: number,
+  ) {
+    return this.calendarService.listActivity(page, size)
+  }
+
+  @Authorized(UserRole.user)
+  @Mutation(returns => [Day])
+  async logActivities(
+    @Arg('activity') activity: LogActivityInput[],
     @Ctx() ctx: Context,
   ) {
-    return {
-      duration: activity.duration,
-      activityType: activity.activityType,
-      activityName: activity.activityName,
-      time: activity.time,
+    return [{
+      duration: activity[0].duration,
+      activityType: activity[0].activityTypeName,
+      activityName: activity[0].activityName,
+      time: activity[0].time,
       totalBurnt: 245,
-    }
+    }]
   }
 }

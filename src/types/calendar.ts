@@ -1,12 +1,12 @@
 import { UserSchema } from '@Models/user.model'
-import { MealType, Pagination } from '@Types/common'
+import { MealType, Pagination, Translation } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
 import { User } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
-import { Activity, ActivityType } from './activity'
+import { UserActivity, Activity } from './activity'
 
 
 @ObjectType()
@@ -50,8 +50,8 @@ export class Day {
   @Field(type => [DayMeal])
   meals: DayMeal[]
 
-  @Field(type => [Activity], { nullable: true })
-  activities?: Activity[]
+  @Field(type => [UserActivity], { nullable: true })
+  activities?: UserActivity[]
 
   @Field()
   totalBurnt?: number
@@ -74,9 +74,21 @@ export class LogActivityInput {
   @Field()
   duration: number
 
-  @Field(type => ActivityType)
-  activityType: ActivityType
+  @Field(type => [Translation])
+  activityTypeName: Translation[]
+
+  @Field()
+  burntCalories: number
 
   @Field(type => Date)
   time: Date
+}
+
+@ObjectType()
+export class ActivityListResponse {
+  @Field(type => [Activity])
+  activities: Activity[]
+
+  @Field(type => Pagination)
+  pagination: Pagination
 }

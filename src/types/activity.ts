@@ -1,22 +1,14 @@
-import { registerEnumType, ObjectType, Field } from "type-graphql"
+import { ObjectType, Field } from "type-graphql"
+import { Translation } from "@Types/common"
 
-export enum ActivityType {
-  running = 'running',
-  cycling = 'cycling',
-}
-
-registerEnumType(ActivityType, {
-  name: 'ActivityType',
-  description: 'ActivityLevel types'
-})
 
 @ObjectType()
-export class Activity {
+export class UserActivity {
   @Field()
   duration: number
 
-  @Field()
-  activityType: ActivityType
+  @Field(type => [Translation])
+  activityTypeName: Translation[]
 
   @Field()
   totalBurnt: number
@@ -26,4 +18,16 @@ export class Activity {
 
   @Field(type => Date)
   time: Date
+}
+
+@ObjectType()
+export class Activity {
+  @Field()
+  activityTypeName: Translation[]
+
+  @Field()
+  burningRate: number
+
+  @Field()
+  met: number
 }
