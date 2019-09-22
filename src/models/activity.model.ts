@@ -19,6 +19,9 @@ export class ActivitySchema extends Typegoose implements Activity {
   @prop()
   met: number
 
+  @prop()
+  icon?: string
+
   createdAt?: Date
   updatedAt?: Date
 }

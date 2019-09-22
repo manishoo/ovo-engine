@@ -18,6 +18,9 @@ export class UserActivity {
 
   @Field(type => Date)
   time: Date
+
+  @Field({ nullable: true })
+  icon?: string
 }
 
 @ObjectType()
