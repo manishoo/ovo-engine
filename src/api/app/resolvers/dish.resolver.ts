@@ -1,69 +1,70 @@
 /*
- * dish.resolver.ts
+ * meal.resolver.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import DishService from '@Services/dish/dish.service'
-import { Dish, DishInput, DishListResponse, ListDishesArgs } from '@Types/dish'
-import { Arg, Authorized, Ctx, Query, Resolver, Mutation, Args } from 'type-graphql'
-import { Service } from 'typedi'
-import { Context } from '@Utils/context'
+import MealService from '@Services/meal/meal-service'
 import { UserRole } from '@Types/common'
+import { ListMealsArgs, Meal, MealInput, MealListResponse } from '@Types/meal'
+import { Context } from '@Utils/context'
+import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Service } from 'typedi'
 
 
 @Service()
 @Resolver()
-export default class DishResolver {
+export default class MealResolver {
   constructor(
     // service injection
-    private readonly dishService: DishService
+    private readonly mealService: MealService
   ) {
     // noop
   }
 
   @Authorized(UserRole.user)
-  @Mutation(returns => Dish)
-  async createDish(
-    @Arg('dish') dish: DishInput,
+  @Mutation(returns => Meal)
+  async createMeal(
+    @Arg('meal') meal: MealInput,
     @Ctx() ctx: Context,
   ) {
-    return this.dishService.create(dish, ctx.user!.id)
+    return this.mealService.create(meal, ctx.user!.id)
   }
 
   @Authorized(UserRole.user)
-  @Query(returns => DishListResponse)
-  async dishes(
-    @Args() { page, size, authorId }: ListDishesArgs,
+  @Query(returns => MealListResponse)
+  async meals(
+    @Args() { page, size, authorId }: ListMealsArgs,
     @Ctx() ctx: Context,
   ) {
-    return this.dishService.list({ page, size, authorId })
+    return this.mealService.list({ page, size, authorId })
   }
+
   @Authorized(UserRole.user)
-  @Query(returns => Dish)
-  async dish(
+  @Query(returns => Meal)
+  async meal(
     @Ctx() ctx: Context,
     @Arg('id', { nullable: true }) id?: string,
     @Arg('slug', { nullable: true }) slug?: string,
   ) {
-    return this.dishService.get(id, slug)
+    return this.mealService.get(id, slug)
   }
 
   @Authorized(UserRole.user)
-  @Mutation(returns => Dish)
-  async deleteDish(
+  @Mutation(returns => Meal)
+  async deleteMeal(
     @Arg('id') id: string,
     @Ctx() ctx: Context,
   ) {
-    return this.dishService.delete(id, ctx.user!.id)
+    return this.mealService.delete(id, ctx.user!.id)
   }
 
   @Authorized(UserRole.user)
-  @Mutation(returns => Dish)
-  async updateDish(
+  @Mutation(returns => Meal)
+  async updateMeal(
     @Arg('id') id: string,
-    @Arg('data') data: DishInput,
+    @Arg('data') data: MealInput,
     @Ctx() ctx: Context,
   ) {
-    return this.dishService.update(id, data, ctx.user!.id)
+    return this.mealService.update(id, data, ctx.user!.id)
   }
 }

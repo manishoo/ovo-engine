@@ -1,35 +1,36 @@
 /*
- * dish.ts
+ * meal.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import { Pagination } from '@Types/common'
-import { Field, InputType, ObjectType, ArgsType } from 'type-graphql'
-import { Ref } from 'typegoose'
 import { Food, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { Author } from './user'
-import { Min, Max, ArrayNotEmpty } from 'class-validator'
+import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import mongoose from 'mongoose'
+import { ArgsType, Field, InputType, ObjectType } from 'type-graphql'
+import { Ref } from 'typegoose'
+import { Author } from './user'
 import { Weight } from './weight'
 
 
-export enum DISH_ITEM_TYPES {
+export enum MealItemType {
   recipe = 'recipe',
   food = 'food',
 }
 
 @ObjectType()
-export class DishListResponse {
-  @Field(type => [Dish])
-  dishes: Dish[]
+export class MealListResponse {
+  @Field(type => [Meal])
+  meals: Meal[]
   @Field(type => Pagination)
   pagination: Pagination
 }
 
 @ObjectType()
-export class Dish {
+export class Meal {
   _id?: mongoose.Schema.Types.ObjectId
+
   @Field()
   id?: string
 
@@ -39,9 +40,9 @@ export class Dish {
   @Field({ nullable: true })
   description?: string
 
-  @Field(type => [DishItem])
+  @Field(type => [MealItem])
   @ArrayNotEmpty()
-  items: DishItem[]
+  items: MealItem[]
 
   @Field(type => Nutrition, { nullable: true })
   nutrition?: Nutrition
@@ -51,20 +52,20 @@ export class Dish {
 }
 
 @InputType()
-export class DishInput {
+export class MealInput {
   @Field({ nullable: true })
   name?: string
 
   @Field({ nullable: true })
   description?: string
 
-  @Field(type => [DishItemInput])
+  @Field(type => [MealItemInput])
   @ArrayNotEmpty()
-  items: DishItemInput[]
+  items: MealItemInput[]
 }
 
 @ObjectType()
-export class DishItem {
+export class MealItem {
   @Field()
   amount: number
 
@@ -79,7 +80,7 @@ export class DishItem {
 }
 
 @InputType()
-export class DishItemInput {
+export class MealItemInput {
   @Field()
   amount: number
 
@@ -94,7 +95,7 @@ export class DishItemInput {
 }
 
 @ArgsType()
-export class ListDishesArgs {
+export class ListMealsArgs {
   @Field({ nullable: true })
   @Min(1)
   page?: number
