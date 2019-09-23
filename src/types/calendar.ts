@@ -6,7 +6,7 @@ import { ArrayNotEmpty } from 'class-validator'
 import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { Ref } from 'typegoose'
-import { UserActivity, Activity } from './activity'
+import { UserActivity } from '@Types/activity'
 
 
 @ObjectType()
@@ -74,8 +74,8 @@ export class LogActivityInput {
   @Field()
   duration: number
 
-  @Field(type => [TranslationInput])
-  activityTypeName: TranslationInput[]
+  @Field()
+  activityId: string
 
   @Field()
   burntCalories: number

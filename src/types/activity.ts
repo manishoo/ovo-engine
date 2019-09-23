@@ -1,15 +1,32 @@
-import { ObjectType, Field } from "type-graphql"
+import { ObjectType, Field } from 'type-graphql'
 import { Translation } from "@Types/common"
 import { Ref } from 'typegoose'
+import mongoose from 'mongoose'
 
 
 @ObjectType()
-export class UserActivity {
+export class Activity {
+  _id?: mongoose.Schema.Types.ObjectId
   @Field()
-  duration: number
+  id?: string
 
   @Field(type => [Translation])
   activityTypeName: Translation[]
+
+  @Field()
+  met: number
+
+  @Field({ nullable: true })
+  icon?: string
+
+  @Field(type => ActivityGroup)
+  activityGroup: Ref<ActivityGroup>
+}
+
+@ObjectType()
+export class UserActivity extends Activity {
+  @Field()
+  duration: number
 
   @Field()
   totalBurnt: number
@@ -19,25 +36,14 @@ export class UserActivity {
 
   @Field(type => Date)
   time: Date
-
-  @Field({ nullable: true })
-  icon?: string
-}
-
-@ObjectType()
-export class Activity {
-  @Field(type => [Translation])
-  activityTypeName: Translation[]
-
-  @Field()
-  met: number
-
-  @Field(type => ActivityGroup)
-  activityGroup: Ref<ActivityGroup>
 }
 
 @ObjectType()
 export class ActivityGroup {
+  _id?: mongoose.Schema.Types.ObjectId
+  @Field()
+  id?: string
+
   @Field(type => [Translation])
   name: Translation[]
 }
