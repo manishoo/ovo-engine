@@ -12,8 +12,6 @@ import { DayMeal, DayMealInput } from '@Types/calendar'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
-import { ActivityModel } from '@Models/activity.model'
-import { Activity } from '@Types/activity'
 
 
 @Service()
@@ -100,12 +98,5 @@ export default class CalendarService {
     }
 
     return day.save()
-  }
-
-  async listActivity(): Promise<Activity[]> {
-
-    const activities = await ActivityModel.find()
-
-    return activities
   }
 }

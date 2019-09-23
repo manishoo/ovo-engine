@@ -1,5 +1,5 @@
 import { UserSchema } from '@Models/user.model'
-import { MealType, Pagination, Translation } from '@Types/common'
+import { MealType, Pagination, Translation, TranslationInput } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
 import { User } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
@@ -74,8 +74,8 @@ export class LogActivityInput {
   @Field()
   duration: number
 
-  @Field(type => [Translation])
-  activityTypeName: Translation[]
+  @Field(type => [TranslationInput])
+  activityTypeName: TranslationInput[]
 
   @Field()
   burntCalories: number

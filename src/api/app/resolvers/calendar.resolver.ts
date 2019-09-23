@@ -4,11 +4,11 @@
  */
 
 import CalendarService from '@Services/calendar/calendar.service'
-import { UserRole } from '@Types/common'
+import { UserRole, LanguageCode } from '@Types/common'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver, Args } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '@Utils/context'
-import { Day, LogActivityInput } from '@Types/calendar'
+import { Day } from '@Types/calendar'
 import { DayMealInput } from '@Types/calendar'
 import { Activity } from '@Types/activity'
 
@@ -47,21 +47,26 @@ export default class CalendarResolver {
   async activities(
     @Ctx() ctc: Context,
   ) {
-    return this.calendarService.listActivity()
-  }
-
-  @Authorized(UserRole.user)
-  @Mutation(returns => [Day])
-  async logActivities(
-    @Arg('activities') activities: LogActivityInput[],
-    @Ctx() ctx: Context,
-  ) {
     return [{
-      duration: activities[0].duration,
-      activityType: activities[0].activityTypeName,
-      activityName: activities[0].activityName,
-      time: activities[0].time,
-      totalBurnt: 245,
+      activityTypeName: [{ locale: LanguageCode.en, text: 'goshad-ish' }],
+      met: 3,
+      activityGroup: {
+        name: [{ locale: LanguageCode.en, text: 'Cycling' }]
+      }
+    },
+    {
+      activityTypeName: [{ locale: LanguageCode.en, text: 'MTB' }],
+      met: 12,
+      activityGroup: {
+        name: [{ locale: LanguageCode.en, text: 'Cycling' }]
+      }
+    },
+    {
+      activityTypeName: [{ locale: LanguageCode.en, text: 'bandari' }],
+      met: 18,
+      activityGroup: {
+        name: [{ locale: LanguageCode.en, text: 'Dancing' }]
+      }
     }]
   }
 }

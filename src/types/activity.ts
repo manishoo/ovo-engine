@@ -1,5 +1,6 @@
 import { ObjectType, Field } from "type-graphql"
 import { Translation } from "@Types/common"
+import { Ref } from 'typegoose'
 
 
 @ObjectType()
@@ -25,12 +26,18 @@ export class UserActivity {
 
 @ObjectType()
 export class Activity {
-  @Field()
+  @Field(type => [Translation])
   activityTypeName: Translation[]
 
   @Field()
-  burningRate: number
-
-  @Field()
   met: number
+
+  @Field(type => ActivityGroup)
+  activityGroup: Ref<ActivityGroup>
+}
+
+@ObjectType()
+export class ActivityGroup {
+  @Field(type => [Translation])
+  name: Translation[]
 }
