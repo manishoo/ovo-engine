@@ -5,7 +5,7 @@
 
 import UserService from '@Services/user/user.service'
 import { UserRole } from '@Types/common'
-import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, NutritionProfile, NutritionProfileInput } from '@Types/user'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
@@ -69,5 +69,26 @@ export default class UserResolver {
     @Ctx() ctx: Context,
   ) {
     return this.userService.doesUsernameExist(username)
+  }
+
+  @Authorized(UserRole.user)
+  @Mutation(returns => User)
+  async updateNutritionProfile(
+    @Arg('nutritionProfile') nutritionProfile: NutritionProfileInput,
+    @Ctx() ctx: Context,
+  ) {
+    return {
+      id: '5d6cd273eff1e93a034aeb5b',
+      username: 'kingGholam',
+      firstName: 'Gholam ali',
+      middleName: 'wait for it',
+      lastName: 'emam gholi',
+      bio: 'the king of south trashestan',
+      imageUrl: {
+        url: 'google.com'
+      },
+      email: 'emamgholi@nasa.com',
+      nutritionProfile,
+    }
   }
 }

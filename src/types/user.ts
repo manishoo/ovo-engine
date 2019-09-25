@@ -126,6 +126,54 @@ export class SocialNetworksInput {
 }
 
 @ObjectType()
+export class TargetNutrition {
+  @Field()
+  min: number
+
+  @Field()
+  max: number
+}
+
+@InputType()
+export class TargetNutritionInput {
+  @Field()
+  min: number
+
+  @Field()
+  max: number
+}
+
+@ObjectType()
+export class NutritionProfile {
+  @Field()
+  calorie: TargetNutrition
+
+  @Field()
+  protein: TargetNutrition
+
+  @Field()
+  carbs: TargetNutrition
+
+  @Field()
+  fat: TargetNutrition
+}
+
+@InputType()
+export class NutritionProfileInput {
+  @Field()
+  calorie: TargetNutritionInput
+
+  @Field()
+  protein: TargetNutritionInput
+
+  @Field()
+  carbs: TargetNutritionInput
+
+  @Field()
+  fat: TargetNutritionInput
+}
+
+@ObjectType()
 export class BaseUser {
   _id?: mongoose.Schema.Types.ObjectId
   @Field()
@@ -175,6 +223,8 @@ export class User extends BaseUser {
   bodyFat?: number
   @Field(type => Gender, { nullable: true })
   gender?: Gender
+  @Field(type => NutritionProfile, { nullable: true })
+  nutritionProfile?: NutritionProfile
   foodAllergies?: string[]
   status?: string
   meals?: MealUnit[]
