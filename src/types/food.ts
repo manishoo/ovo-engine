@@ -4,13 +4,15 @@
  */
 
 import { FoodClassSchema } from '@Models/food-class.model'
+import { FoodGroupSchema } from '@Models/food-group.model'
 import { Image, LanguageCode, NameAndId, Pagination, Translation, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
+import { FoodGroup } from '@Types/food-group'
 import { Weight, WeightInput } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
 import mongoose from 'mongoose'
 import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
-import { Ref } from 'typegoose'
+import { prop, Ref } from 'typegoose'
 
 
 @ObjectType()
@@ -596,6 +598,10 @@ export class Food {
   imageUrl?: Image
   @Field(type => Image)
   thumbnailUrl?: Image
+
+  origFoodClassName: Translation[]
+  @Field(type => FoodGroup)
+  foodGroup: FoodGroupSchema
 }
 
 @InputType()

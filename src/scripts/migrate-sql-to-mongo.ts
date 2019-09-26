@@ -12,7 +12,7 @@ import { FoodGroupModel as mongoFoodGroupModel } from '@Models/food-group.model'
 import { FoodModel as mongoFoodModel } from '@Models/food.model'
 import { LanguageCode, Translation } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
-import { FoodContent } from '@Types/food'
+import { Food, FoodContent } from '@Types/food'
 import { FoodClass, FoodClassTaxonomy } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
 import mongoose from 'mongoose'
@@ -264,9 +264,16 @@ async function migrateFoods() {
         return ((i.origFoodId === caloNewfoodVariety.origFoodId) && (i.citation === citation))
       })
 
+      const foodClass = foodClasses.find(i => i.origId === caloNewfoodVariety.foodId)
+      if (!foodClass) throw new Error('food without foodclass!')
+
       return {
         name: createTranslations(caloNewfoodVariety.origFoodName),
-        foodClass: foodClasses.find(i => i.origId === caloNewfoodVariety.foodId)!._id,
+        foodClass: foodClass._id,
+
+        origFoodClassName: foodClass.name,
+        origFoodGroup: foodClass.foodGroup,
+
         origDb: caloNewfoodVariety.origDb,
         origFoodId: caloNewfoodVariety.origFoodId,
         weights: caloNewWeights.filter(i => i.foodVarietyId === caloNewfoodVariety.id).map(w => ({
