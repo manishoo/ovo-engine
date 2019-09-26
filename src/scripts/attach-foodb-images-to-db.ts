@@ -17,7 +17,7 @@ export default async function main() {
   const errors: any[] = []
 
   for (let fc of foodClasses) {
-    const basePath = `${config.uploadUrl}/images/food-classes/${fc.slug}`
+    const basePath = `${config.uploadUrl}/images/food-classes/${fc.origId}`
     await fs.ensureDirSync(basePath)
 
     try {
