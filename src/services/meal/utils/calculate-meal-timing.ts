@@ -18,9 +18,8 @@ export default function calculateMealTiming(mealItems: MealItem[]): Timing {
   mealItems.map(mealItem => {
     if (mealItem.food) {
       /**
-       * We'll take 1 minutes for each food
+       * We'll assume foods don't have any timing
        * */
-      timing.prepTime! += 1
     }
     if (mealItem.recipe) {
       if (typeof mealItem.recipe === 'string') throw new Error('recipe not populated')
