@@ -5,7 +5,7 @@
 
 import { UserSchema } from '@Models/user.model'
 import mongoose from 'mongoose'
-import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
+import { Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 import { prop, Ref } from 'typegoose'
 
 
@@ -160,6 +160,30 @@ export class TranslationInput {
   text: string
   @Field({ nullable: true, defaultValue: true })
   verified?: boolean
+}
+
+@ObjectType()
+export class Timing {
+  @Field(type => Int, { nullable: true })
+  prepTime?: number
+
+  @Field(type => Int, { nullable: true })
+  cookTime?: number
+
+  @Field(type => Int)
+  totalTime: number
+}
+
+@InputType()
+export class TimingInput {
+  @Field(type => Int, { nullable: true })
+  prepTime?: number
+
+  @Field(type => Int, { nullable: true })
+  cookTime?: number
+
+  @Field(type => Int)
+  totalTime: number
 }
 
 export declare type Ref<T> = T | mongoose.Types.ObjectId;
