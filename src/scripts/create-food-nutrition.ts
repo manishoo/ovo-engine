@@ -19,9 +19,9 @@ enum N {
   caffeine_unused = 'caffeine',
   calcium = 'calcium',
   calories = 'calories',
-  totalCarbs = 'carbs',
-  totalAvailableCarbs = 'carbs',
-  carbsByDifference = 'carbs',
+  totalCarbs = 'totalCarbs',
+  totalAvailableCarbs = 'totalAvailableCarbs',
+  carbsByDifference = 'carbsByDifference',
   cholesterol = 'cholesterol',
   choline_unused = 'choline',
   copper = 'copper',
@@ -85,8 +85,8 @@ enum N {
   vitB12 = 'vitB12',
   vitB6 = 'vitB6',
   vitC = 'vitC',
-  vitCLAscorbic = 'vitC',
-  vitCLDehydroascorbic = 'vitC',
+  vitCLAscorbic = 'vitCLAscorbic',
+  vitCLDehydroascorbic = 'vitCLDehydroascorbic',
   vitD = 'vitD',
   vitD2 = 'vitD2',
   vitD3 = 'vitD3',
@@ -259,7 +259,7 @@ const NUTRITION_ARRAY: { name: string, field: N | null }[] = [
 ]
 
 function attachContentToNutrition(content: FoodContent, nutrition: Nutrition, contentOrigName: string, nutritionField: string) {
-  if (content.origContentName.toString() === contentOrigName) {
+  if (content.origContentName && (content.origContentName.toString() === contentOrigName)) {
     if (nutrition[nutritionField]) {
       if ((content.unit !== nutrition[nutritionField]!.unit) && nutrition[nutritionField]!.amount && content.amount) {
         console.log('=====>>>>>>>')
@@ -269,9 +269,9 @@ function attachContentToNutrition(content: FoodContent, nutrition: Nutrition, co
       }
     }
 
-    let totalAmount = 0
+    let totalAmount = content.amount
     if (nutrition[nutritionField]) {
-      totalAmount = nutrition[nutritionField]!.amount + content.amount
+      totalAmount += nutrition[nutritionField]!.amount + content.amount
     }
 
     nutrition[nutritionField] = {
@@ -391,6 +391,16 @@ export function createFoodNutritionFromContents(contents: FoodContent[]): Nutrit
   let nutrition: Partial<Nutrition> = {}
 
   contents.map(content => {
+    /**
+     * some foods have multiple {energy} content, one for kJ
+     * and one for kcal. For them, we will ignore kJ calories.
+     * */
+    if (contents.filter(p => p.origContentName === 'Energy').length > 1) {
+      if (content.origContentName === 'Energy' && content.unit === 'kJ') {
+        return
+      }
+    }
+
     NUTRITION_ARRAY.map(({ name, field }) => {
       if (field) {
         attachContentToNutrition(convertUnit(content), nutrition, name, field)
