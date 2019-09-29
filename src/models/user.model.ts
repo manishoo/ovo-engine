@@ -28,6 +28,9 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedBy: true,
   overrideMethods: true,
 })
+/**
+ * Household middleware
+ * */
 @pre<UserSchema>('save', function (next) {
   if (!this.household) {
     /**
@@ -43,6 +46,8 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
         next()
       })
   }
+
+  next()
 })
 export class UserSchema extends Typegoose implements User {
   readonly id?: string
