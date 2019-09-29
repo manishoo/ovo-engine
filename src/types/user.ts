@@ -142,6 +142,8 @@ export class BaseUser {
   bio?: string
   @Field(type => Image, { nullable: true })
   imageUrl: Image
+  @Field(type => SocialNetworks, { defaultValue: {} })
+  socialNetworks: SocialNetworks
 }
 
 @ObjectType()
@@ -161,8 +163,6 @@ export class User extends BaseUser {
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
-  @Field(type => SocialNetworks, { defaultValue: {} })
-  socialNetworks: SocialNetworks
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
   @Field({ nullable: true })
