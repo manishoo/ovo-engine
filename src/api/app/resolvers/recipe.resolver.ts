@@ -49,7 +49,7 @@ export default class RecipeResolver {
       size,
       lastId,
       nameSearchQuery,
-      userId: userId || (viewerUser ? viewerUser.id : undefined),
+      userId,
       viewerUser,
       tags,
     })
