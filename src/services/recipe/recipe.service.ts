@@ -73,7 +73,7 @@ export default class RecipeService {
     }
 
     if (variables.nameSearchQuery) {
-      query['title.text'] = { $regex: variables.nameSearchQuery, $options: 'i' }
+      query['title.text'] = { $regex: variables.nameSearchQuery }
     }
 
     if (variables.lastId) {
