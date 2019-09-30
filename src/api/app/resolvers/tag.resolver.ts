@@ -21,7 +21,7 @@ export default class TagResolver {
     // noop
   }
 
-  @Authorized(UserRole.user)
+  @Authorized()
   @Query(returns => [Tag])
   async tags(
     @Ctx() ctx: Context,
@@ -29,12 +29,21 @@ export default class TagResolver {
     return this.tagService.list()
   }
 
-  @Authorized(UserRole.user)
+  @Authorized()
   @Mutation(returns => Tag)
   async addTag(
     @Arg('tag') tagData: TagInput,
     @Ctx() ctx: Context,
   ) {
-    return this.tagService.create(tagData)
+    return this.tagService.create(tagData, ctx.user!)
+  }
+
+  @Authorized()
+  @Mutation(returns => String)
+  async deleteTag(
+    @Arg('tagSlug') tagSlug: string,
+    @Ctx() ctx: Context,
+  ) {
+    return this.tagService.delete(tagSlug, ctx.user!)
   }
 }
