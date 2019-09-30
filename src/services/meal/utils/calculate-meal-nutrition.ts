@@ -20,7 +20,16 @@ export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
     } else if (mealItem.food) {
       const food = mealItem.food as Food
       if (food.nutrition) {
-        calculateNutrition(scaleFoodNutrition(food, mealItem.amount, mealItem.weight as string), totalNutrition)
+        let weightId
+        if (mealItem.weight) {
+          if (typeof mealItem.weight === 'string') {
+            weightId = mealItem.weight
+          } else {
+            weightId = mealItem.weight.id
+          }
+        }
+
+        calculateNutrition(scaleFoodNutrition(food, mealItem.amount, weightId), totalNutrition)
       }
     }
   })
