@@ -9,6 +9,7 @@ import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import { UserRole } from '@Types/common'
+import { Food } from '@Types/food'
 import { ListMealsArgs, Meal, MealInput, MealItem, MealItemInput, MealListResponse } from '@Types/meal'
 import { Recipe } from '@Types/recipe'
 import { Author } from '@Types/user'
@@ -47,12 +48,24 @@ export default class MealService {
     }
 
     const mealItems = await this.validateMealItems(mealInput.items)
+    const timing = calculateMealTiming(mealItems)
+    const nutrition = calculateMealNutrition(mealItems)
 
     const mealToBeCreated = new MealModel({
       ...meal,
-      items: mealItems,
-      nutrition: calculateMealNutrition(mealItems),
-      timing: calculateMealTiming(mealItems)
+      items: mealItems.map(mealItem => {
+        if (mealItem.food) {
+          const food = mealItem.food as Food
+          mealItem.food = food._id
+        } else if (mealItem.recipe) {
+          const recipe = mealItem.recipe as Recipe
+          mealItem.recipe = recipe._id
+        }
+
+        return mealItem
+      }),
+      timing,
+      nutrition,
     })
 
     let createdMeals: Meal[] = []
@@ -389,7 +402,18 @@ export default class MealService {
       const baseMealItem: Partial<MealItem> = {}
 
       if (mealItemInput.alternativeMealItems) {
-        baseMealItem.alternativeMealItems = await this.validateMealItems(mealItemInput.alternativeMealItems as MealItemInput[])
+        const mealItems = await this.validateMealItems(mealItemInput.alternativeMealItems as MealItemInput[])
+        baseMealItem.alternativeMealItems = mealItems.map(mealItem => {
+          if (mealItem.food) {
+            const food = mealItem.food as Food
+            mealItem.food = food._id
+          } else if (mealItem.recipe) {
+            const recipe = mealItem.recipe as Recipe
+            mealItem.recipe = recipe._id
+          }
+
+          return mealItem
+        })
       }
 
       if (mealItemInput.food) {
@@ -406,7 +430,7 @@ export default class MealService {
         return {
           ...baseMealItem,
           amount: mealItemInput.amount,
-          food: food._id,
+          food,
           weight: mealItemInput.weight,
         } as MealItem
       } else if (mealItemInput.recipe) {
@@ -418,7 +442,7 @@ export default class MealService {
         return {
           ...baseMealItem,
           amount: mealItemInput.amount,
-          recipe: recipe._id,
+          recipe,
         } as MealItem
       }
 

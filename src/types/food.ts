@@ -5,14 +5,14 @@
 
 import { FoodClassSchema } from '@Models/food-class.model'
 import { FoodGroupSchema } from '@Models/food-group.model'
-import { Image, LanguageCode, NameAndId, Pagination, Translation, TranslationInput } from '@Types/common'
+import { Image, LanguageCode, NameAndId, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
+import { FoodClass } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
 import { Weight, WeightInput } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
 import mongoose from 'mongoose'
 import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
-import { prop, Ref } from 'typegoose'
 
 
 @ObjectType()
@@ -578,28 +578,41 @@ export class FoodContent {
 
 @ObjectType()
 export class Food {
-  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly _id: mongoose.Types.ObjectId
+
   @Field()
   readonly id: string
+
   @Field(type => [Translation])
   name: Translation[]
+
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
+
   @Field(type => [Weight])
   weights: Weight[]
+
   @Field({ nullable: true })
   origDb?: string
+
   origFoodId?: string
+
+  @Field(type => FoodClass)
   foodClass: Ref<FoodClassSchema>
+
   contents: FoodContent[]
+
   @Field(type => Nutrition)
   nutrition: Nutrition
+
   @Field(type => Image)
   imageUrl?: Image
+
   @Field(type => Image)
   thumbnailUrl?: Image
 
   origFoodClassName: Translation[]
+
   @Field(type => FoodGroup)
   foodGroup: FoodGroupSchema
 }

@@ -22,7 +22,6 @@ export default function calculateMealTiming(mealItems: MealItem[]): Timing {
        * */
     }
     if (mealItem.recipe) {
-      if (typeof mealItem.recipe === 'string') throw new Error('recipe not populated')
       const recipe = mealItem.recipe as Recipe
 
       timing = {
