@@ -232,6 +232,9 @@ export default class RecipeService {
     if (data.description) {
       recipe.description = data.description
     }
+    if (data.difficulty) {
+      recipe.difficulty = data.difficulty
+    }
     if (data.ingredients) {
       recipe.ingredients = await Promise.all(data.ingredients.map(async ingredient => {
         let food = await FoodModel.findById(ingredient.food)
