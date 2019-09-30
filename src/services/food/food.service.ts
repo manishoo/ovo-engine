@@ -38,23 +38,13 @@ export default class FoodService {
       query['foodClass'] = new mongoose.Types.ObjectId(foodClassId)
     }
     if (nameSearchQuery) {
-      query['$or'] = [
-        {
-          $text: {
-            $search: nameSearchQuery,
-          }
-        },
-        {
-          'name.text': {
-            $regex: nameSearchQuery,
-            $options: 'i',
-          }
-        }
-      ]
+      query['name.text'] = {
+        $regex: nameSearchQuery,
+        $options: 'i',
+      }
     }
 
-    const foods = await FoodModel.find(query, { score: { $meta: 'textScore' } })
-      .sort({ score: { $meta: 'textScore' } })
+    const foods = await FoodModel.find(query)
       .limit(size)
       .skip(size * (page - 1))
 
