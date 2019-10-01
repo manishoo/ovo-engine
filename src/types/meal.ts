@@ -4,14 +4,13 @@
  */
 
 import { UserSchema } from '@Models/user.model'
-import { Pagination, Timing, Translation, TranslationInput } from '@Types/common'
+import { Pagination, Ref, Timing, Translation, TranslationInput } from '@Types/common'
 import { Food, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { ObjectId } from 'mongodb'
 import mongoose from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
-import { Ref } from 'typegoose'
 import { Author } from './user'
 import { Weight } from './weight'
 

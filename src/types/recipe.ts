@@ -333,7 +333,7 @@ export class ListRecipesArgs {
   @Min(1)
   page?: number
 
-  @Field({ nullable: true })
+  @Field(type => Int, { nullable: true })
   @Min(1)
   @Max(30)
   size?: number
