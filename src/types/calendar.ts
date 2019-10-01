@@ -1,12 +1,11 @@
 import { UserSchema } from '@Models/user.model'
-import { MealType, Pagination, Translation, TranslationInput } from '@Types/common'
+import { UserActivity } from '@Types/activity'
+import { MealType, Pagination, Ref } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
 import { User } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
-import { Ref } from 'typegoose'
-import { UserActivity } from '@Types/activity'
 
 
 @ObjectType()
@@ -37,7 +36,7 @@ export class DayMealInput {
 
 @ObjectType()
 export class Day {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
   @Field()
   id?: string
 

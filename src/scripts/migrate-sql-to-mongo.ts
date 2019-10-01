@@ -80,7 +80,7 @@ async function migrateFoodClassesAndFoodGroups() {
   await mongoFoodClassModel.deleteMany({})
 
   async function createFoodGroup(foodGroup: string, foodSubGroup: string): Promise<number> {
-    async function _createFG(name: string, parentId?: mongoose.Schema.Types.ObjectId) {
+    async function _createFG(name: string, parentId?: mongoose.Types.ObjectId) {
       return mongoFoodGroupModel.create(<Partial<FoodGroup>>{
         name: createTranslations(name),
         parentFoodGroup: parentId,

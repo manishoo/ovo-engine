@@ -566,7 +566,7 @@ export interface FoodCreateInput {
 }
 
 export class FoodContent {
-  content: mongoose.Schema.Types.ObjectId | Content
+  content: mongoose.Types.ObjectId | Content
   origContentName?: string
   origContentType: CONTENT_TYPE
   amount: number

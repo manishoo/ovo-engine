@@ -6,7 +6,7 @@
 import { UserSchema } from '@Models/user.model'
 import mongoose from 'mongoose'
 import { Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
-import { prop, Ref } from 'typegoose'
+import { prop } from 'typegoose'
 
 
 export enum LanguageCode {

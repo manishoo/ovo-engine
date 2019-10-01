@@ -33,7 +33,7 @@ export default class RecipeResolver {
     return this.recipeService.get(id, slug)
   }
 
-  @Authorized(UserRole.user)
+  // @Authorized(UserRole.user)
   @Query(returns => RecipesListResponse)
   async recipes(
     @Args() { page, size, lastId, nameSearchQuery, userId, tags }: ListRecipesArgs,

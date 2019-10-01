@@ -30,7 +30,7 @@ export class MealListResponse {
 
 @ObjectType()
 export class Meal {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
 
   @Field()
   id?: string
