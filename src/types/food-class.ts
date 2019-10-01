@@ -36,7 +36,7 @@ export class FoodClassTaxonomy {
 
 @ObjectType()
 export class FoodClass {
-  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly _id: mongoose.Types.ObjectId
   @Field()
   readonly id: string
   @Field(type => [Translation])

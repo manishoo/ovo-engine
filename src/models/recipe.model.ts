@@ -5,9 +5,9 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
-import { Image, LanguageCode, Ref, Translation } from '@Types/common'
+import { Image, LanguageCode, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
-import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, RecipeTiming, Review } from '@Types/recipe'
+import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, Review } from '@Types/recipe'
 import { Tag } from '@Types/tag'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
@@ -46,9 +46,9 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   description?: Translation[]
   @prop()
-  timing: RecipeTiming
-  @prop()
-  nutrition?: Nutrition
+  timing: Timing
+  @prop({ default: {} })
+  nutrition: Nutrition
   @prop()
   difficulty?: RecipeDifficulty
   @prop()

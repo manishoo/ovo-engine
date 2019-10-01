@@ -1,15 +1,42 @@
-import { ObjectType, Field } from "type-graphql"
-import { UserSchema } from "@Models/user.model"
-import { Ref } from "typegoose"
-import { User } from "@Types/user"
-import { Pagination } from "@Types/common"
-import { Meal } from "@Types/eating"
+import { UserSchema } from '@Models/user.model'
+import { UserActivity } from '@Types/activity'
+import { MealType, Pagination, Ref } from '@Types/common'
+import { MealItem, MealItemInput } from '@Types/meal'
+import { User } from '@Types/user'
+import { ArrayNotEmpty } from 'class-validator'
 import mongoose from 'mongoose'
+import { Field, InputType, ObjectType } from 'type-graphql'
 
 
 @ObjectType()
+export class DayMeal {
+  @Field(type => MealType)
+  type: MealType
+
+  @Field({ nullable: true })
+  time?: Date
+
+  @Field(type => [MealItem])
+  @ArrayNotEmpty()
+  items: MealItem[]
+}
+
+@InputType()
+export class DayMealInput {
+  @Field(type => MealType)
+  type: MealType
+
+  @Field(type => Date)
+  time: Date
+
+  @Field(type => [MealItemInput])
+  @ArrayNotEmpty()
+  items: MealItemInput[]
+}
+
+@ObjectType()
 export class Day {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
   @Field()
   id?: string
 
@@ -19,8 +46,14 @@ export class Day {
   @Field(type => User)
   user: Ref<UserSchema>
 
-  @Field(type => [Meal])
-  meals: Meal[]
+  @Field(type => [DayMeal])
+  meals: DayMeal[]
+
+  @Field(type => [UserActivity], { nullable: true })
+  activities?: UserActivity[]
+
+  @Field()
+  totalBurnt?: number
 }
 
 @ObjectType()
@@ -30,4 +63,22 @@ export class CalendarResponse {
 
   @Field(type => Pagination)
   pagination: Pagination
+}
+
+@InputType()
+export class LogActivityInput {
+  @Field()
+  activityName: string
+
+  @Field()
+  duration: number
+
+  @Field()
+  activityId: string
+
+  @Field()
+  burntCalories: number
+
+  @Field(type => Date)
+  time: Date
 }

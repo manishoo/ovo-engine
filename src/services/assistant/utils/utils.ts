@@ -5,7 +5,7 @@
 
 import { Message, MessageAdditionalData } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
-import { Activity, Gender, Goal, MealUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, MealUnit } from '@Types/user'
 import { __ } from 'i18n'
 import uuid from 'uuid/v1'
 import w2n from 'words-to-numbers'
@@ -101,15 +101,15 @@ export function generateGoalOptions(lang: LanguageCode, weight: number, height: 
 }
 
 export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
-  return Object.keys(Activity).map((i: string) => {
+  return Object.keys(ActivityLevel).map((i: string) => {
     // @ts-ignore
-    switch (Activity[i]) {
-      case Activity.sed:
+    switch (ActivityLevel[i]) {
+      case ActivityLevel.sed:
         return {
           text: '🛋' + __({ phrase: 'sedActivity', locale: lang }),
-          value: Activity.sed,
+          value: ActivityLevel.sed,
         }
-      case Activity.light: {
+      case ActivityLevel.light: {
         let emoji
         if (gender === Gender.female) {
           emoji = '🚶‍♀️'
@@ -118,10 +118,10 @@ export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
         }
         return {
           text: `${emoji}${__({ phrase: 'lightActivity', locale: lang })}`,
-          value: Activity.light,
+          value: ActivityLevel.light,
         }
       }
-      case Activity.mod: {
+      case ActivityLevel.mod: {
         let emoji
         if (gender === Gender.female) {
           emoji = '🏃‍♀️'
@@ -130,10 +130,10 @@ export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
         }
         return {
           text: `${emoji}${__({ phrase: 'modActivity', locale: lang })}`,
-          value: Activity.mod,
+          value: ActivityLevel.mod,
         }
       }
-      case Activity.high: {
+      case ActivityLevel.high: {
         let emoji
         if (gender === Gender.female) {
           emoji = '🏋‍♀️'
@@ -142,13 +142,13 @@ export function generateActivitySelect(lang: LanguageCode, gender: Gender) {
         }
         return {
           text: `${emoji}${__({ phrase: 'highActivity', locale: lang })}`,
-          value: Activity.high,
+          value: ActivityLevel.high,
         }
       }
-      case Activity.extreme:
+      case ActivityLevel.extreme:
         return {
           text: '🔥' + __({ phrase: 'extremeActivity', locale: lang }),
-          value: Activity.extreme,
+          value: ActivityLevel.extreme,
         }
     }
   })

@@ -4,21 +4,21 @@
  */
 
 import { CalendarModel } from '@Models/calendar.model'
-import DishService from '@Services/dish/dish.service'
+import { FoodModel } from '@Models/food.model'
+import { RecipeModel } from '@Models/recipe.model'
+import MealService from '@Services/meal/meal.service'
 import { Day } from '@Types/calendar'
+import { DayMeal, DayMealInput } from '@Types/calendar'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
-import { Meal, MealInput } from '@Types/eating'
-import { RecipeModel } from '@Models/recipe.model'
-import { FoodModel } from '@Models/food.model'
 
 
 @Service()
 export default class CalendarService {
   constructor(
     // service injection
-    private readonly dishService: DishService
+    private readonly mealService: MealService
   ) {
     // noop
   }
@@ -29,7 +29,7 @@ export default class CalendarService {
     query.date = { $gt: startDate, $lt: endDate }
     query.user = mongoose.Types.ObjectId(userId)
 
-    const calendar = await CalendarModel.find(query)
+    return CalendarModel.find(query)
       .populate({
         path: 'meals.items.recipe',
         model: RecipeModel
@@ -38,16 +38,13 @@ export default class CalendarService {
         path: 'meals.items.food',
         model: FoodModel,
       })
-
-    return calendar
   }
 
-  async logMeal(dishInput: MealInput, userId: string): Promise<Day> {
-
-    let meal: Meal = {
-      type: dishInput.type,
-      time: dishInput.time,
-      items: await this.dishService.generateDishItemList(dishInput.items),
+  async logMeal(dayMealInput: DayMealInput, userId: string): Promise<Day> {
+    let meal: DayMeal = {
+      type: dayMealInput.type,
+      time: dayMealInput.time,
+      items: await this.mealService.validateMealItems(dayMealInput.items),
     }
 
     let userActiveDays = await CalendarModel.aggregate([
@@ -72,18 +69,18 @@ export default class CalendarService {
     let day
     userActiveDays.map(activeDay => {
       if (
-        (activeDay._id.year == dishInput.time!.getFullYear()) &&
-        (activeDay._id.month == dishInput.time!.getMonth() + 1) &&
-        (activeDay._id.day == dishInput.time!.getDate())) {
+        (activeDay._id.year == dayMealInput.time!.getFullYear()) &&
+        (activeDay._id.month == dayMealInput.time!.getMonth() + 1) &&
+        (activeDay._id.day == dayMealInput.time!.getDate())) {
         dayId = activeDay.items[0]
       }
 
     })
 
     if (!dayId) {
-      let calendarMeal: Partial<Meal[]> = []
+      let calendarMeal: Partial<DayMeal[]> = []
       calendarMeal.push(meal)
-      let dayCreationDate = new Date(dishInput.time)
+      let dayCreationDate = new Date(dayMealInput.time)
 
       dayCreationDate.setUTCHours(0)
       dayCreationDate.setHours(0)

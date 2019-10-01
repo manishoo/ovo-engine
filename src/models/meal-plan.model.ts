@@ -23,7 +23,7 @@ export class MealPlanSchema extends Typegoose implements MealPlan {
   name: string
   @prop({ required: true })
   days: Day[]
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
 }
 
 export const MealPlanModel = new MealPlanSchema().getModelForClass(MealPlanSchema, {

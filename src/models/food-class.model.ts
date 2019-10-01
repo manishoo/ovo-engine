@@ -12,7 +12,7 @@ import { instanceMethod, plugin, prop, Typegoose } from 'typegoose'
 
 
 class FoodGroupSchema extends Typegoose implements FoodGroup {
-  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly _id: mongoose.Types.ObjectId
   readonly id: string
 
   @prop({ required: true })
@@ -28,7 +28,7 @@ export interface FoodClassSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 export class FoodClassSchema extends Typegoose implements FoodClass {
-  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly _id: mongoose.Types.ObjectId
   readonly id: string
   @prop({ required: true })
   name: Translation[]

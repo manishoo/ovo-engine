@@ -23,19 +23,38 @@ export default class FoodService {
     // noop
   }
 
+  async getFood(foodId: string) {
+    return FoodModel.findById(foodId)
+      .populate({
+        path: 'foodClass',
+        model: FoodClassModel,
+      })
+      .exec()
+  }
+
   async listFoods({ page, size, foodClassId, nameSearchQuery }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
     if (foodClassId) {
       query['foodClass'] = new mongoose.Types.ObjectId(foodClassId)
     }
     if (nameSearchQuery) {
-      query['name.text'] = {
-        $regex: nameSearchQuery,
-        $options: 'i',
-      }
+      query['$or'] = [
+        {
+          $text: {
+            $search: nameSearchQuery,
+          }
+        },
+        {
+          'name.text': {
+            $regex: nameSearchQuery,
+            $options: 'i',
+          }
+        }
+      ]
     }
 
-    const foods = await FoodModel.find(query)
+    const foods = await FoodModel.find(query, { score: { $meta: 'textScore' } })
+      .sort({ score: { $meta: 'textScore' } })
       .limit(size)
       .skip(size * (page - 1))
 

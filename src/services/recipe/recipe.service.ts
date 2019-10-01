@@ -18,7 +18,7 @@ import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
-import { calculateTotalNutrition } from './utils/calculate-total-nutrition'
+import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
 
 
 @Service()
@@ -73,7 +73,7 @@ export default class RecipeService {
     }
 
     if (variables.nameSearchQuery) {
-      query['title.text'] = { $regex: variables.nameSearchQuery, $options: 'i' }
+      query['title.text'] = { $regex: variables.nameSearchQuery }
     }
 
     if (variables.lastId) {
@@ -182,7 +182,7 @@ export default class RecipeService {
 
       recipe.tags = tags
     }
-    recipe.nutrition = calculateTotalNutrition(recipe.ingredients!)
+    recipe.nutrition = calculateRecipeNutrition(recipe.ingredients!)
 
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe.author = author
@@ -231,6 +231,9 @@ export default class RecipeService {
     }
     if (data.description) {
       recipe.description = data.description
+    }
+    if (data.difficulty) {
+      recipe.difficulty = data.difficulty
     }
     if (data.ingredients) {
       recipe.ingredients = await Promise.all(data.ingredients.map(async ingredient => {
@@ -290,7 +293,7 @@ export default class RecipeService {
 
       recipe.tags = tags
     }
-    recipe.nutrition = calculateTotalNutrition(recipe.ingredients)
+    recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
 
     return transformRecipe(await recipe.save(), user && user.id)
   }

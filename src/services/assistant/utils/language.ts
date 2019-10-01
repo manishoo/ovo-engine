@@ -6,7 +6,7 @@
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { Activity, Gender, Goal, Height, HeightUnits, WeightUnits, WeightUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, Height, HeightUnits, WeightUnits, WeightUnit } from '@Types/user'
 
 
 export default {
@@ -61,9 +61,9 @@ export default {
   async extractActivity(text: string): Promise<string> {
     // one of enum
     let g
-    Object.keys(Activity).map((key: string) => {
+    Object.keys(ActivityLevel).map((key: string) => {
       // @ts-ignore
-      if (Activity[key] === text.replace(/[🏋‍♂️‍♀️🏃🚶🛋🔥]/g, '')) {
+      if (ActivityLevel[key] === text.replace(/[🏋‍♂️‍♀️🏃🚶🛋🔥]/g, '')) {
         // @ts-ignore
         g = key
       }

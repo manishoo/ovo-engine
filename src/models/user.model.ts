@@ -8,15 +8,15 @@ import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Status, UserRole } from '@Types/common'
+import { Image, Ref, Status, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import { Activity, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
 import { Length } from 'class-validator'
 import isUUID from 'is-uuid'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { Container } from 'typedi'
-import { arrayProp, plugin, post, prop, Ref, Typegoose } from 'typegoose'
+import { arrayProp, plugin, pre, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
 
 
@@ -28,22 +28,26 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedBy: true,
   overrideMethods: true,
 })
-@post<UserSchema>('save', function () {
-  if (!this.model.household) {
-    // create and assign household
-    return new Promise((resolve, reject) => {
-      const householdService = Container.get(HouseholdService)
-      householdService.create(<Household>{
-        members: [this.model._id]
-      })
-        .then((h) => {
-          this.model.household = h
-          this.save()
-            .then(resolve)
-        })
-        .catch(reject)
+/**
+ * Household middleware
+ * */
+@pre<UserSchema>('save', function (next) {
+  if (!this.household) {
+    /**
+     * Create and assign household
+     * */
+    const householdService = Container.get(HouseholdService)
+    return householdService.create(<Household>{
+      members: [this._id]
     })
+      .then((household) => {
+        this.household = household._id
+
+        next()
+      })
   }
+
+  next()
 })
 export class UserSchema extends Typegoose implements User {
   readonly id?: string
@@ -114,7 +118,7 @@ export class UserSchema extends Typegoose implements User {
   @prop({ ref: Household })
   household?: Ref<Household>
   @prop()
-  activityLevel?: Activity
+  activityLevel?: ActivityLevel
   @prop()
   goal?: Goal
   @prop({ default: [] })
