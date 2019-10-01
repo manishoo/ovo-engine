@@ -22,7 +22,7 @@ export default class TagService {
     })
   }
 
-  async create(data: TagInput, user: ContextUser): Promise<Tag> {
+  async create(data: TagInput, user?: ContextUser): Promise<Tag> {
     let q: any = {}
     q['slug'] = data.slug
     const validateTag = await TagModel.findOne(q)
@@ -36,7 +36,7 @@ export default class TagService {
       title: data.title,
       slug: data.slug,
       type: data.type,
-      user: user.id,
+      user: user ? user.id : undefined,
     })
     return tag.save()
   }
