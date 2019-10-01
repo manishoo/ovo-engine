@@ -4,8 +4,9 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { LanguageCode, Translation } from '@Types/common'
+import { Ref, Translation } from '@Types/common'
 import { Tag, TagType } from '@Types/tag'
+import { User } from '@Types/user'
 import { prop, Typegoose } from 'typegoose'
 
 
@@ -18,6 +19,8 @@ export class TagSchema extends Typegoose implements Tag {
   info?: Translation[] // info about the tag
   @prop({ required: true })
   type: TagType // recipe, cuisine, etc.
+  @prop()
+  user?: Ref<User>
 
   createdAt?: Date
   updatedAt?: Date
