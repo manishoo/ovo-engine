@@ -35,7 +35,7 @@ export class MealPlan {
   @Field(type => [Day])
   days: Day[]
 
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
 }
 
 export enum DAY_PERIOD {

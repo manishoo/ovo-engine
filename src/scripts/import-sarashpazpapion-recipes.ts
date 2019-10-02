@@ -117,10 +117,10 @@ export default async function main(userPassword: string) {
         let amountDescription: string | undefined
         let amount: number | undefined
 
-        const customUnit = (persianJs(ingredient.quantity).persianNumber().toString() as string).replace(/[0-9]*(\/.)?(-.)?(\..)? /, (substring => {
-          amountDescription = substring.trim() ? persianJs(substring.trim()).persianNumber().toString() : undefined
+        const customUnit = (persianJs(ingredient.quantity).persianNumber().toString() as string).replace(/[0-9]*(\/.)?(-.)?(\..)?/, (substring => {
+          amountDescription = substring ? persianJs(substring.trim()).persianNumber().toString() : undefined
           return ''
-        }))
+        })).trim()
 
         if (amountDescription) {
           if (amountDescription.includes('-')) {

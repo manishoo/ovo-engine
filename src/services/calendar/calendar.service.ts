@@ -6,7 +6,7 @@
 import { CalendarModel } from '@Models/calendar.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
-import MealService from '@Services/meal/meal-service'
+import MealService from '@Services/meal/meal.service'
 import { Day } from '@Types/calendar'
 import { DayMeal, DayMealInput } from '@Types/calendar'
 import Errors from '@Utils/errors'
@@ -44,7 +44,7 @@ export default class CalendarService {
     let meal: DayMeal = {
       type: dayMealInput.type,
       time: dayMealInput.time,
-      items: await this.mealService.generateMealItemList(dayMealInput.items),
+      items: await this.mealService.validateMealItems(dayMealInput.items),
     }
 
     let userActiveDays = await CalendarModel.aggregate([
