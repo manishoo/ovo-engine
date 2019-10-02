@@ -8,6 +8,7 @@ import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { Status, UserRole } from '@Types/common'
+import { RedisKeys } from '@Types/redis'
 import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
@@ -27,7 +28,7 @@ export default class UserService {
   }
 
   async findBySession(session: string) {
-    const key = `user:session:${session}`
+    const key = RedisKeys.userSession(session)
     const userDataJSONString = await redis.get(key)
       .catch(logError('findBySession->redis.get'))
 

@@ -13,7 +13,7 @@ import { prop } from 'typegoose'
 export class Weight {
   @prop({ default: mongoose.Types.ObjectId })
   @Field(type => String)
-  id?: string
+  id?: string | mongoose.Types.ObjectId
   @Field()
   amount: number
   @Field()
