@@ -15,7 +15,7 @@ import importTranslatedFoods from './import-translated-foods'
 import importTranslatedWeights from './import-translated-weights'
 import selectFoodClassDefaultFoods from './select-food-class-default-foods'
 import separateFoodDescription from './separate-food-description'
-
+import importActivityList from './import-activity-list'
 
 const argv = require('minimist')(process.argv.slice(2))
 
@@ -41,14 +41,17 @@ async function main() {
   // console.log('Running selectFoodClassDefaultFoods...')
   // await selectFoodClassDefaultFoods()
 
-  console.log('Running createFoodNutrition...')
-  await createFoodNutrition()
+  //console.log('Running createFoodNutrition...')
+  //await createFoodNutrition()
   //
   // console.log('Running createPanelAdmin...')
   // await createPanelAdmin('admin', String(argv.adminPass || 'adminpass'))
 
   // console.log('Running importSarashpazpapionRecipes...')
   // await importSarashpazpapionRecipes(argv.sarashpazpapionPass || '1')
+
+  console.log('Running importActivityList...')
+  await importActivityList()
 
   process.exit(0)
 }
