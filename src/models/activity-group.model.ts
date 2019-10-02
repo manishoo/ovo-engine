@@ -1,6 +1,6 @@
 import { ActivityGroup } from '../types/activity'
 import { Translation } from '../types/common'
-import { plugin, prop, Typegoose, index } from 'typegoose'
+import { plugin, prop, Typegoose } from 'typegoose'
 import mongoose from '@Config/connections/mongoose'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 

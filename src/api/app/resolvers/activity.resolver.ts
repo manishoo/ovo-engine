@@ -1,15 +1,14 @@
 /*
- * assistant.resolver.ts
+ * ac;tivity.resolver.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import { Ctx, Resolver, Authorized, Query, Mutation, Arg } from 'type-graphql'
 import { Service } from 'typedi'
 import { Context } from '@Utils/context'
-import { UserRole, LanguageCode, TranslationInput } from '@Types/common'
+import { UserRole, TranslationInput } from '@Types/common'
 import { Activity, ActivityInput, ActivityGroup } from '@Types/activity'
 import ActivityService from '@Services/activity/activity.service'
-
 
 
 @Service()

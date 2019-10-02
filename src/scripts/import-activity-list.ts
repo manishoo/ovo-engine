@@ -1,14 +1,13 @@
 /*
- * get-activity-list.ts
+ * import-activity-list.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import cheerio from 'cheerio'
 import { LanguageCode } from '@Types/common'
 import ActivityService from '@Services/activity/activity.service'
-import { ActivityModel } from '@Models/activity.model'
-import Errors from '@Utils/errors'
 import mongoose from '@Config/connections/mongoose'
+
 
 const pageHTML: string = `<h2 class="pagenumber">Page 1</h2>
 <table class="table table-striped table-bordered">
