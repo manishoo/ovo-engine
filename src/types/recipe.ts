@@ -6,7 +6,7 @@
 import mongoose from '@Config/connections/mongoose'
 import { FoodSchema } from '@Models/food.model'
 import { UserSchema } from '@Models/user.model'
-import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
+import { Image, LanguageCode, Pagination, Ref, Timing, TimingInput, Translation, TranslationInput } from '@Types/common'
 import { Food, Nutrition } from '@Types/food'
 import { Tag, TagType } from '@Types/tag'
 import { Author } from '@Types/user'
@@ -56,30 +56,6 @@ export class RecipeTagInput {
 
   @Field()
   type: TagType
-}
-
-@ObjectType()
-export class RecipeTiming {
-  @Field(type => Int, { nullable: true })
-  prepTime?: number
-
-  @Field(type => Int, { nullable: true })
-  cookTime?: number
-
-  @Field(type => Int)
-  totalTime: number
-}
-
-@InputType()
-export class RecipeTimingInput {
-  @Field(type => Int, { nullable: true })
-  prepTime?: number
-
-  @Field(type => Int, { nullable: true })
-  cookTime?: number
-
-  @Field(type => Int)
-  totalTime: number
 }
 
 @ObjectType()
@@ -234,8 +210,8 @@ export class Recipe {
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
 
-  @Field(type => RecipeTiming)
-  timing: RecipeTiming
+  @Field(type => Timing)
+  timing: Timing
 
   @Field(type => Nutrition, { nullable: true })
   nutrition: Nutrition
@@ -329,8 +305,8 @@ export class RecipeInput {
   @Field(type => Int)
   serving: number
 
-  @Field(type => RecipeTimingInput)
-  timing: RecipeTimingInput
+  @Field(type => TimingInput)
+  timing: TimingInput
 
   @Field(type => RecipeDifficulty, { nullable: true })
   difficulty?: RecipeDifficulty
@@ -357,7 +333,7 @@ export class ListRecipesArgs {
   @Min(1)
   page?: number
 
-  @Field({ nullable: true })
+  @Field(type => Int, { nullable: true })
   @Min(1)
   @Max(30)
   size?: number

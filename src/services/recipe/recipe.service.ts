@@ -73,7 +73,7 @@ export default class RecipeService {
     }
 
     if (variables.nameSearchQuery) {
-      query['title.text'] = { $regex: variables.nameSearchQuery, $options: 'i' }
+      query['title.text'] = { $regex: variables.nameSearchQuery }
     }
 
     if (variables.lastId) {
@@ -231,6 +231,9 @@ export default class RecipeService {
     }
     if (data.description) {
       recipe.description = data.description
+    }
+    if (data.difficulty) {
+      recipe.difficulty = data.difficulty
     }
     if (data.ingredients) {
       recipe.ingredients = await Promise.all(data.ingredients.map(async ingredient => {

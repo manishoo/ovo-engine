@@ -20,13 +20,13 @@ export class ParentFoodGroup {
 
 @ObjectType()
 export class FoodGroup {
-  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly _id: mongoose.Types.ObjectId
   @Field()
   readonly id: string
   @Field(type => [Translation])
   name: Translation[]
 
-  parentFoodGroup?: ParentFoodGroup | mongoose.Schema.Types.ObjectId
+  parentFoodGroup?: ParentFoodGroup | mongoose.Types.ObjectId
 }
 
 @InputType()

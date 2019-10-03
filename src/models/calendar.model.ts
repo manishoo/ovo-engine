@@ -1,7 +1,8 @@
 import { Day, DayMeal } from '@Types/calendar'
+import { Ref } from '@Types/common'
 import mongoose from 'mongoose'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { plugin, prop, Ref, Typegoose } from 'typegoose'
+import { plugin, prop, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model'
 
 

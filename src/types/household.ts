@@ -4,10 +4,10 @@
  */
 
 import { UserSchema } from '@Models/user.model'
+import { Ref } from '@Types/common'
 import { Food } from '@Types/food'
 import { User } from '@Types/user'
 import { Field, Int, ObjectType } from 'type-graphql'
-import { Ref } from 'typegoose'
 
 
 @ObjectType()
