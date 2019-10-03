@@ -35,6 +35,24 @@ export class DayMealInput {
 }
 
 @ObjectType()
+export class BodyMeasurement {
+  @Field(type => Date)
+  time: Date
+
+  @Field()
+  weight: number
+}
+
+@InputType()
+export class BodyMeasurementInput {
+  @Field(type => Date)
+  time: Date
+
+  @Field()
+  weight: number
+}
+
+@ObjectType()
 export class Day {
   _id?: mongoose.Types.ObjectId
   @Field()
@@ -51,6 +69,9 @@ export class Day {
 
   @Field(type => [UserActivity], { nullable: true })
   activities?: UserActivity[]
+
+  @Field()
+  measurements?: BodyMeasurement
 
   @Field()
   totalBurnt?: number
