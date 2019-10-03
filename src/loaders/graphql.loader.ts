@@ -11,6 +11,7 @@ import { Types } from 'mongoose'
 import { AuthChecker, buildSchema } from 'type-graphql'
 import { Container } from 'typedi'
 import { ErrorInterceptor } from '../api/common/middlewares/error-interceptor.middleware'
+import mongoose from 'mongoose'
 
 
 const UPLOAD_MAX_FILE_SIZE = 2000000 // 1 MB
@@ -30,7 +31,7 @@ export default async ({ app, resolverPath, context, authChecker, platformPath }:
       container: Container,
       globalMiddlewares: [ErrorInterceptor],
       dateScalarMode: 'isoDate',
-      scalarsMap: [{ type: Types.ObjectId, scalar: ObjectIdScalar }]
+      scalarsMap: [{ type: mongoose.Types.ObjectId, scalar: ObjectIdScalar }]
     }),
     context,
     playground: process.env.NODE_ENV === 'development',

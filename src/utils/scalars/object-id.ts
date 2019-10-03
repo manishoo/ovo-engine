@@ -4,25 +4,25 @@
  */
 
 import { GraphQLScalarType, Kind } from 'graphql'
-import { Types } from 'mongoose'
+import mongoose from 'mongoose'
+import Errors from '@Utils/errors'
 
 
 export const ObjectIdScalar = new GraphQLScalarType({
   name: 'ObjectId',
   description: 'Mongo object id scalar type',
   parseValue(value: string) {
-    if (!Types.ObjectId.isValid(value)) throw new Error('Invalid ID')
 
-    return new Types.ObjectId(value) // value from the client input variables
+    return mongoose.Types.ObjectId(value) // value from the client input variables
   },
-  serialize(value: Types.ObjectId) {
-    return value.toHexString() // value sent to the client
+  serialize(value: mongoose.Types.ObjectId) {
+    return value // value sent to the client
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.STRING) {
-      if (!Types.ObjectId.isValid(ast.value)) throw new Error('Invalid ID')
+      if (!mongoose.Types.ObjectId.isValid(ast.value)) throw new Errors.Validation('Invalid id')
 
-      return new Types.ObjectId(ast.value) // value from the client query
+      return mongoose.Types.ObjectId(ast.value) // value from the client query
     }
 
     return null
