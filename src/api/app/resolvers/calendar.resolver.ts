@@ -43,40 +43,6 @@ export default class CalendarResolver {
   }
 
   @Authorized(UserRole.user)
-  @Query(returns => [Activity])
-  async activities(
-    @Ctx() ctc: Context,
-  ) {
-    return [{
-      id: '5d667c739f5aa96618af5b93',
-      activityTypeName: [{ locale: LanguageCode.en, text: 'goshad-ish' }],
-      met: 3,
-      activityGroup: {
-        id: '5d667c739f5aa96618af5b94',
-        name: [{ locale: LanguageCode.en, text: 'Cycling' }]
-      }
-    },
-    {
-      id: '5d667c739f5aa96618af5b92',
-      activityTypeName: [{ locale: LanguageCode.en, text: 'MTB' }],
-      met: 12,
-      activityGroup: {
-        id: '5d667c739f5aa96618af5b96',
-        name: [{ locale: LanguageCode.en, text: 'Cycling' }]
-      }
-    },
-    {
-      id: '5d667c739f5aa96618af5b99',
-      activityTypeName: [{ locale: LanguageCode.en, text: 'bandari' }],
-      met: 18,
-      activityGroup: {
-        id: '5d667c739f5aa96618af5b43',
-        name: [{ locale: LanguageCode.en, text: 'Dancing' }]
-      }
-    }]
-  }
-
-  @Authorized(UserRole.user)
   @Mutation(returns => [Day])
   async logActivities(
     @Arg('activities', type => [LogActivityInput]) activities: LogActivityInput[],
