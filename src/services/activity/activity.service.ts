@@ -33,7 +33,6 @@ export default class ActivityService {
   }
 
   async addActivity(activity: ActivityInput): Promise<Activity> {
-
     let creatingActivity: Partial<Activity> = {}
     let activityGroup = await ActivityGroupModel.findById(activity.activityGroupId)
     if (!activityGroup) throw new Errors.UserInput('Invalid activity group', { 'activityGroupId': 'ActivityGroup not found' })
