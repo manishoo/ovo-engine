@@ -27,7 +27,6 @@ export default class ActivityService {
   }
 
   async listActivityGroups(): Promise<ActivityGroup[]> {
-
     const activityGroups = await ActivityGroupModel.find()
 
     return activityGroups
