@@ -23,7 +23,7 @@ export class Synonym {
 
 @ObjectType()
 export class Content {
-  _id: mongoose.Schema.Types.ObjectId
+  _id: mongoose.Types.ObjectId
 
   @Field()
   id: string
@@ -34,10 +34,10 @@ export class Content {
 
   origId?: number
   synonyms: Synonym[]
-  flavors: mongoose.Schema.Types.ObjectId[]
-  healthEffects: mongoose.Schema.Types.ObjectId[]
-  pathways: mongoose.Schema.Types.ObjectId[]
-  enzymes: mongoose.Schema.Types.ObjectId[]
+  flavors: mongoose.Types.ObjectId[]
+  healthEffects: mongoose.Types.ObjectId[]
+  pathways: mongoose.Types.ObjectId[]
+  enzymes: mongoose.Types.ObjectId[]
   state?: string
 
   annotationQuality?: string

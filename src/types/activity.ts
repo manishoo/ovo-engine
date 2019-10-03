@@ -1,12 +1,11 @@
 import { ObjectType, Field } from 'type-graphql'
-import { Translation } from "@Types/common"
-import { Ref } from 'typegoose'
+import { Ref, Translation } from '@Types/common'
 import mongoose from 'mongoose'
 
 
 @ObjectType()
 export class Activity {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
   @Field()
   id?: string
 
@@ -40,7 +39,7 @@ export class UserActivity extends Activity {
 
 @ObjectType()
 export class ActivityGroup {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
   @Field()
   id?: string
 

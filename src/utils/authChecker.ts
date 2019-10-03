@@ -17,7 +17,7 @@ const authChecker: AuthChecker<Context> = (
 
   if (roles.find(role => role === context.user!.role)) return true
 
-  return UserRole.operator === context.user!.role ||
+  return UserRole.user === context.user!.role ||
     UserRole.operator === context.user!.role
 }
 
