@@ -12,20 +12,17 @@ export const ObjectIdScalar = new GraphQLScalarType({
   name: 'ObjectId',
   description: 'Mongo object id scalar type',
   parseValue(value: string) {
-    //return new ObjectId(value) // value from the client input variables
 
-    return mongoose.Types.ObjectId(value)
+    return mongoose.Types.ObjectId(value) // value from the client input variables
   },
   serialize(value: mongoose.Types.ObjectId) {
     return value // value sent to the client
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.STRING) {
-      //return new ObjectId(ast.value) // value from the client query
-
       if (!mongoose.Types.ObjectId.isValid(ast.value)) throw new Errors.Validation('Invalid id')
 
-      return mongoose.Types.ObjectId(ast.value)
+      return mongoose.Types.ObjectId(ast.value) // value from the client query
     }
 
     return null

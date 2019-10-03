@@ -37,7 +37,7 @@ export default class AssistantResolver {
     return this.activityService.listActivityGroups()
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(UserRole.operator)
   @Mutation(returns => Activity)
   async addActivity(
     @Arg('activity') activity: ActivityInput,
@@ -46,7 +46,7 @@ export default class AssistantResolver {
     return this.activityService.addActivity(activity)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(UserRole.operator)
   @Mutation(returns => ActivityGroup)
   async addActivityGroup(
     @Arg('name', type => [TranslationInput]) name: TranslationInput[],
