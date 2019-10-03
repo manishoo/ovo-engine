@@ -106,13 +106,6 @@ export default class CalendarService {
   }
 
   async logMeasurements(measurements: BodyMeasurementInput[], userId: string) {
-    /**
-     * 1- create BodyMeasurement object
-     * 2- get day of it's date
-     * 3- change measurements object and set new one
-     * 4- save all days
-     */
-
     let days = await Promise.all(measurements.map(async measurement => {
       let dayId = await getDayByTime(userId, measurement.time)
 

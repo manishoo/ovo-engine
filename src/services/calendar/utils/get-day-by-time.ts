@@ -3,7 +3,6 @@ import mongoose from "@Config/connections/mongoose"
 
 
 export async function getDayByTime(userId: string, time: Date) {
-  console.log('date: ', time)
   let userActiveDays = await CalendarModel.aggregate([
     {
       $match: {
