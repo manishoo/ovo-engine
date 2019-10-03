@@ -20,7 +20,6 @@ export default class ActivityService {
   }
 
   async listActivities(): Promise<Activity[]> {
-
     const activities = await ActivityModel.find()
       .populate('activityGroup')
 
