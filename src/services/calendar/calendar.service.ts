@@ -66,7 +66,9 @@ export default class CalendarService {
   }
 
   async logActivity(activities: LogActivityInput[], userId: string): Promise<Day[]> {
-    let days = await Promise.all(activities.map(async activity => {
+    let days = []
+
+    for (let activity of activities) {
       let dayId = await getDayByTime(userId, activity.time)
 
       let day = await CalendarModel.findById(dayId)
@@ -83,15 +85,13 @@ export default class CalendarService {
       }
 
       if (day.activities) {
-
         day.activities = [...day.activities, newActivity]
       } else {
         day.activities = [newActivity]
       }
-      await day.save()
 
-      return day as Day
-    }))
+      days.push(await day.save())
+    }
 
     return days
   }
