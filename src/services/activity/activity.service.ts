@@ -9,6 +9,7 @@ import { ActivityInput, Activity, ActivityGroup } from '@Types/activity'
 import { TranslationInput } from '@Types/common'
 import { ActivityGroupModel } from '@Models/activity-group.model'
 import { ActivityModel } from '@Models/activity.model'
+import { LogActivityInput } from '@Types/calendar'
 
 
 @Service()
@@ -64,5 +65,14 @@ export default class ActivityService {
     }
 
     return activityGroup
+  }
+
+  async activity(activityId: string) {
+    const activity = await ActivityModel.findById(activityId)
+      .populate('activityGroup')
+
+    if (!activity) throw new Errors.NotFound('Activity not found')
+
+    return activity
   }
 }
