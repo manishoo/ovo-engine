@@ -64,8 +64,8 @@ export class Day {
   @Field(type => User)
   user: Ref<UserSchema>
 
-  @Field(type => [DayMeal], { nullable: true })
-  meals?: DayMeal[]
+  @Field(type => [DayMeal], { defaultValue: [] })
+  meals: DayMeal[]
 
   @Field(type => [UserActivity], { nullable: true })
   activities?: UserActivity[]

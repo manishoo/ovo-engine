@@ -1,5 +1,6 @@
 import { CalendarModel } from "@Models/calendar.model"
 import mongoose from "@Config/connections/mongoose"
+import Errors from "@Utils/errors"
 
 
 export async function getDayByTime(userId: string, time: Date) {
@@ -34,18 +35,14 @@ export async function getDayByTime(userId: string, time: Date) {
   })
 
   if (!dayId) {
-
-    let dayCreationDate = new Date(time)
-    dayCreationDate.setUTCHours(0)
-    dayCreationDate.setHours(0)
-    dayCreationDate.setUTCMinutes(0)
-
     let day = await CalendarModel.create({
       date: time,
       user: userId,
     })
     dayId = day.id
   }
+  let day = await CalendarModel.findById(dayId)
+  if (!day) throw new Errors.System('Something went wrong')
 
-  return dayId
+  return day
 }

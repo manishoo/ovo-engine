@@ -9,7 +9,6 @@ import { RecipeModel } from '@Models/recipe.model'
 import MealService from '@Services/meal/meal.service'
 import { Day, LogActivityInput } from '@Types/calendar'
 import { DayMeal, DayMealInput } from '@Types/calendar'
-import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { getDayByTime } from './utils/get-day-by-time'
@@ -51,11 +50,8 @@ export default class CalendarService {
       items: await this.mealService.validateMealItems(dayMealInput.items),
     }
 
-    let day
-    let dayId = await getDayByTime(userId, dayMealInput.time!)
+    let day = await getDayByTime(userId, dayMealInput.time!)
 
-    day = await CalendarModel.findById(dayId)
-    if (!day) throw new Errors.System('Something went wrong')
     if (day.meals) {
       day.meals = [...day.meals, meal]
     } else {
@@ -69,12 +65,9 @@ export default class CalendarService {
     let days = []
 
     for (let activity of activities) {
-      let dayId = await getDayByTime(userId, activity.time)
+      let day = await getDayByTime(userId, activity.time)
 
-      let day = await CalendarModel.findById(dayId)
-      if (!day) throw new Errors.System('Something went wrong')
-
-      let dbActivity = await this.activityService.activity(activity.activityId)
+      let dbActivity = await this.activityService.getActivity(activity.activityId)
 
       let newActivity: UserActivity = {
         ...dbActivity.toObject(),
