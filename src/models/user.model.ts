@@ -8,7 +8,7 @@ import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Status, UserRole } from '@Types/common'
+import { Image, Ref, Status, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { ActivityLevel, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
@@ -16,7 +16,7 @@ import { Length } from 'class-validator'
 import isUUID from 'is-uuid'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { Container } from 'typedi'
-import { arrayProp, plugin, pre, prop, Ref, Typegoose } from 'typegoose'
+import { arrayProp, plugin, pre, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
 
 
@@ -28,6 +28,9 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedBy: true,
   overrideMethods: true,
 })
+/**
+ * Household middleware
+ * */
 @pre<UserSchema>('save', function (next) {
   if (!this.household) {
     /**
@@ -43,6 +46,8 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
         next()
       })
   }
+
+  next()
 })
 export class UserSchema extends Typegoose implements User {
   readonly id?: string

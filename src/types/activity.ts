@@ -1,12 +1,16 @@
-import { ObjectType, Field } from 'type-graphql'
-import { Translation } from "@Types/common"
-import { Ref } from 'typegoose'
+/*
+ * activity.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
+import { ObjectType, Field, InputType } from 'type-graphql'
+import { Translation, TranslationInput, Ref } from "@Types/common"
 import mongoose from 'mongoose'
 
 
 @ObjectType()
 export class Activity {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
   @Field()
   id?: string
 
@@ -21,6 +25,21 @@ export class Activity {
 
   @Field(type => ActivityGroup)
   activityGroup: Ref<ActivityGroup>
+}
+
+@InputType()
+export class ActivityInput {
+  @Field(type => [TranslationInput])
+  activityTypeName: TranslationInput[]
+
+  @Field()
+  met: number
+
+  @Field({ nullable: true })
+  icon?: string
+
+  @Field()
+  activityGroupId: mongoose.Types.ObjectId
 }
 
 @ObjectType()
@@ -40,10 +59,13 @@ export class UserActivity extends Activity {
 
 @ObjectType()
 export class ActivityGroup {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
   @Field()
   id?: string
 
   @Field(type => [Translation])
   name: Translation[]
+
+  @Field()
+  slug: string
 }

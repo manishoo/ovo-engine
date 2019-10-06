@@ -6,14 +6,13 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, UserRole } from '@Types/common'
+import { Image, Ref, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
 import { IsEmail, IsPhoneNumber } from 'class-validator'
 import mongoose from 'mongoose'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
-import { Ref } from 'typegoose'
 
 
 export enum Gender {
@@ -175,7 +174,7 @@ export class NutritionProfileInput {
 
 @ObjectType()
 export class BaseUser {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: mongoose.Types.ObjectId
   @Field()
   id?: string
   @Field()
@@ -190,6 +189,8 @@ export class BaseUser {
   bio?: string
   @Field(type => Image, { nullable: true })
   imageUrl: Image
+  @Field(type => SocialNetworks, { defaultValue: {} })
+  socialNetworks: SocialNetworks
 }
 
 @ObjectType()
@@ -209,8 +210,6 @@ export class User extends BaseUser {
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
-  @Field(type => SocialNetworks, { defaultValue: {} })
-  socialNetworks: SocialNetworks
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
   @Field({ nullable: true })

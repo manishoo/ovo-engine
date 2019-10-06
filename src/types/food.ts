@@ -4,13 +4,15 @@
  */
 
 import { FoodClassSchema } from '@Models/food-class.model'
-import { Image, LanguageCode, NameAndId, Pagination, Translation, TranslationInput } from '@Types/common'
+import { FoodGroupSchema } from '@Models/food-group.model'
+import { Image, LanguageCode, NameAndId, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
+import { FoodClass } from '@Types/food-class'
+import { FoodGroup } from '@Types/food-group'
 import { Weight, WeightInput } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
 import mongoose from 'mongoose'
 import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
-import { Ref } from 'typegoose'
 
 
 @ObjectType()
@@ -564,8 +566,8 @@ export interface FoodCreateInput {
 }
 
 export class FoodContent {
-  content: mongoose.Schema.Types.ObjectId | Content
-  origContentName: string
+  content: mongoose.Types.ObjectId | Content
+  origContentName?: string
   origContentType: CONTENT_TYPE
   amount: number
   unit: string
@@ -575,27 +577,53 @@ export class FoodContent {
 }
 
 @ObjectType()
-export class Food {
-  readonly _id: mongoose.Schema.Types.ObjectId
+export class BaseFood {
+  readonly _id: mongoose.Types.ObjectId
+
   @Field()
   readonly id: string
+
   @Field(type => [Translation])
   name: Translation[]
+
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
+
   @Field(type => [Weight])
   weights: Weight[]
-  @Field({ nullable: true })
-  origDb?: string
-  origFoodId?: string
+
+  @Field(type => FoodClass)
   foodClass: Ref<FoodClassSchema>
-  contents: FoodContent[]
-  @Field(type => Nutrition)
-  nutrition: Nutrition
+
   @Field(type => Image)
   imageUrl?: Image
+
   @Field(type => Image)
   thumbnailUrl?: Image
+
+  origFoodClassName: Translation[]
+
+  @Field(type => FoodGroup)
+  foodGroup: FoodGroupSchema
+}
+
+
+@ObjectType()
+export class Food extends BaseFood {
+  @Field({ nullable: true })
+  origDb?: string
+
+  origFoodId?: string
+
+  contents: FoodContent[]
+
+  @Field(type => Nutrition)
+  nutrition: Nutrition
+}
+
+@ObjectType()
+export class IngredientFood extends BaseFood {
+
 }
 
 @InputType()

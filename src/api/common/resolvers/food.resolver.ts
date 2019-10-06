@@ -22,6 +22,15 @@ export default class FoodResolver {
   }
 
   @Authorized([OperatorRole.operator, UserRole.user])
+  @Query(returns => Food)
+  async food(
+    @Arg('id') id: string,
+    @Ctx() ctx: Context,
+  ) {
+    return this.foodService.getFood(id)
+  }
+
+  @Authorized([OperatorRole.operator, UserRole.user])
   @Query(returns => FoodsListResponse)
   async foods(
     @Args() { page, size, foodClassId, nameSearchQuery }: FoodListArgs,

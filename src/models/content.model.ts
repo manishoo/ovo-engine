@@ -19,7 +19,7 @@ export interface ContentSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 export class ContentSchema extends Typegoose implements Content {
-  _id: mongoose.Schema.Types.ObjectId
+  _id: mongoose.Types.ObjectId
   id: string
 
   @prop({ enum: CONTENT_TYPE, required: true })
@@ -30,13 +30,13 @@ export class ContentSchema extends Typegoose implements Content {
   @prop({ default: [] })
   synonyms: Synonym[]
   @prop({ default: [] })
-  flavors: mongoose.Schema.Types.ObjectId[]
+  flavors: mongoose.Types.ObjectId[]
   @prop({ default: [] })
-  healthEffects: mongoose.Schema.Types.ObjectId[]
+  healthEffects: mongoose.Types.ObjectId[]
   @prop({ default: [] })
-  pathways: mongoose.Schema.Types.ObjectId[]
+  pathways: mongoose.Types.ObjectId[]
   @prop({ default: [] })
-  enzymes: mongoose.Schema.Types.ObjectId[]
+  enzymes: mongoose.Types.ObjectId[]
 
   @prop()
   origId?: number

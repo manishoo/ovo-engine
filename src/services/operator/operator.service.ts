@@ -9,6 +9,7 @@ import { OperatorModel } from '@Models/operator.model'
 import { AuthResponse } from '@Types/auth'
 import { OperatorRole, Status } from '@Types/common'
 import { Operator } from '@Types/operator'
+import { RedisKeys } from '@Types/redis'
 import Errors from '@Utils/errors'
 import { generateHashPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
@@ -53,13 +54,13 @@ export default class OperatorService {
     const removeOperator = await OperatorModel.findByIdAndRemove(id)
     if (!removeOperator) throw new Errors.NotFound('Operator not found')
 
-    const key = `operator:session:${removeOperator.session}`
+    const key = RedisKeys.operatorSession(removeOperator.session)
     await redis.del(key)
     return removeOperator
   }
 
   async findBySession(session: string): Promise<Operator | null> {
-    const key = `operator:session:${session}`
+    const key = RedisKeys.operatorSession(session)
     const userDataJSONString = await redis.get(key)
     if (userDataJSONString) {
       let user = JSON.parse(userDataJSONString)
