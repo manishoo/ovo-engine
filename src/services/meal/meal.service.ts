@@ -313,7 +313,7 @@ export default class MealService {
     let deletedMealIds = []
     deletedMealIds.push(deleted.id)
 
-    if (bulkDelete) {
+    if (bulkDelete && meal.instanceOf) {
       const meals = await MealModel.find({ instanceOf: { $in: [meal._id, meal.instanceOf] } })
       await MealModel.delete({ instanceOf: { $in: [meal._id, meal.instanceOf] } })
 

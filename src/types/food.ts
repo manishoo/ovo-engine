@@ -577,7 +577,7 @@ export class FoodContent {
 }
 
 @ObjectType()
-export class Food {
+export class BaseFood {
   readonly _id: mongoose.Types.ObjectId
 
   @Field()
@@ -592,18 +592,8 @@ export class Food {
   @Field(type => [Weight])
   weights: Weight[]
 
-  @Field({ nullable: true })
-  origDb?: string
-
-  origFoodId?: string
-
   @Field(type => FoodClass)
   foodClass: Ref<FoodClassSchema>
-
-  contents: FoodContent[]
-
-  @Field(type => Nutrition)
-  nutrition: Nutrition
 
   @Field(type => Image)
   imageUrl?: Image
@@ -615,6 +605,25 @@ export class Food {
 
   @Field(type => FoodGroup)
   foodGroup: FoodGroupSchema
+}
+
+
+@ObjectType()
+export class Food extends BaseFood {
+  @Field({ nullable: true })
+  origDb?: string
+
+  origFoodId?: string
+
+  contents: FoodContent[]
+
+  @Field(type => Nutrition)
+  nutrition: Nutrition
+}
+
+@ObjectType()
+export class IngredientFood extends BaseFood {
+
 }
 
 @InputType()
