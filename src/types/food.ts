@@ -581,7 +581,7 @@ export class BaseFood {
   readonly _id: mongoose.Types.ObjectId
 
   @Field()
-  readonly id: string
+  id: string
 
   @Field(type => [Translation])
   name: Translation[]
@@ -623,7 +623,10 @@ export class Food extends BaseFood {
 
 @ObjectType()
 export class IngredientFood extends BaseFood {
+  contents: FoodContent[]
 
+  @Field(type => Nutrition)
+  nutrition: Nutrition
 }
 
 @InputType()
