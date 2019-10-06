@@ -10,7 +10,7 @@ import { Image, Ref, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
-import { IsEmail, IsPhoneNumber } from 'class-validator'
+import { IsEmail, IsPhoneNumber, Min, Max } from 'class-validator'
 import mongoose from 'mongoose'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
@@ -131,6 +131,11 @@ export class TargetNutrition {
 
   @Field()
   max: number
+
+  @Field()
+  @Min(0)
+  @Max(100)
+  percent: number
 }
 
 @InputType()
@@ -140,6 +145,11 @@ export class TargetNutritionInput {
 
   @Field()
   max: number
+
+  @Field()
+  @Min(0)
+  @Max(100)
+  percent: number
 }
 
 @ObjectType()
@@ -170,6 +180,15 @@ export class NutritionProfileInput {
 
   @Field()
   fat: TargetNutritionInput
+}
+
+@ObjectType()
+export class UpdateNutritionProfileResponse {
+  @Field()
+  userId: mongoose.Types.ObjectId
+
+  @Field()
+  nutritionProfile: NutritionProfile
 }
 
 @ObjectType()
