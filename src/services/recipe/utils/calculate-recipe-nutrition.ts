@@ -14,7 +14,7 @@ export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
     if (ingredient.weight) {
       if (ingredient.weight.hasOwnProperty('id')) {
         const weight = ingredient.weight as Weight
-        weightId = weight.id
+        weightId = weight.id!.toString()
       } else {
         weightId = ingredient.weight.toString()
       }
