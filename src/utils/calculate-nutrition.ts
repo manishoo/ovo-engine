@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Food, NutrientUnit, Nutrition } from '@Types/food'
+import { Food, NutrientUnit, Nutrition, IngredientFood } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import Errors from '@Utils/errors'
 
@@ -22,7 +22,7 @@ export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutriti
   })
 }
 
-export function scaleFoodNutrition(food: Food, foodAmount: number, weightId?: string, customGramWeight?: number): Nutrition {
+export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, weightId?: string, customGramWeight?: number): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
   /**
@@ -40,7 +40,7 @@ export function scaleFoodNutrition(food: Food, foodAmount: number, weightId?: st
   return totalNutrition
 }
 
-function getFoodNutrientAmount(food: Food, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: string, customGramWeight?: number) {
+function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: string, customGramWeight?: number) {
   let totalAmount = baseAmount
   /**
    * If the food had a weight,
