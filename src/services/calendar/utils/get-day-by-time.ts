@@ -29,7 +29,6 @@ export async function getDayByTime(userId: string, time: Date) {
   ])
 
   let dayId = null
-  console.log('userActiveDays: ', userActiveDays)
   userActiveDays.map(activeDay => {
     if (
       (activeDay._id.year == time.getFullYear()) &&
