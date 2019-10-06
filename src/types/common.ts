@@ -44,13 +44,13 @@ registerEnumType(UserRole, {
   description: 'User roles'
 })
 
-export enum WeightMeasureUnit {
+export enum WeightMeasurementUnit {
   kg = 'kg',
   lb = 'lb',
 }
 
-registerEnumType(WeightMeasureUnit, {
-  name: 'WeightMeasuretUnit',
+registerEnumType(WeightMeasurementUnit, {
+  name: 'WeightMeasurementUnit',
   description: 'Weight units'
 })
 
