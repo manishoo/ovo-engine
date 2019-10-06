@@ -623,10 +623,6 @@ export class Food extends BaseFood {
 
 @ObjectType()
 export class IngredientFood extends BaseFood {
-  contents: FoodContent[]
-
-  @Field(type => Nutrition)
-  nutrition: Nutrition
 }
 
 @InputType()
