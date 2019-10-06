@@ -113,9 +113,8 @@ export default class CalendarService {
       if (!day) throw new Errors.System('Something went wrong')
 
       day.measurements = {
-        time: measurement.time,
         weight: measurement.weight,
-        unit: measurement.unit,
+        weightUnit: measurement.weightUnit,
       }
       await day.save()
 

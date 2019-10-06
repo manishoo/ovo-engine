@@ -36,14 +36,11 @@ export class DayMealInput {
 
 @ObjectType()
 export class BodyMeasurement {
-  @Field(type => Date)
-  time: Date
-
   @Field()
   weight: number
 
   @Field(type => WeightMeasurementUnit)
-  unit: WeightMeasurementUnit
+  weightUnit: WeightMeasurementUnit
 }
 
 @InputType()
@@ -55,7 +52,7 @@ export class BodyMeasurementInput {
   weight: number
 
   @Field(type => WeightMeasurementUnit)
-  unit: WeightMeasurementUnit
+  weightUnit: WeightMeasurementUnit
 }
 
 @ObjectType()
