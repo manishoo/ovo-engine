@@ -4,10 +4,16 @@ import Errors from "@Utils/errors"
 
 
 export async function getDayByTime(userId: string, time: Date) {
+  let lastDayOfTime = new Date(time)
+  lastDayOfTime.setDate(time.getDate() - 1)
+  let nextDayOfTime = new Date(time)
+  nextDayOfTime.setDate(time.getDate() + 1)
+
   let userActiveDays = await CalendarModel.aggregate([
     {
       $match: {
-        user: mongoose.Types.ObjectId(userId)
+        user: mongoose.Types.ObjectId(userId),
+        date: { $gte: lastDayOfTime, $lte: nextDayOfTime }
       }
     },
     {
@@ -23,7 +29,7 @@ export async function getDayByTime(userId: string, time: Date) {
   ])
 
   let dayId = null
-
+  console.log('userActiveDays: ', userActiveDays)
   userActiveDays.map(activeDay => {
     if (
       (activeDay._id.year == time.getFullYear()) &&
