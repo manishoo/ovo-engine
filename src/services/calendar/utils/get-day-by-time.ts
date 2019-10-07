@@ -1,12 +1,19 @@
 import { CalendarModel } from "@Models/calendar.model"
 import mongoose from "@Config/connections/mongoose"
+import Errors from "@Utils/errors"
 
 
 export async function getDayByTime(userId: string, time: Date) {
+  let lastDayOfTime = new Date(time)
+  lastDayOfTime.setDate(time.getDate() - 1)
+  let nextDayOfTime = new Date(time)
+  nextDayOfTime.setDate(time.getDate() + 1)
+
   let userActiveDays = await CalendarModel.aggregate([
     {
       $match: {
-        user: mongoose.Types.ObjectId(userId)
+        user: mongoose.Types.ObjectId(userId),
+        date: { $gte: lastDayOfTime, $lte: nextDayOfTime }
       }
     },
     {
@@ -22,7 +29,6 @@ export async function getDayByTime(userId: string, time: Date) {
   ])
 
   let dayId = null
-
   userActiveDays.map(activeDay => {
     if (
       (activeDay._id.year == time.getFullYear()) &&
@@ -34,18 +40,14 @@ export async function getDayByTime(userId: string, time: Date) {
   })
 
   if (!dayId) {
-
-    let dayCreationDate = new Date(time)
-    dayCreationDate.setUTCHours(0)
-    dayCreationDate.setHours(0)
-    dayCreationDate.setUTCMinutes(0)
-
     let day = await CalendarModel.create({
       date: time,
       user: userId,
     })
     dayId = day.id
   }
+  let day = await CalendarModel.findById(dayId)
+  if (!day) throw new Errors.System('Something went wrong')
 
-  return dayId
+  return day
 }

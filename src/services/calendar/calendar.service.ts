@@ -9,12 +9,12 @@ import { RecipeModel } from '@Models/recipe.model'
 import MealService from '@Services/meal/meal.service'
 import { Day, LogActivityInput, BodyMeasurementInput } from '@Types/calendar'
 import { DayMeal, DayMealInput } from '@Types/calendar'
-import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { getDayByTime } from './utils/get-day-by-time'
 import ActivityService from '@Services/activity/activity.service'
 import { UserActivity } from '@Types/activity'
+import Errors from '@Utils/errors'
 
 
 @Service()
@@ -67,49 +67,36 @@ export default class CalendarService {
 
 
   async logActivity(activities: LogActivityInput[], userId: string): Promise<Day[]> {
-    /**
-     * 1- create UserActivity object
-     * 2- get day of it's date
-     * 3- push activity in it's activities list
-     * 4- save all days
-     */
+    let days = []
 
-    let days = await Promise.all(activities.map(async activity => {
-      let dayId = await getDayByTime(userId, activity.time)
+    for (let activity of activities) {
+      let day = await getDayByTime(userId, activity.time)
 
-      let day = await CalendarModel.findById(dayId)
-      if (!day) throw new Errors.System('Something went wrong')
-
-      let dbActivity = await this.activityService.activity(activity.activityId)
+      let dbActivity = await this.activityService.getActivity(activity.activityId)
 
       let newActivity: UserActivity = {
         ...dbActivity.toObject(),
         duration: activity.duration,
         totalBurnt: activity.burntCalories,
         activityName: activity.activityName,
-        time: activity.time
+        time: activity.time,
       }
 
       if (day.activities) {
         day.activities = [...day.activities, newActivity]
-
       } else {
         day.activities = [newActivity]
       }
-      await day.save()
 
-      return day.toObject()
-    }))
+      days.push(await day.save())
+    }
 
     return days
   }
 
-  async logMeasurements(measurements: BodyMeasurementInput[], userId: string) {
+  async logMeasurements(measurements: BodyMeasurementInput[], userId: string): Promise<Day[]> {
     let days = await Promise.all(measurements.map(async measurement => {
-      let dayId = await getDayByTime(userId, measurement.time)
-
-      let day = await CalendarModel.findById(dayId)
-      if (!day) throw new Errors.System('Something went wrong')
+      let day = await getDayByTime(userId, measurement.time)
 
       day.measurements = {
         weight: {

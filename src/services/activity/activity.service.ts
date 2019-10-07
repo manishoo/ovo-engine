@@ -67,7 +67,7 @@ export default class ActivityService {
     return activityGroup
   }
 
-  async activity(activityId: string) {
+  async getActivity(activityId: string) {
     const activity = await ActivityModel.findById(activityId)
       .populate('activityGroup')
 

@@ -23,7 +23,7 @@ export class DaySchema extends Typegoose implements Day {
   user: Ref<UserSchema>
 
   @prop()
-  meals?: DayMeal[]
+  meals: DayMeal[]
 
   @prop()
   activities?: UserActivity[]
