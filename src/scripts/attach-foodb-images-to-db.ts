@@ -4,7 +4,6 @@
  */
 
 import { FoodClassModel } from '@Models/food-class.model'
-import config from '../config'
 import attachFoodImagesFromFoodClasses from './attach-food-images-from-food-classes'
 
 
@@ -17,10 +16,10 @@ export default async function main() {
   const errors: any[] = []
 
   await Promise.all(foodClasses.map(async fc => {
-    fc.imageUrl = {
+    fc.image = {
       url: `http://foodb.ca/system/foods/pictures/${fc.origId}/full/${fc.origId}.png`
     }
-    fc.thumbnailUrl = {
+    fc.thumbnail = {
       url: `http://foodb.ca/system/foods/pictures/${fc.origId}/thumb/${fc.origId}.png`
     }
 
@@ -36,7 +35,7 @@ export default async function main() {
   //       url: `http://foodb.ca/system/foods/pictures/${fc.origId}/full/${fc.origId}.png`,
   //       dest: `${basePath}/full.png`,
   //     })
-  //     fc.imageUrl = { url: filename }
+  //     fc.image = { url: filename }
   //   } catch (e) {
   //     console.log(e)
   //     errors.push(e)
@@ -46,7 +45,7 @@ export default async function main() {
   //       url: `http://foodb.ca/system/foods/pictures/${fc.origId}/thumb/${fc.origId}.png`,
   //       dest: `${basePath}/thumb.png`,
   //     })
-  //     fc.thumbnailUrl = { url: filename }
+  //     fc.thumbnail = { url: filename }
   //   } catch (e) {
   //     console.log(e)
   //     errors.push(e)

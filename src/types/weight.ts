@@ -3,17 +3,16 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Translation, TranslationInput } from '@Types/common'
-import mongoose from 'mongoose'
+import { ObjectId, Translation, TranslationInput } from '@Types/common'
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { prop } from 'typegoose'
 
 
 @ObjectType()
 export class Weight {
-  @prop({ default: mongoose.Types.ObjectId })
+  @prop({ default: ObjectId })
   @Field(type => String)
-  id?: string | mongoose.Types.ObjectId
+  id?: string | ObjectId
   @Field()
   amount: number
   @Field()

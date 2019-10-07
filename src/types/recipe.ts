@@ -3,10 +3,19 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
-import { Image, LanguageCode, Pagination, Ref, Timing, TimingInput, Translation, TranslationInput } from '@Types/common'
-import { Food, IngredientFood, Nutrition } from '@Types/food'
+import {
+  Image,
+  LanguageCode,
+  ObjectId,
+  Pagination,
+  Ref,
+  Timing,
+  TimingInput,
+  Translation,
+  TranslationInput
+} from '@Types/common'
+import { IngredientFood, Nutrition } from '@Types/food'
 import { Tag, TagType } from '@Types/tag'
 import { Author } from '@Types/user'
 import { Weight } from '@Types/weight'
@@ -169,7 +178,7 @@ export class RecipeOrigin {
 
 @ObjectType()
 export class Recipe {
-  readonly _id: mongoose.Types.ObjectId
+  readonly _id: ObjectId
   @Field()
   readonly id: string
 

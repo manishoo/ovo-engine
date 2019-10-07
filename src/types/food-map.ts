@@ -3,11 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LanguageCode, Pagination, Ref } from '@Types/common'
+import { LanguageCode, ObjectId, Pagination, Ref } from '@Types/common'
 import { Food } from '@Types/food'
 import { Weight } from '@Types/weight'
 import { Max, Min } from 'class-validator'
-import mongoose from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
 
 
@@ -33,7 +32,7 @@ export class FoodMapUnitInput {
 
 @ObjectType()
 export class FoodMap {
-  readonly _id: mongoose.Types.ObjectId
+  readonly _id: ObjectId
 
   @Field()
   readonly id: string
@@ -62,7 +61,7 @@ export class FoodMapInput {
   @Field()
   verified: boolean
   @Field()
-  food: mongoose.Types.ObjectId
+  food: ObjectId
   @Field(type => [FoodMapUnitInput])
   units: FoodMapUnitInput[]
 }

@@ -1,3 +1,8 @@
+/*
+ * calculate-recipe-nutrition.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
 import { Nutrition } from '@Types/food'
 import { Ingredient } from '@Types/recipe'
 import { Weight } from '@Types/weight'

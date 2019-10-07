@@ -4,11 +4,10 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { Ref, Timing, Translation } from '@Types/common'
+import { ObjectId, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
 import { Meal, MealItem } from '@Types/meal'
 import { Author } from '@Types/user'
-import { ObjectId } from 'mongodb'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model'

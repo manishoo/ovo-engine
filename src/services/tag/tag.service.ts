@@ -4,11 +4,11 @@
  */
 
 import { TagModel } from '@Models/tag.model'
-import { UserRole } from '@Types/common'
+import { ObjectId, Role } from '@Types/common'
 import { Tag, TagInput, TagType } from '@Types/tag'
 import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
-import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
@@ -53,11 +53,11 @@ export default class TagService {
       slug: tagSlug,
     }
 
-    if (user.role === UserRole.user) {
-      q['user'] = mongoose.Types.ObjectId(user.id)
+    if (user.role === Role.user) {
+      q['user'] = ObjectId(user.id)
     }
 
-    await TagModel.deleteOne(q)
+    await TagModel.delete(q, DeleteBy.user(user))
 
     return tagSlug
   }

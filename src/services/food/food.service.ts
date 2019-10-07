@@ -6,11 +6,13 @@
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import UploadService from '@Services/upload/upload.service'
+import { ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
 import { WeightInput } from '@Types/weight'
+import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
-import mongoose from 'mongoose'
 import { Service } from 'typedi'
 
 
@@ -35,7 +37,7 @@ export default class FoodService {
   async listFoods({ page, size, foodClassId, nameSearchQuery }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
     if (foodClassId) {
-      query['foodClass'] = new mongoose.Types.ObjectId(foodClassId)
+      query['foodClass'] = new ObjectId(foodClassId)
     }
     if (nameSearchQuery) {
       query['$or'] = [
@@ -67,7 +69,7 @@ export default class FoodService {
   }
 
   async updateFood(foodId: string, foodInput: FoodInput): Promise<Food | null> {
-    if (!mongoose.Types.ObjectId.isValid(foodId)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
+    if (!ObjectId.isValid(foodId)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
 
     const food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('food not found')
@@ -77,25 +79,25 @@ export default class FoodService {
       if (weight.id) {
         weights.push(weight)
       } else {
-        weight['id'] = String(new mongoose.Types.ObjectId())
+        weight['id'] = String(new ObjectId())
         weights.push(weight)
       }
     })
 
-    if (foodInput.imageUrl) {
-      food.imageUrl = {
-        url: await this.uploadService.processUpload(foodInput.imageUrl, 'full', `images/foods/${food.id}`)
+    if (foodInput.image) {
+      food.image = {
+        url: await this.uploadService.processUpload(foodInput.image, 'full', `images/foods/${food.id}`)
       }
-      if (!foodInput.thumbnailUrl) {
-        food.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodInput.imageUrl, 'thumb', `images/foods/${food.id}`)
+      if (!foodInput.thumbnail) {
+        food.thumbnail = {
+          url: await this.uploadService.processUpload(foodInput.image, 'thumb', `images/foods/${food.id}`)
         }
       }
     }
 
-    if (foodInput.thumbnailUrl) {
-      food.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodInput.thumbnailUrl, 'thumb', `images/foods/${food.id}`)
+    if (foodInput.thumbnail) {
+      food.thumbnail = {
+        url: await this.uploadService.processUpload(foodInput.thumbnail, 'thumb', `images/foods/${food.id}`)
       }
     }
 
@@ -112,24 +114,26 @@ export default class FoodService {
     return food.save()
   }
 
-  async deleteFood(foodID: string): Promise<Food> {
-    if (!mongoose.Types.ObjectId.isValid(foodID)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
+  async deleteFood(foodID: string, user: ContextUser): Promise<Food> {
+    if (!ObjectId.isValid(foodID)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
 
-    const food = await FoodModel.findByIdAndDelete(foodID)
+    const food = await FoodModel.findById(foodID)
     if (!food) throw new Errors.NotFound('food not found')
+
+    await food.delete(DeleteBy.user(user))
 
     return food
   }
 
   async createFood(foodClassID: string, foodInput: FoodInput): Promise<Food> {
-    if (!mongoose.Types.ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
+    if (!ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
     const foodClass = await FoodClassModel.findById(foodClassID)
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     let weights: WeightInput[] = []
     foodInput.weights.map(weight => {
-      weight['id'] = String(new mongoose.Types.ObjectId())
+      weight['id'] = String(new ObjectId())
       weights.push(weight)
     })
 
@@ -141,20 +145,20 @@ export default class FoodService {
       nutrition: foodInput.nutrition,
     })
 
-    if (foodInput.imageUrl) {
-      food.imageUrl = {
-        url: await this.uploadService.processUpload(foodInput.imageUrl, 'full', `images/foods/${food.id}`)
+    if (foodInput.image) {
+      food.image = {
+        url: await this.uploadService.processUpload(foodInput.image, 'full', `images/foods/${food.id}`)
       }
-      if (!foodInput.thumbnailUrl) {
-        food.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodInput.imageUrl, 'thumb', `images/foods/${food.id}`)
+      if (!foodInput.thumbnail) {
+        food.thumbnail = {
+          url: await this.uploadService.processUpload(foodInput.image, 'thumb', `images/foods/${food.id}`)
         }
       }
     }
 
-    if (foodInput.thumbnailUrl) {
-      food.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodInput.thumbnailUrl, 'thumb', `images/foods/${food.id}`)
+    if (foodInput.thumbnail) {
+      food.thumbnail = {
+        url: await this.uploadService.processUpload(foodInput.thumbnail, 'thumb', `images/foods/${food.id}`)
       }
     }
 

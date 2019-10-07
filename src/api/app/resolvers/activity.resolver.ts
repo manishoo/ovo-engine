@@ -1,14 +1,14 @@
 /*
- * ac;tivity.resolver.ts
+ * activity.resolver.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Ctx, Resolver, Authorized, Query, Mutation, Arg } from 'type-graphql'
-import { Service } from 'typedi'
-import { Context } from '@Utils/context'
-import { UserRole, TranslationInput } from '@Types/common'
-import { Activity, ActivityInput, ActivityGroup } from '@Types/activity'
 import ActivityService from '@Services/activity/activity.service'
+import { Activity, ActivityGroup, ActivityInput } from '@Types/activity'
+import { Role, TranslationInput } from '@Types/common'
+import { Context } from '@Utils/context'
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Service } from 'typedi'
 
 
 @Service()
@@ -21,7 +21,7 @@ export default class AssistantResolver {
     // noop
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Query(returns => [Activity])
   async activities(
     @Ctx() ctc: Context,
@@ -29,7 +29,7 @@ export default class AssistantResolver {
     return this.activityService.listActivities()
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Query(returns => [ActivityGroup])
   async activityGroups(
     @Ctx() ctx: Context,
@@ -37,7 +37,7 @@ export default class AssistantResolver {
     return this.activityService.listActivityGroups()
   }
 
-  @Authorized(UserRole.operator)
+  @Authorized(Role.operator)
   @Mutation(returns => Activity)
   async addActivity(
     @Arg('activity') activity: ActivityInput,
@@ -46,7 +46,7 @@ export default class AssistantResolver {
     return this.activityService.addActivity(activity)
   }
 
-  @Authorized(UserRole.operator)
+  @Authorized(Role.operator)
   @Mutation(returns => ActivityGroup)
   async addActivityGroup(
     @Arg('name', type => [TranslationInput]) name: TranslationInput[],

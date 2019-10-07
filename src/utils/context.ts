@@ -3,18 +3,26 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LanguageCode, Status, UserRole, OperatorRole } from '@Types/common'
+import { LanguageCode, Role, Status } from '@Types/common'
 import { Request } from 'express'
 
-export interface ContextUser {
-  id: string,
-  status: Status,
-  lang: LanguageCode,
-  role: UserRole | OperatorRole
+
+export enum ContextUserType {
+  operator = 'operator',
+  user = 'user',
 }
 
-export interface Context {
-  request: Request,
-  lang: LanguageCode,
-  user?: ContextUser,
+export class ContextUser {
+  id: string
+  status: Status
+  session: string
+  // lang: LanguageCode
+  type: ContextUserType
+  role: Role
+}
+
+export class Context {
+  request: Request
+  lang: LanguageCode
+  user?: ContextUser
 }

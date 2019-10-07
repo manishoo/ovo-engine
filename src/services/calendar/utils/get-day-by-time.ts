@@ -1,9 +1,16 @@
-import { CalendarModel } from "@Models/calendar.model"
-import mongoose from "@Config/connections/mongoose"
-import Errors from "@Utils/errors"
+/*
+ * get-day-by-time.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
+import mongoose from '@Config/connections/mongoose'
+import { CalendarModel } from '@Models/calendar.model'
+import { Day } from '@Types/calendar'
+import Errors from '@Utils/errors'
+import { InstanceType } from 'typegoose'
 
 
-export async function getDayByTime(userId: string, time: Date) {
+export async function getDayByTime(userId: string, time: Date): Promise<InstanceType<Day>> {
   let lastDayOfTime = new Date(time)
   lastDayOfTime.setDate(time.getDate() - 1)
   let nextDayOfTime = new Date(time)

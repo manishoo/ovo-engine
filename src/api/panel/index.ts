@@ -3,15 +3,15 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import 'reflect-metadata' // needed for type-graphql
 import config from '@Config'
 import expressLoader from '@Loaders/express.loader'
 import graphQLLoader from '@Loaders/graphql.loader'
 import healthCheckLoader from '@Loaders/health-check.loader'
+import { authChecker } from '@Utils/authChecker'
 import chalk from 'chalk'
 import express, { Request } from 'express'
+import 'reflect-metadata' // needed for type-graphql
 import operatorMiddleware from './middlewares/operator.middleware'
-import { authChecker } from '@Utils/authChecker'
 
 
 global.Promise = require('bluebird')

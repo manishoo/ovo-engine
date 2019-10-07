@@ -1,10 +1,10 @@
 /*
- * weight-resolver.ts
+ * weight.resolver.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import WeightService from '@Services/food/weight.service'
-import { OperatorRole } from '@Types/common'
+import { Role } from '@Types/common'
 import { Weight, WeightInput } from '@Types/weight'
 import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql'
@@ -21,7 +21,7 @@ export default class WeightResolver {
     // noop
   }
 
-  @Authorized([OperatorRole.operator])
+  @Authorized([Role.operator])
   @Mutation(returns => Weight)
   async createWeight(
     @Arg('foodId') foodId: string,

@@ -5,7 +5,7 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { FoodSchema } from '@Models/food.model'
-import { LanguageCode, Ref } from '@Types/common'
+import { LanguageCode, ObjectId, Ref } from '@Types/common'
 import { Food } from '@Types/food'
 import { FoodMap, FoodMapUnit } from '@Types/food-map'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
@@ -21,7 +21,7 @@ export interface FoodMapSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 export class FoodMapSchema extends Typegoose implements FoodMap {
-  readonly _id: mongoose.Types.ObjectId
+  readonly _id: ObjectId
 
   readonly id: string
 

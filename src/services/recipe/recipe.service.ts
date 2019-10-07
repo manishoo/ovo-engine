@@ -8,12 +8,12 @@ import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
-import { Image, LanguageCode, UserRole } from '@Types/common'
+import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
 import { Ingredient, Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
 import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
-import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
@@ -33,10 +33,10 @@ export default class RecipeService {
   async get(id?: string, slug?: string) {
     if (!id && !slug) throw new Errors.Validation('Recipe id or slug must be provided')
 
-    const query: { slug?: string, _id?: mongoose.Types.ObjectId } = {}
+    const query: { slug?: string, _id?: ObjectId } = {}
 
     if (id) {
-      query._id = mongoose.Types.ObjectId(id)
+      query._id = ObjectId(id)
     }
     if (slug) {
       query.slug = slug
@@ -65,7 +65,7 @@ export default class RecipeService {
       const me = await UserModel.findById(variables.userId)
       if (!me) throw new Errors.System('something went wrong')
 
-      query['author'] = mongoose.Types.ObjectId(variables.userId)
+      query['author'] = ObjectId(variables.userId)
     }
 
     if (variables.tags) {
@@ -77,7 +77,7 @@ export default class RecipeService {
     }
 
     if (variables.lastId) {
-      if (!mongoose.Types.ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
+      if (!ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
 
       const recipe = await RecipeModel.findById(variables.lastId)
       if (!recipe) throw new Errors.NotFound('recipe not found')
@@ -131,6 +131,7 @@ export default class RecipeService {
         text: instructionInput.text,
         step: instructionInput.step,
       })),
+      languages: data.title.map(name => name.locale),
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
         let ingredient: Partial<Ingredient> = {}
 
@@ -146,12 +147,12 @@ export default class RecipeService {
           /**
            * If the ingredient had an associated food
            * */
-          if (!mongoose.Types.ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
+          if (!ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
           const food = await FoodModel.findById(ingredientInput.food)
           if (!food) throw new Errors.NotFound('food not found')
 
           ingredient.food = food
-          ingredient.thumbnail = food.thumbnailUrl
+          ingredient.thumbnail = food.thumbnail
           ingredient.name = food.name
 
           if (ingredientInput.weight) {
@@ -190,18 +191,18 @@ export default class RecipeService {
     return transformRecipe(createdRecipe, userId)
   }
 
-  async delete(id: string, user?: ContextUser, operatorId?: string) {
-    if (!user && !operatorId) throw new Errors.Forbidden('not allowed')
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid recipe ID')
+  async delete(id: string, user: ContextUser) {
+    if (!user) throw new Errors.Forbidden('not allowed')
+    if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid recipe ID')
 
     const query: any = { _id: id }
-    if (user && (user.role !== UserRole.operator)) {
-      query.author = mongoose.Types.ObjectId(user.id)
+    if (user && (user.role !== Role.operator)) {
+      query.author = ObjectId(user.id)
     }
     const recipe = await RecipeModel.findOne(query)
     if (!recipe) throw new Errors.NotFound('recipe not found')
 
-    const removedRecipe = await recipe.remove()
+    const removedRecipe = await recipe.delete(DeleteBy.user(user))
     if (!removedRecipe) throw new Errors.System('something went wrong')
 
     return removedRecipe.id
@@ -210,8 +211,8 @@ export default class RecipeService {
   async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, user: ContextUser) {
     const query: any = { _id: recipeId }
 
-    if (user.role !== UserRole.operator) {
-      query['author'] = mongoose.Types.ObjectId(user.id)
+    if (user.role !== Role.operator) {
+      query['author'] = ObjectId(user.id)
     }
 
     const recipe = await RecipeModel.findOne(query)
@@ -228,6 +229,7 @@ export default class RecipeService {
     }
     if (data.title) {
       recipe.title = data.title
+      recipe.languages = data.title.map(name => name.locale)
     }
     if (data.description) {
       recipe.description = data.description
@@ -245,7 +247,7 @@ export default class RecipeService {
           amount: ingredient.amount,
           customUnit: ingredient.customUnit,
           gramWeight: ingredient.gramWeight,
-          thumbnail: ingredient.thumbnail || food.thumbnailUrl,
+          thumbnail: ingredient.thumbnail || food.thumbnail,
           description: ingredient.description,
           food: food,
           weight: food.weights.find(w => w.id == ingredient.weight),

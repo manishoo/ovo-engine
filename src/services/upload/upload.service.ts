@@ -36,6 +36,6 @@ export default class UploadService {
     const { createReadStream, filename, mimetype } = await upload
     const stream = createReadStream()
     const { path } = await this.storeFS({ stream, filename, name, location })
-    return path.replace(`/${config.uploadUrl}`, '')
+    return path.replace(`${config.uploadUrl}/`, '')
   }
 }

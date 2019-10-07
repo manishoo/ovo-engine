@@ -6,12 +6,11 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Ref, UserRole } from '@Types/common'
+import { Image, ObjectId, Ref, Role, Status } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
 import { IsEmail, IsPhoneNumber } from 'class-validator'
-import mongoose from 'mongoose'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -126,7 +125,7 @@ export class SocialNetworksInput {
 
 @ObjectType()
 export class BaseUser {
-  _id?: mongoose.Types.ObjectId
+  _id?: ObjectId
   @Field()
   id?: string
   @Field()
@@ -140,7 +139,7 @@ export class BaseUser {
   @Field({ nullable: true })
   bio?: string
   @Field(type => Image, { nullable: true })
-  imageUrl: Image
+  avatar: Image
   @Field(type => SocialNetworks, { defaultValue: {} })
   socialNetworks: SocialNetworks
 }
@@ -151,11 +150,11 @@ export class Author extends BaseUser {
 
 @ObjectType()
 export class User extends BaseUser {
-  persistedPassword: PersistedPassword
+  password: PersistedPassword
   @Field()
   session?: string
-  @Field(type => UserRole)
-  role?: UserRole
+  @Field(type => Role)
+  role?: Role
   @Field()
   @IsEmail()
   email: string
@@ -175,8 +174,8 @@ export class User extends BaseUser {
   @Field(type => Gender, { nullable: true })
   gender?: Gender
   foodAllergies?: string[]
-  status?: string
-  meals?: MealUnit[]
+  status?: Status
+  mealStructure?: MealUnit[]
   mealPlanSettings?: MacroNutrientDistribution
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
@@ -228,7 +227,7 @@ export class UserUpdateInput {
   @Field(type => Gender, { nullable: true })
   gender?: Gender
   @Field(type => GraphQLUpload, { nullable: true })
-  imageUrl?: any
+  avatar?: any
   @Field(type => SocialNetworksInput)
   socialNetworks: SocialNetworksInput
   @Field({ nullable: true })

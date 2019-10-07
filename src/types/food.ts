@@ -5,13 +5,12 @@
 
 import { FoodClassSchema } from '@Models/food-class.model'
 import { FoodGroupSchema } from '@Models/food-group.model'
-import { Image, LanguageCode, NameAndId, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
+import { Image, LanguageCode, NameAndId, ObjectId, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { FoodClass } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
 import { Weight, WeightInput } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
-import mongoose from 'mongoose'
 import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
 
 
@@ -553,7 +552,7 @@ export interface FoodCreateInput {
   foodGroupId: string
   name: string
   description?: string
-  imageUrl?: string
+  image?: string
   nutrients: { id: string, value: number }[]
   proFactor?: number
   fatFactor?: number
@@ -566,7 +565,7 @@ export interface FoodCreateInput {
 }
 
 export class FoodContent {
-  content: mongoose.Types.ObjectId | Content
+  content: ObjectId | Content
   origContentName?: string
   origContentType: CONTENT_TYPE
   amount: number
@@ -577,8 +576,8 @@ export class FoodContent {
 }
 
 @ObjectType()
-export class BaseFood {
-  readonly _id: mongoose.Types.ObjectId
+export class FoodBase {
+  readonly _id: ObjectId
 
   @Field()
   id: string
@@ -596,35 +595,32 @@ export class BaseFood {
   foodClass: Ref<FoodClassSchema>
 
   @Field(type => Image)
-  imageUrl?: Image
+  image?: Image
 
   @Field(type => Image)
-  thumbnailUrl?: Image
+  thumbnail?: Image
 
   origFoodClassName: Translation[]
 
   @Field(type => FoodGroup)
   foodGroup: FoodGroupSchema
+
+  @Field(type => Nutrition)
+  nutrition: Nutrition
 }
 
-
 @ObjectType()
-export class Food extends BaseFood {
+export class Food extends FoodBase {
   @Field({ nullable: true })
   origDb?: string
 
   origFoodId?: string
 
   contents: FoodContent[]
-
-  @Field(type => Nutrition)
-  nutrition: Nutrition
 }
 
 @ObjectType()
-export class IngredientFood extends BaseFood {
-  @Field(type => Nutrition)
-  nutrition: Nutrition
+export class IngredientFood extends FoodBase {
 }
 
 @InputType()
@@ -638,9 +634,9 @@ export class FoodInput {
   @Field(type => NutritionInput, { nullable: true })
   nutrition?: NutritionInput
   @Field(type => GraphQLUpload, { nullable: true })
-  imageUrl?: any
+  image?: any
   @Field(type => GraphQLUpload, { nullable: true })
-  thumbnailUrl?: any
+  thumbnail?: any
 }
 
 @ArgsType()
