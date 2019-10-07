@@ -26,6 +26,7 @@ export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
             weightId = mealItem.weight
           } else {
             weightId = mealItem.weight.id
+            weightId = weightId!.toString()
           }
         }
 
