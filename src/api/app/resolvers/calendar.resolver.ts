@@ -48,53 +48,7 @@ export default class CalendarResolver {
     @Arg('activities', type => [LogActivityInput]) activities: LogActivityInput[],
     @Ctx() ctx: Context,
   ) {
-    return [
-      {
-        id: '5d667c739f5aa96618af5b94',
-        date: new Date('2019-09-23T14:12:28.098Z'),
-        user: {
-          id: '5d667c739f5aa96618af5b94',
-          username: 'Gholam ali',
-        },
-        meals: [{
-          type: MealType.breakfast,
-          time: new Date('2019-09-23T14:12:28.098Z'),
-          items: [{
-            amount: 4,
-            recipe: {
-              id: '5d667c739f5aa96618af5b93',
-              title: [{ locale: LanguageCode.en, text: 'cheshm' }],
-              ingredients: [
-                {
-                  food: {
-                    id: '5d667c739f5aa96618af5b87',
-                    name: [{ locale: LanguageCode.en, text: 'carrot' }],
-                  },
-                  weight: '5d667c739f5aa96618af5b94'
-                }
-              ],
-              serving: 1,
-              slug: 'die-hard-please-vyHCB2D',
-            }
-          }]
-        }],
-        activities: [
-          {
-            id: '5d6cd273eff1e93a034aeb5b',
-            duration: activities[0].duration,
-            activityTypeName: [{ locale: LanguageCode.en, text: 'MTB' }],
-            totalBurnt: activities[0].burntCalories,
-            activityName: activities[0].activityName,
-            time: activities[0].time,
-            met: 4,
-            activityGroup: {
-              name: [{ locale: LanguageCode.en, text: 'Cycling' }]
-            }
-          }
-        ],
-        totalBurnt: 4
-      }
-    ]
+    return this.calendarService.logActivity(activities, ctx.user!.id)
   }
 
   @Authorized(UserRole.user)
