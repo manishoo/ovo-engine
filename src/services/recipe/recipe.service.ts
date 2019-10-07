@@ -105,18 +105,18 @@ export default class RecipeService {
     const author = await UserModel.findById(userId)
     if (!author) throw new Errors.NotFound('author not found')
 
-    let coverImage: Image | undefined = undefined
+    let image: Image | undefined = undefined
 
     const slugAddedId = shortid.generate()
     const generatedSlug = `${slug(data.title[0].text)}-${slugAddedId}`
-    if (data.coverImage) {
-      coverImage = {
-        url: await this.uploadService.processUpload(data.coverImage, `${generatedSlug}`, 'recipes'),
+    if (data.image) {
+      image = {
+        url: await this.uploadService.processUpload(data.image, `${generatedSlug}`, 'recipes'),
       }
     }
 
     const recipe: Partial<Recipe> = {
-      coverImage,
+      image,
       title: data.title,
       serving: data.serving,
       timing: {
@@ -268,9 +268,9 @@ export default class RecipeService {
         return <Instruction>instruction
       }))
     }
-    if (data.coverImage) {
-      recipe.coverImage = {
-        url: await this.uploadService.processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
+    if (data.image) {
+      recipe.image = {
+        url: await this.uploadService.processUpload(data.image, `${data.slug}-${shortid.generate()}`, 'recipes'),
       }
     }
     if (data.timing) {

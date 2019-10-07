@@ -10,7 +10,7 @@ import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
 import { Image, Ref, Role, Status } from '@Types/common'
 import { Household } from '@Types/household'
-import { ActivityLevel, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, Height, UserMeal, SocialNetworks, User, WeightUnit } from '@Types/user'
 import { Length } from 'class-validator'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { Container } from 'typedi'
@@ -118,10 +118,7 @@ export class UserSchema extends Typegoose implements User {
   status: Status
 
   @prop({ default: [] })
-  mealStructure?: MealUnit[]
-
-  @prop()
-  mealPlanSettings?: MacroNutrientDistribution
+  meals?: UserMeal[]
 
   @prop({ ref: MealPlanSchema })
   mealPlans?: Ref<MealPlanSchema>[]

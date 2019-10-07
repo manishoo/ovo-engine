@@ -34,7 +34,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   slug: string
   @prop()
-  coverImage?: Image
+  image?: Image
   @prop()
   thumbnail?: Image
   @prop()

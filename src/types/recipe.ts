@@ -195,7 +195,7 @@ export class Recipe {
   slug: string
 
   @Field(type => Image, { nullable: true })
-  coverImage?: Image
+  image?: Image
 
   @Field(type => Image, { nullable: true })
   thumbnail?: Image
@@ -326,7 +326,7 @@ export class RecipeInput {
   description: [TranslationInput]
 
   @Field(type => GraphQLUpload, { nullable: true })
-  coverImage?: any
+  image?: any
 
   @Field(type => GraphQLUpload, { nullable: true })
   thumbnail?: any

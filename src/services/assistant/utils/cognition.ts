@@ -13,7 +13,7 @@ import {
   MessagePayload
 } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
-import { Gender, MealUnit } from '@Types/user'
+import { Gender, UserMeal } from '@Types/user'
 import Errors from '@Utils/errors'
 import { logError } from '@Utils/logger'
 import { __ } from 'i18n'
@@ -176,7 +176,7 @@ export default class Cognition {
   }
 }
 
-function createDefaultMealDistribution(): MealUnit[] {
+function createDefaultMealDistribution(): UserMeal[] {
   return [
     {
       energyPercentageOfDay: 30,

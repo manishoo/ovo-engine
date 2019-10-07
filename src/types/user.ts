@@ -84,7 +84,7 @@ export class WeightUnit {
 }
 
 @ObjectType()
-export class MealUnit {
+export class UserMeal {
   @Field()
   name: string
   @Field()
@@ -175,8 +175,7 @@ export class User extends BaseUser {
   gender?: Gender
   foodAllergies?: string[]
   status?: Status
-  mealStructure?: MealUnit[]
-  mealPlanSettings?: MacroNutrientDistribution
+  meals?: UserMeal[]
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
   activityLevel?: ActivityLevel
