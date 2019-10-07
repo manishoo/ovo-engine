@@ -7,15 +7,14 @@ import { CalendarModel } from '@Models/calendar.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import MealService from '@Services/meal/meal.service'
-import { Day, LogActivityInput, BodyMeasurementInput, BodyMeasurement } from '@Types/calendar'
+import { Day, LogActivityInput, BodyMeasurementInput } from '@Types/calendar'
 import { DayMeal, DayMealInput } from '@Types/calendar'
 import Errors from '@Utils/errors'
 import mongoose from 'mongoose'
 import { Service } from 'typedi'
 import { getDayByTime } from './utils/get-day-by-time'
 import ActivityService from '@Services/activity/activity.service'
-import { UserActivity, Activity } from '@Types/activity'
-import { ProvidedRequiredArgumentsRule } from 'graphql'
+import { UserActivity } from '@Types/activity'
 
 
 @Service()
@@ -113,8 +112,10 @@ export default class CalendarService {
       if (!day) throw new Errors.System('Something went wrong')
 
       day.measurements = {
-        weight: measurement.weight,
-        weightUnit: measurement.weightUnit,
+        weight: {
+          value: measurement.weight.value,
+          unit: measurement.weight.unit,
+        },
       }
       await day.save()
 

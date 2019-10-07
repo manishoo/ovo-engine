@@ -44,16 +44,6 @@ registerEnumType(UserRole, {
   description: 'User roles'
 })
 
-export enum WeightMeasurementUnit {
-  kg = 'kg',
-  lb = 'lb',
-}
-
-registerEnumType(WeightMeasurementUnit, {
-  name: 'WeightMeasurementUnit',
-  description: 'Weight units'
-})
-
 @ObjectType()
 export class NameAndId {
   @Field()

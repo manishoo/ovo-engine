@@ -45,8 +45,13 @@ export enum Goal {
 
 export enum WeightUnits {
   kg = 'kg',
-  pound = 'pound',
+  lb = 'lb',
 }
+
+registerEnumType(WeightUnits, {
+  name: 'WeightUnits',
+  description: 'Weight Units'
+})
 
 export enum HeightUnits {
   cm = 'cm',
@@ -72,7 +77,7 @@ export class HeightInput {
 export class WeightUnitInput {
   @Field()
   value: number
-  @Field()
+  @Field(type => WeightUnits)
   unit: WeightUnits
 }
 
