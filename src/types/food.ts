@@ -594,10 +594,10 @@ export class FoodBase {
   @Field(type => FoodClass)
   foodClass: Ref<FoodClassSchema>
 
-  @Field(type => Image)
+  @Field(type => Image, { nullable: true })
   image?: Image
 
-  @Field(type => Image)
+  @Field(type => Image, { nullable: true })
   thumbnail?: Image
 
   origFoodClassName: Translation[]
