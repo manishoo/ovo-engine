@@ -6,9 +6,9 @@
 import AssistantService from '@Services/assistant/assistant.service'
 import { createMessage } from '@Services/assistant/utils/utils'
 import { MessagePayload } from '@Types/assistant'
+import { Context } from '@Utils/context'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '@Utils/context'
 
 
 @Service()

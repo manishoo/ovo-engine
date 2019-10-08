@@ -11,8 +11,12 @@ const PASSWORD_LENGTH = 256
 const SALT_LENGTH = 64
 const ITERATIONS = 10000
 const DIGEST = 'sha256'
-const BYTE_TO_STRING_ENCODING = 'hex'
+const BYTE_TO_STRING_ENCODING = 'hex'  // this could be base64, for instance
 
+/**
+ * Generates a PersistedPassword given the password provided by the user. This should be called when creating a user
+ * or redefining the password
+ */
 async function generateHashPassword(password: string): Promise<PersistedPassword> {
   return new Promise<PersistedPassword>((accept, reject) => {
     const salt = crypto.randomBytes(SALT_LENGTH).toString(BYTE_TO_STRING_ENCODING)
@@ -30,13 +34,17 @@ async function generateHashPassword(password: string): Promise<PersistedPassword
   })
 }
 
-async function verifyPassword(persistedPassword: PersistedPassword, passwordAttempt: string): Promise<boolean> {
+/**
+ * Verifies the attempted password against the password information saved in the database. This should be called when
+ * the user tries to log in.
+ */
+async function verifyPassword(password: PersistedPassword, passwordAttempt: string): Promise<boolean> {
   return new Promise<boolean>((accept, reject) => {
-    crypto.pbkdf2(passwordAttempt, persistedPassword.salt, persistedPassword.iterations, PASSWORD_LENGTH, DIGEST, (error, hash) => {
+    crypto.pbkdf2(passwordAttempt, password.salt, password.iterations, PASSWORD_LENGTH, DIGEST, (error, hash) => {
       if (error) {
         reject(error)
       } else {
-        accept(persistedPassword.hash === hash.toString(BYTE_TO_STRING_ENCODING))
+        accept(password.hash === hash.toString(BYTE_TO_STRING_ENCODING))
       }
     })
   })

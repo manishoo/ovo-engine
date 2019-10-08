@@ -3,10 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import cheerio from 'cheerio'
-import { LanguageCode } from '@Types/common'
 import ActivityService from '@Services/activity/activity.service'
-import mongoose from '@Config/connections/mongoose'
+import { LanguageCode, ObjectId } from '@Types/common'
+import cheerio from 'cheerio'
 
 
 const pageHTML: string = `<h2 class="pagenumber">Page 1</h2>
@@ -5281,11 +5280,15 @@ export default async function main() {
   })
 
   for (let activityData of activities) {
-    let activityGroup = await activityService.addActivityGroup(activityData.activityGroupName, [{ locale: LanguageCode.en, text: activityData.activityGroupName, verified: true }])
+    let activityGroup = await activityService.addActivityGroup(activityData.activityGroupName, [{
+      locale: LanguageCode.en,
+      text: activityData.activityGroupName,
+      verified: true
+    }])
 
     if (!Number.isNaN(Number(activityData.met))) {
       let activity = await activityService.addActivity({
-        activityGroupId: mongoose.Types.ObjectId(activityGroup.id),
+        activityGroupId: ObjectId(activityGroup.id),
         activityTypeName: [{ locale: LanguageCode.en, text: activityData.activityName }],
         met: Number(activityData.met)
       })

@@ -1,19 +1,18 @@
 /*
- * Calendar.service.ts
+ * calendar.service.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import { CalendarModel } from '@Models/calendar.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
+import ActivityService from '@Services/activity/activity.service'
 import MealService from '@Services/meal/meal.service'
-import { Day, LogActivityInput } from '@Types/calendar'
-import { DayMeal, DayMealInput } from '@Types/calendar'
-import mongoose from 'mongoose'
+import { UserActivity } from '@Types/activity'
+import { Day, DayMeal, DayMealInput, LogActivityInput } from '@Types/calendar'
+import { ObjectId } from '@Types/common'
 import { Service } from 'typedi'
 import { getDayByTime } from './utils/get-day-by-time'
-import ActivityService from '@Services/activity/activity.service'
-import { UserActivity } from '@Types/activity'
 
 
 @Service()
@@ -30,7 +29,7 @@ export default class CalendarService {
     let query: any = {}
 
     query.date = { $gt: startDate, $lt: endDate }
-    query.user = mongoose.Types.ObjectId(userId)
+    query.user = ObjectId(userId)
 
     return CalendarModel.find(query)
       .populate({

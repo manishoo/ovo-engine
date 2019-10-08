@@ -4,11 +4,10 @@
  */
 
 import TagService from '@Services/tag/tag.service'
-import { Tag, TagType, TagInput } from '@Types/tag'
-import { Ctx, Query, Resolver, Mutation, Arg, Authorized } from 'type-graphql'
-import { Service } from 'typedi'
+import { Tag, TagInput } from '@Types/tag'
 import { Context } from '@Utils/context'
-import { UserRole } from '@Types/common';
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Service } from 'typedi'
 
 
 @Service()

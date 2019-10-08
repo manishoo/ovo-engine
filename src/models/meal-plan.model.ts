@@ -4,6 +4,7 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
+import { ObjectId } from '@Types/common'
 import { Day, MealPlan } from '@Types/meal-plan'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Typegoose } from 'typegoose'
@@ -23,7 +24,7 @@ export class MealPlanSchema extends Typegoose implements MealPlan {
   name: string
   @prop({ required: true })
   days: Day[]
-  _id?: mongoose.Types.ObjectId
+  _id?: ObjectId
 }
 
 export const MealPlanModel = new MealPlanSchema().getModelForClass(MealPlanSchema, {

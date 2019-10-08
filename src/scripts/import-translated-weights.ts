@@ -51,7 +51,7 @@ async function translateWeights() {
       return weight
     })
 
-    await FoodModel.updateOne({_id: food._id}, food)
+    await FoodModel.updateOne({ _id: food._id }, food)
     // await food.save()
     process.stdout.write('.')
   }

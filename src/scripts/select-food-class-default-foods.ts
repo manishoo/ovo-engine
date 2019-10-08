@@ -6,6 +6,7 @@
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import { LanguageCode, Translation } from '@Types/common'
+import { DeleteBy } from '@Utils/delete-by'
 
 
 function getEnTranslation(tr: Translation[]) {
@@ -30,7 +31,7 @@ export default async function main() {
 
     if (foods.length === 0) {
       console.log(`Deleting ${getEnTranslation(foodClass.name)} - ${foodClass.id} - ${foodClass.origId}`)
-      await foodClass.delete()
+      await foodClass.delete(DeleteBy.system('select-food-class-default-foods.ts'))
       continue
     }
 

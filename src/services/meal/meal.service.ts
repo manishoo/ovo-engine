@@ -1,5 +1,5 @@
 /*
- * mealService.ts
+ * meal.service.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
@@ -8,17 +8,17 @@ import { MealModel } from '@Models/meal.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
-import { UserRole } from '@Types/common'
+import { ObjectId, Role } from '@Types/common'
 import { Food } from '@Types/food'
 import { ListMealsArgs, Meal, MealInput, MealItem, MealItemInput, MealListResponse } from '@Types/meal'
 import { Recipe } from '@Types/recipe'
 import { Author } from '@Types/user'
+import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import generateAllCases from '@Utils/generate-all-cases'
 import { createPagination } from '@Utils/generate-pagination'
-import mongoose from 'mongoose'
 import { Service } from 'typedi'
-import uuid from 'uuid/v4'
 import { transformMeal } from './transformes/meal.transformer'
 import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
 
@@ -26,7 +26,7 @@ import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
 @Service()
 export default class MealService {
   async create(mealInput: MealInput, userId: string, bulkCreate?: boolean): Promise<Meal[]> {
-    if (!mongoose.Types.ObjectId.isValid(userId)) throw new Errors.Validation('invalid user id')
+    if (!ObjectId.isValid(userId)) throw new Errors.Validation('invalid user id')
 
     let meal: Partial<Meal> = {}
 
@@ -73,7 +73,7 @@ export default class MealService {
     /**
      * Create meal instances
      * */
-    if (bulkCreate && me.role !== UserRole.user) {
+    if (bulkCreate && me.role !== Role.user) {
       const mealInstances = await this.createMealInstances(mealToBeCreated)
       createdMeals.push(...mealInstances)
     } else {
@@ -113,29 +113,22 @@ export default class MealService {
   }
 
   async createMealInstances(meal: Meal) {
-    const items = meal.items.map(i => {
-      i._tempId = uuid()
-      i.alternativeMealItems.map(j => {
-        j._tempId = uuid()
-        return j
-      })
-
-      return i
-    })
-
-    const arrayOfArrayOfMealItemIds = generateAllCases(items.map((mealItem, i) => ([items[i], ...mealItem.alternativeMealItems].map(j => j._tempId!))))
+    const arrayOfArrayOfMealItemIds = generateAllCases(meal.items.map((mealItem, i) => ([meal.items[i], ...mealItem.alternativeMealItems].map(j => j.id.toString()!))))
 
     return Promise.all(arrayOfArrayOfMealItemIds.map(async arrayOfMealItemIds => {
-      const mealItems = items.map((item, index) => {
+      const mealItems = meal.items.map((item, index) => {
         const allMealItems = [item, ...item.alternativeMealItems]
 
         const targetId = arrayOfMealItemIds[index]
-        const found = allMealItems.find(p => p._tempId === targetId)
+        const found = allMealItems.find(p => p.id.toString() === targetId)
         if (!found) throw new Errors.System('Something went wrong')
 
         return {
           ...found,
-          alternativeMealItems: allMealItems.filter(p => p._tempId !== found._tempId),
+          alternativeMealItems: allMealItems.filter(p => p.id !== found.id).map(alternativeMealItem => ({
+            ...alternativeMealItem,
+            alternativeMealItems: undefined,
+          })),
         } as MealItem
       })
 
@@ -184,7 +177,7 @@ export default class MealService {
     let query: any = {}
 
     if (id) {
-      if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
+      if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
       query._id = id
     } else if (slug) {
       query.slug = slug
@@ -233,14 +226,14 @@ export default class MealService {
     let query: any = {}
 
     if (variables.authorId) {
-      if (!mongoose.Types.ObjectId.isValid(variables.authorId)) throw new Errors.Validation('Invalid author id')
+      if (!ObjectId.isValid(variables.authorId)) throw new Errors.Validation('Invalid author id')
       let author = await UserModel.findById(variables.authorId)
       if (!author) throw new Errors.NotFound('Author not found')
       query['author'] = author._id
     }
 
     if (variables.lastId) {
-      if (!mongoose.Types.ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
+      if (!ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
 
       const meal = await MealModel.findById(variables.lastId)
       if (!meal) throw new Errors.NotFound('meal not found')
@@ -285,8 +278,6 @@ export default class MealService {
         meal.items.map((i, ind) => {
           if (i.recipe) {
             const r = i.recipe as Recipe
-
-            console.log('r.author', r.author)
           }
         })
       }
@@ -299,15 +290,15 @@ export default class MealService {
     }
   }
 
-  async delete(id: string, userId: string, bulkDelete?: boolean): Promise<string[]> {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
+  async delete(id: string, user: ContextUser, bulkDelete?: boolean): Promise<string[]> {
+    if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
 
     let meal = await MealModel.findById(id)
     if (!meal) throw new Errors.NotFound('meal not found')
 
-    if (meal.author.toString() !== userId) throw new Errors.Forbidden('You can only delete your own meals')
+    if (meal.author.toString() !== user.id) throw new Errors.Forbidden('You can only delete your own meals')
 
-    const deleted = await meal.delete()
+    const deleted = await meal.delete(DeleteBy.user(user))
     if (!deleted) throw new Errors.System('something went wrong')
 
     let deletedMealIds = []
@@ -315,7 +306,7 @@ export default class MealService {
 
     if (bulkDelete && meal.instanceOf) {
       const meals = await MealModel.find({ instanceOf: { $in: [meal._id, meal.instanceOf] } })
-      await MealModel.delete({ instanceOf: { $in: [meal._id, meal.instanceOf] } })
+      await MealModel.delete({ instanceOf: { $in: [meal._id, meal.instanceOf] } }, DeleteBy.user(user))
 
       //FIXME? Maybe I'm wrong?
       deletedMealIds.push(...meals.map(m => m.id))
@@ -325,7 +316,7 @@ export default class MealService {
   }
 
   async update(id: string, mealInput: MealInput, userId: string): Promise<Meal> {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
+    if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
 
     let meal = await MealModel.findById(id)
       .populate('author')
@@ -338,12 +329,16 @@ export default class MealService {
     meal.name = mealInput.name
     meal.description = mealInput.description
     meal.items = mealInput.items.map(inputItem => ({
+      id: inputItem.id,
       amount: inputItem.amount,
       food: inputItem.food,
       recipe: inputItem.recipe,
       weight: inputItem.weight,
       author: meal!.author,
-      alternativeMealItems: inputItem.alternativeMealItems,
+      alternativeMealItems: inputItem.alternativeMealItems.map(alternativeMealItem => ({
+        ...alternativeMealItem,
+        alternativeMealItems: undefined,
+      })),
     } as MealItem))
     meal.nutrition = calculateMealNutrition(meal.items)
 
@@ -417,7 +412,7 @@ export default class MealService {
       }
 
       if (mealItemInput.food) {
-        if (!mongoose.Types.ObjectId.isValid(mealItemInput.food.toString())) throw new Errors.Validation('Invalid food id')
+        if (!ObjectId.isValid(mealItemInput.food.toString())) throw new Errors.Validation('Invalid food id')
 
         const food = await FoodModel.findById(mealItemInput.food.toString())
         if (!food) throw new Errors.NotFound('food not found')
@@ -434,7 +429,7 @@ export default class MealService {
           weight: mealItemInput.weight,
         } as MealItem
       } else if (mealItemInput.recipe) {
-        if (!mongoose.Types.ObjectId.isValid(mealItemInput.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
+        if (!ObjectId.isValid(mealItemInput.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
 
         const recipe = await RecipeModel.findById(mealItemInput.recipe.toString())
         if (!recipe) throw new Errors.NotFound('recipe not found')

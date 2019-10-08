@@ -32,7 +32,7 @@ class NotFoundError extends ApolloError {
 }
 
 class SystemError extends ApolloError {
-  constructor(message: string) {
+  constructor(message: string = 'Something went wrong') {
     super(message, ErrorCodes.System)
   }
 }

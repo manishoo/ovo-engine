@@ -3,14 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { ObjectType, Field, InputType } from 'type-graphql'
-import { Translation, TranslationInput, Ref } from "@Types/common"
-import mongoose from 'mongoose'
+import { ObjectId, Ref, Translation, TranslationInput } from '@Types/common'
+import { Field, InputType, ObjectType } from 'type-graphql'
 
 
 @ObjectType()
 export class Activity {
-  _id?: mongoose.Types.ObjectId
+  _id?: ObjectId
   @Field()
   id?: string
 
@@ -39,7 +38,7 @@ export class ActivityInput {
   icon?: string
 
   @Field()
-  activityGroupId: mongoose.Types.ObjectId
+  activityGroupId: ObjectId
 }
 
 @ObjectType()
@@ -59,7 +58,7 @@ export class UserActivity extends Activity {
 
 @ObjectType()
 export class ActivityGroup {
-  _id?: mongoose.Types.ObjectId
+  _id?: ObjectId
   @Field()
   id?: string
 

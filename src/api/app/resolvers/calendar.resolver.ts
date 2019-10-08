@@ -1,16 +1,14 @@
 /*
- * user.resolver.ts
+ * calendar.resolver.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import CalendarService from '@Services/calendar/calendar.service'
-import { UserRole, LanguageCode, MealType } from '@Types/common'
+import { BodyMeasurementInput, Day, DayMealInput, LogActivityInput } from '@Types/calendar'
+import { LanguageCode, MealType, Role } from '@Types/common'
+import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '@Utils/context'
-import { Day, LogActivityInput, BodyMeasurementInput } from '@Types/calendar'
-import { DayMealInput } from '@Types/calendar'
-import { Activity } from '@Types/activity'
 
 
 @Service()
@@ -23,7 +21,7 @@ export default class CalendarResolver {
     // noop
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Query(returns => [Day])
   async calendar(
     @Arg('startDate') startDate: Date,
@@ -33,7 +31,7 @@ export default class CalendarResolver {
     return this.calendarService.listDays(ctx.user!.id, startDate, endDate)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => Day)
   async logMeal(
     @Arg('meal', type => DayMealInput) mealInput: DayMealInput,
@@ -42,7 +40,7 @@ export default class CalendarResolver {
     return this.calendarService.logMeal(mealInput, ctx.user!.id)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => [Day])
   async logActivities(
     @Arg('activities', type => [LogActivityInput]) activities: LogActivityInput[],
@@ -51,7 +49,7 @@ export default class CalendarResolver {
     return this.calendarService.logActivity(activities, ctx.user!.id)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => [Day])
   async logBodyMeasurement(
     @Arg('measurement', type => [BodyMeasurementInput]) bodyMeasurements: BodyMeasurementInput[],

@@ -6,7 +6,7 @@
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { ActivityLevel, Gender, Goal, Height, HeightUnits, WeightUnits, WeightUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, Height, HeightUnits, WeightUnit, WeightUnits } from '@Types/user'
 
 
 export default {

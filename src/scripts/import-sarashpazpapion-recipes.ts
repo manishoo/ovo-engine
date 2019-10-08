@@ -84,7 +84,7 @@ export default async function main(userPassword: string) {
       title: [{ text: rec.title, locale: LanguageCode.fa, verified: true }],
       serving: Number(persianJs(rec.serveCount).persianNumber().toString()),
       slug: generatedSlug,
-      coverImage: {
+      image: {
         url: rec.image.url,
         alt: rec.image.alt,
       },

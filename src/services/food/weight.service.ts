@@ -4,10 +4,10 @@
  */
 
 import { FoodModel } from '@Models/food.model'
+import { ObjectId } from '@Types/common'
 import { Weight, WeightInput } from '@Types/weight'
 import Errors from '@Utils/errors'
 import { Service } from 'typedi'
-import mongoose from 'mongoose'
 
 
 @Service()
@@ -15,7 +15,7 @@ export default class WeightService {
   async create(foodId: string, weightInput: WeightInput): Promise<Weight> {
     const weight: Weight = {
       ...weightInput,
-      id: new mongoose.Types.ObjectId(),
+      id: new ObjectId(),
     }
 
     const food = await FoodModel.findById(foodId)
