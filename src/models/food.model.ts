@@ -22,9 +22,7 @@ export interface FoodSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 @index({ 'name.text': 'text' })
-@index({ 'description.text': 'text' })
 @index({ 'name.text': 1 })
-@index({ 'description.text': 1 })
 export class FoodSchema extends Typegoose implements Food {
   readonly _id: ObjectId
   id: string
