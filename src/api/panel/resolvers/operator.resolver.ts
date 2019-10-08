@@ -7,11 +7,10 @@ import { OperatorModel } from '@Models/operator.model'
 import AuthService from '@Services/auth/auth.service'
 import OperatorService from '@Services/operator/operator.service'
 import { AuthResponse } from '@Types/auth'
-import { OperatorRole } from '@Types/common'
+import { ObjectId, Role } from '@Types/common'
 import { Operator, OperatorResponse } from '@Types/operator'
 import { Context } from '@Utils/context'
 import Errors from '@Utils/errors'
-import mongoose from 'mongoose'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 
@@ -46,7 +45,7 @@ export default class OperatorResolver {
     return s
   }
 
-  @Authorized(OperatorRole.admin)
+  @Authorized(Role.admin)
   @Query(returns => [Operator])
   async operators(
     @Ctx() ctx: Context,
@@ -54,24 +53,24 @@ export default class OperatorResolver {
     return this.operatorService.getOperatorsList()
   }
 
-  @Authorized(OperatorRole.admin)
+  @Authorized(Role.admin)
   @Mutation(returns => OperatorResponse)
   async createOperator(
     @Arg('username') username: string,
     @Arg('password') password: string,
-    @Arg('role', type => OperatorRole, { nullable: true }) role: OperatorRole,
+    @Arg('role', type => Role, { nullable: true }) role: Role,
     @Ctx() ctx: Context,
   ) {
     return this.operatorService.create(username, password, role)
   }
 
-  @Authorized(OperatorRole.admin)
+  @Authorized(Role.admin)
   @Mutation(returns => Operator)
   async deleteOperator(
     @Arg('id') operatorID: string,
     @Ctx() ctx: Context,
   ) {
-    if (!mongoose.Types.ObjectId.isValid(operatorID)) throw new Errors.UserInput('Invalid id', { id: 'Invalid id' })
-    return this.operatorService.removeOperator(operatorID)
+    if (!ObjectId.isValid(operatorID)) throw new Errors.UserInput('Invalid id', { id: 'Invalid id' })
+    return this.operatorService.removeOperator(operatorID, ctx.user!)
   }
 }

@@ -5,7 +5,7 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
-import { Image, LanguageCode, Ref, Timing, Translation } from '@Types/common'
+import { Image, LanguageCode, ObjectId, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
 import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, Review } from '@Types/recipe'
 import { Tag } from '@Types/tag'
@@ -22,7 +22,7 @@ export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 export class RecipeSchema extends Typegoose implements Recipe {
-  _id: mongoose.Types.ObjectId
+  _id: ObjectId
   id: string
 
   @prop({ required: true })
@@ -34,7 +34,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   slug: string
   @prop()
-  coverImage?: Image
+  image?: Image
   @prop()
   thumbnail?: Image
   @prop()

@@ -6,7 +6,7 @@
 import mongoose from '@Config/connections/mongoose'
 import { FoodClassSchema } from '@Models/food-class.model'
 import { FoodGroupSchema } from '@Models/food-group.model'
-import { Image, Ref, Translation } from '@Types/common'
+import { Image, ObjectId, Ref, Translation } from '@Types/common'
 import { Food, FoodContent, Nutrition } from '@Types/food'
 import { Weight } from '@Types/weight'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
@@ -26,7 +26,7 @@ export interface FoodSchema extends SoftDeleteModel<SoftDeleteDocument> {
 @index({ 'name.text': 1 })
 @index({ 'description.text': 1 })
 export class FoodSchema extends Typegoose implements Food {
-  readonly _id: mongoose.Types.ObjectId
+  readonly _id: ObjectId
   id: string
 
   @prop({ required: true })
@@ -50,9 +50,9 @@ export class FoodSchema extends Typegoose implements Food {
   @prop({ default: [], required: true })
   weights: Weight[]
   @prop()
-  imageUrl?: Image
+  image?: Image
   @prop()
-  thumbnailUrl?: Image
+  thumbnail?: Image
 }
 
 export const FoodModel = new FoodSchema().getModelForClass(FoodSchema, {

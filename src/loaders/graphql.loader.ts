@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { ObjectId } from '@Types/common'
 import { ObjectIdScalar } from '@Utils/scalars/object-id'
 import { ContextFunction } from 'apollo-server-core'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import { ObjectId } from 'mongodb'
 import { AuthChecker, buildSchema } from 'type-graphql'
 import { Container } from 'typedi'
 import { ErrorInterceptor } from '../api/common/middlewares/error-interceptor.middleware'

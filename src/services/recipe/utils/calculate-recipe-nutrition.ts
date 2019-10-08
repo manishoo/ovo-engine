@@ -1,3 +1,8 @@
+/*
+ * calculate-recipe-nutrition.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
 import { Nutrition } from '@Types/food'
 import { Ingredient } from '@Types/recipe'
 import { Weight } from '@Types/weight'
@@ -14,7 +19,7 @@ export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
     if (ingredient.weight) {
       if (ingredient.weight.hasOwnProperty('id')) {
         const weight = ingredient.weight as Weight
-        weightId = weight.id
+        weightId = weight.id!.toString()
       } else {
         weightId = ingredient.weight.toString()
       }

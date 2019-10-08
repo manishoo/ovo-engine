@@ -1,16 +1,14 @@
 /*
- * user.resolver.ts
+ * calendar.resolver.ts
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
 import CalendarService from '@Services/calendar/calendar.service'
-import { UserRole, LanguageCode, MealType } from '@Types/common'
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver, Args } from 'type-graphql'
-import { Service } from 'typedi'
+import { BodyMeasurementInput, Day, DayMealInput, LogActivityInput } from '@Types/calendar'
+import { LanguageCode, MealType, Role } from '@Types/common'
 import { Context } from '@Utils/context'
-import { Day, LogActivityInput } from '@Types/calendar'
-import { DayMealInput } from '@Types/calendar'
-import { Activity } from '@Types/activity'
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Service } from 'typedi'
 
 
 @Service()
@@ -23,7 +21,7 @@ export default class CalendarResolver {
     // noop
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Query(returns => [Day])
   async calendar(
     @Arg('startDate') startDate: Date,
@@ -33,7 +31,7 @@ export default class CalendarResolver {
     return this.calendarService.listDays(ctx.user!.id, startDate, endDate)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => Day)
   async logMeal(
     @Arg('meal', type => DayMealInput) mealInput: DayMealInput,
@@ -42,44 +40,19 @@ export default class CalendarResolver {
     return this.calendarService.logMeal(mealInput, ctx.user!.id)
   }
 
-  @Authorized(UserRole.user)
-  @Query(returns => [Activity])
-  async activities(
-    @Ctx() ctc: Context,
-  ) {
-    return [{
-      id: '5d667c739f5aa96618af5b93',
-      activityTypeName: [{ locale: LanguageCode.en, text: 'goshad-ish' }],
-      met: 3,
-      activityGroup: {
-        id: '5d667c739f5aa96618af5b94',
-        name: [{ locale: LanguageCode.en, text: 'Cycling' }]
-      }
-    },
-    {
-      id: '5d667c739f5aa96618af5b92',
-      activityTypeName: [{ locale: LanguageCode.en, text: 'MTB' }],
-      met: 12,
-      activityGroup: {
-        id: '5d667c739f5aa96618af5b96',
-        name: [{ locale: LanguageCode.en, text: 'Cycling' }]
-      }
-    },
-    {
-      id: '5d667c739f5aa96618af5b99',
-      activityTypeName: [{ locale: LanguageCode.en, text: 'bandari' }],
-      met: 18,
-      activityGroup: {
-        id: '5d667c739f5aa96618af5b43',
-        name: [{ locale: LanguageCode.en, text: 'Dancing' }]
-      }
-    }]
-  }
-
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => [Day])
   async logActivities(
     @Arg('activities', type => [LogActivityInput]) activities: LogActivityInput[],
+    @Ctx() ctx: Context,
+  ) {
+    return this.calendarService.logActivity(activities, ctx.user!.id)
+  }
+
+  @Authorized(Role.user)
+  @Mutation(returns => [Day])
+  async logBodyMeasurement(
+    @Arg('measurement', type => [BodyMeasurementInput]) bodyMeasurements: BodyMeasurementInput[],
     @Ctx() ctx: Context,
   ) {
     return [
@@ -115,18 +88,22 @@ export default class CalendarResolver {
         activities: [
           {
             id: '5d6cd273eff1e93a034aeb5b',
-            duration: activities[0].duration,
+            duration: 12,
             activityTypeName: [{ locale: LanguageCode.en, text: 'MTB' }],
-            totalBurnt: activities[0].burntCalories,
-            activityName: activities[0].activityName,
-            time: activities[0].time,
+            totalBurnt: 398,
+            activityName: 'Morning ride',
+            time: new Date('2019-10-23T14:12:28.098Z'),
             met: 4,
             activityGroup: {
               name: [{ locale: LanguageCode.en, text: 'Cycling' }]
             }
           }
         ],
-        totalBurnt: 4
+        totalBurnt: 4,
+        measurements: {
+          time: new Date('2019-10-23T14:12:28.098Z'),
+          weight: 132,
+        }
       }
     ]
   }

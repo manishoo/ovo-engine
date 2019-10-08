@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { Role } from '@Types/common'
 import { Context } from '@Utils/context'
 import { AuthChecker } from 'type-graphql'
-import { OperatorRole, UserRole } from '@Types/common'
 
 
 const authChecker: AuthChecker<Context> = (
@@ -13,12 +13,12 @@ const authChecker: AuthChecker<Context> = (
   roles,
 ) => {
   if (!context.user) return false
-  if (context.user.role === OperatorRole.admin) return true
+  if (context.user.role === Role.admin) return true
 
   if (roles.find(role => role === context.user!.role)) return true
 
-  return UserRole.user === context.user!.role ||
-    UserRole.operator === context.user!.role
+  return Role.user === context.user!.role ||
+    Role.operator === context.user!.role
 }
 
 export { authChecker }

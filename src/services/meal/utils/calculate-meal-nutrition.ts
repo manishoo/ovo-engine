@@ -1,3 +1,8 @@
+/*
+ * calculate-meal-nutrition.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
 import { Food, Nutrition } from '@Types/food'
 import { MealItemBase } from '@Types/meal'
 import { Recipe } from '@Types/recipe'
@@ -26,6 +31,7 @@ export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
             weightId = mealItem.weight
           } else {
             weightId = mealItem.weight.id
+            weightId = weightId!.toString()
           }
         }
 

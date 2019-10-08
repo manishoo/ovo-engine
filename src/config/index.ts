@@ -73,6 +73,6 @@ export default {
     },
   },
   uploadUrl: 'uploads',
-  imageUrl: process.env.IMAGE_URL || '127.0.0.1',
+  imagesUrl: process.env.IMAGE_URL || '127.0.0.1',
 
 }
