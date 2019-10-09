@@ -186,4 +186,36 @@ export class TimingInput {
   totalTime: number
 }
 
+export enum UnitEnum {
+  kg = 'kg',
+  lb = 'lb',
+  m = 'm',
+  cm = 'cm',
+}
+
+registerEnumType(UnitEnum, {
+  name: 'UnitEnum',
+  description: 'Unit enum'
+})
+
+@ObjectType()
+export class Unit {
+  @Field()
+  value: number
+
+  @Field()
+  unit: UnitEnum
+}
+
+@InputType()
+export class UnitInput {
+  @Field()
+  value: number
+
+  @Field(type => UnitEnum)
+  unit: UnitEnum
+}
+
 export declare type Ref<T> = T | mongoose.Types.ObjectId;
+
+export declare type UnitType<T> = { value: number, unit: T }

@@ -1,8 +1,8 @@
 import { UserSchema } from '@Models/user.model'
 import { UserActivity } from '@Types/activity'
-import { MealType, Pagination, Ref } from '@Types/common'
+import { MealType, Pagination, Ref, Unit, UnitType, UnitInput, UnitEnum } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
-import { User, WeightUnit, WeightUnitInput } from '@Types/user'
+import { User } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
@@ -36,8 +36,8 @@ export class DayMealInput {
 
 @ObjectType()
 export class BodyMeasurement {
-  @Field(type => WeightUnit)
-  weight: WeightUnit
+  @Field(type => Unit)
+  weight: UnitType<UnitEnum>
 }
 
 @InputType()
@@ -45,8 +45,8 @@ export class BodyMeasurementInput {
   @Field(type => Date)
   time: Date
 
-  @Field(type => WeightUnitInput)
-  weight: WeightUnitInput
+  @Field(type => UnitInput)
+  weight: UnitType<UnitEnum>
 }
 
 @ObjectType()

@@ -8,7 +8,7 @@ import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Ref, Status, UserRole } from '@Types/common'
+import { Image, Ref, Status, UserRole, UnitType, UnitEnum } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { ActivityLevel, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
@@ -93,7 +93,7 @@ export class UserSchema extends Typegoose implements User {
   @prop()
   height?: Height
   @prop()
-  weight?: WeightUnit
+  weight?: UnitType<UnitEnum>
   @prop({ min: 0, max: 150 })
   age?: number
   @prop()
