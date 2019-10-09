@@ -176,7 +176,7 @@ export class NutritionProfileInput {
   protein: TargetNutritionInput
 
   @Field()
-  carbs: TargetNutritionInput
+  carb: TargetNutritionInput
 
   @Field()
   fat: TargetNutritionInput
