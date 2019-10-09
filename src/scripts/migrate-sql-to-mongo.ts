@@ -10,12 +10,11 @@ import { ContentModel as mongoContentModel } from '@Models/content.model'
 import { FoodClassModel as mongoFoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel as mongoFoodGroupModel } from '@Models/food-group.model'
 import { FoodModel as mongoFoodModel } from '@Models/food.model'
-import { LanguageCode, Translation } from '@Types/common'
+import { LanguageCode, ObjectId, Translation } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
-import { Food, FoodContent } from '@Types/food'
+import { FoodContent } from '@Types/food'
 import { FoodClass, FoodClassTaxonomy } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
-import mongoose from 'mongoose'
 import { Sequelize } from 'sequelize'
 import shortid from 'shortid'
 import slug from 'slug'
@@ -80,7 +79,7 @@ async function migrateFoodClassesAndFoodGroups() {
   await mongoFoodClassModel.deleteMany({})
 
   async function createFoodGroup(foodGroup: string, foodSubGroup: string): Promise<number> {
-    async function _createFG(name: string, parentId?: mongoose.Types.ObjectId) {
+    async function _createFG(name: string, parentId?: ObjectId) {
       return mongoFoodGroupModel.create(<Partial<FoodGroup>>{
         name: createTranslations(name),
         parentFoodGroup: parentId,
@@ -277,7 +276,7 @@ async function migrateFoods() {
         origDb: caloNewfoodVariety.origDb,
         origFoodId: caloNewfoodVariety.origFoodId,
         weights: caloNewWeights.filter(i => i.foodVarietyId === caloNewfoodVariety.id).map(w => ({
-          id: new mongoose.Types.ObjectId(),
+          id: new ObjectId(),
           seq: w.seq,
           gramWeight: w.gmWgt,
           amount: w.amount,

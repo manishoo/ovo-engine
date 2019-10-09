@@ -1,10 +1,10 @@
-const MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient
 
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://localhost:27017'
 
 async function start(db1, db2) {
-  const Recipe = db1.collection('recipes');
-  const Food = db2.collection('foods');
+  const Recipe = db1.collection('recipes')
+  const Food = db2.collection('foods')
   /*
     const foods = await Food.find().toArray();
     await Promise.all(foods.map(async (it) => {
@@ -12,7 +12,7 @@ async function start(db1, db2) {
     }));
   */
 
-   await Food.createIndex({ name: 'text' });
+  await Food.createIndex({ name: 'text' })
   // await Food.dropIndex('name_text');
 
   const res = await Recipe.aggregate([
@@ -22,35 +22,35 @@ async function start(db1, db2) {
     { $group: { _id: { 'name': '$name' }, count: { $sum: '$count' } } },
     { $sort: { count: -1 } },
     { $limit: 100 },
-  ]).toArray();
+  ]).toArray()
 
   const aaa = await Promise.all(res.map(async (it, i) => {
-    const a = await Food.findOne({ $text: { $search: '' } });
+    const a = await Food.findOne({ $text: { $search: '' } })
 
-    console.log(a);
+    console.log(a)
 
-    it.food = a;
+    it.food = a
 
-    return it;
-  }));
+    return it
+  }))
 
-  const f = aaa.filter((it) => it.food != null);
+  const f = aaa.filter((it) => it.food != null)
 
-  console.log(f.length);
+  console.log(f.length)
 }
 
-MongoClient.connect(url, async function(err, client) {
+MongoClient.connect(url, async function (err, client) {
   if (err) {
-    console.log(err);
-    return;
+    console.log(err)
+    return
   }
 
-  console.log('Connected successfully to server');
+  console.log('Connected successfully to server')
 
-  const db1 = client.db('recipes-db');
-  const db2 = client.db('foodb');
+  const db1 = client.db('recipes-db')
+  const db2 = client.db('foodb')
 
-  await start(db1, db2);
+  await start(db1, db2)
 
-  client.close();
-});
+  client.close()
+})

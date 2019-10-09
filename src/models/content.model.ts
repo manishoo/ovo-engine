@@ -4,7 +4,7 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { LanguageCode, Translation } from '@Types/common'
+import { LanguageCode, ObjectId, Translation } from '@Types/common'
 import { Content, CONTENT_TYPE, Synonym } from '@Types/content'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { instanceMethod, plugin, prop, Typegoose } from 'typegoose'
@@ -19,7 +19,7 @@ export interface ContentSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 export class ContentSchema extends Typegoose implements Content {
-  _id: mongoose.Types.ObjectId
+  _id: ObjectId
   id: string
 
   @prop({ enum: CONTENT_TYPE, required: true })
@@ -30,13 +30,13 @@ export class ContentSchema extends Typegoose implements Content {
   @prop({ default: [] })
   synonyms: Synonym[]
   @prop({ default: [] })
-  flavors: mongoose.Types.ObjectId[]
+  flavors: ObjectId[]
   @prop({ default: [] })
-  healthEffects: mongoose.Types.ObjectId[]
+  healthEffects: ObjectId[]
   @prop({ default: [] })
-  pathways: mongoose.Types.ObjectId[]
+  pathways: ObjectId[]
   @prop({ default: [] })
-  enzymes: mongoose.Types.ObjectId[]
+  enzymes: ObjectId[]
 
   @prop()
   origId?: number

@@ -4,7 +4,7 @@
  */
 
 import MealService from '@Services/meal/meal.service'
-import { UserRole } from '@Types/common'
+import { Role } from '@Types/common'
 import { ListMealsArgs, Meal, MealInput, MealListResponse } from '@Types/meal'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
@@ -21,7 +21,7 @@ export default class MealResolver {
     // noop
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Query(returns => Meal)
   async meal(
     @Ctx() ctx: Context,
@@ -31,7 +31,7 @@ export default class MealResolver {
     return this.mealService.get(id, slug)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Query(returns => MealListResponse)
   async meals(
     @Args() { page, size, authorId, lastId }: ListMealsArgs,
@@ -40,7 +40,7 @@ export default class MealResolver {
     return this.mealService.list({ page, size, authorId, lastId })
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => [Meal])
   async createMeal(
     @Arg('meal') meal: MealInput,
@@ -50,7 +50,7 @@ export default class MealResolver {
     return this.mealService.create(meal, ctx.user!.id, bulkCreate)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => Meal)
   async updateMeal(
     @Arg('id') id: string,
@@ -60,13 +60,13 @@ export default class MealResolver {
     return this.mealService.update(id, data, ctx.user!.id)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => [String])
   async deleteMeal(
     @Arg('id') id: string,
     @Arg('bulkDelete', { nullable: true, defaultValue: false }) bulkDelete: boolean,
     @Ctx() ctx: Context,
   ) {
-    return this.mealService.delete(id, ctx.user!.id, bulkDelete)
+    return this.mealService.delete(id, ctx.user!, bulkDelete)
   }
 }

@@ -13,11 +13,9 @@ import {
   MessagePayload
 } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
-import { Gender, MealUnit, User } from '@Types/user'
+import { Gender, UserMeal } from '@Types/user'
 import Errors from '@Utils/errors'
-import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
-import { generateHashPassword } from '@Utils/password-manager'
 import { __ } from 'i18n'
 import { Container } from 'typedi'
 import NutritionCalculator from '../../meal-plan/utils/nutrition-calculator'
@@ -128,32 +126,32 @@ export default class Cognition {
               const data = message.data
               const validatedData = Validators.validateRegistration(data)
               const userService = Container.get(UserService)
-/*
-              const tempData = await userService.getTempData(t)
+              /*
+                            const tempData = await userService.getTempData(t)
 
-              await userService.createNewUser(<User>{
-                username: validatedData.username,
-                persistedPassword: await generateHashPassword(validatedData.password),
-                email: validatedData.email,
-                timeZone: validatedData.timeZone,
-                firstName: tempData.nickname,
-                // bmr: tempData.bmr,
-                mealPlanSettings: tempData.mealPlanSettings,
-                caloriesPerDay: tempData.tdee,
-                height: tempData.height,
-                weight: tempData.weight,
-                age: tempData.age,
-                activityLevel: tempData.activity,
-                goal: tempData.goal,
-                gender: tempData.gender,
-                meals: createDefaultMealDistribution(),
-                session: t,
-                avatar: {
-                  url: generateAvatarUrl(validatedData.username, tempData.gender)
-                }
-              })
+                            await userService.createNewUser(<User>{
+                              username: validatedData.username,
+                              password: await generateHashPassword(validatedData.password),
+                              email: validatedData.email,
+                              timeZone: validatedData.timeZone,
+                              firstName: tempData.nickname,
+                              // bmr: tempData.bmr,
+                              mealPlanSettings: tempData.mealPlanSettings,
+                              caloriesPerDay: tempData.tdee,
+                              height: tempData.height,
+                              weight: tempData.weight,
+                              age: tempData.age,
+                              activityLevel: tempData.activity,
+                              goal: tempData.goal,
+                              gender: tempData.gender,
+                              meals: createDefaultMealDistribution(),
+                              session: t,
+                              avatar: {
+                                url: generateAvatarUrl(validatedData.username, tempData.gender)
+                              }
+                            })
 
-              */
+                            */
               //return askForMealPlan(lang, tempData.tdee)
               return askForMealPlan(lang, 0)
             }
@@ -178,7 +176,7 @@ export default class Cognition {
   }
 }
 
-function createDefaultMealDistribution(): MealUnit[] {
+function createDefaultMealDistribution(): UserMeal[] {
   return [
     {
       energyPercentageOfDay: 30,

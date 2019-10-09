@@ -4,13 +4,12 @@
  */
 
 import redis from '@Config/connections/redis'
-import { WeightModel } from '@Models'
 import { FoodMapModel } from '@Models/food-map.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { calculateRecipeNutrition } from '@Services/recipe/utils/calculate-recipe-nutrition'
-import { Food, IngredientFood } from '@Types/food'
-import { FoodMap, FoodMapInput, FoodMapList, FoodMapListArgs, FoodMapUnit } from '@Types/food-map'
+import { IngredientFood } from '@Types/food'
+import { FoodMap, FoodMapInput, FoodMapList, FoodMapListArgs } from '@Types/food-map'
 import { RedisKeys } from '@Types/redis'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
@@ -109,7 +108,7 @@ export default class FoodMapperService {
             ingredient.name.map(name => {
               if (name.text === foodMap.text) {
                 ingredient.food = food
-                ingredient.thumbnail = food.thumbnailUrl
+                ingredient.thumbnail = food.thumbnail
               }
             })
           }

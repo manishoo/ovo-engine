@@ -4,8 +4,8 @@
  */
 
 import UserService from '@Services/user/user.service'
-import { UserRole } from '@Types/common'
-import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, NutritionProfile, NutritionProfileInput, UpdateNutritionProfileResponse } from '@Types/user'
+import { Role } from '@Types/common'
+import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, NutritionProfileInput, UpdateNutritionProfileResponse } from '@Types/user'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
@@ -36,7 +36,7 @@ export default class UserResolver {
     return this.userService.loginUser({ username, password })
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => User)
   async updateUser(
     @Arg('id') userId: string,
@@ -46,7 +46,7 @@ export default class UserResolver {
     return this.userService.update(user, userId)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Query(returns => User)
   async me(
     @Ctx() ctx: Context,
@@ -71,7 +71,7 @@ export default class UserResolver {
     return this.userService.doesUsernameExist(username)
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => UpdateNutritionProfileResponse)
   async updateNutritionProfile(
     @Arg('nutritionProfile') nutritionProfile: NutritionProfileInput,
@@ -82,7 +82,7 @@ export default class UserResolver {
       nutritionProfile: {
         calorie: nutritionProfile.calorie,
         protein: nutritionProfile.protein,
-        carbs: nutritionProfile.carbs,
+        carb: nutritionProfile.carb,
         fat: nutritionProfile.fat
       }
     }

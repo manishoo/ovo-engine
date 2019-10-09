@@ -5,7 +5,7 @@
 
 import { Message, MessageAdditionalData } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
-import { ActivityLevel, Gender, Goal, MealUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, UserMeal } from '@Types/user'
 import { __ } from 'i18n'
 import uuid from 'uuid/v1'
 import w2n from 'words-to-numbers'
@@ -23,7 +23,7 @@ export function validateTime(text: string): string {
   }
 }
 
-export function normalizeTimes(meals: MealUnit[]) {
+export function normalizeTimes(meals: UserMeal[]) {
   let fullClock = true
   meals.forEach((meal) => {
     if (meal.time.includes('pm') || meal.time.includes('am')) {

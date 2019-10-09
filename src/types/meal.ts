@@ -4,12 +4,10 @@
  */
 
 import { UserSchema } from '@Models/user.model'
-import { Pagination, Ref, Timing, Translation, TranslationInput } from '@Types/common'
+import { ObjectId, Pagination, Ref, Timing, Translation, TranslationInput } from '@Types/common'
 import { Food, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
-import { ObjectId } from 'mongodb'
-import mongoose from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
 import { Author } from './user'
 import { Weight } from './weight'
@@ -30,7 +28,7 @@ export class MealListResponse {
 
 @ObjectType()
 export class Meal {
-  _id?: mongoose.Types.ObjectId
+  _id?: ObjectId
 
   @Field()
   id?: string
@@ -68,6 +66,7 @@ export class Meal {
   @Field(type => Date)
   updatedAt?: Date
 
+  @Field()
   instanceOf?: ObjectId
 }
 
@@ -86,7 +85,8 @@ export class MealInput {
 
 @ObjectType()
 export class MealItemBase {
-  _tempId?: string
+  @Field()
+  readonly id: ObjectId
 
   @Field()
   amount: number
@@ -118,6 +118,9 @@ export class MealItem extends MealItemBase {
 
 @InputType()
 export class MealItemInputBase {
+  @Field({ defaultValue: ObjectId, nullable: true })
+  readonly id?: ObjectId
+
   @Field()
   amount: number
 

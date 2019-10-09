@@ -1,10 +1,14 @@
+/*
+ * calendar.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
 import { UserSchema } from '@Models/user.model'
 import { UserActivity } from '@Types/activity'
-import { MealType, Pagination, Ref } from '@Types/common'
+import { MealType, ObjectId, Pagination, Ref } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
 import { User } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
-import mongoose from 'mongoose'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
 
@@ -54,7 +58,7 @@ export class BodyMeasurementInput {
 
 @ObjectType()
 export class Day {
-  _id?: mongoose.Types.ObjectId
+  _id?: ObjectId
   @Field()
   id?: string
 

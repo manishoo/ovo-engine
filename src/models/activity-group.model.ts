@@ -1,8 +1,13 @@
-import { ActivityGroup } from '../types/activity'
-import { Translation } from '../types/common'
-import { plugin, prop, Typegoose } from 'typegoose'
+/*
+ * activity-group.model.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
 import mongoose from '@Config/connections/mongoose'
+import { ActivityGroup } from '@Types/activity'
+import { Translation } from '@Types/common'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { plugin, prop, Typegoose } from 'typegoose'
 
 
 export interface ActivityGroupSchema extends SoftDeleteModel<SoftDeleteDocument> {

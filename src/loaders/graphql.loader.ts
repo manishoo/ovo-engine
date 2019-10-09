@@ -3,15 +3,14 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { ObjectId } from '@Types/common'
 import { ObjectIdScalar } from '@Utils/scalars/object-id'
 import { ContextFunction } from 'apollo-server-core'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import { Types } from 'mongoose'
 import { AuthChecker, buildSchema } from 'type-graphql'
 import { Container } from 'typedi'
 import { ErrorInterceptor } from '../api/common/middlewares/error-interceptor.middleware'
-import mongoose from 'mongoose'
 
 
 const UPLOAD_MAX_FILE_SIZE = 2000000 // 1 MB
@@ -31,7 +30,7 @@ export default async ({ app, resolverPath, context, authChecker, platformPath }:
       container: Container,
       globalMiddlewares: [ErrorInterceptor],
       dateScalarMode: 'isoDate',
-      scalarsMap: [{ type: mongoose.Types.ObjectId, scalar: ObjectIdScalar }]
+      scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }]
     }),
     context,
     playground: process.env.NODE_ENV === 'development',

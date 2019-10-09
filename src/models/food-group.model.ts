@@ -4,7 +4,7 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { Ref, Translation } from '@Types/common'
+import { ObjectId, Ref, Translation } from '@Types/common'
 import { FoodGroup, ParentFoodGroup } from '@Types/food-group'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Typegoose } from 'typegoose'
@@ -19,7 +19,7 @@ export interface FoodGroupSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
 })
 export class FoodGroupSchema extends Typegoose implements FoodGroup {
-  readonly _id: mongoose.Types.ObjectId
+  readonly _id: ObjectId
   readonly id: string
   @prop({ required: true })
   name: Translation[]

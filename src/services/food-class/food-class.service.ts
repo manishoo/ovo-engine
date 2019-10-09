@@ -7,13 +7,14 @@ import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { FoodModel } from '@Models/food.model'
 import UploadService from '@Services/upload/upload.service'
-import { LanguageCode, Translation } from '@Types/common'
+import { LanguageCode, ObjectId, Translation } from '@Types/common'
 import { FoodClass, FoodClassInput, FoodClassListResponse, ListFoodClassesArgs } from '@Types/food-class'
+import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 // @ts-ignore
 import levenSort from 'leven-sort'
-import mongoose from 'mongoose'
 import { Service } from 'typedi'
 
 
@@ -34,7 +35,7 @@ export default class FoodClassService {
         /**
          * Search group and subgroups
          * */
-        $in: [mongoose.Types.ObjectId(foodGroupId), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
+        $in: [ObjectId(foodGroupId), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
       }
     }
 
@@ -134,14 +135,14 @@ export default class FoodClassService {
   }
 
   async getFoodClass(foodClassID: string): Promise<FoodClass> {
-    const foodClass = await FoodClassModel.findById(mongoose.Types.ObjectId(foodClassID))
+    const foodClass = await FoodClassModel.findById(ObjectId(foodClassID))
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     return foodClass
   }
 
   async editFoodClass(foodClassID: string, foodClassInput: FoodClassInput): Promise<FoodClass> {
-    const foodGroup = await FoodGroupModel.findOne({ _id: mongoose.Types.ObjectId(foodClassInput.foodGroupId) })
+    const foodGroup = await FoodGroupModel.findOne({ _id: ObjectId(foodClassInput.foodGroupId) })
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
     const foodClass = await FoodClassModel.findById(foodClassID)
@@ -150,24 +151,24 @@ export default class FoodClassService {
     let foodClassFullImagePath: string | undefined
     let foodClassThumbImagePath: string | undefined
 
-    if (foodClassInput.imageUrl) {
-      foodClassFullImagePath = await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/food-classes/${foodClassInput.slug}`)
-      foodClass.imageUrl = {
+    if (foodClassInput.image) {
+      foodClassFullImagePath = await this.uploadService.processUpload(foodClassInput.image, 'full', `images/food-classes/${foodClassInput.slug}`)
+      foodClass.image = {
         url: foodClassFullImagePath,
       }
-      if (!foodClassInput.thumbnailUrl) {
-        foodClassThumbImagePath = await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
-        foodClass.thumbnailUrl = {
+      if (!foodClassInput.thumbnail) {
+        foodClassThumbImagePath = await this.uploadService.processUpload(foodClassInput.image, 'thumb', `images/food-classes/${foodClassInput.slug}`)
+        foodClass.thumbnail = {
           url: foodClassThumbImagePath
         }
       }
     }
 
-    if (foodClassInput.thumbnailUrl) {
+    if (foodClassInput.thumbnail) {
       if (!foodClassThumbImagePath) {
-        foodClassThumbImagePath = await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
+        foodClassThumbImagePath = await this.uploadService.processUpload(foodClassInput.thumbnail, 'thumb', `images/food-classes/${foodClassInput.slug}`)
       }
-      foodClass.thumbnailUrl = {
+      foodClass.thumbnail = {
         url: foodClassThumbImagePath
       }
     }
@@ -176,7 +177,7 @@ export default class FoodClassService {
     foodClass.foodGroup = foodGroup
     foodClass.description = foodClassInput.description
     foodClass.slug = foodClassInput.slug
-    foodClass.defaultFood = mongoose.Types.ObjectId(foodClassInput.defaultFood)
+    foodClass.defaultFood = ObjectId(foodClassInput.defaultFood)
 
     const savedFoodClass = await foodClass.save()
 
@@ -184,19 +185,19 @@ export default class FoodClassService {
      * Replace the images of this food class' relative foods
      * with the uploaded image if any
      * */
-    if (foodClassInput.imageUrl) {
-      const foodClassFoods = await FoodModel.find({foodClass: savedFoodClass._id})
+    if (foodClassInput.image) {
+      const foodClassFoods = await FoodModel.find({ foodClass: savedFoodClass._id })
 
       Promise.all(foodClassFoods.map(async food => {
-        if (food.thumbnailUrl && food.thumbnailUrl.source === 'sameAsFoodClass' && foodClassThumbImagePath) {
-          food.thumbnailUrl = {
+        if (food.thumbnail && food.thumbnail.source === 'sameAsFoodClass' && foodClassThumbImagePath) {
+          food.thumbnail = {
             source: 'sameAsFoodClass',
             url: foodClassThumbImagePath,
           }
         }
 
-        if (food.imageUrl && food.imageUrl.source === 'sameAsFoodClass' && foodClassFullImagePath) {
-          food.imageUrl = {
+        if (food.image && food.image.source === 'sameAsFoodClass' && foodClassFullImagePath) {
+          food.image = {
             source: 'sameAsFoodClass',
             url: foodClassFullImagePath,
           }
@@ -209,20 +210,20 @@ export default class FoodClassService {
     return savedFoodClass
   }
 
-  async deleteFoodClass(foodClassID: string): Promise<String> {
-    const foodClass = await FoodClassModel.findById(mongoose.Types.ObjectId(foodClassID))
+  async deleteFoodClass(foodClassID: string, user: ContextUser): Promise<String> {
+    const foodClass = await FoodClassModel.findById(ObjectId(foodClassID))
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     const foodCount = await FoodModel.countDocuments({ foodClass: foodClass._id })
     if (foodCount !== 0) throw new Errors.Validation('This food class has food associated with it! It can\'t be removed')
 
-    await foodClass.remove()
+    await foodClass.delete(DeleteBy.user(user))
 
     return foodClass.id
   }
 
   async createFoodClass(foodClassInput: FoodClassInput): Promise<FoodClass> {
-    if (!mongoose.Types.ObjectId.isValid(foodClassInput.foodGroupId)) throw new Errors.UserInput('invalid food group id', { 'foodGroupId': 'invalid food group id' })
+    if (!ObjectId.isValid(foodClassInput.foodGroupId)) throw new Errors.UserInput('invalid food group id', { 'foodGroupId': 'invalid food group id' })
     const foodGroup = await FoodGroupModel.findById(foodClassInput.foodGroupId)
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
@@ -231,20 +232,20 @@ export default class FoodClassService {
       foodGroup,
     })
 
-    if (foodClassInput.imageUrl) {
-      foodClass.imageUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'full', `images/food-classes/${foodClassInput.slug}`)
+    if (foodClassInput.image) {
+      foodClass.image = {
+        url: await this.uploadService.processUpload(foodClassInput.image, 'full', `images/food-classes/${foodClassInput.slug}`)
       }
-      if (!foodClassInput.thumbnailUrl) {
-        foodClass.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodClassInput.imageUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
+      if (!foodClassInput.thumbnail) {
+        foodClass.thumbnail = {
+          url: await this.uploadService.processUpload(foodClassInput.image, 'thumb', `images/food-classes/${foodClassInput.slug}`)
         }
       }
     }
 
-    if (foodClassInput.thumbnailUrl) {
-      foodClass.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodClassInput.thumbnailUrl, 'thumb', `images/food-classes/${foodClassInput.slug}`)
+    if (foodClassInput.thumbnail) {
+      foodClass.thumbnail = {
+        url: await this.uploadService.processUpload(foodClassInput.thumbnail, 'thumb', `images/food-classes/${foodClassInput.slug}`)
       }
     }
 
