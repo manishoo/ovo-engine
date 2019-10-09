@@ -157,28 +157,28 @@ export class NutritionProfile {
   @Field()
   calories: number
 
-  @Field()
+  @Field(type => TargetNutrition)
   protein: TargetNutrition
 
-  @Field()
+  @Field(type => TargetNutrition)
   carb: TargetNutrition
 
-  @Field()
+  @Field(type => TargetNutrition)
   fat: TargetNutrition
 }
 
 @InputType()
 export class NutritionProfileInput {
   @Field()
-  calorie: TargetNutritionInput
+  calorie: number
 
-  @Field()
+  @Field(type => TargetNutritionInput)
   protein: TargetNutritionInput
 
-  @Field()
+  @Field(type => TargetNutritionInput)
   carb: TargetNutritionInput
 
-  @Field()
+  @Field(type => TargetNutritionInput)
   fat: TargetNutritionInput
 }
 

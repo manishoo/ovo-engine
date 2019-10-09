@@ -11,7 +11,7 @@ import { PersistedPassword } from '@Types/auth'
 import { Image, Ref, Status, UserRole } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
-import { ActivityLevel, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit, NutritionProfile } from '@Types/user'
 import { Length } from 'class-validator'
 import isUUID from 'is-uuid'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
@@ -88,6 +88,8 @@ export class UserSchema extends Typegoose implements User {
   /**
    * physical attributes
    * */
+  @prop()
+  nutritionProfile?: NutritionProfile
   @prop()
   caloriesPerDay?: number
   @prop()
