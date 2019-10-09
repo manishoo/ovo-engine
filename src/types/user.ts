@@ -155,7 +155,7 @@ export class TargetNutritionInput {
 @ObjectType()
 export class NutritionProfile {
   @Field()
-  calorie: TargetNutrition
+  calories: number
 
   @Field()
   protein: TargetNutrition
