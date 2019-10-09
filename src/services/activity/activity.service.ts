@@ -3,13 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import Errors from '@Utils/errors'
-import { Service } from 'typedi'
-import { ActivityInput, Activity, ActivityGroup } from '@Types/activity'
-import { TranslationInput } from '@Types/common'
 import { ActivityGroupModel } from '@Models/activity-group.model'
 import { ActivityModel } from '@Models/activity.model'
-import { LogActivityInput } from '@Types/calendar'
+import { Activity, ActivityGroup, ActivityInput } from '@Types/activity'
+import { TranslationInput } from '@Types/common'
+import Errors from '@Utils/errors'
+import { Service } from 'typedi'
 
 
 @Service()
@@ -21,16 +20,12 @@ export default class ActivityService {
   }
 
   async listActivities(): Promise<Activity[]> {
-    const activities = await ActivityModel.find()
+    return ActivityModel.find()
       .populate('activityGroup')
-
-    return activities
   }
 
   async listActivityGroups(): Promise<ActivityGroup[]> {
-    const activityGroups = await ActivityGroupModel.find()
-
-    return activityGroups
+    return ActivityGroupModel.find()
   }
 
   async addActivity(activity: ActivityInput): Promise<Activity> {

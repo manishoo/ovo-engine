@@ -7,9 +7,18 @@ import mongoose from '@Config/connections/mongoose'
 import { Ref, Translation } from '@Types/common'
 import { Tag, TagType } from '@Types/tag'
 import { User } from '@Types/user'
-import { prop, Typegoose } from 'typegoose'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { plugin, prop, Typegoose } from 'typegoose'
 
 
+export interface TagSchema extends SoftDeleteModel<SoftDeleteDocument> {
+}
+
+@plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+})
 export class TagSchema extends Typegoose implements Tag {
   @prop({ required: true, unique: true })
   slug: string // only English: quick-bite

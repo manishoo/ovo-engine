@@ -1,8 +1,13 @@
-import { Activity, ActivityGroup } from '../types/activity'
-import { Translation, Ref } from '../types/common'
-import { plugin, prop, Typegoose } from 'typegoose'
+/*
+ * activity.model.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
 import mongoose from '@Config/connections/mongoose'
+import { Activity, ActivityGroup } from '@Types/activity'
+import { Ref, Translation } from '@Types/common'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { plugin, prop, Typegoose } from 'typegoose'
 import { ActivityGroupSchema } from './activity-group.model'
 
 
@@ -29,12 +34,12 @@ export class ActivitySchema extends Typegoose implements Activity {
 }
 
 export const ActivityModel = new ActivitySchema().getModelForClass(ActivitySchema, {
-  existingMongoose: mongoose,
-  schemaOptions: {
-    collection: 'activities',
-    timestamps: true,
-    emitIndexErrors: true,
-    validateBeforeSave: true,
+    existingMongoose: mongoose,
+    schemaOptions: {
+      collection: 'activities',
+      timestamps: true,
+      emitIndexErrors: true,
+      validateBeforeSave: true,
+    }
   }
-}
 )

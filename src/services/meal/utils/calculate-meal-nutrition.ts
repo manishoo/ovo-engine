@@ -1,3 +1,8 @@
+/*
+ * calculate-meal-nutrition.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
 import { Food, Nutrition } from '@Types/food'
 import { MealItemBase } from '@Types/meal'
 import { Recipe } from '@Types/recipe'

@@ -50,7 +50,7 @@ export class Tag {
   info?: Translation[]
   @Field(type => TagType)
   type: TagType
-  @Field(type => String, {nullable: true})
+  @Field(type => String, { nullable: true })
   user?: Ref<User>
 
   createdAt?: Date

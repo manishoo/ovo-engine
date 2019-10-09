@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Food, NutrientUnit, Nutrition, IngredientFood } from '@Types/food'
+import { IngredientFood, NutrientUnit, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import Errors from '@Utils/errors'
 
@@ -16,7 +16,7 @@ export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutriti
     const nutrient = nutrition[fieldName]!
 
     totalNutrition[fieldName] = {
-      amount: nutrient.amount + (totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0),
+      amount: Number((nutrient.amount + (totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0)).toFixed(2)),
       unit: nutrient.unit,
     }
   })
@@ -58,7 +58,7 @@ function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrien
 
   totalAmount += (nutrient.amount / 100) * totalAmount
 
-  return totalAmount
+  return Number(totalAmount.toFixed(2))
 }
 
 export function scaleRecipeNutrition(recipe: Recipe, serving: number): Nutrition {

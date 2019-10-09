@@ -4,7 +4,7 @@
  */
 
 import { DayMeal } from '@Types/calendar'
-import mongoose from 'mongoose'
+import { ObjectId } from '@Types/common'
 import { Field, ObjectType } from 'type-graphql'
 
 
@@ -35,7 +35,7 @@ export class MealPlan {
   @Field(type => [Day])
   days: Day[]
 
-  _id?: mongoose.Types.ObjectId
+  _id?: ObjectId
 }
 
 export enum DAY_PERIOD {

@@ -50,7 +50,9 @@ export default {
   async extractGender(text: string): Promise<string> {
     let g
     Object.keys(Gender).map((key: any) => {
+      // @ts-ignore
       if (Gender[key] === text.replace(/[👱‍♀️‍♂️]/g, '')) {
+        // @ts-ignore
         g = key
       }
     })

@@ -4,18 +4,15 @@
  */
 
 import { Operator } from '@Types/operator'
-import { Field, Int, ObjectType } from 'type-graphql'
+import { Field, ObjectType } from 'type-graphql'
 
 
-@ObjectType()
+/**
+ * The information about the password that is stored in the database
+ */
 export class PersistedPassword {
-  @Field()
   salt: string
-
-  @Field()
   hash: string
-
-  @Field(type => Int)
   iterations: number
 }
 

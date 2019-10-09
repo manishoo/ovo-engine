@@ -3,7 +3,6 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { UserSchema } from '@Models/user.model'
 import mongoose from 'mongoose'
 import { Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 import { prop } from 'typegoose'
@@ -24,24 +23,15 @@ export enum Status {
   inactive = 'INACTIVE',
 }
 
-export enum OperatorRole {
+export enum Role {
   admin = 'ADMIN',
   operator = 'OPERATOR',
-}
-
-registerEnumType(OperatorRole, {
-  name: 'OperatorRole',
-  description: 'Operator roles'
-})
-
-export enum UserRole {
   user = 'USER',
-  operator = 'OPERATOR',
 }
 
-registerEnumType(UserRole, {
-  name: 'UserRole',
-  description: 'User roles'
+registerEnumType(Role, {
+  name: 'Role',
+  description: 'User Roles'
 })
 
 @ObjectType()
@@ -69,9 +59,6 @@ export class Video {
   @Field({ nullable: true })
   authorName?: string
 
-  // @Field(type => String, {nullable: true})
-  authorId?: Ref<UserSchema>
-
   @Field()
   url: string
 }
@@ -92,9 +79,6 @@ export class Image {
 
   @Field({ nullable: true })
   authorName?: string
-
-  // @Field(type => String, {nullable: true})
-  authorId?: Ref<UserSchema>
 
   @Field()
   url: string
@@ -219,3 +203,6 @@ export class UnitInput {
 export declare type Ref<T> = T | mongoose.Types.ObjectId;
 
 export declare type UnitType<T> = { value: number, unit: T }
+
+export declare type ObjectId = mongoose.Types.ObjectId
+export const ObjectId = mongoose.Types.ObjectId
