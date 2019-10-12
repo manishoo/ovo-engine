@@ -17,6 +17,7 @@ export interface ContentSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class ContentSchema extends Typegoose implements Content {
   _id: ObjectId
