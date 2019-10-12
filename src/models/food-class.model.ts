@@ -26,6 +26,7 @@ export interface FoodClassSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class FoodClassSchema extends Typegoose implements FoodClass {
   readonly _id: ObjectId

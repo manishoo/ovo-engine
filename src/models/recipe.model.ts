@@ -20,6 +20,7 @@ export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class RecipeSchema extends Typegoose implements Recipe {
   _id: ObjectId

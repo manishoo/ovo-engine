@@ -19,6 +19,7 @@ export interface DaySchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class DaySchema extends Typegoose implements Day {
   @prop()

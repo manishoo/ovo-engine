@@ -20,3 +20,9 @@ export default async function main(username: string, password: string) {
   await admin.save()
 }
 
+if (argv.run) {
+  main(argv.u, argv.p)
+    .then(() => {
+      console.log('DONE')
+    })
+}
