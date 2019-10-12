@@ -25,6 +25,7 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 /**
  * Household middleware

@@ -18,6 +18,7 @@ export interface TagSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class TagSchema extends Typegoose implements Tag {
   @prop({ required: true, unique: true })

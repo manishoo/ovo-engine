@@ -168,6 +168,8 @@ export default class FoodService {
       }
     }
 
+    food.origFoodClassName = foodClass.name
+
     return food.save()
   }
 

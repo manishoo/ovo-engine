@@ -17,6 +17,7 @@ export interface ActivityGroupSchema extends SoftDeleteModel<SoftDeleteDocument>
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 
 export class ActivityGroupSchema extends Typegoose implements ActivityGroup {
