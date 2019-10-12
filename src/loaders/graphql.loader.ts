@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import config from '@Config'
 import { ObjectId } from '@Types/common'
 import { ObjectIdScalar } from '@Utils/scalars/object-id'
 import { ContextFunction } from 'apollo-server-core'
@@ -12,9 +13,6 @@ import { AuthChecker, buildSchema } from 'type-graphql'
 import { Container } from 'typedi'
 import { ErrorInterceptor } from '../api/common/middlewares/error-interceptor.middleware'
 
-
-const UPLOAD_MAX_FILE_SIZE = 2000000 // 1 MB
-const UPLOAD_MAX_FILES = 1
 
 export default async ({ app, resolverPath, context, authChecker, platformPath }: { app: express.Application, resolverPath: string, context: ContextFunction, authChecker?: AuthChecker<any>, platformPath: string }) => {
   /**
@@ -35,8 +33,8 @@ export default async ({ app, resolverPath, context, authChecker, platformPath }:
     context,
     playground: process.env.NODE_ENV === 'development',
     uploads: {
-      maxFileSize: UPLOAD_MAX_FILE_SIZE,
-      maxFiles: UPLOAD_MAX_FILES
+      maxFileSize: config.uploads.maxFileSize,
+      maxFiles: config.uploads.maxFiles
     },
   })
   graphQLAppServer.applyMiddleware({ app, path: `/${platformPath}` })
