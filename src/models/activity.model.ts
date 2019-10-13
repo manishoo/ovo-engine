@@ -18,6 +18,7 @@ export interface ActivitySchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class ActivitySchema extends Typegoose implements Activity {
   @prop()

@@ -19,6 +19,7 @@ export interface OperatorSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class OperatorSchema extends Typegoose implements Operator {
   id: string

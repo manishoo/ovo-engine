@@ -19,6 +19,7 @@ export interface FoodMapSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class FoodMapSchema extends Typegoose implements FoodMap {
   readonly _id: ObjectId

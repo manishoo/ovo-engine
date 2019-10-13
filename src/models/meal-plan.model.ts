@@ -17,6 +17,7 @@ export interface MealPlanSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class MealPlanSchema extends Typegoose implements MealPlan {
   id: string

@@ -13,6 +13,6 @@ export enum DeleteByType {
 }
 
 export class DeleteBy {
-  public static user = (user: ContextUser) => `${user.type}-${user.id}`
-  public static system = (name?: string) => `${DeleteByType.system}${name ? `-${name}` : ''}`
+  public static user = (user: ContextUser) => `${user.type}_${user.id}`
+  public static system = (name?: string) => `${DeleteByType.system}${name ? `_${name}` : ''}`
 }

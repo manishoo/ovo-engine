@@ -72,6 +72,10 @@ export default {
       protein: 45,
     },
   },
+  uploads: {
+    maxFileSize: 2000000, // 2 MB
+    maxFiles: 2,
+  },
   uploadUrl: 'uploads',
   imagesUrl: process.env.IMAGE_URL || '127.0.0.1',
 

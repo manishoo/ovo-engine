@@ -19,6 +19,7 @@ export interface HouseholdSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class HouseholdSchema extends Typegoose implements Household {
   @prop({ required: true, ref: UserSchema })
