@@ -20,6 +20,7 @@ export interface FoodSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 @index({ 'name.text': 'text' })
 @index({ 'name.text': 1 })
