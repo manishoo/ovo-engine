@@ -80,7 +80,7 @@ export default class UserResolver {
     return {
       userId: '5d6cd273eff1e93a034aeb5b',
       nutritionProfile: {
-        calorie: nutritionProfile.calorie,
+        calories: nutritionProfile.calories,
         protein: nutritionProfile.protein,
         carb: nutritionProfile.carb,
         fat: nutritionProfile.fat

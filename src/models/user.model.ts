@@ -99,9 +99,6 @@ export class UserSchema extends Typegoose implements User {
   nutritionProfile?: NutritionProfile
 
   @prop()
-  caloriesPerDay?: number
-
-  @prop()
   height?: Height
 
   @prop()

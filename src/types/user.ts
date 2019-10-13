@@ -4,14 +4,12 @@
  */
 
 import { MealPlanSchema } from '@Models/meal-plan.model'
-import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
 import { Image, ObjectId, Ref, Role, Status } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
 import { IsEmail, IsPhoneNumber, Min, Max } from 'class-validator'
-import mongoose from 'mongoose'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -126,30 +124,30 @@ export class SocialNetworksInput {
 
 @ObjectType()
 export class TargetNutrition {
-  @Field()
-  min: number
+  @Field({ nullable: true })
+  min?: number
 
-  @Field()
-  max: number
+  @Field({ nullable: true })
+  max?: number
 
-  @Field()
+  @Field({ nullable: true })
   @Min(0)
   @Max(100)
-  percent: number
+  percent?: number
 }
 
 @InputType()
 export class TargetNutritionInput {
-  @Field()
-  min: number
+  @Field({ nullable: true })
+  min?: number
 
-  @Field()
-  max: number
+  @Field({ nullable: true })
+  max?: number
 
-  @Field()
+  @Field({ nullable: true })
   @Min(0)
   @Max(100)
-  percent: number
+  percent?: number
 }
 
 @ObjectType()
@@ -170,7 +168,7 @@ export class NutritionProfile {
 @InputType()
 export class NutritionProfileInput {
   @Field()
-  calorie: number
+  calories: number
 
   @Field(type => TargetNutritionInput)
   protein: TargetNutritionInput
@@ -185,7 +183,7 @@ export class NutritionProfileInput {
 @ObjectType()
 export class UpdateNutritionProfileResponse {
   @Field()
-  userId: mongoose.Types.ObjectId
+  userId: ObjectId
 
   @Field()
   nutritionProfile: NutritionProfile
