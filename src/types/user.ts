@@ -5,7 +5,7 @@
 
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Ref, UnitType, Unit, UnitEnum, Role, Status, ObjectId } from '@Types/common'
+import { Image, Ref, WeightMeasurement, Role, Status, ObjectId } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
@@ -51,16 +51,22 @@ registerEnumType(WeightUnit, {
   description: 'Weight Units'
 })
 
-export enum HeightUnits {
+export enum HeightUnit {
   cm = 'cm',
+  m = 'm',
 }
+
+registerEnumType(HeightUnit, {
+  name: 'HeightUnit',
+  description: 'Height Units'
+})
 
 @ObjectType()
 export class Height {
   @Field()
   value: number
   @Field()
-  unit: HeightUnits
+  unit: HeightUnit
 }
 
 @InputType()
@@ -68,7 +74,7 @@ export class HeightInput {
   @Field()
   value: number
   @Field()
-  unit: HeightUnits
+  unit: HeightUnit
 }
 
 @ObjectType()
@@ -153,8 +159,8 @@ export class User extends BaseUser {
   caloriesPerDay?: number
   @Field({ nullable: true })
   height?: Height
-  @Field(type => Unit, { nullable: true })
-  weight?: UnitType<UnitEnum>
+  @Field(type => WeightMeasurement, { nullable: true })
+  weight?: WeightMeasurement
   @Field({ nullable: true })
   age?: number
   @Field(type => Int, { nullable: true })

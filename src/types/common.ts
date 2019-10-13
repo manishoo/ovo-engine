@@ -6,6 +6,7 @@
 import mongoose from 'mongoose'
 import { Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 import { prop } from 'typegoose'
+import { WeightUnit, HeightUnit } from '@Types/user'
 
 
 export enum LanguageCode {
@@ -170,39 +171,43 @@ export class TimingInput {
   totalTime: number
 }
 
-export enum UnitEnum {
-  kg = 'kg',
-  lb = 'lb',
-  m = 'm',
-  cm = 'cm',
-}
-
-registerEnumType(UnitEnum, {
-  name: 'UnitEnum',
-  description: 'Unit enum'
-})
-
 @ObjectType()
-export class Unit {
+export class WeightMeasurement {
   @Field()
   value: number
 
-  @Field()
-  unit: UnitEnum
+  @Field(type => WeightUnit)
+  unit: WeightUnit
 }
 
 @InputType()
-export class UnitInput {
+export class WeightMeasurementInput {
   @Field()
   value: number
 
-  @Field(type => UnitEnum)
-  unit: UnitEnum
+  @Field(type => WeightUnit)
+  unit: WeightUnit
 }
 
-export declare type Ref<T> = T | mongoose.Types.ObjectId;
+@ObjectType()
+export class HeightMeasurement {
+  @Field()
+  value: number
 
-export declare type UnitType<T> = { value: number, unit: T }
+  @Field(type => HeightUnit)
+  unit: HeightUnit
+}
+
+@InputType()
+export class HeightMeasurementInput {
+  @Field()
+  value: number
+
+  @Field(type => HeightUnit)
+  unit: HeightUnit
+}
+
+export declare type Ref<T> = T | mongoose.Types.ObjectId
 
 export declare type ObjectId = mongoose.Types.ObjectId
 export const ObjectId = mongoose.Types.ObjectId

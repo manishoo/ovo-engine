@@ -5,7 +5,7 @@
 
 import { UserSchema } from '@Models/user.model'
 import { UserActivity } from '@Types/activity'
-import { MealType, Pagination, Ref, Unit, UnitType, UnitInput, UnitEnum, ObjectId } from '@Types/common'
+import { MealType, Pagination, Ref, WeightMeasurement, ObjectId, WeightMeasurementInput } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
 import { User } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
@@ -40,8 +40,8 @@ export class DayMealInput {
 
 @ObjectType()
 export class BodyMeasurement {
-  @Field(type => Unit)
-  weight: UnitType<UnitEnum>
+  @Field(type => WeightMeasurement)
+  weight: WeightMeasurement
 }
 
 @InputType()
@@ -49,8 +49,8 @@ export class BodyMeasurementInput {
   @Field(type => Date)
   time: Date
 
-  @Field(type => UnitInput)
-  weight: UnitType<UnitEnum>
+  @Field(type => WeightMeasurementInput)
+  weight: WeightMeasurementInput
 }
 
 @ObjectType()

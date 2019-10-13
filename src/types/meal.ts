@@ -66,7 +66,7 @@ export class Meal {
   @Field(type => Date)
   updatedAt?: Date
 
-  @Field()
+  @Field(type => ObjectId)
   instanceOf?: ObjectId
 }
 
@@ -85,7 +85,7 @@ export class MealInput {
 
 @ObjectType()
 export class MealItemBase {
-  @Field()
+  @Field(type => ObjectId)
   readonly id: ObjectId
 
   @Field()
@@ -118,7 +118,7 @@ export class MealItem extends MealItemBase {
 
 @InputType()
 export class MealItemInputBase {
-  @Field({ defaultValue: ObjectId, nullable: true })
+  @Field(type => ObjectId, { defaultValue: ObjectId, nullable: true })
   readonly id?: ObjectId
 
   @Field()

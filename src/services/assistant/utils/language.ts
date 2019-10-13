@@ -6,8 +6,8 @@
 import { MacroNutrientDistribution } from '@Types/assistant'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { ActivityLevel, Gender, Goal, Height, HeightUnits, WeightUnit } from '@Types/user'
-import { UnitType } from '@Types/common'
+import { ActivityLevel, Gender, Goal, Height, HeightUnit, WeightUnit } from '@Types/user'
+import { WeightMeasurement } from '@Types/common'
 
 
 export default {
@@ -21,7 +21,7 @@ export default {
       throw Error()
     }
   },
-  extractWeight(data: any): UnitType<WeightUnit> {
+  extractWeight(data: any): WeightMeasurement {
     if (!data) throw Error()
 
     const foundUnit = Object.keys(WeightUnit).find(i => i === data.unit)
@@ -37,11 +37,11 @@ export default {
   extractHeight(data: any): Height {
     if (!data) throw Error()
 
-    const foundUnit = Object.keys(HeightUnits).find(i => i === data.unit)
+    const foundUnit = Object.keys(HeightUnit).find(i => i === data.unit)
     if (foundUnit) {
       return {
         value: +data.value,
-        unit: <HeightUnits>foundUnit
+        unit: <HeightUnit>foundUnit
       }
     } else {
       throw Error('unit unacceptable')

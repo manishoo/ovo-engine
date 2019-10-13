@@ -504,7 +504,7 @@ export class FoodTranslationO {
   fullDescription?: string
   @Field(type => [NameAndId], { nullable: true })
   foodGroup?: NameAndId[]
-  @Field({ nullable: true })
+  @Field(type => Image, { nullable: true })
   image?: Image
   @Field(type => [FoodVariety])
   translations: FoodVariety[]

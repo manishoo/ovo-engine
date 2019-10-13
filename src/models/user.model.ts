@@ -6,10 +6,8 @@
 import mongoose from '@Config/connections/mongoose'
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
-import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Ref, Status, Role, UnitType, UnitEnum } from '@Types/common'
-import { Event } from '@Types/event'
+import { Image, Ref, Status, Role, WeightMeasurement } from '@Types/common'
 import { Household } from '@Types/household'
 import { ActivityLevel, Gender, Goal, Height, UserMeal, SocialNetworks, User, WeightUnit } from '@Types/user'
 import { Length } from 'class-validator'
@@ -102,7 +100,7 @@ export class UserSchema extends Typegoose implements User {
   height?: Height
 
   @prop()
-  weight?: UnitType<UnitEnum>
+  weight?: WeightMeasurement
 
   @prop({ min: 0, max: 150 })
   age?: number
