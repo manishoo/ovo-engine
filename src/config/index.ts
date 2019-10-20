@@ -78,5 +78,9 @@ export default {
   },
   uploadUrl: 'uploads',
   imagesUrl: process.env.IMAGE_URL || '127.0.0.1',
+  mail: {
+    apiKey: process.env.MAIL_API_KEY || '',
+    domain: process.env.MAIL_DOMAIN || '',
+  },
 
 }
