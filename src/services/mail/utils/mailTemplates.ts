@@ -1,5 +1,5 @@
 
-const TestEmailTemplate = `
+const RecoverPasswordEmailTemplate = `
 <!DOCTYPE html>
 <html  style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 <head>
@@ -88,9 +88,9 @@ background-color: #f6f6f6;
 `
 
 export const EmailTemplates = {
-  verify: TestEmailTemplate
+  reciverPassword: RecoverPasswordEmailTemplate
 }
 
 export enum MailTemplate {
-  test = 'test',
+  recoverPassword = 'recoverPassword',
 }
