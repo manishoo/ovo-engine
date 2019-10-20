@@ -88,7 +88,7 @@ background-color: #f6f6f6;
 `
 
 export const EmailTemplates = {
-  reciverPassword: RecoverPasswordEmailTemplate
+  recoverPassword: RecoverPasswordEmailTemplate
 }
 
 export enum MailTemplate {
