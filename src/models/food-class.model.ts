@@ -35,7 +35,7 @@ export class FoodClassSchema extends Typegoose implements FoodClass {
   name: Translation[]
   @prop()
   description?: Translation[]
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   slug: string
   @prop({ required: true })
   foodGroup: FoodGroupSchema
