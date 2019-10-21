@@ -26,6 +26,16 @@ import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
+export enum RecipeStatus {
+  private = 'private',
+  public = 'public',
+}
+
+registerEnumType(RecipeStatus, {
+  name: 'RecipeStatus',
+  description: 'Recipe Status'
+})
+
 export enum RecipeDifficulty {
   easy = 'easy',
   medium = 'medium',
@@ -238,9 +248,14 @@ export class Recipe {
 
   @Field(type => Date)
   updatedAt?: Date
+
   @Field({ nullable: true })
   userLikedRecipe?: boolean
+
   likes: Ref<UserSchema>[]
+
+  @Field(type => RecipeStatus)
+  status: RecipeStatus
 }
 
 @ObjectType()
@@ -333,6 +348,9 @@ export class RecipeInput {
 
   @Field(type => [String], { nullable: true })
   tags?: string[]
+
+  @Field(type => RecipeStatus, { nullable: true })
+  status?: RecipeStatus
 }
 
 @ArgsType()
