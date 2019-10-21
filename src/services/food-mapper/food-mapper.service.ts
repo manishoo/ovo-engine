@@ -116,6 +116,7 @@ export default class FoodMapperService {
           return ingredient
         })
         recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
+        recipe.markModified('ingredients')
         return recipe.save()
       }))
     }
