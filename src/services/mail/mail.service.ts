@@ -26,7 +26,6 @@ export default class MailingService {
       }
       emailList.push(recipient.email)
     })
-    console.log('%recipient.template%')
     const envelope = {
       from: 'Prana <%recipient.senderAddress%@prana.global>',
       to: emailList,
