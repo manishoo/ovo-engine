@@ -84,5 +84,9 @@ export default {
     senderName: process.env.MAIL_SENDER_NAME,
     senderDomain: process.env.MAIL_SENDER_DOMAIN,
   },
+  jwt: {
+    key: process.env.JWT_KEY || 'jwtPrivateKey',
+    tokenTime: process.env.JWT_TOKEN_TIME || 60 * 60 * 24 * 30 //a month
+  }
 
 }

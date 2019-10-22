@@ -87,4 +87,11 @@ export default class UserResolver {
       }
     }
   }
+
+  @Query(returns => Boolean)
+  async requestRecoverPassword(
+    @Ctx() ctx: Context,
+  ) {
+    return this.userService.requestRecoverPassword(ctx.user!.id)
+  }
 }
