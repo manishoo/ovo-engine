@@ -7,7 +7,7 @@ import { ObjectType, Field } from "type-graphql"
 
 
 @ObjectType()
-export class SendMail {
+export class MailInput {
   @Field()
   userId: string
 

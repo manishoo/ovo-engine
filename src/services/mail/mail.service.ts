@@ -4,14 +4,14 @@
  */
 
 import { Service } from 'typedi'
-import { SendMail } from '@Types/mail'
+import { MailInput } from '@Types/mail'
 import config from '@Config'
 
 const mailgun = require('mailgun-js')({ apiKey: config.mail.apiKey, domain: config.mail.domain, retry: 5 })
 
 @Service()
 export default class MailingService {
-  async sendMail(recipients: SendMail[]) {
+  async sendMail(recipients: MailInput[]) {
 
     let emailList: string[] = []
     let mailRecipients: any = {}
@@ -27,7 +27,7 @@ export default class MailingService {
       emailList.push(recipient.email)
     })
     const envelope = {
-      from: 'Prana <%recipient.senderAddress%@prana.global>',
+      from: '%recipient.senderName% <%recipient.senderAddress%@prana.global>',
       to: emailList,
       subject: '%recipient.subject%',
       html: '%recipient.template%',
