@@ -5,9 +5,9 @@
 
 import { Service } from 'typedi'
 import { MailInput } from '@Types/mail'
-import config from '@Config'
+import Config from '@Config'
 
-const mailgun = require('mailgun-js')({ apiKey: config.mail.apiKey, domain: config.mail.domain, retry: 5 })
+const mailgun = require('mailgun-js')({ apiKey: Config.mail.apiKey, domain: Config.mail.domain, retry: 5 })
 
 @Service()
 export default class MailingService {
@@ -27,7 +27,7 @@ export default class MailingService {
       emailList.push(recipient.email)
     })
     const envelope = {
-      from: '%recipient.senderName% <%recipient.senderAddress%@prana.global>',
+      from: `${Config.mail.senderName} <%recipient.senderAddress%@${Config.mail.senderDomain}>`,
       to: emailList,
       subject: '%recipient.subject%',
       html: '%recipient.template%',
