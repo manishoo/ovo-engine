@@ -142,8 +142,10 @@ export default class FoodService {
       weights,
       description: foodInput.description,
       foodClass: foodClass._id,
+      origFoodClassName: foodClass.name,
+      origFoodGroups: foodClass.foodGroups,
       nutrition: foodInput.nutrition,
-    })
+    } as Partial<Food>)
 
     if (foodInput.image) {
       food.image = {
@@ -167,8 +169,6 @@ export default class FoodService {
         ...foodInput.nutrition
       }
     }
-
-    food.origFoodClassName = foodClass.name
 
     return food.save()
   }
