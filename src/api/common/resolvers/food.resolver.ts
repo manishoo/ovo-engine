@@ -33,10 +33,10 @@ export default class FoodResolver {
   @Authorized([Role.operator, Role.user])
   @Query(returns => FoodsListResponse)
   async foods(
-    @Args() { page, size, foodClassId, nameSearchQuery }: FoodListArgs,
+    @Args() args: FoodListArgs,
     @Ctx() ctx: Context,
   ) {
-    return this.foodService.listFoods({ page, size, foodClassId, nameSearchQuery })
+    return this.foodService.listFoods(args)
   }
 
   @Authorized([Role.operator, Role.user])
@@ -54,8 +54,9 @@ export default class FoodResolver {
   async deleteFood(
     @Arg('foodId') foodID: string,
     @Ctx() ctx: Context,
+    @Arg('restore', {nullable: true}) restore?: boolean,
   ) {
-    return this.foodService.deleteFood(foodID, ctx.user!)
+    return this.foodService.deleteFood(foodID, ctx.user!, restore)
   }
 
   @Authorized([Role.operator, Role.user])

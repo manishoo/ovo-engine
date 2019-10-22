@@ -10,12 +10,21 @@ import { Image, ObjectId, Ref, Translation } from '@Types/common'
 import { Food, FoodContent, Nutrition } from '@Types/food'
 import { Weight } from '@Types/weight'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { index, plugin, prop, Typegoose } from 'typegoose'
+import { index, plugin, post, pre, prop, Typegoose } from 'typegoose'
 
 
 export interface FoodSchema extends SoftDeleteModel<SoftDeleteDocument> {
 }
 
+@pre<Food>('find', function (next) { // or @pre(this: Car, 'save', ...
+  this.populate('foodClass')
+  next()
+})
+@post<Food>('save', function (food, next) {
+  food.populate('foodClass').execPopulate().then(() => {
+    if (next) next()
+  })
+})
 @plugin(mongooseDelete, {
   deletedAt: true,
   deletedBy: true,
@@ -36,7 +45,7 @@ export class FoodSchema extends Typegoose implements Food {
   origFoodId?: string
   @prop()
   origDb?: string
-  @prop({ required: true })
+  @prop({ ref: FoodClassSchema, required: true })
   foodClass: Ref<FoodClassSchema>
   @prop({ required: true })
   origFoodClassName: Translation[]
@@ -52,6 +61,10 @@ export class FoodSchema extends Typegoose implements Food {
   image?: Image
   @prop()
   thumbnail?: Image
+  @prop()
+  isDefault?: boolean
+
+  deleted: boolean
 }
 
 export const FoodModel = new FoodSchema().getModelForClass(FoodSchema, {

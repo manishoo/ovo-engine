@@ -114,6 +114,9 @@ export default class FoodClassService {
        * Sort FoodClasses by how close their name is to {nameSearchQuery}
        * */
       const dbFoodClasses = await FoodClassModel.find(query)
+        .sort({
+          'name.text': 1,
+        })
 
       counts = dbFoodClasses.length
       const sortedArray = levenSort(dbFoodClasses.map(i => ({
@@ -126,6 +129,9 @@ export default class FoodClassService {
       foodClasses = await FoodClassModel.find(query)
         .limit(size)
         .skip(size * (page - 1))
+        .sort({
+          'name.text': 1,
+        })
     }
 
     return {
@@ -177,7 +183,26 @@ export default class FoodClassService {
     foodClass.foodGroup = foodGroup
     foodClass.description = foodClassInput.description
     foodClass.slug = foodClassInput.slug
-    foodClass.defaultFood = ObjectId(foodClassInput.defaultFood)
+
+    /**
+     * Setting and unSetting default food
+     * */
+    if (foodClassInput.defaultFood) {
+      const oldDefaultFood = await FoodModel.findById(foodClass.defaultFood)
+
+      if (oldDefaultFood) {
+        oldDefaultFood.isDefault = false
+        await oldDefaultFood.save()
+      }
+
+      const newDefaultFood = await FoodModel.findById(foodClassInput.defaultFood)
+
+      if (newDefaultFood) {
+        newDefaultFood.isDefault = true
+        await newDefaultFood.save()
+        foodClass.defaultFood = newDefaultFood._id
+      }
+    }
 
     const savedFoodClass = await foodClass.save()
 
