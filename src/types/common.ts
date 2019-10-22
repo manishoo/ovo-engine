@@ -171,5 +171,5 @@ export class TimingInput {
 }
 
 export declare type Ref<T> = T | mongoose.Types.ObjectId
-export declare type ObjectId = mongoose.Types.ObjectId
-export const ObjectId = mongoose.Types.ObjectId
+
+export class ObjectId extends mongoose.Types.ObjectId {}

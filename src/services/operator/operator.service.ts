@@ -56,7 +56,7 @@ export default class OperatorService {
     const removeOperator = await OperatorModel.deleteById(id, DeleteBy.user(user))
     if (!removeOperator) throw new Errors.NotFound('Operator not found')
 
-    const operator = await OperatorModel.findOneWithDeleted({ _id: ObjectId(id) })
+    const operator = await OperatorModel.findOneWithDeleted({ _id: new ObjectId(id) })
     if (!operator) throw new Errors.System()
 
     await redis.del(RedisKeys.operatorSession(operator.session))

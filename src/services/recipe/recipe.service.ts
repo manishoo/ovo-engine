@@ -36,7 +36,7 @@ export default class RecipeService {
     const query: { slug?: string, _id?: ObjectId } = {}
 
     if (id) {
-      query._id = ObjectId(id)
+      query._id = new ObjectId(id)
     }
     if (slug) {
       query.slug = slug
@@ -65,7 +65,7 @@ export default class RecipeService {
       const me = await UserModel.findById(variables.userId)
       if (!me) throw new Errors.System('something went wrong')
 
-      query['author'] = ObjectId(variables.userId)
+      query['author'] = new ObjectId(variables.userId)
     }
 
     if (variables.tags) {
@@ -197,7 +197,7 @@ export default class RecipeService {
 
     const query: any = { _id: id }
     if (user && (user.role !== Role.operator)) {
-      query.author = ObjectId(user.id)
+      query.author = new ObjectId(user.id)
     }
     const recipe = await RecipeModel.findOne(query)
     if (!recipe) throw new Errors.NotFound('recipe not found')
@@ -212,7 +212,7 @@ export default class RecipeService {
     const query: any = { _id: recipeId }
 
     if (user.role !== Role.operator) {
-      query['author'] = ObjectId(user.id)
+      query['author'] = new ObjectId(user.id)
     }
 
     const recipe = await RecipeModel.findOne(query)

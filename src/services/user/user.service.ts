@@ -130,7 +130,7 @@ export default class UserService {
      * */
     user = await UserModel.findOne({
       $or: [
-        { userId: ObjectId(userId) },
+        { userId: new ObjectId(userId) },
         { username },
       ]
     })

@@ -54,7 +54,7 @@ export default class TagService {
     }
 
     if (user.role === Role.user) {
-      q['user'] = ObjectId(user.id)
+      q['user'] = new ObjectId(user.id)
     }
 
     await TagModel.delete(q, DeleteBy.user(user))
