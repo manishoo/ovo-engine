@@ -186,9 +186,9 @@ export default class UserService {
     return !!user
   }
 
-  async requestRecoverPassword(userId: string): Promise<Boolean> {
+  async requestRecoverPassword(email: string): Promise<Boolean> {
 
-    const user = await UserModel.findById(userId)
+    const user = await UserModel.findOne({ email })
     if (!user) throw new Errors.NotFound('User not found')
 
     this.mailingService.sendMail([{

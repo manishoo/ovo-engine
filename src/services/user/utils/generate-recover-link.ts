@@ -13,5 +13,5 @@ export default function generateRecoverLink(userId: string): string {
     expiresIn: 60 * 60 //an hour
   })
 
-  return `${Config.appFullAddressForExternalUse}/recover?key=${token}`
+  return `${Config.supernovaUrl}/recover?key=${token}`
 }

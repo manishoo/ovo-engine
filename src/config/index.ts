@@ -18,6 +18,7 @@ export default {
     return process.env.CORE_APP_ADDRESS || `http://${this.appUrl}:${this.appPort}`
   },
 
+  supernovaUrl: process.env.SUPERNOVA_URL,
   graphQLPath: process.env.GRAPHQL_PATH || 'gql',
   graphQLPath_APP: process.env.GRAPHQL_PATH_APP || 'gql',
   graphQLPath_PANEL: process.env.GRAPHQL_PATH_PANEL || 'gql',
@@ -85,7 +86,7 @@ export default {
     senderDomain: process.env.MAIL_SENDER_DOMAIN,
   },
   jwt: {
-    key: process.env.JWT_KEY,
+    key: process.env.JWT_KEY || 'jwtPrivateKey',
   }
-
 }
+
