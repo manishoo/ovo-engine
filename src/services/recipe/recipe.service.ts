@@ -116,17 +116,31 @@ export default class RecipeService {
     if (!author) throw new Errors.NotFound('author not found')
 
     let image: Image | undefined = undefined
+    let thumbnail: Image | undefined = undefined
 
     const slugAddedId = shortid.generate()
     const generatedSlug = `${slug(data.title[0].text)}-${slugAddedId}`
+
     if (data.image) {
       image = {
-        url: await this.uploadService.processUpload(data.image, `${generatedSlug}`, 'recipes'),
+        url: await this.uploadService.processUpload(data.image, `full`, `images/recipes/${generatedSlug}`),
+      }
+
+      if (!data.thumbnail) {
+        thumbnail = {
+          url: await this.uploadService.processUpload(data.image, `thumb`, `images/recipes/${generatedSlug}`),
+        }
+      }
+    }
+    if (data.thumbnail) {
+      thumbnail = {
+        url: await this.uploadService.processUpload(data.thumbnail, `thumb`, `images/recipes/${generatedSlug}`),
       }
     }
 
     const recipe: Partial<Recipe> = {
       image,
+      thumbnail,
       title: data.title,
       serving: data.serving,
       timing: {
@@ -221,6 +235,10 @@ export default class RecipeService {
   async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, user: ContextUser) {
     const query: any = { _id: recipeId }
 
+    /**
+     * If you're a User, you can
+     * only update your own recipe
+     * */
     if (user.role !== Role.operator) {
       query['author'] = ObjectId(user.id)
     }
@@ -228,6 +246,7 @@ export default class RecipeService {
     const recipe = await RecipeModel.findOne(query)
       .populate('author')
       .exec()
+
     if (!recipe) throw new Errors.NotFound('recipe not found')
 
     if (data.slug) {
@@ -280,9 +299,27 @@ export default class RecipeService {
     }
     if (data.image) {
       recipe.image = {
-        url: await this.uploadService.processUpload(data.image, `${data.slug}-${shortid.generate()}`, 'recipes'),
+        url: await this.uploadService.processUpload(data.image, `${data.slug}-${shortid.generate()}`, 'images/recipes'),
       }
     }
+
+    if (data.image) {
+      recipe.image = {
+        url: await this.uploadService.processUpload(data.image, `full`, `images/recipes/${data.slug}`),
+      }
+
+      if (!data.thumbnail) {
+        recipe.thumbnail = {
+          url: await this.uploadService.processUpload(data.image, `thumb`, `images/recipes/${data.slug}`),
+        }
+      }
+    }
+    if (data.thumbnail) {
+      recipe.thumbnail = {
+        url: await this.uploadService.processUpload(data.thumbnail, `thumb`, `images/recipes/${data.slug}`),
+      }
+    }
+
     if (data.timing) {
       recipe.timing = {
         totalTime: data.timing.totalTime,
