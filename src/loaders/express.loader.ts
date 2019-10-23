@@ -17,6 +17,7 @@ export default ({ app }: { app: express.Application }) => {
   app.use(bodyParser.urlencoded({ extended: false, limit: config.bodyParserUrlEncoderLimit }))
   app.use(cors())
   app.use(methodOverride())
+  app.use(`/${config.uploadUrl}`, express.static(config.uploadUrl))
 
   return app
 }

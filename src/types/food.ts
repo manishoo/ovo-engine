@@ -613,7 +613,7 @@ export class FoodBase {
   origFoodClassName: Translation[]
 
   @Field(type => FoodGroup)
-  foodGroup: FoodGroupSchema
+  origFoodGroups: FoodGroup[][]
 
   @Field(type => Nutrition)
   nutrition: Nutrition

@@ -9,7 +9,15 @@ import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
-import { Ingredient, Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
+import {
+  Ingredient,
+  Instruction,
+  ListRecipesArgs,
+  Recipe,
+  RecipeInput,
+  RecipesListResponse,
+  RecipeStatus
+} from '@Types/recipe'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
@@ -59,7 +67,9 @@ export default class RecipeService {
       variables.page = 1
     }
 
-    const query: any = {}
+    const query: any = {
+      status: RecipeStatus.public,
+    }
 
     if (variables.userId) {
       const me = await UserModel.findById(variables.userId)
@@ -106,17 +116,31 @@ export default class RecipeService {
     if (!author) throw new Errors.NotFound('author not found')
 
     let image: Image | undefined = undefined
+    let thumbnail: Image | undefined = undefined
 
     const slugAddedId = shortid.generate()
     const generatedSlug = `${slug(data.title[0].text)}-${slugAddedId}`
+
     if (data.image) {
       image = {
-        url: await this.uploadService.processUpload(data.image, `${generatedSlug}`, 'recipes'),
+        url: await this.uploadService.processUpload(data.image, `full`, `images/recipes/${generatedSlug}`),
+      }
+
+      if (!data.thumbnail) {
+        thumbnail = {
+          url: await this.uploadService.processUpload(data.image, `thumb`, `images/recipes/${generatedSlug}`),
+        }
+      }
+    }
+    if (data.thumbnail) {
+      thumbnail = {
+        url: await this.uploadService.processUpload(data.thumbnail, `thumb`, `images/recipes/${generatedSlug}`),
       }
     }
 
     const recipe: Partial<Recipe> = {
       image,
+      thumbnail,
       title: data.title,
       serving: data.serving,
       timing: {
@@ -211,6 +235,10 @@ export default class RecipeService {
   async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, user: ContextUser) {
     const query: any = { _id: recipeId }
 
+    /**
+     * If you're a User, you can
+     * only update your own recipe
+     * */
     if (user.role !== Role.operator) {
       query['author'] = ObjectId(user.id)
     }
@@ -218,6 +246,7 @@ export default class RecipeService {
     const recipe = await RecipeModel.findOne(query)
       .populate('author')
       .exec()
+
     if (!recipe) throw new Errors.NotFound('recipe not found')
 
     if (data.slug) {
@@ -270,9 +299,27 @@ export default class RecipeService {
     }
     if (data.image) {
       recipe.image = {
-        url: await this.uploadService.processUpload(data.image, `${data.slug}-${shortid.generate()}`, 'recipes'),
+        url: await this.uploadService.processUpload(data.image, `${data.slug}-${shortid.generate()}`, 'images/recipes'),
       }
     }
+
+    if (data.image) {
+      recipe.image = {
+        url: await this.uploadService.processUpload(data.image, `full`, `images/recipes/${data.slug}`),
+      }
+
+      if (!data.thumbnail) {
+        recipe.thumbnail = {
+          url: await this.uploadService.processUpload(data.image, `thumb`, `images/recipes/${data.slug}`),
+        }
+      }
+    }
+    if (data.thumbnail) {
+      recipe.thumbnail = {
+        url: await this.uploadService.processUpload(data.thumbnail, `thumb`, `images/recipes/${data.slug}`),
+      }
+    }
+
     if (data.timing) {
       recipe.timing = {
         totalTime: data.timing.totalTime,
@@ -296,6 +343,19 @@ export default class RecipeService {
       recipe.tags = tags
     }
     recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
+
+    if (data.status) {
+      switch (data.status) {
+        case RecipeStatus.private:
+          recipe.status = data.status
+          break
+        case RecipeStatus.public:
+          if (user.role === Role.operator || user.role === Role.admin) {
+            recipe.status = data.status
+          }
+          break
+      }
+    }
 
     return transformRecipe(await recipe.save(), user && user.id)
   }
