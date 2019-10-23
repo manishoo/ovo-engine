@@ -19,7 +19,7 @@ export default class FoodGroupService {
     const foodGroup = await FoodGroupModel.findById(id)
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
-    const subGroups = await FoodGroupModel.find({ parentFoodGroup: ObjectId(id) })
+    const subGroups = await FoodGroupModel.find({ parentFoodGroup: new ObjectId(id) })
 
     return {
       id: foodGroup.id,
