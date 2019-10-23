@@ -10,7 +10,7 @@ import Config from '@Config'
 export default function generateRecoverLink(userId: string): string {
 
   const token = jwt.sign({ id: userId }, Config.jwt.key, {
-    expiresIn: Config.jwt.tokenTime
+    expiresIn: 60 * 60 //an hour
   })
 
   return `${Config.appFullAddressForExternalUse}/recover?key=${token}`
