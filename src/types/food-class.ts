@@ -44,8 +44,8 @@ export class FoodClass {
   description?: Translation[]
   @Field()
   slug: string
-  @Field(type => FoodGroup)
-  foodGroup: FoodGroup
+  @Field(type => [[FoodGroup]])
+  foodGroups: Partial<FoodGroup>[][]
   @Field(type => Image, { nullable: true })
   image?: Image
   @Field(type => Image, { nullable: true })
@@ -71,8 +71,8 @@ export class FoodClassInput {
   description?: Translation[]
   @Field()
   slug: string
-  @Field(type => String)
-  foodGroupId: string
+  @Field(type => [[String]])
+  foodGroups: string[][]
   @Field(type => FOOD_CLASS_TYPES)
   foodType: FOOD_CLASS_TYPES
   @Field(type => String, { nullable: true })

@@ -5,9 +5,9 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { FoodClassSchema } from '@Models/food-class.model'
-import { FoodGroupSchema } from '@Models/food-group.model'
 import { Image, ObjectId, Ref, Translation } from '@Types/common'
 import { Food, FoodContent, Nutrition } from '@Types/food'
+import { FoodGroup } from '@Types/food-group'
 import { Weight } from '@Types/weight'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { index, plugin, prop, Typegoose } from 'typegoose'
@@ -41,7 +41,7 @@ export class FoodSchema extends Typegoose implements Food {
   @prop({ required: true })
   origFoodClassName: Translation[]
   @prop()
-  foodGroup: FoodGroupSchema
+  origFoodGroups: FoodGroup[][]
   @prop({ default: [], required: true })
   contents: FoodContent[]
   @prop({ default: {} })

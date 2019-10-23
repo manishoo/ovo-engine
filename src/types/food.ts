@@ -4,7 +4,6 @@
  */
 
 import { FoodClassSchema } from '@Models/food-class.model'
-import { FoodGroupSchema } from '@Models/food-group.model'
 import { Image, LanguageCode, NameAndId, ObjectId, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { FoodClass } from '@Types/food-class'
@@ -603,7 +602,7 @@ export class FoodBase {
   origFoodClassName: Translation[]
 
   @Field(type => FoodGroup)
-  foodGroup: FoodGroupSchema
+  origFoodGroups: FoodGroup[][]
 
   @Field(type => Nutrition)
   nutrition: Nutrition
