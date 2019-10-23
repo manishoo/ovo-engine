@@ -4,13 +4,24 @@
  */
 
 import { FoodClassSchema } from '@Models/food-class.model'
-import { Image, LanguageCode, NameAndId, ObjectId, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
+import { FoodGroupSchema } from '@Models/food-group.model'
+import {
+  Image,
+  LanguageCode,
+  NameAndId,
+  ObjectId,
+  Pagination,
+  Ref,
+  Role,
+  Translation,
+  TranslationInput
+} from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
 import { FoodClass } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
 import { Weight, WeightInput } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
-import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
+import { ArgsType, Authorized, Field, ID, InputType, ObjectType } from 'type-graphql'
 
 
 @ObjectType()
@@ -616,6 +627,12 @@ export class Food extends FoodBase {
   origFoodId?: string
 
   contents: FoodContent[]
+
+  @Field({ nullable: true })
+  isDefault?: boolean
+
+  @Field()
+  deleted: boolean
 }
 
 @ObjectType()
@@ -636,6 +653,8 @@ export class FoodInput {
   image?: any
   @Field(type => GraphQLUpload, { nullable: true })
   thumbnail?: any
+  @Field({ nullable: true })
+  foodClassId?: ObjectId
 }
 
 @ArgsType()
@@ -648,4 +667,7 @@ export class FoodListArgs {
   foodClassId: string
   @Field({ nullable: true })
   nameSearchQuery: string
+  @Authorized(Role.operator)
+  @Field({ nullable: true })
+  withDeleted: boolean
 }
