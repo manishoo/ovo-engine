@@ -7,7 +7,7 @@ import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, ObjectId, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
-import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, Review } from '@Types/recipe'
+import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, RecipeStatus, Review } from '@Types/recipe'
 import { Tag } from '@Types/tag'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
@@ -64,7 +64,11 @@ export class RecipeSchema extends Typegoose implements Recipe {
   reviews?: Review[]
   @prop()
   createdAt: Date
+
   userLikedRecipe: boolean
+
+  @prop({ default: RecipeStatus.private, required: true })
+  status: RecipeStatus
 
   @prop()
   get likesCount(): number {

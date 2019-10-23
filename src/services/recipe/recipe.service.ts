@@ -9,7 +9,15 @@ import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
-import { Ingredient, Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
+import {
+  Ingredient,
+  Instruction,
+  ListRecipesArgs,
+  Recipe,
+  RecipeInput,
+  RecipesListResponse,
+  RecipeStatus
+} from '@Types/recipe'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
@@ -59,7 +67,9 @@ export default class RecipeService {
       variables.page = 1
     }
 
-    const query: any = {}
+    const query: any = {
+      status: RecipeStatus.public,
+    }
 
     if (variables.userId) {
       const me = await UserModel.findById(variables.userId)
@@ -296,6 +306,19 @@ export default class RecipeService {
       recipe.tags = tags
     }
     recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
+
+    if (data.status) {
+      switch (data.status) {
+        case RecipeStatus.private:
+          recipe.status = data.status
+          break
+        case RecipeStatus.public:
+          if (user.role === Role.operator || user.role === Role.admin) {
+            recipe.status = data.status
+          }
+          break
+      }
+    }
 
     return transformRecipe(await recipe.save(), user && user.id)
   }
