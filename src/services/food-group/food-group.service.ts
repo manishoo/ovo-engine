@@ -5,10 +5,11 @@
 
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel } from '@Models/food-group.model'
-import { Translation } from '@Types/common'
+import { ObjectId, Translation } from '@Types/common'
 import { FoodGroup, FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
+import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
-import mongoose from 'mongoose'
 import { Service } from 'typedi'
 
 
@@ -18,7 +19,7 @@ export default class FoodGroupService {
     const foodGroup = await FoodGroupModel.findById(id)
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
-    const subGroups = await FoodGroupModel.find({ parentFoodGroup: mongoose.Types.ObjectId(id) })
+    const subGroups = await FoodGroupModel.find({ parentFoodGroup: new ObjectId(id) })
 
     return {
       id: foodGroup.id,
@@ -47,7 +48,7 @@ export default class FoodGroupService {
     })
   }
 
-  async removeFoodGroup(foodGroupID: string): Promise<Boolean> {
+  async removeFoodGroup(foodGroupID: string, user: ContextUser): Promise<Boolean> {
     const foodGroup = await FoodGroupModel.findById(foodGroupID)
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
@@ -64,12 +65,12 @@ export default class FoodGroupService {
     const count = await FoodGroupModel.countDocuments({ parentFoodGroup: foodGroup._id })
     if (count !== 0) throw new Errors.Validation('This food group has subgroups. Please first delete the subgroups')
 
-    await foodGroup.remove()
+    await foodGroup.delete(DeleteBy.user(user))
 
     return true
   }
 
-  async editFoodGroup(foodGroup: FoodGroupInput): Promise<ParentFoodGroup | null> {
+  async editFoodGroup(foodGroup: FoodGroupInput, user: ContextUser): Promise<ParentFoodGroup | null> {
     const editingFoodGroup = await FoodGroupModel.findById(foodGroup.id)
     if (!editingFoodGroup) throw new Errors.NotFound('food group not found')
 
@@ -78,15 +79,15 @@ export default class FoodGroupService {
     editingFoodGroup.name = foodGroup.name
 
     // If user deleted a subgroup
-    Promise.all(editingFoodGroupSubGroups.map(async fg => {
+    await Promise.all(editingFoodGroupSubGroups.map(async fg => {
       const found = foodGroup.subGroups.find(sg => sg.id === String(fg.id))
       if (!found) {
-        await fg.remove()
+        await fg.delete(DeleteBy.user(user))
       }
     }))
 
     // If user added a subgroup
-    Promise.all(foodGroup.subGroups.map(async fg => {
+    await Promise.all(foodGroup.subGroups.map(async fg => {
       const found = editingFoodGroupSubGroups.find(sg => String(sg.id) === fg.id)
 
       if (!found) {

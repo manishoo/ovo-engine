@@ -3,8 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Translation } from '@Types/common'
-import mongoose from 'mongoose'
+import { ObjectId, Translation } from '@Types/common'
 import { Field, ObjectType } from 'type-graphql'
 
 
@@ -23,7 +22,7 @@ export class Synonym {
 
 @ObjectType()
 export class Content {
-  _id: mongoose.Schema.Types.ObjectId
+  _id: ObjectId
 
   @Field()
   id: string
@@ -34,10 +33,10 @@ export class Content {
 
   origId?: number
   synonyms: Synonym[]
-  flavors: mongoose.Schema.Types.ObjectId[]
-  healthEffects: mongoose.Schema.Types.ObjectId[]
-  pathways: mongoose.Schema.Types.ObjectId[]
-  enzymes: mongoose.Schema.Types.ObjectId[]
+  flavors: ObjectId[]
+  healthEffects: ObjectId[]
+  pathways: ObjectId[]
+  enzymes: ObjectId[]
   state?: string
 
   annotationQuality?: string

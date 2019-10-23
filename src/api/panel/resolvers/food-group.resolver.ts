@@ -4,11 +4,11 @@
  */
 
 import FoodGroupService from '@Services/food-group/food-group.service'
-import { OperatorRole, TranslationInput } from '@Types/common'
+import { Role, TranslationInput } from '@Types/common'
 import { FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
+import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '@Utils/context'
 
 
 @Service()
@@ -21,7 +21,7 @@ export default class FoodGroupResolver {
     // noop
   }
 
-  @Authorized(OperatorRole.operator)
+  @Authorized(Role.operator)
   @Query(returns => ParentFoodGroup)
   async foodGroup(
     @Arg('id', type => String) id: string,
@@ -30,7 +30,7 @@ export default class FoodGroupResolver {
     return this.foodGroupService.getFoodGroup(id)
   }
 
-  @Authorized(OperatorRole.operator)
+  @Authorized(Role.operator)
   @Query(returns => [ParentFoodGroup])
   async foodGroups(
     @Ctx() ctx: Context,
@@ -38,7 +38,7 @@ export default class FoodGroupResolver {
     return this.foodGroupService.listFoodGroups()
   }
 
-  @Authorized(OperatorRole.operator)
+  @Authorized(Role.operator)
   @Mutation(returns => ParentFoodGroup)
   async createFoodGroup(
     @Arg('name', type => [TranslationInput]) name: TranslationInput[],
@@ -47,20 +47,21 @@ export default class FoodGroupResolver {
     return this.foodGroupService.addFoodGroup(name, parentFoodGroup)
   }
 
-  @Authorized(OperatorRole.operator)
+  @Authorized(Role.operator)
   @Mutation(returns => Boolean)
   async deleteFoodGroup(
     @Arg('id') foodGroupID: string,
+    @Ctx() ctx: Context,
   ) {
-    return this.foodGroupService.removeFoodGroup(foodGroupID)
+    return this.foodGroupService.removeFoodGroup(foodGroupID, ctx.user!)
   }
 
-  @Authorized(OperatorRole.operator)
+  @Authorized(Role.operator)
   @Mutation(returns => ParentFoodGroup)
   async editFoodGroup(
     @Arg('foodGroup') foodGroup: FoodGroupInput,
     @Ctx() ctx: Context,
   ) {
-    return this.foodGroupService.editFoodGroup(foodGroup)
+    return this.foodGroupService.editFoodGroup(foodGroup, ctx.user!)
   }
 }

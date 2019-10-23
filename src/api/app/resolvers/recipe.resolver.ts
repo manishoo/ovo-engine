@@ -5,12 +5,12 @@
 
 import RecipeService from '@Services/recipe/recipe.service'
 import TagService from '@Services/tag/tag.service'
+import { Role } from '@Types/common'
 import { ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
 import { Tag } from '@Types/tag'
+import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Context } from '@Utils/context'
-import { UserRole } from '@Types/common'
 
 
 @Service()
@@ -33,7 +33,7 @@ export default class RecipeResolver {
     return this.recipeService.get(id, slug)
   }
 
-  @Authorized(UserRole.user)
+  // @Authorized(Role.user)
   @Query(returns => RecipesListResponse)
   async recipes(
     @Args() { page, size, lastId, nameSearchQuery, userId, tags }: ListRecipesArgs,
@@ -49,13 +49,13 @@ export default class RecipeResolver {
       size,
       lastId,
       nameSearchQuery,
-      userId: userId || (viewerUser ? viewerUser.id : undefined),
+      userId,
       viewerUser,
       tags,
     })
   }
 
-  @Authorized(UserRole.user)
+  @Authorized(Role.user)
   @Mutation(returns => Recipe)
   async createRecipe(
     @Arg('recipe') recipe: RecipeInput,

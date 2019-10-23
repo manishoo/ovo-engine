@@ -5,10 +5,11 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
+import { Ref } from '@Types/common'
 import { Household, LatLng, PantryItem } from '@Types/household'
 import { User } from '@Types/user'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { plugin, prop, Ref, Typegoose } from 'typegoose'
+import { plugin, prop, Typegoose } from 'typegoose'
 
 
 export interface HouseholdSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -18,6 +19,7 @@ export interface HouseholdSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class HouseholdSchema extends Typegoose implements Household {
   @prop({ required: true, ref: UserSchema })

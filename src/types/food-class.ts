@@ -3,12 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Image, Pagination, Translation, TranslationInput } from '@Types/common'
+import { Image, ObjectId, Pagination, Translation, TranslationInput } from '@Types/common'
 
 import { FoodGroup } from '@Types/food-group'
 import { GraphQLUpload } from 'apollo-server'
 import { Max, Min } from 'class-validator'
-import mongoose from 'mongoose'
 import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -36,7 +35,7 @@ export class FoodClassTaxonomy {
 
 @ObjectType()
 export class FoodClass {
-  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly _id: ObjectId
   @Field()
   readonly id: string
   @Field(type => [Translation])
@@ -45,14 +44,14 @@ export class FoodClass {
   description?: Translation[]
   @Field()
   slug: string
-  @Field(type => FoodGroup)
-  foodGroup: FoodGroup
+  @Field(type => [[FoodGroup]])
+  foodGroups: Partial<FoodGroup>[][]
   @Field(type => Image, { nullable: true })
-  imageUrl?: Image
+  image?: Image
   @Field(type => Image, { nullable: true })
-  thumbnailUrl?: Image
+  thumbnail?: Image
   @Field(type => String, { nullable: true })
-  defaultFood?: mongoose.Types.ObjectId
+  defaultFood?: ObjectId
 
   origId: number
   nameScientific?: string
@@ -72,17 +71,17 @@ export class FoodClassInput {
   description?: Translation[]
   @Field()
   slug: string
-  @Field(type => String)
-  foodGroupId: string
+  @Field(type => [[String]])
+  foodGroups: string[][]
   @Field(type => FOOD_CLASS_TYPES)
   foodType: FOOD_CLASS_TYPES
   @Field(type => String, { nullable: true })
   defaultFood?: string
 
   @Field(type => GraphQLUpload, { nullable: true })
-  imageUrl?: any
+  image?: any
   @Field(type => GraphQLUpload, { nullable: true })
-  thumbnailUrl?: any
+  thumbnail?: any
 }
 
 @ObjectType()

@@ -4,12 +4,13 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { Meal, MealItem } from '@Types/meal'
-import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { plugin, prop, Ref, Typegoose } from 'typegoose'
-import { UserSchema } from './user.model'
-import { Author } from '@Types/user'
+import { ObjectId, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
+import { Meal, MealItem } from '@Types/meal'
+import { Author } from '@Types/user'
+import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { arrayProp, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
+import { UserSchema } from './user.model'
 
 
 export interface MealSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -19,19 +20,51 @@ export interface MealSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class MealSchema extends Typegoose implements Meal {
   readonly id?: string
+
   @prop()
-  name?: string
+  name?: Translation[]
+
   @prop()
-  description?: string
+  description?: Translation[]
+
   @prop()
   items: MealItem[]
+
   @prop()
   nutrition?: Nutrition
+
   @prop({ ref: UserSchema })
   author: Ref<Author>
+
+  @prop({ default: {} })
+  timing: Timing
+
+  likedByUser?: boolean
+
+  @arrayProp({ itemsRef: UserSchema, default: [] })
+  likes: Ref<UserSchema>[]
+
+  @prop()
+  createdAt: Date
+  @prop()
+  updatedAt?: Date
+
+  @prop()
+  instanceOf?: ObjectId
+
+  @prop()
+  get likesCount(): number {
+    return this.likes.length
+  }
+
+  @instanceMethod
+  isLiked(userId: string): boolean {
+    return !!this.likes.find(p => String(p) === userId)
+  }
 }
 
 export const MealModel = new MealSchema().getModelForClass(MealSchema, {

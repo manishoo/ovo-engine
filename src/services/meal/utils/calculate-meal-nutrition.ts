@@ -1,10 +1,15 @@
+/*
+ * calculate-meal-nutrition.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
 import { Food, Nutrition } from '@Types/food'
-import { MealItem } from '@Types/meal'
+import { MealItemBase } from '@Types/meal'
 import { Recipe } from '@Types/recipe'
 import { calculateNutrition, scaleFoodNutrition, scaleRecipeNutrition } from '@Utils/calculate-nutrition'
 
 
-export function calculateMealNutrition(items: MealItem[]): Nutrition {
+export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
   /**
@@ -14,10 +19,24 @@ export function calculateMealNutrition(items: MealItem[]): Nutrition {
   items.map(mealItem => {
     if (mealItem.recipe) {
       const recipe = mealItem.recipe as Recipe
-      calculateNutrition(scaleRecipeNutrition(recipe, mealItem.amount), totalNutrition)
+      if (recipe.nutrition) {
+        calculateNutrition(scaleRecipeNutrition(recipe, mealItem.amount), totalNutrition)
+      }
     } else if (mealItem.food) {
       const food = mealItem.food as Food
-      calculateNutrition(scaleFoodNutrition(food, mealItem.amount, mealItem.weight as string), totalNutrition)
+      if (food.nutrition) {
+        let weightId
+        if (mealItem.weight) {
+          if (typeof mealItem.weight === 'string') {
+            weightId = mealItem.weight
+          } else {
+            weightId = mealItem.weight.id
+            weightId = weightId!.toString()
+          }
+        }
+
+        calculateNutrition(scaleFoodNutrition(food, mealItem.amount, weightId), totalNutrition)
+      }
     }
   })
 

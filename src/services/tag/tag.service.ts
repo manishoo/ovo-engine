@@ -4,11 +4,14 @@
  */
 
 import { TagModel } from '@Models/tag.model'
+import { ObjectId, Role } from '@Types/common'
 import { Tag, TagInput, TagType } from '@Types/tag'
+import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
+import shortid from 'shortid'
+import slug from 'slug'
 import { Service } from 'typedi'
-import shortid = require('shortid')
-import slug = require('slug')
 
 
 @Service()
@@ -19,7 +22,7 @@ export default class TagService {
     })
   }
 
-  async create(data: TagInput): Promise<Tag> {
+  async create(data: TagInput, user?: ContextUser): Promise<Tag> {
     let q: any = {}
     q['slug'] = data.slug
     const validateTag = await TagModel.findOne(q)
@@ -33,6 +36,7 @@ export default class TagService {
       title: data.title,
       slug: data.slug,
       type: data.type,
+      user: user ? user.id : undefined,
     })
     return tag.save()
   }
@@ -42,5 +46,19 @@ export default class TagService {
     if (!tag) throw new Errors.NotFound('tag not found')
 
     return tag
+  }
+
+  async delete(tagSlug: string, user: ContextUser) {
+    const q: any = {
+      slug: tagSlug,
+    }
+
+    if (user.role === Role.user) {
+      q['user'] = new ObjectId(user.id)
+    }
+
+    await TagModel.delete(q, DeleteBy.user(user))
+
+    return tagSlug
   }
 }

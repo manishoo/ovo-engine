@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Food, NutrientUnit, Nutrition } from '@Types/food'
+import { IngredientFood, NutrientUnit, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import Errors from '@Utils/errors'
 
@@ -16,13 +16,13 @@ export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutriti
     const nutrient = nutrition[fieldName]!
 
     totalNutrition[fieldName] = {
-      amount: nutrient.amount + (totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0),
+      amount: Number((nutrient.amount + (totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0)).toFixed(2)),
       unit: nutrient.unit,
     }
   })
 }
 
-export function scaleFoodNutrition(food: Food, foodAmount: number, weightId?: string, customGramWeight?: number): Nutrition {
+export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, weightId?: string, customGramWeight?: number): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
   /**
@@ -40,7 +40,7 @@ export function scaleFoodNutrition(food: Food, foodAmount: number, weightId?: st
   return totalNutrition
 }
 
-function getFoodNutrientAmount(food: Food, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: string, customGramWeight?: number) {
+function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: string, customGramWeight?: number) {
   let totalAmount = baseAmount
   /**
    * If the food had a weight,
@@ -58,7 +58,7 @@ function getFoodNutrientAmount(food: Food, foodAmount: number, nutrient: Nutrien
 
   totalAmount += (nutrient.amount / 100) * totalAmount
 
-  return totalAmount
+  return Number(totalAmount.toFixed(2))
 }
 
 export function scaleRecipeNutrition(recipe: Recipe, serving: number): Nutrition {

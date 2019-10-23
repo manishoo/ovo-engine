@@ -4,7 +4,6 @@
  */
 
 import { FoodClassModel } from '@Models/food-class.model'
-import config from '../config'
 import attachFoodImagesFromFoodClasses from './attach-food-images-from-food-classes'
 
 
@@ -16,34 +15,45 @@ export default async function main() {
   const foodClasses = await FoodClassModel.find()
   const errors: any[] = []
 
-  for (let fc of foodClasses) {
-    const basePath = `${config.uploadUrl}/images/food-classes/${fc.slug}`
-    await fs.ensureDirSync(basePath)
-
-    try {
-      const { filename } = await download.image({
-        url: `http://foodb.ca/system/foods/pictures/${fc.origId}/full/${fc.origId}.png`,
-        dest: `${basePath}/full.png`,
-      })
-      fc.imageUrl = { url: filename }
-    } catch (e) {
-      console.log(e)
-      errors.push(e)
+  await Promise.all(foodClasses.map(async fc => {
+    fc.image = {
+      url: `http://foodb.ca/system/foods/pictures/${fc.origId}/full/${fc.origId}.png`
     }
-    try {
-      const { filename } = await download.image({
-        url: `http://foodb.ca/system/foods/pictures/${fc.origId}/thumb/${fc.origId}.png`,
-        dest: `${basePath}/thumb.png`,
-      })
-      fc.thumbnailUrl = { url: filename }
-    } catch (e) {
-      console.log(e)
-      errors.push(e)
+    fc.thumbnail = {
+      url: `http://foodb.ca/system/foods/pictures/${fc.origId}/thumb/${fc.origId}.png`
     }
 
     await fc.save()
-    process.stdout.write('.')
-  }
+  }))
+
+  // for (let fc of foodClasses) {
+  //   const basePath = `${config.uploadUrl}/images/food-classes/${fc.origId}`
+  //   await fs.ensureDirSync(basePath)
+  //
+  //   try {
+  //     const { filename } = await download.image({
+  //       url: `http://foodb.ca/system/foods/pictures/${fc.origId}/full/${fc.origId}.png`,
+  //       dest: `${basePath}/full.png`,
+  //     })
+  //     fc.image = { url: filename }
+  //   } catch (e) {
+  //     console.log(e)
+  //     errors.push(e)
+  //   }
+  //   try {
+  //     const { filename } = await download.image({
+  //       url: `http://foodb.ca/system/foods/pictures/${fc.origId}/thumb/${fc.origId}.png`,
+  //       dest: `${basePath}/thumb.png`,
+  //     })
+  //     fc.thumbnail = { url: filename }
+  //   } catch (e) {
+  //     console.log(e)
+  //     errors.push(e)
+  //   }
+  //
+  //   await fc.save()
+  //   process.stdout.write('.')
+  // }
 
   fs.writeFileSync(
     './errors.json',

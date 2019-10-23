@@ -1,4 +1,10 @@
-import { Pagination } from "@Types/common"
+/*
+ * generate-pagination.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
+import { Pagination } from '@Types/common'
+
 
 export function createPagination(page: number, size: number, count: number): Pagination {
 

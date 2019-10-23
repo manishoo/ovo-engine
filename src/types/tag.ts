@@ -3,10 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Translation, TranslationInput } from '@Types/common'
+import { Ref, Translation, TranslationInput } from '@Types/common'
+import { User } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import { Types } from 'mongoose'
-import { Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
+import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 
 
 export enum TagType {
@@ -49,6 +50,9 @@ export class Tag {
   info?: Translation[]
   @Field(type => TagType)
   type: TagType
+  @Field(type => String, { nullable: true })
+  user?: Ref<User>
+
   createdAt?: Date
   updatedAt?: Date
 }

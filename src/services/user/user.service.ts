@@ -7,27 +7,32 @@ import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
-import { Status, UserRole } from '@Types/common'
+import { ObjectId, Role, Status } from '@Types/common'
+import { RedisKeys } from '@Types/redis'
 import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import { ContextUser, ContextUserType } from '@Utils/context'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
-import mongoose from 'mongoose'
 import { Service } from 'typedi'
+import MailingService from '@Services/mail/mail.service'
+import { MailTemplate, EmailTemplates } from '@Services/mail/utils/mailTemplates'
+import generateRecoverLink from './utils/generate-recover-link'
 
 
 @Service()
 export default class UserService {
   constructor(
     // service injection
-    private readonly uploadService: UploadService
+    private readonly uploadService: UploadService,
+    private readonly mailingService: MailingService,
   ) {
     // noop
   }
 
-  async findBySession(session: string) {
-    const key = `user:session:${session}`
+  async findBySession(session: string): Promise<ContextUser | null> {
+    const key = RedisKeys.userSession(session)
     const userDataJSONString = await redis.get(key)
       .catch(logError('findBySession->redis.get'))
 
@@ -41,10 +46,12 @@ export default class UserService {
       if (!dbUser) {
         return null
       }
-      let user = {
+      let user: ContextUser = {
         id: dbUser._id,
         status: dbUser.status,
-        role: dbUser.role
+        role: dbUser.role,
+        type: ContextUserType.user,
+        session,
       }
       redis.setex(key, config.times.sessionExpiration, JSON.stringify(user))
         .catch(logError('findBySession->redis.setex'))
@@ -61,13 +68,13 @@ export default class UserService {
 
     let newUser = await UserModel.create(<Partial<User>>{
       username: user.username,
-      persistedPassword: await generateHashPassword(user.password),
-      role: UserRole.user,
+      password: await generateHashPassword(user.password),
+      role: Role.user,
       email: user.email,
       firstName: user.firstName,
       middleName: user.middleName,
       lastName: user.lastName,
-      imageUrl: {
+      avatar: {
         url: generateAvatarUrl(user.username),
         source: 'generated-avatar'
       }
@@ -85,7 +92,7 @@ export default class UserService {
       password: 'Wrong username or password'
     })
 
-    const validatePassword = await verifyPassword(checkUser.persistedPassword, user.password)
+    const validatePassword = await verifyPassword(checkUser.password, user.password)
 
     if (!validatePassword) throw new Errors.UserInput('Wrong username or password', {
       username: 'Wrong username or password',
@@ -102,9 +109,9 @@ export default class UserService {
     let user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('user not found')
 
-    if (userInput.imageUrl) {
-      user.imageUrl = {
-        url: await this.uploadService.processUpload(userInput.imageUrl, userInput.username, `images/users/${user.id}`)
+    if (userInput.avatar) {
+      user.avatar = {
+        url: await this.uploadService.processUpload(userInput.avatar, userInput.username, `images/users/${user.id}`)
       }
     }
 
@@ -127,7 +134,7 @@ export default class UserService {
      * */
     user = await UserModel.findOne({
       $or: [
-        { userId: mongoose.Types.ObjectId(userId) },
+        { userId: new ObjectId(userId) },
         { username },
       ]
     })
@@ -147,18 +154,15 @@ export default class UserService {
         lastName: user.lastName,
         bio: user.bio,
         phoneNumber: user.phoneNumber,
-        imageUrl: user.imageUrl,
+        avatar: user.avatar,
         socialNetworks: user.socialNetworks,
-        caloriesPerDay: user.caloriesPerDay,
         height: user.height,
         weight: user.weight,
         age: user.age,
         bodyFat: user.bodyFat,
         gender: user.gender,
-        foodAllergies: user.foodAllergies,
         household: user.household,
         activityLevel: user.activityLevel,
-        path: user.path,
       } as User
     } else {
       userInfo = {
@@ -168,7 +172,7 @@ export default class UserService {
         middleName: user.middleName,
         lastName: user.lastName,
         bio: user.bio,
-        imageUrl: user.imageUrl,
+        avatar: user.avatar,
         socialNetworks: user.socialNetworks,
       } as BaseUser
     }
@@ -180,6 +184,28 @@ export default class UserService {
     const user = await UserModel.findOne({ username })
 
     return !!user
+  }
+
+  async requestRecoverPassword(email: string): Promise<Boolean> {
+
+    const user = await UserModel.findOne({ email })
+    if (!user) throw new Errors.NotFound('User not found')
+
+    let userFirstName: string = ''
+    if (user.firstName) {
+      userFirstName = user.firstName
+    } else {
+      userFirstName = 'User'
+    }
+    this.mailingService.sendMail([{
+      name: userFirstName,
+      email: user.email,
+      senderAddress: 'recover',
+      subject: `Password recover for ${user.firstName}`,
+      template: EmailTemplates[MailTemplate.recoverPassword],
+      recover: generateRecoverLink(user.id)
+    }])
+    return true
   }
 
 }

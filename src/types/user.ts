@@ -4,16 +4,13 @@
  */
 
 import { MealPlanSchema } from '@Models/meal-plan.model'
-import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, UserRole } from '@Types/common'
+import { Image, ObjectId, Ref, Role, Status } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
-import { IsEmail, IsPhoneNumber } from 'class-validator'
-import mongoose from 'mongoose'
+import { IsEmail, IsPhoneNumber, Min, Max } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
-import { Ref } from 'typegoose'
 
 
 export enum Gender {
@@ -86,7 +83,7 @@ export class WeightUnit {
 }
 
 @ObjectType()
-export class MealUnit {
+export class UserMeal {
   @Field()
   name: string
   @Field()
@@ -126,8 +123,75 @@ export class SocialNetworksInput {
 }
 
 @ObjectType()
+export class TargetNutrition {
+  @Field({ nullable: true })
+  min?: number
+
+  @Field({ nullable: true })
+  max?: number
+
+  @Field({ nullable: true })
+  @Min(0)
+  @Max(100)
+  percent?: number
+}
+
+@InputType()
+export class TargetNutritionInput {
+  @Field({ nullable: true })
+  min?: number
+
+  @Field({ nullable: true })
+  max?: number
+
+  @Field({ nullable: true })
+  @Min(0)
+  @Max(100)
+  percent?: number
+}
+
+@ObjectType()
+export class NutritionProfile {
+  @Field()
+  calories: number
+
+  @Field(type => TargetNutrition)
+  protein: TargetNutrition
+
+  @Field(type => TargetNutrition)
+  carb: TargetNutrition
+
+  @Field(type => TargetNutrition)
+  fat: TargetNutrition
+}
+
+@InputType()
+export class NutritionProfileInput {
+  @Field()
+  calories: number
+
+  @Field(type => TargetNutritionInput)
+  protein: TargetNutritionInput
+
+  @Field(type => TargetNutritionInput)
+  carb: TargetNutritionInput
+
+  @Field(type => TargetNutritionInput)
+  fat: TargetNutritionInput
+}
+
+@ObjectType()
+export class UpdateNutritionProfileResponse {
+  @Field()
+  userId: ObjectId
+
+  @Field()
+  nutritionProfile: NutritionProfile
+}
+
+@ObjectType()
 export class BaseUser {
-  _id?: mongoose.Schema.Types.ObjectId
+  _id?: ObjectId
   @Field()
   id?: string
   @Field()
@@ -141,7 +205,9 @@ export class BaseUser {
   @Field({ nullable: true })
   bio?: string
   @Field(type => Image, { nullable: true })
-  imageUrl: Image
+  avatar: Image
+  @Field(type => SocialNetworks, { defaultValue: {} })
+  socialNetworks: SocialNetworks
 }
 
 @ObjectType()
@@ -150,19 +216,17 @@ export class Author extends BaseUser {
 
 @ObjectType()
 export class User extends BaseUser {
-  persistedPassword: PersistedPassword
+  password: PersistedPassword
   @Field()
   session?: string
-  @Field(type => UserRole)
-  role?: UserRole
+  @Field(type => Role)
+  role?: Role
   @Field()
   @IsEmail()
   email: string
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
-  @Field(type => SocialNetworks, { defaultValue: {} })
-  socialNetworks: SocialNetworks
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
   @Field({ nullable: true })
@@ -175,10 +239,11 @@ export class User extends BaseUser {
   bodyFat?: number
   @Field(type => Gender, { nullable: true })
   gender?: Gender
+  @Field(type => NutritionProfile, { nullable: true })
+  nutritionProfile?: NutritionProfile
   foodAllergies?: string[]
-  status?: string
-  meals?: MealUnit[]
-  mealPlanSettings?: MacroNutrientDistribution
+  status?: Status
+  meals?: UserMeal[]
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
   activityLevel?: ActivityLevel
@@ -229,7 +294,7 @@ export class UserUpdateInput {
   @Field(type => Gender, { nullable: true })
   gender?: Gender
   @Field(type => GraphQLUpload, { nullable: true })
-  imageUrl?: any
+  avatar?: any
   @Field(type => SocialNetworksInput)
   socialNetworks: SocialNetworksInput
   @Field({ nullable: true })

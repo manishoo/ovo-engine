@@ -4,11 +4,10 @@
  */
 
 import TagService from '@Services/tag/tag.service'
-import { Tag, TagType, TagInput } from '@Types/tag'
-import { Ctx, Query, Resolver, Mutation, Arg, Authorized } from 'type-graphql'
-import { Service } from 'typedi'
+import { Tag, TagInput } from '@Types/tag'
 import { Context } from '@Utils/context'
-import { UserRole } from '@Types/common';
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Service } from 'typedi'
 
 
 @Service()
@@ -21,7 +20,7 @@ export default class TagResolver {
     // noop
   }
 
-  @Authorized(UserRole.user)
+  @Authorized()
   @Query(returns => [Tag])
   async tags(
     @Ctx() ctx: Context,
@@ -29,12 +28,21 @@ export default class TagResolver {
     return this.tagService.list()
   }
 
-  @Authorized(UserRole.user)
+  @Authorized()
   @Mutation(returns => Tag)
   async addTag(
     @Arg('tag') tagData: TagInput,
     @Ctx() ctx: Context,
   ) {
-    return this.tagService.create(tagData)
+    return this.tagService.create(tagData, ctx.user!)
+  }
+
+  @Authorized()
+  @Mutation(returns => String)
+  async deleteTag(
+    @Arg('tagSlug') tagSlug: string,
+    @Ctx() ctx: Context,
+  ) {
+    return this.tagService.delete(tagSlug, ctx.user!)
   }
 }

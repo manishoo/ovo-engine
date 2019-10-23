@@ -6,17 +6,14 @@
 import mongoose from '@Config/connections/mongoose'
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
-import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Status, UserRole } from '@Types/common'
-import { Event } from '@Types/event'
+import { Image, Ref, Role, Status } from '@Types/common'
 import { Household } from '@Types/household'
-import { ActivityLevel, Gender, Goal, Height, MealUnit, SocialNetworks, User, WeightUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, Height, UserMeal, SocialNetworks, User, WeightUnit, NutritionProfile } from '@Types/user'
 import { Length } from 'class-validator'
-import isUUID from 'is-uuid'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { Container } from 'typedi'
-import { arrayProp, plugin, pre, prop, Ref, Typegoose } from 'typegoose'
+import { plugin, pre, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
 
 
@@ -27,7 +24,11 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
+/**
+ * Household middleware
+ * */
 @pre<UserSchema>('save', function (next) {
   if (!this.household) {
     /**
@@ -43,6 +44,8 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
         next()
       })
   }
+
+  next()
 })
 export class UserSchema extends Typegoose implements User {
   readonly id?: string
@@ -54,28 +57,37 @@ export class UserSchema extends Typegoose implements User {
   username: string
 
   @prop({ required: true })
-  persistedPassword: PersistedPassword
+  password: PersistedPassword
+
   @prop({ required: true, unique: true, default: uuid })
   session: string
-  @prop({ required: true, enum: UserRole, default: UserRole.user })
-  role?: UserRole
+
+  @prop({ required: true, enum: Role, default: Role.user })
+  role: Role
   /**
    * personal information
    * */
   @prop({ required: true, unique: true })
   email: string
+
   @prop()
   firstName?: string
+
   @prop()
   middleName?: string
+
   @prop()
   lastName?: string
+
   @prop()
-  imageUrl: Image
+  avatar: Image
+
   @prop({ default: {} })
   socialNetworks: SocialNetworks
+
   @prop()
   bio?: string
+
   @prop()
   @Length(5, 15)
   phoneNumber?: string
@@ -84,40 +96,44 @@ export class UserSchema extends Typegoose implements User {
    * physical attributes
    * */
   @prop()
-  caloriesPerDay?: number
+  nutritionProfile?: NutritionProfile
+
   @prop()
   height?: Height
+
   @prop()
   weight?: WeightUnit
+
   @prop({ min: 0, max: 150 })
   age?: number
+
   @prop()
   bodyFat?: number
+
   @prop()
   gender?: Gender
-  // FIXME allergies aren't foods!
-  @arrayProp({ items: String, validate: value => !value.find((v: string) => !isUUID.v4(v)) })
-  foodAllergies?: string[]
 
   /**
    * other
    * */
   @prop({ required: true, enum: Status, default: Status.active })
-  status?: string
+  status: Status
+
   @prop({ default: [] })
-  meals?: MealUnit[]
-  @prop()
-  mealPlanSettings?: MacroNutrientDistribution
+  meals?: UserMeal[]
+
   @prop({ ref: MealPlanSchema })
   mealPlans?: Ref<MealPlanSchema>[]
+
   @prop({ ref: Household })
   household?: Ref<Household>
+
   @prop()
   activityLevel?: ActivityLevel
+
   @prop()
   goal?: Goal
-  @prop({ default: [] })
-  path?: Event[]
+
   @prop()
   timeZone?: string
 }

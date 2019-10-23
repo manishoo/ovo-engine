@@ -4,20 +4,12 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
-import { Image, LanguageCode, Translation } from '@Types/common'
+import { Image, LanguageCode, ObjectId, Translation } from '@Types/common'
 import { FOOD_CLASS_CATEGORY, FOOD_CLASS_TYPES, FoodClass, FoodClassTaxonomy } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { instanceMethod, plugin, prop, Typegoose } from 'typegoose'
+import { index, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
 
-
-class FoodGroupSchema extends Typegoose implements FoodGroup {
-  readonly _id: mongoose.Schema.Types.ObjectId
-  readonly id: string
-
-  @prop({ required: true })
-  name: Translation[]
-}
 
 export interface FoodClassSchema extends SoftDeleteModel<SoftDeleteDocument> {
 }
@@ -26,22 +18,24 @@ export interface FoodClassSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
+@index({ 'name.text': 1 })
 export class FoodClassSchema extends Typegoose implements FoodClass {
-  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly _id: ObjectId
   readonly id: string
   @prop({ required: true })
   name: Translation[]
   @prop()
   description?: Translation[]
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   slug: string
   @prop({ required: true })
-  foodGroup: FoodGroupSchema
+  foodGroups: Partial<FoodGroup>[][]
   @prop()
-  imageUrl?: Image
+  image?: Image
   @prop()
-  thumbnailUrl?: Image
+  thumbnail?: Image
   @prop({ enum: FOOD_CLASS_TYPES, required: true })
   foodType: FOOD_CLASS_TYPES
   @prop()
@@ -59,7 +53,7 @@ export class FoodClassSchema extends Typegoose implements FoodClass {
   @prop()
   taxonomies: FoodClassTaxonomy[]
   @prop()
-  defaultFood?: mongoose.Types.ObjectId
+  defaultFood?: ObjectId
 
   @instanceMethod
   getName(locale: LanguageCode): string | undefined {

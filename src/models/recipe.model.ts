@@ -5,9 +5,9 @@
 
 import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
-import { Image, LanguageCode, Ref, Translation } from '@Types/common'
+import { Image, LanguageCode, ObjectId, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
-import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, RecipeTiming, Review } from '@Types/recipe'
+import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, RecipeStatus, Review } from '@Types/recipe'
 import { Tag } from '@Types/tag'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
@@ -20,9 +20,10 @@ export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
+  deletedByType: String,
 })
 export class RecipeSchema extends Typegoose implements Recipe {
-  _id: mongoose.Types.ObjectId
+  _id: ObjectId
   id: string
 
   @prop({ required: true })
@@ -31,10 +32,10 @@ export class RecipeSchema extends Typegoose implements Recipe {
   ingredients: Ingredient[]
   @prop({ required: true })
   serving: number
-  @prop()
+  @prop({ required: true, unique: true })
   slug: string
   @prop()
-  coverImage?: Image
+  image?: Image
   @prop()
   thumbnail?: Image
   @prop()
@@ -46,7 +47,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   description?: Translation[]
   @prop()
-  timing: RecipeTiming
+  timing: Timing
   @prop({ default: {} })
   nutrition: Nutrition
   @prop()
@@ -63,7 +64,11 @@ export class RecipeSchema extends Typegoose implements Recipe {
   reviews?: Review[]
   @prop()
   createdAt: Date
+
   userLikedRecipe: boolean
+
+  @prop({ default: RecipeStatus.private, required: true })
+  status: RecipeStatus
 
   @prop()
   get likesCount(): number {

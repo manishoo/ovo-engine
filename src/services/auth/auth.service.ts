@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { OperatorModel } from '@Models/operator.model'
 import OperatorService from '@Services/operator/operator.service'
 import { AuthResponse } from '@Types/auth'
 import Errors from '@Utils/errors'
@@ -23,7 +24,7 @@ export default class AuthService {
     const operator = await this.operatorService.findByUsername(username)
     if (!operator) throw new Errors.Authentication('wrong username or password')
 
-    const validatePassword = await verifyPassword(operator.persistedPassword, password)
+    const validatePassword = await verifyPassword(operator.password, password)
 
     if (!validatePassword) throw new Errors.UserInput('wrong username or password', { password: 'wrong password' })
 
@@ -34,8 +35,11 @@ export default class AuthService {
   }
 
   async authenticateBySession(session: string): Promise<AuthResponse> {
-    const operator = await this.operatorService.findBySession(session)
-    if (!operator) throw new Errors.Authentication('not ok')
+    const op = await this.operatorService.findBySession(session)
+    if (!op) throw new Errors.Authentication('not ok')
+
+    const operator = await OperatorModel.findById(op.id)
+    if (!operator) throw new Errors.System()
 
     return {
       operator,

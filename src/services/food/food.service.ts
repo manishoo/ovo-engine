@@ -5,12 +5,15 @@
 
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
+import putDefaultFoodsOnTop from '@Services/food/utils/put-default-foods-on-top'
 import UploadService from '@Services/upload/upload.service'
+import { ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
 import { WeightInput } from '@Types/weight'
+import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
-import mongoose from 'mongoose'
 import { Service } from 'typedi'
 
 
@@ -23,32 +26,56 @@ export default class FoodService {
     // noop
   }
 
-  async listFoods({ page, size, foodClassId, nameSearchQuery }: FoodListArgs): Promise<FoodsListResponse> {
+  async getFood(foodId: string) {
+    return FoodModel.findById(foodId)
+  }
+
+  async listFoods({ page, size, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
     if (foodClassId) {
-      query['foodClass'] = new mongoose.Types.ObjectId(foodClassId)
+      query['foodClass'] = new ObjectId(foodClassId)
     }
     if (nameSearchQuery) {
-      query['name.text'] = {
-        $regex: nameSearchQuery,
-        $options: 'i',
-      }
+      query['$or'] = [
+        {
+          $text: {
+            $search: nameSearchQuery,
+          }
+        },
+        {
+          'name.text': {
+            $regex: nameSearchQuery,
+            $options: 'i',
+          }
+        }
+      ]
     }
 
-    const foods = await FoodModel.find(query)
-      .limit(size)
-      .skip(size * (page - 1))
+    let foods = []
+    let count
 
-    const counts = await FoodModel.countDocuments(query)
+    if (withDeleted) {
+      foods = await FoodModel.findWithDeleted(query, { score: { $meta: 'textScore' } })
+        .sort({ score: { $meta: 'textScore' } })
+        .limit(size)
+        .skip(size * (page - 1))
+      count = await FoodModel.countWithDeleted(query)
+    } else {
+      foods = await FoodModel.find(query, { score: { $meta: 'textScore' } })
+        .sort({ score: { $meta: 'textScore' } })
+        .limit(size)
+        .skip(size * (page - 1))
+      count = await FoodModel.count(query)
+    }
 
     return {
-      foods,
-      pagination: createPagination(page, size, counts),
+      foods: putDefaultFoodsOnTop(foods),
+      pagination: createPagination(page, size, count),
     }
   }
 
   async updateFood(foodId: string, foodInput: FoodInput): Promise<Food | null> {
-    if (!mongoose.Types.ObjectId.isValid(foodId)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
+    if (!ObjectId.isValid(foodId)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
 
     const food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('food not found')
@@ -58,25 +85,25 @@ export default class FoodService {
       if (weight.id) {
         weights.push(weight)
       } else {
-        weight['id'] = String(new mongoose.Types.ObjectId())
+        weight['id'] = String(new ObjectId())
         weights.push(weight)
       }
     })
 
-    if (foodInput.imageUrl) {
-      food.imageUrl = {
-        url: await this.uploadService.processUpload(foodInput.imageUrl, 'full', `images/foods/${food.id}`)
+    if (foodInput.image) {
+      food.image = {
+        url: await this.uploadService.processUpload(foodInput.image, 'full', `images/foods/${food.id}`)
       }
-      if (!foodInput.thumbnailUrl) {
-        food.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodInput.imageUrl, 'thumb', `images/foods/${food.id}`)
+      if (!foodInput.thumbnail) {
+        food.thumbnail = {
+          url: await this.uploadService.processUpload(foodInput.image, 'thumb', `images/foods/${food.id}`)
         }
       }
     }
 
-    if (foodInput.thumbnailUrl) {
-      food.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodInput.thumbnailUrl, 'thumb', `images/foods/${food.id}`)
+    if (foodInput.thumbnail) {
+      food.thumbnail = {
+        url: await this.uploadService.processUpload(foodInput.thumbnail, 'thumb', `images/foods/${food.id}`)
       }
     }
 
@@ -90,27 +117,38 @@ export default class FoodService {
       }
     }
 
+    if (foodInput.foodClassId) {
+      if (food.isDefault) throw new Error('The selected Food is the default food, please remove the default status and try again')
+      food.foodClass = foodInput.foodClassId
+    }
+
     return food.save()
   }
 
-  async deleteFood(foodID: string): Promise<Food> {
-    if (!mongoose.Types.ObjectId.isValid(foodID)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
+  async deleteFood(foodID: string, user: ContextUser, restore?: boolean): Promise<Food> {
+    if (!ObjectId.isValid(foodID)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
 
-    const food = await FoodModel.findByIdAndDelete(foodID)
+    const food = await FoodModel.findOneWithDeleted({ _id: new ObjectId(foodID) })
     if (!food) throw new Errors.NotFound('food not found')
+
+    if (restore) {
+      await food.restore()
+    } else {
+      await food.delete(DeleteBy.user(user))
+    }
 
     return food
   }
 
   async createFood(foodClassID: string, foodInput: FoodInput): Promise<Food> {
-    if (!mongoose.Types.ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
+    if (!ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
     const foodClass = await FoodClassModel.findById(foodClassID)
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     let weights: WeightInput[] = []
     foodInput.weights.map(weight => {
-      weight['id'] = String(new mongoose.Types.ObjectId())
+      weight['id'] = String(new ObjectId())
       weights.push(weight)
     })
 
@@ -119,23 +157,25 @@ export default class FoodService {
       weights,
       description: foodInput.description,
       foodClass: foodClass._id,
+      origFoodClassName: foodClass.name,
+      origFoodGroups: foodClass.foodGroups,
       nutrition: foodInput.nutrition,
-    })
+    } as Partial<Food>)
 
-    if (foodInput.imageUrl) {
-      food.imageUrl = {
-        url: await this.uploadService.processUpload(foodInput.imageUrl, 'full', `images/foods/${food.id}`)
+    if (foodInput.image) {
+      food.image = {
+        url: await this.uploadService.processUpload(foodInput.image, 'full', `images/foods/${food.id}`)
       }
-      if (!foodInput.thumbnailUrl) {
-        food.thumbnailUrl = {
-          url: await this.uploadService.processUpload(foodInput.imageUrl, 'thumb', `images/foods/${food.id}`)
+      if (!foodInput.thumbnail) {
+        food.thumbnail = {
+          url: await this.uploadService.processUpload(foodInput.image, 'thumb', `images/foods/${food.id}`)
         }
       }
     }
 
-    if (foodInput.thumbnailUrl) {
-      food.thumbnailUrl = {
-        url: await this.uploadService.processUpload(foodInput.thumbnailUrl, 'thumb', `images/foods/${food.id}`)
+    if (foodInput.thumbnail) {
+      food.thumbnail = {
+        url: await this.uploadService.processUpload(foodInput.thumbnail, 'thumb', `images/foods/${food.id}`)
       }
     }
 

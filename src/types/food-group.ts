@@ -3,8 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Translation, TranslationInput } from '@Types/common'
-import mongoose from 'mongoose'
+import { ObjectId, Translation, TranslationInput } from '@Types/common'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
 
@@ -20,13 +19,13 @@ export class ParentFoodGroup {
 
 @ObjectType()
 export class FoodGroup {
-  readonly _id: mongoose.Schema.Types.ObjectId
+  readonly _id: ObjectId
   @Field()
   readonly id: string
   @Field(type => [Translation])
   name: Translation[]
 
-  parentFoodGroup?: ParentFoodGroup | mongoose.Schema.Types.ObjectId
+  parentFoodGroup?: ParentFoodGroup | ObjectId
 }
 
 @InputType()

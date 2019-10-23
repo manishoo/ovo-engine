@@ -8,12 +8,20 @@ import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
-import { Image, LanguageCode, UserRole } from '@Types/common'
-import { Ingredient, Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
+import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
+import {
+  Ingredient,
+  Instruction,
+  ListRecipesArgs,
+  Recipe,
+  RecipeInput,
+  RecipesListResponse,
+  RecipeStatus
+} from '@Types/recipe'
 import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
-import mongoose from 'mongoose'
 import shortid from 'shortid'
 import slug from 'slug'
 import { Service } from 'typedi'
@@ -33,10 +41,10 @@ export default class RecipeService {
   async get(id?: string, slug?: string) {
     if (!id && !slug) throw new Errors.Validation('Recipe id or slug must be provided')
 
-    const query: { slug?: string, _id?: mongoose.Types.ObjectId } = {}
+    const query: { slug?: string, _id?: ObjectId } = {}
 
     if (id) {
-      query._id = mongoose.Types.ObjectId(id)
+      query._id = new ObjectId(id)
     }
     if (slug) {
       query.slug = slug
@@ -59,13 +67,15 @@ export default class RecipeService {
       variables.page = 1
     }
 
-    const query: any = {}
+    const query: any = {
+      status: RecipeStatus.public,
+    }
 
     if (variables.userId) {
       const me = await UserModel.findById(variables.userId)
       if (!me) throw new Errors.System('something went wrong')
 
-      query['author'] = mongoose.Types.ObjectId(variables.userId)
+      query['author'] = new ObjectId(variables.userId)
     }
 
     if (variables.tags) {
@@ -73,11 +83,11 @@ export default class RecipeService {
     }
 
     if (variables.nameSearchQuery) {
-      query['title.text'] = { $regex: variables.nameSearchQuery, $options: 'i' }
+      query['title.text'] = { $regex: variables.nameSearchQuery }
     }
 
     if (variables.lastId) {
-      if (!mongoose.Types.ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
+      if (!ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
 
       const recipe = await RecipeModel.findById(variables.lastId)
       if (!recipe) throw new Errors.NotFound('recipe not found')
@@ -105,18 +115,32 @@ export default class RecipeService {
     const author = await UserModel.findById(userId)
     if (!author) throw new Errors.NotFound('author not found')
 
-    let coverImage: Image | undefined = undefined
+    let image: Image | undefined = undefined
+    let thumbnail: Image | undefined = undefined
 
     const slugAddedId = shortid.generate()
     const generatedSlug = `${slug(data.title[0].text)}-${slugAddedId}`
-    if (data.coverImage) {
-      coverImage = {
-        url: await this.uploadService.processUpload(data.coverImage, `${generatedSlug}`, 'recipes'),
+
+    if (data.image) {
+      image = {
+        url: await this.uploadService.processUpload(data.image, `full`, `images/recipes/${generatedSlug}`),
+      }
+
+      if (!data.thumbnail) {
+        thumbnail = {
+          url: await this.uploadService.processUpload(data.image, `thumb`, `images/recipes/${generatedSlug}`),
+        }
+      }
+    }
+    if (data.thumbnail) {
+      thumbnail = {
+        url: await this.uploadService.processUpload(data.thumbnail, `thumb`, `images/recipes/${generatedSlug}`),
       }
     }
 
     const recipe: Partial<Recipe> = {
-      coverImage,
+      image,
+      thumbnail,
       title: data.title,
       serving: data.serving,
       timing: {
@@ -131,6 +155,7 @@ export default class RecipeService {
         text: instructionInput.text,
         step: instructionInput.step,
       })),
+      languages: data.title.map(name => name.locale),
       ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
         let ingredient: Partial<Ingredient> = {}
 
@@ -146,12 +171,12 @@ export default class RecipeService {
           /**
            * If the ingredient had an associated food
            * */
-          if (!mongoose.Types.ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
+          if (!ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
           const food = await FoodModel.findById(ingredientInput.food)
           if (!food) throw new Errors.NotFound('food not found')
 
           ingredient.food = food
-          ingredient.thumbnail = food.thumbnailUrl
+          ingredient.thumbnail = food.thumbnail
           ingredient.name = food.name
 
           if (ingredientInput.weight) {
@@ -190,18 +215,18 @@ export default class RecipeService {
     return transformRecipe(createdRecipe, userId)
   }
 
-  async delete(id: string, user?: ContextUser, operatorId?: string) {
-    if (!user && !operatorId) throw new Errors.Forbidden('not allowed')
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new Errors.Validation('invalid recipe ID')
+  async delete(id: string, user: ContextUser) {
+    if (!user) throw new Errors.Forbidden('not allowed')
+    if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid recipe ID')
 
     const query: any = { _id: id }
-    if (user && (user.role !== UserRole.operator)) {
-      query.author = mongoose.Types.ObjectId(user.id)
+    if (user && (user.role !== Role.operator)) {
+      query.author = new ObjectId(user.id)
     }
     const recipe = await RecipeModel.findOne(query)
     if (!recipe) throw new Errors.NotFound('recipe not found')
 
-    const removedRecipe = await recipe.remove()
+    const removedRecipe = await recipe.delete(DeleteBy.user(user))
     if (!removedRecipe) throw new Errors.System('something went wrong')
 
     return removedRecipe.id
@@ -210,13 +235,18 @@ export default class RecipeService {
   async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, user: ContextUser) {
     const query: any = { _id: recipeId }
 
-    if (user.role !== UserRole.operator) {
-      query['author'] = mongoose.Types.ObjectId(user.id)
+    /**
+     * If you're a User, you can
+     * only update your own recipe
+     * */
+    if (user.role !== Role.operator) {
+      query['author'] = new ObjectId(user.id)
     }
 
     const recipe = await RecipeModel.findOne(query)
       .populate('author')
       .exec()
+
     if (!recipe) throw new Errors.NotFound('recipe not found')
 
     if (data.slug) {
@@ -228,9 +258,13 @@ export default class RecipeService {
     }
     if (data.title) {
       recipe.title = data.title
+      recipe.languages = data.title.map(name => name.locale)
     }
     if (data.description) {
       recipe.description = data.description
+    }
+    if (data.difficulty) {
+      recipe.difficulty = data.difficulty
     }
     if (data.ingredients) {
       recipe.ingredients = await Promise.all(data.ingredients.map(async ingredient => {
@@ -242,7 +276,7 @@ export default class RecipeService {
           amount: ingredient.amount,
           customUnit: ingredient.customUnit,
           gramWeight: ingredient.gramWeight,
-          thumbnail: ingredient.thumbnail || food.thumbnailUrl,
+          thumbnail: ingredient.thumbnail || food.thumbnail,
           description: ingredient.description,
           food: food,
           weight: food.weights.find(w => w.id == ingredient.weight),
@@ -263,11 +297,29 @@ export default class RecipeService {
         return <Instruction>instruction
       }))
     }
-    if (data.coverImage) {
-      recipe.coverImage = {
-        url: await this.uploadService.processUpload(data.coverImage, `${data.slug}-${shortid.generate()}`, 'recipes'),
+    if (data.image) {
+      recipe.image = {
+        url: await this.uploadService.processUpload(data.image, `${data.slug}-${shortid.generate()}`, 'images/recipes'),
       }
     }
+
+    if (data.image) {
+      recipe.image = {
+        url: await this.uploadService.processUpload(data.image, `full`, `images/recipes/${data.slug}`),
+      }
+
+      if (!data.thumbnail) {
+        recipe.thumbnail = {
+          url: await this.uploadService.processUpload(data.image, `thumb`, `images/recipes/${data.slug}`),
+        }
+      }
+    }
+    if (data.thumbnail) {
+      recipe.thumbnail = {
+        url: await this.uploadService.processUpload(data.thumbnail, `thumb`, `images/recipes/${data.slug}`),
+      }
+    }
+
     if (data.timing) {
       recipe.timing = {
         totalTime: data.timing.totalTime,
@@ -291,6 +343,19 @@ export default class RecipeService {
       recipe.tags = tags
     }
     recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
+
+    if (data.status) {
+      switch (data.status) {
+        case RecipeStatus.private:
+          recipe.status = data.status
+          break
+        case RecipeStatus.public:
+          if (user.role === Role.operator || user.role === Role.admin) {
+            recipe.status = data.status
+          }
+          break
+      }
+    }
 
     return transformRecipe(await recipe.save(), user && user.id)
   }

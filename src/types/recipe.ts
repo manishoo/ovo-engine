@@ -3,11 +3,19 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import mongoose from '@Config/connections/mongoose'
-import { FoodSchema } from '@Models/food.model'
 import { UserSchema } from '@Models/user.model'
-import { Image, LanguageCode, Pagination, Ref, Translation, TranslationInput } from '@Types/common'
-import { Food, Nutrition } from '@Types/food'
+import {
+  Image,
+  LanguageCode,
+  ObjectId,
+  Pagination,
+  Ref,
+  Timing,
+  TimingInput,
+  Translation,
+  TranslationInput
+} from '@Types/common'
+import { IngredientFood, Nutrition } from '@Types/food'
 import { Tag, TagType } from '@Types/tag'
 import { Author } from '@Types/user'
 import { Weight } from '@Types/weight'
@@ -17,6 +25,16 @@ import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
+
+export enum RecipeStatus {
+  private = 'private',
+  public = 'public',
+}
+
+registerEnumType(RecipeStatus, {
+  name: 'RecipeStatus',
+  description: 'Recipe Status'
+})
 
 export enum RecipeDifficulty {
   easy = 'easy',
@@ -59,30 +77,6 @@ export class RecipeTagInput {
 }
 
 @ObjectType()
-export class RecipeTiming {
-  @Field(type => Int, { nullable: true })
-  prepTime?: number
-
-  @Field(type => Int, { nullable: true })
-  cookTime?: number
-
-  @Field(type => Int)
-  totalTime: number
-}
-
-@InputType()
-export class RecipeTimingInput {
-  @Field(type => Int, { nullable: true })
-  prepTime?: number
-
-  @Field(type => Int, { nullable: true })
-  cookTime?: number
-
-  @Field(type => Int)
-  totalTime: number
-}
-
-@ObjectType()
 export class Ingredient {
   @Field(type => [Translation], { nullable: true })
   name?: Translation[]
@@ -102,8 +96,8 @@ export class Ingredient {
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
 
-  @Field(type => Food, { nullable: true })
-  food?: FoodSchema
+  @Field(type => IngredientFood, { nullable: true })
+  food?: IngredientFood
 
   @Field(type => Weight, { nullable: true })
   weight?: Ref<Weight>
@@ -194,7 +188,7 @@ export class RecipeOrigin {
 
 @ObjectType()
 export class Recipe {
-  readonly _id: mongoose.Types.ObjectId
+  readonly _id: ObjectId
   @Field()
   readonly id: string
 
@@ -211,7 +205,7 @@ export class Recipe {
   slug: string
 
   @Field(type => Image, { nullable: true })
-  coverImage?: Image
+  image?: Image
 
   @Field(type => Image, { nullable: true })
   thumbnail?: Image
@@ -234,8 +228,8 @@ export class Recipe {
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
 
-  @Field(type => RecipeTiming)
-  timing: RecipeTiming
+  @Field(type => Timing)
+  timing: Timing
 
   @Field(type => Nutrition, { nullable: true })
   nutrition: Nutrition
@@ -254,9 +248,14 @@ export class Recipe {
 
   @Field(type => Date)
   updatedAt?: Date
+
   @Field({ nullable: true })
   userLikedRecipe?: boolean
+
   likes: Ref<UserSchema>[]
+
+  @Field(type => RecipeStatus)
+  status: RecipeStatus
 }
 
 @ObjectType()
@@ -329,8 +328,8 @@ export class RecipeInput {
   @Field(type => Int)
   serving: number
 
-  @Field(type => RecipeTimingInput)
-  timing: RecipeTimingInput
+  @Field(type => TimingInput)
+  timing: TimingInput
 
   @Field(type => RecipeDifficulty, { nullable: true })
   difficulty?: RecipeDifficulty
@@ -342,13 +341,16 @@ export class RecipeInput {
   description: [TranslationInput]
 
   @Field(type => GraphQLUpload, { nullable: true })
-  coverImage?: any
+  image?: any
 
   @Field(type => GraphQLUpload, { nullable: true })
   thumbnail?: any
 
   @Field(type => [String], { nullable: true })
   tags?: string[]
+
+  @Field(type => RecipeStatus, { nullable: true })
+  status?: RecipeStatus
 }
 
 @ArgsType()
@@ -357,7 +359,7 @@ export class ListRecipesArgs {
   @Min(1)
   page?: number
 
-  @Field({ nullable: true })
+  @Field(type => Int, { nullable: true })
   @Min(1)
   @Max(30)
   size?: number

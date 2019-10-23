@@ -1,5 +1,10 @@
-import { Meal } from "@Types/meal"
-import { Food } from "@Types/food"
+/*
+ * meal.transformer.ts
+ * Copyright: Ouranos Studio 2019. All rights reserved.
+ */
+
+import { Food } from '@Types/food'
+import { Meal } from '@Types/meal'
 
 
 export function transformMeal(meal: Meal) {

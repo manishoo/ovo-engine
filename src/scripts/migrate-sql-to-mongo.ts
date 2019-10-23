@@ -10,12 +10,11 @@ import { ContentModel as mongoContentModel } from '@Models/content.model'
 import { FoodClassModel as mongoFoodClassModel } from '@Models/food-class.model'
 import { FoodGroupModel as mongoFoodGroupModel } from '@Models/food-group.model'
 import { FoodModel as mongoFoodModel } from '@Models/food.model'
-import { LanguageCode, Translation } from '@Types/common'
+import { LanguageCode, ObjectId, Translation } from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
-import { FoodContent } from '@Types/food'
+import { Food, FoodContent } from '@Types/food'
 import { FoodClass, FoodClassTaxonomy } from '@Types/food-class'
 import { FoodGroup } from '@Types/food-group'
-import mongoose from 'mongoose'
 import { Sequelize } from 'sequelize'
 import shortid from 'shortid'
 import slug from 'slug'
@@ -79,8 +78,8 @@ async function migrateFoodClassesAndFoodGroups() {
   await mongoFoodGroupModel.deleteMany({})
   await mongoFoodClassModel.deleteMany({})
 
-  async function createFoodGroup(foodGroup: string, foodSubGroup: string): Promise<number> {
-    async function _createFG(name: string, parentId?: mongoose.Schema.Types.ObjectId) {
+  async function createFoodGroup(foodGroup: string, foodSubGroup: string): Promise<FoodGroup[]> {
+    async function _createFG(name: string, parentId?: ObjectId) {
       return mongoFoodGroupModel.create(<Partial<FoodGroup>>{
         name: createTranslations(name),
         parentFoodGroup: parentId,
@@ -92,31 +91,38 @@ async function migrateFoodClassesAndFoodGroups() {
     }
 
     let id
+    let foodGroups: FoodGroup[] = []
 
     const fg = await _findFG(foodGroup)
     if (fg) {
       id = fg.id
+      foodGroups.push(fg)
       const fgg = await _findFG(foodSubGroup)
       if (!fgg && fg.id) {
         const f = await _createFG(foodSubGroup, fg.id)
         id = f._id
+        foodGroups.push(f)
       } else if (fgg) {
         id = fgg._id
+        foodGroups.push(fgg)
       }
     } else {
       const fg = await _createFG(foodGroup)
       id = fg._id
+      foodGroups.push(fg)
       const fgg = await _findFG(foodSubGroup)
       if (!fgg && fg.id) {
         const f = await _createFG(foodSubGroup, fg.id)
         id = f._id
+        foodGroups.push(f)
       } else if (fgg) {
         id = fgg._id
+        foodGroups.push(fgg)
       }
     }
 
-    if (!id) throw new Error()
-    return id
+    if (foodGroups.length === 0) throw new Error()
+    return foodGroups
   }
 
   const all = await foodbModels.foods.findAll()
@@ -146,7 +152,7 @@ async function migrateFoodClassesAndFoodGroups() {
       ncbiTaxonomyId,
       exportToFoodb,
     } = all[i]
-    const foodGroupId = await createFoodGroup(foodGroup, foodSubgroup)
+    const foodGroups = await createFoodGroup(foodGroup, foodSubgroup)
     const taxonomies = await foodbModels.foodTaxonomies.findAll()
 
     foodsToCreate.push(<Partial<FoodClass>>{
@@ -160,7 +166,10 @@ async function migrateFoodClassesAndFoodGroups() {
       slug: slug(`${name}-${shortid()}`),
       name: createTranslations(name),
       description: description && createTranslations(description),
-      foodGroup: await mongoFoodGroupModel.findById(foodGroupId),
+      foodGroups: [foodGroups.map(fg => ({
+        id: fg.id,
+        name: fg.name,
+      }))],
       taxonomies: taxonomies.map(taxonomy => ({
         ncbiTaxonomyId: taxonomy.ncbiTaxonomyId,
         classificationName: taxonomy.classificationName,
@@ -264,13 +273,20 @@ async function migrateFoods() {
         return ((i.origFoodId === caloNewfoodVariety.origFoodId) && (i.citation === citation))
       })
 
+      const foodClass = foodClasses.find(i => i.origId === caloNewfoodVariety.foodId)
+      if (!foodClass) throw new Error('food without foodclass!')
+
       return {
         name: createTranslations(caloNewfoodVariety.origFoodName),
-        foodClass: foodClasses.find(i => i.origId === caloNewfoodVariety.foodId)!._id,
+        foodClass: foodClass._id,
+
+        origFoodClassName: foodClass.name,
+        origFoodGroups: foodClass.foodGroups,
+
         origDb: caloNewfoodVariety.origDb,
         origFoodId: caloNewfoodVariety.origFoodId,
         weights: caloNewWeights.filter(i => i.foodVarietyId === caloNewfoodVariety.id).map(w => ({
-          id: new mongoose.Types.ObjectId(),
+          id: new ObjectId(),
           seq: w.seq,
           gramWeight: w.gmWgt,
           amount: w.amount,
@@ -292,7 +308,7 @@ async function migrateFoods() {
             origId: foodbContent.sourceId,
           } as FoodContent
         }),
-      }
+      } as Partial<Food>
     }))
     console.log(`${totalCount - size} left`)
     totalCount = totalCount - size

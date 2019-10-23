@@ -4,13 +4,24 @@
  */
 
 import { FoodClassSchema } from '@Models/food-class.model'
-import { Image, LanguageCode, NameAndId, Pagination, Translation, TranslationInput } from '@Types/common'
+import { FoodGroupSchema } from '@Models/food-group.model'
+import {
+  Image,
+  LanguageCode,
+  NameAndId,
+  ObjectId,
+  Pagination,
+  Ref,
+  Role,
+  Translation,
+  TranslationInput
+} from '@Types/common'
 import { Content, CONTENT_TYPE } from '@Types/content'
+import { FoodClass } from '@Types/food-class'
+import { FoodGroup } from '@Types/food-group'
 import { Weight, WeightInput } from '@Types/weight'
 import { GraphQLUpload } from 'apollo-server'
-import mongoose from 'mongoose'
-import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
-import { Ref } from 'typegoose'
+import { ArgsType, Authorized, Field, ID, InputType, ObjectType } from 'type-graphql'
 
 
 @ObjectType()
@@ -551,7 +562,7 @@ export interface FoodCreateInput {
   foodGroupId: string
   name: string
   description?: string
-  imageUrl?: string
+  image?: string
   nutrients: { id: string, value: number }[]
   proFactor?: number
   fatFactor?: number
@@ -564,8 +575,8 @@ export interface FoodCreateInput {
 }
 
 export class FoodContent {
-  content: mongoose.Schema.Types.ObjectId | Content
-  origContentName: string
+  content: ObjectId | Content
+  origContentName?: string
   origContentType: CONTENT_TYPE
   amount: number
   unit: string
@@ -575,27 +586,57 @@ export class FoodContent {
 }
 
 @ObjectType()
-export class Food {
-  readonly _id: mongoose.Schema.Types.ObjectId
+export class FoodBase {
+  readonly _id: ObjectId
+
   @Field()
-  readonly id: string
+  id: string
+
   @Field(type => [Translation])
   name: Translation[]
+
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
+
   @Field(type => [Weight])
   weights: Weight[]
-  @Field({ nullable: true })
-  origDb?: string
-  origFoodId?: string
+
+  @Field(type => FoodClass)
   foodClass: Ref<FoodClassSchema>
-  contents: FoodContent[]
+
+  @Field(type => Image, { nullable: true })
+  image?: Image
+
+  @Field(type => Image, { nullable: true })
+  thumbnail?: Image
+
+  origFoodClassName: Translation[]
+
+  @Field(type => FoodGroup)
+  origFoodGroups: FoodGroup[][]
+
   @Field(type => Nutrition)
   nutrition: Nutrition
-  @Field(type => Image)
-  imageUrl?: Image
-  @Field(type => Image)
-  thumbnailUrl?: Image
+}
+
+@ObjectType()
+export class Food extends FoodBase {
+  @Field({ nullable: true })
+  origDb?: string
+
+  origFoodId?: string
+
+  contents: FoodContent[]
+
+  @Field({ nullable: true })
+  isDefault?: boolean
+
+  @Field()
+  deleted: boolean
+}
+
+@ObjectType()
+export class IngredientFood extends FoodBase {
 }
 
 @InputType()
@@ -609,9 +650,11 @@ export class FoodInput {
   @Field(type => NutritionInput, { nullable: true })
   nutrition?: NutritionInput
   @Field(type => GraphQLUpload, { nullable: true })
-  imageUrl?: any
+  image?: any
   @Field(type => GraphQLUpload, { nullable: true })
-  thumbnailUrl?: any
+  thumbnail?: any
+  @Field({ nullable: true })
+  foodClassId?: ObjectId
 }
 
 @ArgsType()
@@ -624,4 +667,7 @@ export class FoodListArgs {
   foodClassId: string
   @Field({ nullable: true })
   nameSearchQuery: string
+  @Authorized(Role.operator)
+  @Field({ nullable: true })
+  withDeleted: boolean
 }

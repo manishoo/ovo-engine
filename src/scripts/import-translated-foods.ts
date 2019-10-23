@@ -4,7 +4,7 @@
  */
 
 import { FoodClassModel } from '@Models/food-class.model'
-import { FoodGroupModel } from '@Models/food-group.model'
+import { FoodGroupModel, FoodGroupSchema } from '@Models/food-group.model'
 import { FoodModel } from '@Models/food.model'
 import { LanguageCode, Translation } from '@Types/common'
 import uniqueTokens from './food-unique-tokens-fa.json'
@@ -27,7 +27,7 @@ function addFaTranslation(translations: Translation[]) {
   if (!enTranslation) throw new Error('no translation')
 
   const tr = uniqueTokens.find(p => p.token === enTranslation)
-  if (!tr) throw new Error('no farsi translation found')
+  if (!tr) throw new Error(`no farsi translation found for ${enTranslation}`)
 
   return [
     {
@@ -48,19 +48,26 @@ export default async function main() {
   const foodClasses = await FoodClassModel.find()
   const foodGroups = await FoodGroupModel.find()
 
-  await Promise.all(foods.map(async food => {
+  const foodGroupsSaved = await Promise.all(foodGroups.map(async food => {
     food.name = addFaTranslation(food.name)
 
     return food.save()
   }))
-  await Promise.all(foodClasses.map(async food => {
-    food.name = addFaTranslation(food.name)
-
-    return food.save()
-  }))
-  await Promise.all(foodGroups.map(async food => {
-    food.name = addFaTranslation(food.name)
-
-    return food.save()
-  }))
+  // TODO food group structure changed and these functions need to be changed
+  // const foodClassesSaved = await Promise.all(foodClasses.map(async food => {
+  //   food.name = addFaTranslation(food.name)
+  //   const foodGroup = foodGroupsSaved.find(p => String(p._id) === String(food.foodGroup._id))
+  //   if (!foodGroup) throw new Error('no food class for this food')
+  //   food.foodGroup = foodGroup
+  //   return food.save()
+  // }))
+  // await Promise.all(foods.map(async food => {
+  //   food.name = addFaTranslation(food.name)
+  //   const foodClass = foodClassesSaved.find(p => String(p._id) === String(food.foodClass))
+  //   if (!foodClass) throw new Error('no food class for this food')
+  //   food.origFoodClassName = foodClass.name
+  //   food.foodGroup = foodClass.foodGroup as FoodGroupSchema
+  //
+  //   return food.save()
+  // }))
 }

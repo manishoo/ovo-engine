@@ -6,7 +6,9 @@
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import { LanguageCode, Translation } from '@Types/common'
+import { DeleteBy } from '@Utils/delete-by'
 
+const argv = require('minimist')(process.argv.slice(2))
 
 function getEnTranslation(tr: Translation[]) {
   if (tr.length === 0) return
@@ -26,11 +28,12 @@ export default async function main() {
     const foods = await FoodModel.find({ foodClass: foodClass._id })
 
     let shortestFoodId = undefined
-    let shortestFood = ''
+    let shortestFoodName = ''
+    let shortestFood
 
     if (foods.length === 0) {
       console.log(`Deleting ${getEnTranslation(foodClass.name)} - ${foodClass.id} - ${foodClass.origId}`)
-      await foodClass.delete()
+      await foodClass.delete(DeleteBy.system('select-food-class-default-foods.ts'))
       continue
     }
 
@@ -42,12 +45,14 @@ export default async function main() {
         const enName = getEnTranslation(food.name)
         if (!enName) throw new Error('en tr not found')
         if (shortestFoodId) {
-          if (enName.length < shortestFood.length) {
-            shortestFood = enName
+          if (enName.length < shortestFoodName.length) {
+            shortestFoodName = enName
+            shortestFood = food
             shortestFoodId = food._id
           }
         } else {
-          shortestFood = enName
+          shortestFoodName = enName
+          shortestFood = food
           shortestFoodId = food._id
         }
       }
@@ -57,12 +62,14 @@ export default async function main() {
           const enName = getEnTranslation(food.name)
           if (!enName) throw new Error('en tr not found')
           if (shortestFoodId) {
-            if (enName.length < shortestFood.length) {
-              shortestFood = enName
+            if (enName.length < shortestFoodName.length) {
+              shortestFoodName = enName
+              shortestFood = food
               shortestFoodId = food._id
             }
           } else {
-            shortestFood = enName
+            shortestFoodName = enName
+            shortestFood = food
             shortestFoodId = food._id
           }
         }
@@ -70,9 +77,19 @@ export default async function main() {
     }
 
     if (!shortestFoodId) throw new Error('no food selected')
+    if (!shortestFood) throw new Error('no food selected')
 
     foodClass.defaultFood = shortestFoodId
     await foodClass.save()
+    shortestFood.isDefault = true
+    await shortestFood.save()
     process.stdout.write('.')
   }
+}
+
+if (argv.run) {
+  main()
+    .then(() => {
+      console.log('DONE')
+    })
 }

@@ -7,8 +7,11 @@ import config from '@Config'
 import redis from '@Config/connections/redis'
 import { OperatorModel } from '@Models/operator.model'
 import { AuthResponse } from '@Types/auth'
-import { OperatorRole, Status } from '@Types/common'
+import { ObjectId, Role, Status } from '@Types/common'
 import { Operator } from '@Types/operator'
+import { RedisKeys } from '@Types/redis'
+import { ContextUser, ContextUserType } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { generateHashPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
@@ -28,14 +31,14 @@ export default class OperatorService {
     return null
   }
 
-  async create(username: string, password: string, role?: OperatorRole): Promise<AuthResponse> {
+  async create(username: string, password: string, role?: Role): Promise<AuthResponse> {
     const checkOperator = await this.findByUsername(username)
     if (checkOperator) throw new Errors.UserInput('Operator creation error', { username: 'This username already exists' })
 
     const hashedPassword = await generateHashPassword(password)
     const operator = await OperatorModel.create({
       username,
-      persistedPassword: hashedPassword,
+      password: hashedPassword,
       role,
     })
     return {
@@ -49,17 +52,19 @@ export default class OperatorService {
       .select('-session -presistedPassword')
   }
 
-  async removeOperator(id: string): Promise<Operator | null> {
-    const removeOperator = await OperatorModel.findByIdAndRemove(id)
+  async removeOperator(id: string, user: ContextUser): Promise<Operator | null> {
+    const removeOperator = await OperatorModel.deleteById(id, DeleteBy.user(user))
     if (!removeOperator) throw new Errors.NotFound('Operator not found')
 
-    const key = `operator:session:${removeOperator.session}`
-    await redis.del(key)
-    return removeOperator
+    const operator = await OperatorModel.findOneWithDeleted({ _id: new ObjectId(id) })
+    if (!operator) throw new Errors.System()
+
+    await redis.del(RedisKeys.operatorSession(operator.session))
+    return operator
   }
 
-  async findBySession(session: string): Promise<Operator | null> {
-    const key = `operator:session:${session}`
+  async findBySession(session: string): Promise<ContextUser | null> {
+    const key = RedisKeys.operatorSession(session)
     const userDataJSONString = await redis.get(key)
     if (userDataJSONString) {
       let user = JSON.parse(userDataJSONString)
@@ -71,12 +76,12 @@ export default class OperatorService {
       if (!dbUser) {
         return null
       }
-      let user = <Operator>{
+      let user: ContextUser = {
         id: dbUser._id,
         status: dbUser.status,
         session,
-        username: dbUser.username,
         role: dbUser.role,
+        type: ContextUserType.operator
       }
       redis.setex(key, config.times.sessionExpiration, JSON.stringify(user))
       return user
