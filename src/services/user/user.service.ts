@@ -16,13 +16,17 @@ import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
+import MailingService from '@Services/mail/mail.service'
+import { MailTemplate, EmailTemplates } from '@Services/mail/utils/mailTemplates'
+import generateRecoverLink from './utils/generate-recover-link'
 
 
 @Service()
 export default class UserService {
   constructor(
     // service injection
-    private readonly uploadService: UploadService
+    private readonly uploadService: UploadService,
+    private readonly mailingService: MailingService,
   ) {
     // noop
   }
@@ -180,6 +184,28 @@ export default class UserService {
     const user = await UserModel.findOne({ username })
 
     return !!user
+  }
+
+  async requestRecoverPassword(email: string): Promise<Boolean> {
+
+    const user = await UserModel.findOne({ email })
+    if (!user) throw new Errors.NotFound('User not found')
+
+    let userFirstName: string = ''
+    if (user.firstName) {
+      userFirstName = user.firstName
+    } else {
+      userFirstName = 'User'
+    }
+    this.mailingService.sendMail([{
+      name: userFirstName,
+      email: user.email,
+      senderAddress: 'recover',
+      subject: `Password recover for ${user.firstName}`,
+      template: EmailTemplates[MailTemplate.recoverPassword],
+      recover: generateRecoverLink(user.id)
+    }])
+    return true
   }
 
 }
