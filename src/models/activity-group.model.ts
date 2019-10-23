@@ -24,7 +24,7 @@ export class ActivityGroupSchema extends Typegoose implements ActivityGroup {
   @prop()
   name: Translation[]
 
-  @prop()
+  @prop({required: true, unique: true})
   slug: string
 }
 

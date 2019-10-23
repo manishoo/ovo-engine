@@ -9,7 +9,11 @@
     "start:app": "ts-node -r tsconfig-paths/register src/api/app/index.ts",
     "build": "gulp"
   },
-  "author": "Mani Shooshtari",
+  "authors": [
+    "Mani Shooshtari",
+    "Bamdad Nouri",
+    "Mostafa Kouhpayeh"
+  ],
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "@types/cheerio": "^0.22.13",
