@@ -182,7 +182,7 @@ export default class FoodClassService {
     })
     foodClass.description = foodClassInput.description
     foodClass.slug = foodClassInput.slug
-    foodClass.defaultFood = ObjectId(foodClassInput.defaultFood)
+    foodClass.defaultFood = new ObjectId(foodClassInput.defaultFood)
 
     const savedFoodClass = await foodClass.save()
 
