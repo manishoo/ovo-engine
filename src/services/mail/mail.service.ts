@@ -23,6 +23,7 @@ export default class MailingService {
         userId: recipient.userId,
         senderAddress: recipient.senderAddress,
         template: recipient.template,
+        recover: recipient.recover,
       }
       emailList.push(recipient.email)
     })

@@ -9,7 +9,7 @@ import { ObjectType, Field } from "type-graphql"
 @ObjectType()
 export class MailInput {
   @Field()
-  userId: string
+  userId?: string
 
   @Field()
   name: string
@@ -25,4 +25,7 @@ export class MailInput {
 
   @Field(type => String)
   template: string
+
+  @Field()
+  recover?: string
 }
