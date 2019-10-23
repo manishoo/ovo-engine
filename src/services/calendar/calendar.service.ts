@@ -29,7 +29,7 @@ export default class CalendarService {
     let query: any = {}
 
     query.date = { $gt: startDate, $lt: endDate }
-    query.user = ObjectId(userId)
+    query.user = new ObjectId(userId)
 
     return CalendarModel.find(query)
       .populate({
