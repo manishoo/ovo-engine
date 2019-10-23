@@ -191,8 +191,14 @@ export default class UserService {
     const user = await UserModel.findOne({ email })
     if (!user) throw new Errors.NotFound('User not found')
 
+    let userFirstName: string = ''
+    if (user.firstName) {
+      userFirstName = user.firstName
+    } else {
+      userFirstName = 'User'
+    }
     this.mailingService.sendMail([{
-      name: user.firstName!,
+      name: userFirstName,
       email: user.email,
       senderAddress: 'recover',
       subject: `Password recover for ${user.firstName}`,
