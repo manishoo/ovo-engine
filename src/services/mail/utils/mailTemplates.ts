@@ -1,5 +1,28 @@
+import { LanguageCode } from "@Types/common"
 
-const RecoverPasswordEmailTemplate = `
+export function getRecoverTemplate(locale: LanguageCode) {
+  if (!locale) locale = LanguageCode.en
+
+  let texts = {
+    [LanguageCode.en]: {
+      title: 'Password issues?',
+      body: 'Dear %recipient.name%, it seems you have a problem with your password. You can change it right now.',
+      ignoreText: 'If you didn’t request a password reset, you don’t have to do anything. Just ignore this email.',
+      problemText: 'Problems or questions?',
+      downloadText: 'Download App',
+      buttonText: 'RESET YOUR PASSWORD',
+    },
+    [LanguageCode.fa]: {
+      title: 'مشکلی با رمز دارین؟',
+      body: 'عزیز، به نظر میاد با رمز اکانت پرانا مشکل دارین. از همین جا میتونین تغییر بدین %recipient.name%',
+      ignoreText: 'اگر درخواست تعویض ندادین، این ایمیل رو نادیده بگیرین.',
+      problemText: 'انتقاد، پیشنهاد؟',
+      downloadText: 'دانلود اپلیکیشن',
+      buttonText: 'تعویض رمز',
+    }
+  }
+
+  return `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 xmlns:v="urn:schemas-microsoft-com:vml"
@@ -125,13 +148,13 @@ u + .em_body .em_full_wrap { width:100% !important; width:100vw !important;}
                 <td height="45" style="height:45px;" class="em_h20">&nbsp;</td>
               </tr>
               <tr>
-                <td class="em_blue em_font_22" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 26px; line-height: 29px; color:#264780; font-weight:bold;">Password issues?</td>
+                <td class="em_blue em_font_22" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 26px; line-height: 29px; color:#264780; font-weight:bold;">${texts[locale].title}</td>
               </tr>
               <tr>
                 <td height="14" style="height:14px; font-size:0px; line-height:0px;">&nbsp;</td>
               </tr>
               <tr>
-                <td class="em_grey" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 26px; color:#434343;">Dear %recipient.name%, it seems you have a problem with your password. You can change it right now.</td>
+                <td class="em_grey" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 26px; color:#434343;">${texts[locale].body}</td>
               </tr>
               <tr>
                 <td height="26" style="height:26px;" class="em_h20">&nbsp;</td>
@@ -139,7 +162,7 @@ u + .em_body .em_full_wrap { width:100% !important; width:100vw !important;}
               <tr>
                 <td align="center" valign="top"><table width="250" style="width:250px; background-color:#6bafb2; border-radius:4px;" border="0" cellspacing="0" cellpadding="0" align="center">
                   <tr>
-                    <td class="em_white" height="42" align="center" valign="middle" style="font-family: Arial, sans-serif; font-size: 16px; color:#ffffff; font-weight:bold; height:42px;"><a href="%recipient.recover%" target="_blank" style="text-decoration:none; color:#ffffff; line-height:42px; display:block;">RESET YOUR PASSWORD</a></td>
+                    <td class="em_white" height="42" align="center" valign="middle" style="font-family: Arial, sans-serif; font-size: 16px; color:#ffffff; font-weight:bold; height:42px;"><a href="%recipient.recover%" target="_blank" style="text-decoration:none; color:#ffffff; line-height:42px; display:block;">${texts[locale].buttonText}</a></td>
                   </tr>
                 </table>
                 </td>
@@ -148,8 +171,7 @@ u + .em_body .em_full_wrap { width:100% !important; width:100vw !important;}
                 <td height="25" style="height:25px;" class="em_h20">&nbsp;</td>
               </tr>
               <tr>
-                <td class="em_grey" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 26px; color:#434343;">If you didn&rsquo;t request a password reset, you don&rsquo;t have to do anything.<br class="em_hide" />
-Just ignore this email.</td>
+                <td class="em_grey" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 26px; color:#434343;">${texts[locale].ignoreText}<br class="em_hide" /></td>
               </tr>
               <tr>
                 <td height="44" style="height:44px;" class="em_h20">&nbsp;</td>
@@ -179,7 +201,7 @@ Just ignore this email.</td>
                 <td height="16" style="height:16px; font-size:1px; line-height:1px; height:16px;">&nbsp;</td>
               </tr>
               <tr>
-                <td class="em_grey" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 15px; line-height: 18px; color:#434343; font-weight:bold;">Problems or questions?</td>
+                <td class="em_grey" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 15px; line-height: 18px; color:#434343; font-weight:bold;">${texts[locale].problemText}</td>
               </tr>
               <tr>
                 <td height="10" style="height:10px; font-size:1px; line-height:1px;">&nbsp;</td>
@@ -224,7 +246,7 @@ Just ignore this email.</td>
               <tr>
                 <td align="center" valign="top"><table border="0" cellspacing="0" cellpadding="0" align="left" class="em_wrapper">
                   <tr>
-                    <td class="em_grey" align="center" valign="middle" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 16px; color:#434343;">&copy; Prana 2019  &nbsp;|&nbsp;  <a href="https://prana.global" target="_blank" style="text-decoration:underline; color:#434343;">Download App</a></td>
+                    <td class="em_grey" align="center" valign="middle" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 16px; color:#434343;">&copy; Prana 2019  &nbsp;|&nbsp;  <a href="https://prana.global" target="_blank" style="text-decoration:underline; color:#434343;">${texts[locale].downloadText}</a></td>
                   </tr>
                 </table>
                 </td>
@@ -245,11 +267,4 @@ Just ignore this email.</td>
 </body>
 </html>
 `
-
-export const EmailTemplates = {
-  recoverPassword: RecoverPasswordEmailTemplate
-}
-
-export enum MailTemplate {
-  recoverPassword = 'recoverPassword',
 }

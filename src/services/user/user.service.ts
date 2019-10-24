@@ -7,7 +7,7 @@ import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
-import { ObjectId, Role, Status } from '@Types/common'
+import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
 import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, DecodedUser } from '@Types/user'
 import { ContextUser, ContextUserType } from '@Utils/context'
@@ -18,7 +18,7 @@ import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
 import decodeJwtToken from '@Utils/decode-jwt-token'
 import MailingService from '@Services/mail/mail.service'
-import { MailTemplate, EmailTemplates } from '@Services/mail/utils/mailTemplates'
+import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
 import generateRecoverLink from './utils/generate-recover-link'
 
 
@@ -187,7 +187,7 @@ export default class UserService {
     return !!user
   }
 
-  async requestRecoverPassword(email: string): Promise<Boolean> {
+  async requestRecoverPassword(email: string, locale: LanguageCode): Promise<Boolean> {
 
     const user = await UserModel.findOne({ email })
     if (!user) throw new Errors.NotFound('User not found')
@@ -203,7 +203,7 @@ export default class UserService {
       email: user.email,
       senderAddress: 'recover',
       subject: `Password recover for ${user.firstName}`,
-      template: EmailTemplates[MailTemplate.recoverPassword],
+      template: getRecoverTemplate(locale),
       recover: generateRecoverLink(user.id)
     }])
     return true
