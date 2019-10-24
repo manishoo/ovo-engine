@@ -210,7 +210,7 @@ export default class UserService {
   }
 
   async changeUserPassword(token: string, password: string) {
-    const decoded = decodeJwtToken(token) as DecodedUser
+    const decoded: DecodedUser = decodeJwtToken(token)
 
     const user = await UserModel.findById(decoded.id!)
     if (!user) throw new Errors.NotFound('User not found')
