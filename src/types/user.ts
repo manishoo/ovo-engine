@@ -311,3 +311,9 @@ export class UserAuthResponse {
   @Field()
   session: string
 }
+
+@ObjectType()
+export class DecodedUser {
+  @Field()
+  id: string
+}
