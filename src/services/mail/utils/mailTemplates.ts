@@ -4,7 +4,7 @@ export function getRecoverTemplate(locale: LanguageCode) {
   if (!locale) locale = LanguageCode.en
 
   let texts = {
-    en: {
+    [LanguageCode.en]: {
       title: 'Password issues?',
       body: 'Dear %recipient.name%, it seems you have a problem with your password. You can change it right now.',
       ignoreText: 'If you didn’t request a password reset, you don’t have to do anything. Just ignore this email.',
