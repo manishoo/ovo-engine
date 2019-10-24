@@ -4,11 +4,13 @@
  */
 
 import { Service } from 'typedi'
-import { DietInput, Diet } from '@Types/diet'
+import { DietInput, Diet, ListDietInput } from '@Types/diet'
 import { FoodClassModel } from '@Models/food-class.model'
 import Errors from '@Utils/errors'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { DietModel } from '@Models/diet.model'
+import { ObjectId } from '@Types/common'
+
 
 
 @Service()
@@ -35,5 +37,20 @@ export default class DietService {
       foodClassIncludes: diet.foodClassIncludes,
       foodGroupIncludes: diet.foodGroupIncludes,
     })
+  }
+
+  async list(variables?: ListDietInput): Promise<Diet[]> {
+    let query: any = {}
+
+    if (variables && variables.searchSlug) {
+      query['slug'] = { $regex: variables.searchSlug, $options: 'i' }
+    }
+    if (variables && variables.searchFoodClass) {
+      query['foodClassIncludes'] = { $in: variables.searchFoodClass }
+    }
+    if (variables && variables.searchFoodGroup) {
+      query['foodGroupIncludes'] = { $in: variables.searchFoodGroup }
+    }
+    return DietModel.find(query)
   }
 }

@@ -45,3 +45,15 @@ export class DietInput {
   @ArrayUnique()
   foodGroupIncludes: ObjectId[]
 }
+
+@InputType()
+export class ListDietInput {
+  @Field({ nullable: true })
+  searchSlug?: string
+
+  @Field(type => [ObjectId], { nullable: true })
+  searchFoodClass?: ObjectId[]
+
+  @Field(type => [ObjectId], { nullable: true })
+  searchFoodGroup?: ObjectId[]
+}
