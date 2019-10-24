@@ -130,6 +130,10 @@ export class TargetNutrition {
 
   @Field()
   max: number
+
+  get average() {
+    return this.min + this.max / 2
+  }
 }
 
 @InputType()

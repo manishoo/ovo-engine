@@ -84,14 +84,23 @@ export default class UserService {
       carb: {
         max: 250,
         min: 200,
+        get average(): number {
+          return this.max + this.min / 2
+        }
       },
       fat: {
         max: 90,
         min: 80,
+        get average(): number {
+          return this.max + this.min / 2
+        }
       },
       protein: {
         max: 170,
         min: 150,
+        get average(): number {
+          return this.max + this.min / 2
+        }
       },
     }
 
