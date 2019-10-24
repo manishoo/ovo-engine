@@ -7,7 +7,7 @@ import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
-import { ObjectId, Role, Status } from '@Types/common'
+import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
 import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
 import { ContextUser, ContextUserType } from '@Utils/context'
@@ -17,7 +17,7 @@ import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
 import MailingService from '@Services/mail/mail.service'
-import { MailTemplate, EmailTemplates } from '@Services/mail/utils/mailTemplates'
+import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
 import generateRecoverLink from './utils/generate-recover-link'
 
 
@@ -202,7 +202,7 @@ export default class UserService {
       email: user.email,
       senderAddress: 'recover',
       subject: `Password recover for ${user.firstName}`,
-      template: EmailTemplates[MailTemplate.recoverPassword],
+      template: getRecoverTemplate(LanguageCode.en),
       recover: generateRecoverLink(user.id)
     }])
     return true
