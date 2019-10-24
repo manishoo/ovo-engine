@@ -186,7 +186,7 @@ export default class UserService {
     return !!user
   }
 
-  async requestRecoverPassword(email: string): Promise<Boolean> {
+  async requestRecoverPassword(email: string, locale: LanguageCode): Promise<Boolean> {
 
     const user = await UserModel.findOne({ email })
     if (!user) throw new Errors.NotFound('User not found')
@@ -202,7 +202,7 @@ export default class UserService {
       email: user.email,
       senderAddress: 'recover',
       subject: `Password recover for ${user.firstName}`,
-      template: getRecoverTemplate(LanguageCode.en),
+      template: getRecoverTemplate(locale),
       recover: generateRecoverLink(user.id)
     }])
     return true

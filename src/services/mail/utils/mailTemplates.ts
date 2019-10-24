@@ -1,6 +1,7 @@
 import { LanguageCode } from "@Types/common"
 
 export function getRecoverTemplate(locale: LanguageCode) {
+  if (!locale) locale = LanguageCode.en
 
   let texts = {
     en: {

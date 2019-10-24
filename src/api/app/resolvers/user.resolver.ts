@@ -93,6 +93,6 @@ export default class UserResolver {
     @Arg('email') email: string,
     @Ctx() ctx: Context,
   ) {
-    return this.userService.requestRecoverPassword(email)
+    return this.userService.requestRecoverPassword(email, ctx.lang)
   }
 }
