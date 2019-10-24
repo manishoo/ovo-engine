@@ -13,7 +13,7 @@ import { Context } from '@Utils/context'
 
 @Service()
 @Resolver(of => Diet)
-export default class UserResolver {
+export default class DietResolver {
   constructor(
     // service injection
     private readonly dietService: DietService,
