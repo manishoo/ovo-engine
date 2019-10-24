@@ -25,19 +25,21 @@ export default class SuggestionService {
     // TODO get user excluded foods and food classes
     const biasConditions: any = {}
 
+    const mealsCount = 4 // temporary user meal count(same weight for each meal)
+
     if (nutritionProfile.isStrict) {
       biasConditions.nutrition = {
         'proteins.amount': {
-          $gte: nutritionProfile.protein.min,
-          $lte: nutritionProfile.protein.max
+          $gte: nutritionProfile.protein.min / mealsCount,
+          $lte: nutritionProfile.protein.max / mealsCount
         },
         'totalCarbs.amount': {
-          $gte: nutritionProfile.carb.min,
-          $lte: nutritionProfile.carb.max
+          $gte: nutritionProfile.carb.min / mealsCount,
+          $lte: nutritionProfile.carb.max / mealsCount
         },
         'fats.amount': {
-          $gte: nutritionProfile.fat.min,
-          $lte: nutritionProfile.fat.max
+          $gte: nutritionProfile.fat.min / mealsCount,
+          $lte: nutritionProfile.fat.max / mealsCount
         },
       }
     }
@@ -46,10 +48,10 @@ export default class SuggestionService {
 
     const weights = [1, 1, 1, 1, 1]
     const userTargetNuts = {
-      calories: nutritionProfile.calories,
-      protein: nutritionProfile.protein.average,
-      carb: nutritionProfile.carb.average,
-      fat: nutritionProfile.fat.average,
+      calories: nutritionProfile.calories / mealsCount,
+      protein: nutritionProfile.protein.average / mealsCount,
+      carb: nutritionProfile.carb.average / mealsCount,
+      fat: nutritionProfile.fat.average / mealsCount,
     }
 
     const rankedMeals = await Promise.all(meals.map(async (meal) => {
