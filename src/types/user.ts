@@ -9,7 +9,7 @@ import { Image, ObjectId, Ref, Role, Status } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
-import { IsEmail, IsPhoneNumber, Min, Max } from 'class-validator'
+import { IsEmail, IsPhoneNumber } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 import { Diet } from '@Types/diet'
 
@@ -125,24 +125,20 @@ export class SocialNetworksInput {
 
 @ObjectType()
 export class TargetNutrition {
+  @Field()
   min: number
 
+  @Field()
   max: number
-
-  @Min(0)
-  @Max(100)
-  percent: number
 }
 
 @InputType()
 export class TargetNutritionInput {
+  @Field()
   min: number
 
+  @Field()
   max: number
-
-  @Min(0)
-  @Max(100)
-  percent: number
 }
 
 @ObjectType()
@@ -158,6 +154,9 @@ export class NutritionProfile {
 
   @Field(type => TargetNutrition)
   fat: TargetNutrition
+
+  @Field()
+  isStrict: boolean
 }
 
 @InputType()
@@ -173,6 +172,9 @@ export class NutritionProfileInput {
 
   @Field(type => TargetNutritionInput)
   fat: TargetNutritionInput
+
+  @Field()
+  isStrict: boolean
 }
 
 @ObjectType()

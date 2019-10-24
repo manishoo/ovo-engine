@@ -79,21 +79,19 @@ export default class UserService {
     if (checkEmail) throw new Errors.UserInput('user creation error', { username: 'This email is already in use' })
 
     const defaultNutritionProfile: NutritionProfile = {
-      calories: 200,
+      isStrict: false,
+      calories: 2000,
       carb: {
         max: 250,
         min: 200,
-        percent: 40
       },
       fat: {
         max: 90,
         min: 80,
-        percent: 30
       },
       protein: {
         max: 170,
         min: 150,
-        percent: 30
       },
     }
 
