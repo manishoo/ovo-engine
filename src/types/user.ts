@@ -240,8 +240,8 @@ export class User extends BaseUser {
   bodyFat?: number
   @Field(type => Gender, { nullable: true })
   gender?: Gender
-  @Field(type => NutritionProfile, { nullable: true })
-  nutritionProfile?: NutritionProfile
+  @Field(type => NutritionProfile)
+  nutritionProfile: NutritionProfile
   @Field(type => Diet, { nullable: true })
   diet?: Diet
   foodAllergies?: string[]

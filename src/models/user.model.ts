@@ -97,7 +97,7 @@ export class UserSchema extends Typegoose implements User {
    * physical attributes
    * */
   @prop()
-  nutritionProfile?: NutritionProfile
+  nutritionProfile: NutritionProfile
 
   @prop()
   height?: Height

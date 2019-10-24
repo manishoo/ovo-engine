@@ -9,7 +9,16 @@ import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
-import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, DecodedUser } from '@Types/user'
+import {
+  BaseUser,
+  NutritionProfile,
+  User,
+  UserAuthResponse,
+  UserLoginArgs,
+  UserRegistrationInput,
+  UserUpdateInput,
+  DecodedUser,
+} from '@Types/user'
 import { ContextUser, ContextUserType } from '@Utils/context'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
@@ -69,6 +78,25 @@ export default class UserService {
     const checkEmail = await UserModel.findOne({ email: user.email })
     if (checkEmail) throw new Errors.UserInput('user creation error', { username: 'This email is already in use' })
 
+    const defaultNutritionProfile: NutritionProfile = {
+      calories: 200,
+      carb: {
+        max: 250,
+        min: 200,
+        percent: 40
+      },
+      fat: {
+        max: 90,
+        min: 80,
+        percent: 30
+      },
+      protein: {
+        max: 170,
+        min: 150,
+        percent: 30
+      },
+    }
+
     let createUser = <Partial<User>>{
       username: user.username,
       password: await generateHashPassword(user.password),
@@ -77,6 +105,7 @@ export default class UserService {
       firstName: user.firstName,
       middleName: user.middleName,
       lastName: user.lastName,
+      nutritionProfile: defaultNutritionProfile,
       avatar: {
         url: generateAvatarUrl(user.username),
         source: 'generated-avatar'
