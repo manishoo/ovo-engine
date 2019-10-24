@@ -5,7 +5,7 @@
 
 import { Service } from 'typedi'
 import { Meal } from '@Types/meal'
-import UserSettingService from '@Services/user/userSetting.service'
+import UserSettingService from '@Services/user/user-setting.service'
 import { MealModel } from '@Models/meal.model'
 import math from 'mathjs'
 
