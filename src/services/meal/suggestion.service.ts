@@ -46,7 +46,7 @@ export default class SuggestionService {
 
     const meals = await MealModel.find(biasConditions, null, { plain: true })
 
-    const weights = [1, 1, 1, 1, 1]
+    const weights = [1, 1, 1, 1, 1] // this weights indicate the importance of each parameter of our input features
     const userTargetNuts = {
       calories: nutritionProfile.calories / mealsCount,
       protein: nutritionProfile.protein.average / mealsCount,
