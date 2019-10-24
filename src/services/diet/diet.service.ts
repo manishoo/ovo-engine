@@ -41,8 +41,6 @@ export default class DietService {
   }
 
   async delete(dietId: ObjectId, operator: ContextUser): Promise<ObjectId> {
-    if (!ObjectId.isValid(dietId)) throw new Errors.Validation('Invalid diet id')
-
     let diet = await DietModel.findById(dietId)
     if (!diet) throw new Errors.NotFound('Diet not found')
 
