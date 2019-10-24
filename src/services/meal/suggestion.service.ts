@@ -20,9 +20,29 @@ export default class SuggestionService {
 
   async suggestMeal(userId: string): Promise<Meal> {
     const nutritionProfile = await this.userSettingService.getUserNutritionProfile(userId)
+    /* TODO bias conditions: diet, exclude foods and food classes */
     // TODO get user diet
     // TODO get user excluded foods and food classes
-    const meals = await MealModel.find({/* TODO bias conditions: diet, exclude foods and food classes */ }, null, { plain: true })
+    const biasConditions: any = {}
+
+    if (nutritionProfile.isStrict) {
+      biasConditions.nutrition = {
+        'proteins.amount': {
+          $gte: nutritionProfile.protein.min,
+          $lte: nutritionProfile.protein.max
+        },
+        'totalCarbs.amount': {
+          $gte: nutritionProfile.carb.min,
+          $lte: nutritionProfile.carb.max
+        },
+        'fats.amount': {
+          $gte: nutritionProfile.fat.min,
+          $lte: nutritionProfile.fat.max
+        },
+      }
+    }
+
+    const meals = await MealModel.find(biasConditions, null, { plain: true })
 
     const weights = [1, 1, 1, 1, 1]
     const userTargetNuts = {
