@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { ObjectType, Field, InputType } from 'type-graphql'
+import { ObjectType, Field, InputType, ArgsType } from 'type-graphql'
 import { Translation, ObjectId, TranslationInput } from '@Types/common'
 import { ArrayUnique } from 'class-validator'
 
@@ -46,8 +46,8 @@ export class DietInput {
   foodGroupIncludes: ObjectId[]
 }
 
-@InputType()
-export class ListDietInput {
+@ArgsType()
+export class ListDietArgs {
   @Field({ nullable: true })
   searchSlug?: string
 

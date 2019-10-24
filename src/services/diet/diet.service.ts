@@ -4,13 +4,11 @@
  */
 
 import { Service } from 'typedi'
-import { DietInput, Diet, ListDietInput } from '@Types/diet'
+import { DietInput, Diet, ListDietArgs } from '@Types/diet'
 import { FoodClassModel } from '@Models/food-class.model'
 import Errors from '@Utils/errors'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { DietModel } from '@Models/diet.model'
-import { ObjectId } from '@Types/common'
-
 
 
 @Service()
@@ -39,7 +37,7 @@ export default class DietService {
     })
   }
 
-  async list(variables?: ListDietInput): Promise<Diet[]> {
+  async list(variables?: ListDietArgs): Promise<Diet[]> {
     let query: any = {}
 
     if (variables && variables.searchSlug) {
