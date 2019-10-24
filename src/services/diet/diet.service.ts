@@ -9,6 +9,9 @@ import { FoodClassModel } from '@Models/food-class.model'
 import Errors from '@Utils/errors'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { DietModel } from '@Models/diet.model'
+import { ObjectId } from '@Types/common'
+import { DeleteBy } from '@Utils/delete-by'
+import { ContextUser } from '@Utils/context'
 
 
 @Service()
@@ -35,5 +38,17 @@ export default class DietService {
       foodClassIncludes: diet.foodClassIncludes,
       foodGroupIncludes: diet.foodGroupIncludes,
     })
+  }
+
+  async delete(dietId: ObjectId, operator: ContextUser): Promise<ObjectId> {
+    if (!ObjectId.isValid(dietId)) throw new Errors.Validation('Invalid diet id')
+
+    let diet = await DietModel.findById(dietId)
+    if (!diet) throw new Errors.NotFound('Diet not found')
+
+    const deleted = await diet.delete(DeleteBy.user(operator))
+    if (!deleted) throw new Errors.System('Something went wrong')
+
+    return deleted.id
   }
 }
