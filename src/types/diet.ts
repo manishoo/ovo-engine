@@ -5,6 +5,7 @@
 
 import { ObjectType, Field, InputType } from 'type-graphql'
 import { Translation, ObjectId, TranslationInput } from '@Types/common'
+import { ArrayUnique } from 'class-validator'
 
 
 @ObjectType()
@@ -20,9 +21,11 @@ export class Diet {
   slug: string
 
   @Field(type => [ObjectId])
+  @ArrayUnique()
   foodClassIncludes: ObjectId[]
 
   @Field(type => [ObjectId])
+  @ArrayUnique()
   foodGroupIncludes: ObjectId[]
 }
 
@@ -34,9 +37,11 @@ export class DietInput {
   @Field()
   slug: string
 
-  @Field(type => [String])
-  foodClassIncludes: string[]
+  @Field(type => [ObjectId])
+  @ArrayUnique()
+  foodClassIncludes: ObjectId[]
 
-  @Field(type => [String])
-  foodGroupIncludes: string[]
+  @Field(type => [ObjectId])
+  @ArrayUnique()
+  foodGroupIncludes: ObjectId[]
 }

@@ -23,27 +23,17 @@ export default class DietService {
     let checkExistance = await DietModel.findOne({ slug: diet.slug })
     if (checkExistance) throw new Errors.Validation('Diet already exists')
 
-    let foodClassIds = await Promise.all(diet.foodClassIncludes.map(async foodClassId => {
+    const foodClasses = await FoodClassModel.find({ _id: { $in: diet.foodClassIncludes } })
+    if (foodClasses.length !== diet.foodClassIncludes.length) throw new Errors.Validation('Invalid food class id')
 
-      let foodClass = await FoodClassModel.findById(foodClassId)
-      if (!foodClass) throw new Errors.NotFound('Food class not found')
-
-      return foodClass._id
-    }))
-
-    let foodGroupIds = await Promise.all(diet.foodGroupIncludes.map(async foodGroupId => {
-
-      let foodGroup = await FoodGroupModel.findById(foodGroupId)
-      if (!foodGroup) throw new Errors.NotFound('Food group not found')
-
-      return foodGroup._id
-    }))
+    const foodGroups = await FoodGroupModel.find({ _id: { $in: diet.foodGroupIncludes } })
+    if (foodGroups.length !== diet.foodGroupIncludes.length) throw new Errors.Validation('Invalid food group id')
 
     return DietModel.create({
       name: diet.name,
       slug: diet.slug,
-      foodClassIncludes: foodClassIds,
-      foodGroupIncludes: foodGroupIds,
+      foodClassIncludes: diet.foodClassIncludes,
+      foodGroupIncludes: diet.foodGroupIncludes,
     })
   }
 }
