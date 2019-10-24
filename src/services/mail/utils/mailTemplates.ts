@@ -12,7 +12,7 @@ export function getRecoverTemplate(locale: LanguageCode) {
       downloadText: 'Download App',
       buttonText: 'RESET YOUR PASSWORD',
     },
-    fa: {
+    [LanguageCode.fa]: {
       title: 'مشکلی با رمز دارین؟',
       body: 'عزیز، به نظر میاد با رمز اکانت پرانا مشکل دارین. از همین جا میتونین تغییر بدین %recipient.name%',
       ignoreText: 'اگر درخواست تعویض ندادین، این ایمیل رو نادیده بگیرین.',
