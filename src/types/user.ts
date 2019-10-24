@@ -125,30 +125,24 @@ export class SocialNetworksInput {
 
 @ObjectType()
 export class TargetNutrition {
-  @Field({ nullable: true })
-  min?: number
+  min: number
 
-  @Field({ nullable: true })
-  max?: number
+  max: number
 
-  @Field({ nullable: true })
   @Min(0)
   @Max(100)
-  percent?: number
+  percent: number
 }
 
 @InputType()
 export class TargetNutritionInput {
-  @Field({ nullable: true })
-  min?: number
+  min: number
 
-  @Field({ nullable: true })
-  max?: number
+  max: number
 
-  @Field({ nullable: true })
   @Min(0)
   @Max(100)
-  percent?: number
+  percent: number
 }
 
 @ObjectType()
