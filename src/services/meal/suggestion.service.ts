@@ -25,20 +25,19 @@ export default class SuggestionService {
     const meals = await MealModel.find({/* TODO bias conditions: diet, exclude foods and food classes */ }, null, { plain: true })
 
     const weights = [1, 1, 1, 1, 1]
+    const userTargetNuts = {
+      calories: nutritionProfile.calories,
+      protein: nutritionProfile.protein.average,
+      carb: nutritionProfile.carb.average,
+      fat: nutritionProfile.fat.average,
+    }
+
     const rankedMeals = await Promise.all(meals.map(async (meal) => {
       const id = meal._id
 
-      const { nutrition } = meal
-      if (!nutrition) return { id, rank: 0 }
+      if (!meal.nutrition) return { id, rank: 0 }
 
-      const { calories, proteins, totalCarbs, fats } = nutrition
-
-      const userTargetNuts = {
-        calories: nutritionProfile.calories,
-        protein: (nutritionProfile.protein.max + nutritionProfile.protein.min) / 2, // average
-        carb: (nutritionProfile.carb.max + nutritionProfile.carb.min) / 2, // average
-        fat: (nutritionProfile.fat.max + nutritionProfile.fat.min) / 2, // average
-      }
+      const { calories, proteins, totalCarbs, fats } = meal.nutrition
 
       const nutDiff = { ...userTargetNuts } // set some init values
 
