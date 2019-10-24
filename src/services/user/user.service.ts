@@ -9,13 +9,14 @@ import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { ObjectId, Role, Status } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
-import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, DecodedUser } from '@Types/user'
 import { ContextUser, ContextUserType } from '@Utils/context'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
+import decodeJwtToken from '@Utils/decode-jwt-token'
 import MailingService from '@Services/mail/mail.service'
 import { MailTemplate, EmailTemplates } from '@Services/mail/utils/mailTemplates'
 import generateRecoverLink from './utils/generate-recover-link'
@@ -208,4 +209,15 @@ export default class UserService {
     return true
   }
 
+  async changeUserPassword(token: string, password: string) {
+    const decoded = decodeJwtToken(token) as DecodedUser
+
+    const user = await UserModel.findById(decoded.id!)
+    if (!user) throw new Errors.NotFound('User not found')
+
+    user.password = await generateHashPassword(password)
+    await user.save()
+
+    return true
+  }
 }
