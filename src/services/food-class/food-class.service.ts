@@ -16,6 +16,7 @@ import { createPagination } from '@Utils/generate-pagination'
 // @ts-ignore
 import levenSort from 'leven-sort'
 import { Service } from 'typedi'
+import populateFoodGroups from './utils/populate-food-groups'
 
 
 @Service()
@@ -35,7 +36,7 @@ export default class FoodClassService {
         /**
          * Search group and subgroups
          * */
-        $in: [ObjectId(foodGroupId), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
+        $in: [new ObjectId(foodGroupId), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
       }
     }
 
@@ -114,6 +115,9 @@ export default class FoodClassService {
        * Sort FoodClasses by how close their name is to {nameSearchQuery}
        * */
       const dbFoodClasses = await FoodClassModel.find(query)
+        .sort({
+          'name.text': 1,
+        })
 
       counts = dbFoodClasses.length
       const sortedArray = levenSort(dbFoodClasses.map(i => ({
@@ -126,6 +130,9 @@ export default class FoodClassService {
       foodClasses = await FoodClassModel.find(query)
         .limit(size)
         .skip(size * (page - 1))
+        .sort({
+          'name.text': 1,
+        })
     }
 
     return {
@@ -135,15 +142,14 @@ export default class FoodClassService {
   }
 
   async getFoodClass(foodClassID: string): Promise<FoodClass> {
-    const foodClass = await FoodClassModel.findById(ObjectId(foodClassID))
+    const foodClass = await FoodClassModel.findById(new ObjectId(foodClassID))
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     return foodClass
   }
 
   async editFoodClass(foodClassID: string, foodClassInput: FoodClassInput): Promise<FoodClass> {
-    const foodGroup = await FoodGroupModel.findOne({ _id: ObjectId(foodClassInput.foodGroupId) })
-    if (!foodGroup) throw new Errors.NotFound('food group not found')
+    const foodGroups = await populateFoodGroups(foodClassInput.foodGroups)
 
     const foodClass = await FoodClassModel.findById(foodClassID)
     if (!foodClass) throw new Errors.NotFound('food class not found')
@@ -174,10 +180,35 @@ export default class FoodClassService {
     }
 
     foodClass.name = foodClassInput.name
-    foodClass.foodGroup = foodGroup
+    foodClass.foodGroups = foodGroups.map(fgs => {
+      return fgs.map(fg => ({
+        name: fg.name,
+        id: fg.id,
+      }))
+    })
     foodClass.description = foodClassInput.description
     foodClass.slug = foodClassInput.slug
-    foodClass.defaultFood = ObjectId(foodClassInput.defaultFood)
+    foodClass.defaultFood = new ObjectId(foodClassInput.defaultFood)
+
+    /**
+     * Setting and unSetting default food
+     * */
+    if (foodClassInput.defaultFood) {
+      const oldDefaultFood = await FoodModel.findById(foodClass.defaultFood)
+
+      if (oldDefaultFood) {
+        oldDefaultFood.isDefault = false
+        await oldDefaultFood.save()
+      }
+
+      const newDefaultFood = await FoodModel.findById(foodClassInput.defaultFood)
+
+      if (newDefaultFood) {
+        newDefaultFood.isDefault = true
+        await newDefaultFood.save()
+        foodClass.defaultFood = newDefaultFood._id
+      }
+    }
 
     const savedFoodClass = await foodClass.save()
 
@@ -211,7 +242,7 @@ export default class FoodClassService {
   }
 
   async deleteFoodClass(foodClassID: string, user: ContextUser): Promise<String> {
-    const foodClass = await FoodClassModel.findById(ObjectId(foodClassID))
+    const foodClass = await FoodClassModel.findById(new ObjectId(foodClassID))
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     const foodCount = await FoodModel.countDocuments({ foodClass: foodClass._id })
@@ -223,13 +254,16 @@ export default class FoodClassService {
   }
 
   async createFoodClass(foodClassInput: FoodClassInput): Promise<FoodClass> {
-    if (!ObjectId.isValid(foodClassInput.foodGroupId)) throw new Errors.UserInput('invalid food group id', { 'foodGroupId': 'invalid food group id' })
-    const foodGroup = await FoodGroupModel.findById(foodClassInput.foodGroupId)
-    if (!foodGroup) throw new Errors.NotFound('food group not found')
+    const foodGroups = await populateFoodGroups(foodClassInput.foodGroups)
 
     let foodClass = new FoodClassModel({
       ...foodClassInput,
-      foodGroup,
+      foodGroups: foodGroups.map(fgs => {
+        return fgs.map(fg => ({
+          name: fg.name,
+          id: fg.id,
+        }))
+      }),
     })
 
     if (foodClassInput.image) {

@@ -5288,7 +5288,7 @@ export default async function main() {
 
     if (!Number.isNaN(Number(activityData.met))) {
       let activity = await activityService.addActivity({
-        activityGroupId: ObjectId(activityGroup.id),
+        activityGroupId: new ObjectId(activityGroup.id),
         activityTypeName: [{ locale: LanguageCode.en, text: activityData.activityName }],
         met: Number(activityData.met)
       })

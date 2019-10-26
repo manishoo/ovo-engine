@@ -4,13 +4,12 @@
  */
 
 import { MealPlanSchema } from '@Models/meal-plan.model'
-import { MacroNutrientDistribution } from '@Types/assistant'
 import { PersistedPassword } from '@Types/auth'
 import { Image, ObjectId, Ref, Role, Status } from '@Types/common'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
-import { IsEmail, IsPhoneNumber } from 'class-validator'
+import { IsEmail, IsPhoneNumber, Min, Max } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -124,6 +123,73 @@ export class SocialNetworksInput {
 }
 
 @ObjectType()
+export class TargetNutrition {
+  @Field({ nullable: true })
+  min?: number
+
+  @Field({ nullable: true })
+  max?: number
+
+  @Field({ nullable: true })
+  @Min(0)
+  @Max(100)
+  percent?: number
+}
+
+@InputType()
+export class TargetNutritionInput {
+  @Field({ nullable: true })
+  min?: number
+
+  @Field({ nullable: true })
+  max?: number
+
+  @Field({ nullable: true })
+  @Min(0)
+  @Max(100)
+  percent?: number
+}
+
+@ObjectType()
+export class NutritionProfile {
+  @Field()
+  calories: number
+
+  @Field(type => TargetNutrition)
+  protein: TargetNutrition
+
+  @Field(type => TargetNutrition)
+  carb: TargetNutrition
+
+  @Field(type => TargetNutrition)
+  fat: TargetNutrition
+}
+
+@InputType()
+export class NutritionProfileInput {
+  @Field()
+  calories: number
+
+  @Field(type => TargetNutritionInput)
+  protein: TargetNutritionInput
+
+  @Field(type => TargetNutritionInput)
+  carb: TargetNutritionInput
+
+  @Field(type => TargetNutritionInput)
+  fat: TargetNutritionInput
+}
+
+@ObjectType()
+export class UpdateNutritionProfileResponse {
+  @Field()
+  userId: ObjectId
+
+  @Field()
+  nutritionProfile: NutritionProfile
+}
+
+@ObjectType()
 export class BaseUser {
   _id?: ObjectId
   @Field()
@@ -173,6 +239,8 @@ export class User extends BaseUser {
   bodyFat?: number
   @Field(type => Gender, { nullable: true })
   gender?: Gender
+  @Field(type => NutritionProfile, { nullable: true })
+  nutritionProfile?: NutritionProfile
   foodAllergies?: string[]
   status?: Status
   meals?: UserMeal[]
@@ -242,4 +310,10 @@ export class UserAuthResponse {
   user: User
   @Field()
   session: string
+}
+
+@ObjectType()
+export class DecodedUser {
+  @Field()
+  id: string
 }

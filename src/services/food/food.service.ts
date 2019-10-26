@@ -5,6 +5,7 @@
 
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
+import putDefaultFoodsOnTop from '@Services/food/utils/put-default-foods-on-top'
 import UploadService from '@Services/upload/upload.service'
 import { ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
@@ -27,14 +28,9 @@ export default class FoodService {
 
   async getFood(foodId: string) {
     return FoodModel.findById(foodId)
-      .populate({
-        path: 'foodClass',
-        model: FoodClassModel,
-      })
-      .exec()
   }
 
-  async listFoods({ page, size, foodClassId, nameSearchQuery }: FoodListArgs): Promise<FoodsListResponse> {
+  async listFoods({ page, size, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
     if (foodClassId) {
       query['foodClass'] = new ObjectId(foodClassId)
@@ -55,16 +51,26 @@ export default class FoodService {
       ]
     }
 
-    const foods = await FoodModel.find(query, { score: { $meta: 'textScore' } })
-      .sort({ score: { $meta: 'textScore' } })
-      .limit(size)
-      .skip(size * (page - 1))
+    let foods = []
+    let count
 
-    const counts = await FoodModel.countDocuments(query)
+    if (withDeleted) {
+      foods = await FoodModel.findWithDeleted(query, { score: { $meta: 'textScore' } })
+        .sort({ score: { $meta: 'textScore' } })
+        .limit(size)
+        .skip(size * (page - 1))
+      count = await FoodModel.countWithDeleted(query)
+    } else {
+      foods = await FoodModel.find(query, { score: { $meta: 'textScore' } })
+        .sort({ score: { $meta: 'textScore' } })
+        .limit(size)
+        .skip(size * (page - 1))
+      count = await FoodModel.count(query)
+    }
 
     return {
-      foods,
-      pagination: createPagination(page, size, counts),
+      foods: putDefaultFoodsOnTop(foods),
+      pagination: createPagination(page, size, count),
     }
   }
 
@@ -111,16 +117,25 @@ export default class FoodService {
       }
     }
 
+    if (foodInput.foodClassId) {
+      if (food.isDefault) throw new Error('The selected Food is the default food, please remove the default status and try again')
+      food.foodClass = foodInput.foodClassId
+    }
+
     return food.save()
   }
 
-  async deleteFood(foodID: string, user: ContextUser): Promise<Food> {
+  async deleteFood(foodID: string, user: ContextUser, restore?: boolean): Promise<Food> {
     if (!ObjectId.isValid(foodID)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
 
-    const food = await FoodModel.findById(foodID)
+    const food = await FoodModel.findOneWithDeleted({ _id: new ObjectId(foodID) })
     if (!food) throw new Errors.NotFound('food not found')
 
-    await food.delete(DeleteBy.user(user))
+    if (restore) {
+      await food.restore()
+    } else {
+      await food.delete(DeleteBy.user(user))
+    }
 
     return food
   }
@@ -142,8 +157,10 @@ export default class FoodService {
       weights,
       description: foodInput.description,
       foodClass: foodClass._id,
+      origFoodClassName: foodClass.name,
+      origFoodGroups: foodClass.foodGroups,
       nutrition: foodInput.nutrition,
-    })
+    } as Partial<Food>)
 
     if (foodInput.image) {
       food.image = {
@@ -167,8 +184,6 @@ export default class FoodService {
         ...foodInput.nutrition
       }
     }
-
-    food.origFoodClassName = foodClass.name
 
     return food.save()
   }

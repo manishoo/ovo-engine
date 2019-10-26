@@ -9,10 +9,15 @@
     "start:app": "ts-node -r tsconfig-paths/register src/api/app/index.ts",
     "build": "gulp"
   },
-  "author": "Mani Shooshtari",
+  "authors": [
+    "Mani Shooshtari",
+    "Bamdad Nouri",
+    "Mostafa Kouhpayeh"
+  ],
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "@types/cheerio": "^0.22.13",
+    "@types/mailgun-js": "^0.22.3",
     "apollo-server": "^2.2.2",
     "apollo-server-express": "^2.3.1",
     "bluebird": "^3.5.2",
@@ -28,7 +33,9 @@
     "i18n": "^0.8.3",
     "ioredis": "^4.2.0",
     "is-uuid": "^1.0.2",
+    "jsonwebtoken": "^8.5.1",
     "leven-sort": "^3.0.0",
+    "mailgun-js": "^0.22.0",
     "method-override": "^3.0.0",
     "minimist": "^1.2.0",
     "moment": "^2.24.0",
