@@ -13,6 +13,7 @@ import { Day, DayMeal, DayMealInput, LogActivityInput } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
 import { Service } from 'typedi'
 import { getDayByTime } from './utils/get-day-by-time'
+import convertTimeToUTC from './utils/convert-time-to-utc'
 
 
 @Service()
@@ -45,11 +46,11 @@ export default class CalendarService {
   async logMeal(dayMealInput: DayMealInput, userId: string): Promise<Day> {
     let meal: DayMeal = {
       type: dayMealInput.type,
-      time: dayMealInput.time,
+      time: convertTimeToUTC(dayMealInput.time),
       items: await this.mealService.validateMealItems(dayMealInput.items),
     }
 
-    let day = await getDayByTime(userId, dayMealInput.time!)
+    let day = await getDayByTime(userId, convertTimeToUTC(dayMealInput.time!))
 
     if (day.meals) {
       day.meals = [...day.meals, meal]
@@ -64,7 +65,7 @@ export default class CalendarService {
     let days = []
 
     for (let activity of activities) {
-      let day = await getDayByTime(userId, activity.time)
+      let day = await getDayByTime(userId, convertTimeToUTC(activity.time))
 
       let dbActivity = await this.activityService.getActivity(activity.activityId)
 
@@ -73,7 +74,7 @@ export default class CalendarService {
         duration: activity.duration,
         totalBurnt: activity.burntCalories,
         activityName: activity.activityName,
-        time: activity.time,
+        time: convertTimeToUTC(activity.time),
       }
 
       if (day.activities) {

@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import mongoose from '@Config/connections/mongoose'
 import { CalendarModel } from '@Models/calendar.model'
 import { Day } from '@Types/calendar'
 import Errors from '@Utils/errors'
 import { InstanceType } from 'typegoose'
+import { ObjectId } from '@Types/common'
 
 
 export async function getDayByTime(userId: string, time: Date): Promise<InstanceType<Day>> {
@@ -19,7 +19,7 @@ export async function getDayByTime(userId: string, time: Date): Promise<Instance
   let userActiveDays = await CalendarModel.aggregate([
     {
       $match: {
-        user: mongoose.Types.ObjectId(userId),
+        user: new ObjectId(userId),
         date: { $gte: lastDayOfTime, $lte: nextDayOfTime }
       }
     },
