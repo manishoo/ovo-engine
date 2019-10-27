@@ -82,8 +82,8 @@ export default class UserService {
         source: 'generated-avatar'
       }
     }
-    if (user.diet) {
-      const diet = await this.dietService.diet(user.diet._id)
+    if (user.dietId) {
+      const diet = await this.dietService.diet(user.dietId)
       createUser.diet = diet
     }
     let newUser = await UserModel.create(createUser)
@@ -122,8 +122,8 @@ export default class UserService {
         url: await this.uploadService.processUpload(userInput.avatar, userInput.username, `images/users/${user.id}`)
       }
     }
-    if (userInput.diet) {
-      const diet = await this.dietService.diet(userInput.diet._id)
+    if (userInput.dietId) {
+      const diet = await this.dietService.diet(userInput.dietId)
       user.diet = diet
     }
 
