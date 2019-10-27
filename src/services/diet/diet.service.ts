@@ -9,6 +9,7 @@ import { FoodClassModel } from '@Models/food-class.model'
 import Errors from '@Utils/errors'
 import { FoodGroupModel } from '@Models/food-group.model'
 import { DietModel } from '@Models/diet.model'
+import { ObjectId } from '@Types/common'
 
 
 @Service()
@@ -35,5 +36,12 @@ export default class DietService {
       foodClassIncludes: diet.foodClassIncludes,
       foodGroupIncludes: diet.foodGroupIncludes,
     })
+  }
+
+  async diet(dietId: ObjectId) {
+    let diet = await DietModel.findById(dietId)
+    if (!diet) throw new Errors.NotFound('Diet not found')
+
+    return diet
   }
 }
