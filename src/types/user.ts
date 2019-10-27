@@ -271,8 +271,8 @@ export class UserRegistrationInput {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
-  @Field(type => Diet, { nullable: true })
-  diet?: Diet
+  @Field(type => ObjectId, { nullable: true })
+  dietId?: ObjectId
 }
 
 @ArgsType()
@@ -307,8 +307,8 @@ export class UserUpdateInput {
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
-  @Field(type => Diet, { nullable: true })
-  diet?: Diet
+  @Field(type => ObjectId, { nullable: true })
+  dietId?: ObjectId
 }
 
 @ObjectType()
