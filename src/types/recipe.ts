@@ -190,7 +190,7 @@ export class RecipeOrigin {
 export class Recipe {
   readonly _id: ObjectId
   @Field()
-  readonly id: string
+  id: string
 
   @Field(type => [Translation])
   title: Translation[]
@@ -223,7 +223,7 @@ export class Recipe {
   difficulty?: RecipeDifficulty
 
   @Field(type => Author)
-  author: Ref<Author>
+  author: Ref<Author> | Author[]
 
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
@@ -256,6 +256,9 @@ export class Recipe {
 
   @Field(type => RecipeStatus)
   status: RecipeStatus
+
+  @Field({ defaultValue: false })
+  likedByUser: boolean
 }
 
 @ObjectType()
@@ -375,6 +378,18 @@ export class ListRecipesArgs {
 
   @Field(type => [String], { nullable: true })
   tags?: string[]
+
+  @Field({ nullable: true })
+  popular?: boolean
+
+  @Field({ nullable: true })
+  latest?: boolean
+
+  @Field(type => [ObjectId], { nullable: true })
+  ingredients?: ObjectId[]
+
+  @Field(type => [ObjectId], { nullable: true })
+  diets?: ObjectId[]
 
   viewerUser?: ContextUser
 }

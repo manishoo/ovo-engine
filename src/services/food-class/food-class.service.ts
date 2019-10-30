@@ -285,6 +285,12 @@ export default class FoodClassService {
 
     return foodClass.save()
   }
+
+  async getFoodClassesByFoodGroup(foodGroupId: ObjectId) {
+    let q: any = {}
+    q['foodGroup._id'] = foodGroupId
+    return FoodClassModel.find(q)
+  }
 }
 
 function getEnTranslation(tr: Translation[]) {

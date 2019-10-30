@@ -27,6 +27,9 @@ import slug from 'slug'
 import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
 import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
+import { Author } from '@Types/user'
+import DietService from '@Services/diet/diet.service'
+import FoodClassService from '@Services/food-class/food-class.service'
 
 
 @Service()
@@ -34,6 +37,8 @@ export default class RecipeService {
   constructor(
     // service injection
     private readonly uploadService: UploadService,
+    private readonly dietService: DietService,
+    private readonly foodClassService: FoodClassService,
   ) {
     // noop
   }
@@ -68,7 +73,10 @@ export default class RecipeService {
     }
 
     const query: any = {
-      status: RecipeStatus.public,
+      //status: RecipeStatus.public,
+    }
+    let sort: any = {
+      createdAt: -1,
     }
 
     if (variables.userId) {
@@ -86,27 +94,75 @@ export default class RecipeService {
       query['title.text'] = { $regex: variables.nameSearchQuery }
     }
 
-    if (variables.lastId) {
-      if (!ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
+    if (variables.ingredients) {
+      query['ingredients.food._id'] = { $in: variables.ingredients }
+    }
 
+    if (variables.popular) {
+      sort['likes'] = -1
+    }
+
+    if (variables.diets) {
+      let diets = await Promise.all(variables.diets.map(async dietId => {
+        return await this.dietService.getDiet(dietId)
+      }))
+      let foodClassIds: ObjectId[] = []
+
+      await Promise.all(diets.map(async diet => {
+        await Promise.all(diet.foodGroupIncludes.map(async foodGroupId => {
+          /**
+           * get foodClass list by their foodGroup
+           */
+          let foodClassesByFoodGroup = await this.foodClassService.getFoodClassesByFoodGroup(foodGroupId)
+          foodClassesByFoodGroup.map(fc => {
+            foodClassIds.push(fc._id)
+          })
+        }))
+
+        foodClassIds = [...foodClassIds, ...diet.foodClassIncludes]
+      }))
+
+      query['ingredients.food.foodClass'] = { $in: foodClassIds }
+    }
+
+    if (variables.lastId) {
       const recipe = await RecipeModel.findById(variables.lastId)
       if (!recipe) throw new Errors.NotFound('recipe not found')
 
       query.createdAt = { $lt: recipe.createdAt }
     }
-    const recipes = await RecipeModel.find(query)
-      .sort({
-        createdAt: -1,
-      })
-      .limit(variables.size)
-      .skip((variables.page - 1) * variables.size)
-      .populate('author')
-      .exec()
-    const totalCount = await RecipeModel.count(query)
+
+    const recipies: Recipe[] = await RecipeModel.aggregate([
+      {
+        $match: query
+      },
+      {
+        $sort: sort,
+      },
+      {
+        $limit: variables.size,
+      },
+      {
+        $skip: (variables.page - 1) * variables.size
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'author',
+          foreignField: '_id',
+          as: 'author'
+        }
+      },
+    ])
+    recipies.map(recipe => {
+      let authors = recipe.author as Author[]
+      recipe.author = authors[0]
+      recipe.author.id = recipe.author._id!.toString()
+    })
 
     return {
-      recipes: recipes.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),
-      pagination: createPagination(variables.page, variables.size, totalCount),
+      recipes: recipies.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),
+      pagination: createPagination(variables.page, variables.size, recipies.length),
     }
   }
 
