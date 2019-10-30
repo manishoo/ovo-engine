@@ -103,8 +103,8 @@ export class ListFoodClassesArgs {
   @Max(30)
   size: number
 
-  @Field({ nullable: true })
-  foodGroupId?: string
+  @Field(type => ObjectId, { nullable: true })
+  foodGroupId?: ObjectId
 
   @Field({ nullable: true })
   nameSearchQuery?: string

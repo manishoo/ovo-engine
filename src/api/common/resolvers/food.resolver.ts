@@ -4,7 +4,7 @@
  */
 
 import FoodService from '@Services/food/food.service'
-import { Role } from '@Types/common'
+import { Role, ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
@@ -24,7 +24,7 @@ export default class FoodResolver {
   @Authorized([Role.operator, Role.user])
   @Query(returns => Food)
   async food(
-    @Arg('id') id: string,
+    @Arg('id') id: ObjectId,
     @Ctx() ctx: Context,
   ) {
     return this.foodService.getFood(id)
@@ -42,7 +42,7 @@ export default class FoodResolver {
   @Authorized([Role.operator, Role.user])
   @Mutation(returns => Food)
   async updateFood(
-    @Arg('foodId') foodId: string,
+    @Arg('foodId') foodId: ObjectId,
     @Arg('food') food: FoodInput,
     @Ctx() ctx: Context,
   ) {
@@ -52,21 +52,21 @@ export default class FoodResolver {
   @Authorized([Role.operator, Role.user])
   @Mutation(returns => Food)
   async deleteFood(
-    @Arg('foodId') foodID: string,
+    @Arg('foodId') foodId: ObjectId,
     @Ctx() ctx: Context,
-    @Arg('restore', {nullable: true}) restore?: boolean,
+    @Arg('restore', { nullable: true }) restore?: boolean,
   ) {
-    return this.foodService.deleteFood(foodID, ctx.user!, restore)
+    return this.foodService.deleteFood(foodId, ctx.user!, restore)
   }
 
   @Authorized([Role.operator, Role.user])
   @Mutation(returns => Food)
   async createFood(
-    @Arg('foodClassId') foodClassID: string,
+    @Arg('foodClassId') foodClassId: ObjectId,
     @Arg('food') food: FoodInput,
     @Ctx() ctx: Context,
   ) {
-    return this.foodService.createFood(foodClassID, food)
+    return this.foodService.createFood(foodClassId, food)
   }
 
 }

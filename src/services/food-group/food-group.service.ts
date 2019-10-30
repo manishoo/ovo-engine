@@ -15,7 +15,7 @@ import { Service } from 'typedi'
 
 @Service()
 export default class FoodGroupService {
-  async getFoodGroup(id: string): Promise<ParentFoodGroup> {
+  async getFoodGroup(id: ObjectId): Promise<ParentFoodGroup> {
     const foodGroup = await FoodGroupModel.findById(id)
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
@@ -48,7 +48,7 @@ export default class FoodGroupService {
     })
   }
 
-  async removeFoodGroup(foodGroupID: string, user: ContextUser): Promise<Boolean> {
+  async removeFoodGroup(foodGroupID: ObjectId, user: ContextUser): Promise<Boolean> {
     const foodGroup = await FoodGroupModel.findById(foodGroupID)
     if (!foodGroup) throw new Errors.NotFound('food group not found')
 
