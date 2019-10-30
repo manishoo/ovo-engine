@@ -75,9 +75,7 @@ export default class RecipeService {
     const query: any = {
       //status: RecipeStatus.public,
     }
-    let sort: any = {
-      createdAt: -1,
-    }
+    let sort: any = {}
 
     if (variables.userId) {
       const me = await UserModel.findById(variables.userId)
@@ -100,6 +98,10 @@ export default class RecipeService {
 
     if (variables.popular) {
       sort['likes'] = -1
+    }
+
+    if (variables.latest) {
+      sort['createdAt'] = -1
     }
 
     if (variables.diets) {
