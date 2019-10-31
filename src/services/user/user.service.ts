@@ -83,7 +83,7 @@ export default class UserService {
       }
     }
     if (user.dietId) {
-      const diet = await this.dietService.diet(user.dietId)
+      const diet = await this.dietService.get(user.dietId)
       createUser.diet = diet
     }
     let newUser = await UserModel.create(createUser)
@@ -123,7 +123,7 @@ export default class UserService {
       }
     }
     if (userInput.dietId) {
-      const diet = await this.dietService.diet(userInput.dietId)
+      const diet = await this.dietService.get(userInput.dietId)
       user.diet = diet
     }
 

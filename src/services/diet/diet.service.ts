@@ -37,7 +37,7 @@ export default class DietService {
     })
   }
 
-  async diet(dietId: ObjectId) {
+  async get(dietId: ObjectId) {
     let diet = await DietModel.findById(dietId)
     if (!diet) throw new Errors.NotFound('Diet not found')
 
