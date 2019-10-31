@@ -39,20 +39,20 @@ export default class AssistantResolver {
 
   @Authorized(Role.operator)
   @Mutation(returns => Activity)
-  async addActivity(
+  async createActivity(
     @Arg('activity') activity: ActivityInput,
     @Ctx() ctx: Context,
   ) {
-    return this.activityService.addActivity(activity)
+    return this.activityService.createActivity(activity)
   }
 
   @Authorized(Role.operator)
   @Mutation(returns => ActivityGroup)
-  async addActivityGroup(
+  async createActivityGroup(
     @Arg('name', type => [TranslationInput]) name: TranslationInput[],
     @Arg('slug') slug: string,
     @Ctx() ctx: Context,
   ) {
-    return this.activityService.addActivityGroup(slug, name)
+    return this.activityService.createActivityGroup(slug, name)
   }
 }

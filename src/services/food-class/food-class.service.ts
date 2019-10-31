@@ -148,7 +148,7 @@ export default class FoodClassService {
     return foodClass
   }
 
-  async editFoodClass(foodClassID: string, foodClassInput: FoodClassInput): Promise<FoodClass> {
+  async updateFoodClass(foodClassID: string, foodClassInput: FoodClassInput): Promise<FoodClass> {
     const foodGroups = await populateFoodGroups(foodClassInput.foodGroups)
 
     const foodClass = await FoodClassModel.findById(foodClassID)
