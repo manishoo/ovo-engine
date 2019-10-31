@@ -106,7 +106,7 @@ export default class UserService {
     }
   }
 
-  async update(userInput: UserUpdateInput, userId: string): Promise<User> {
+  async update(userInput: UserUpdateInput, userId: ObjectId): Promise<User> {
     let user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('user not found')
 
@@ -127,7 +127,7 @@ export default class UserService {
     return user.save()
   }
 
-  async userProfile(selfId?: string, userId?: string, username?: string): Promise<User | BaseUser> {
+  async userProfile(selfId?: string, userId?: ObjectId, username?: string): Promise<User | BaseUser> {
     let user
 
     /**

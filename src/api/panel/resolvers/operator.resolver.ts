@@ -67,10 +67,9 @@ export default class OperatorResolver {
   @Authorized(Role.admin)
   @Mutation(returns => Operator)
   async deleteOperator(
-    @Arg('id') operatorID: string,
+    @Arg('id') operatorId: ObjectId,
     @Ctx() ctx: Context,
   ) {
-    if (!ObjectId.isValid(operatorID)) throw new Errors.UserInput('Invalid id', { id: 'Invalid id' })
-    return this.operatorService.removeOperator(operatorID, ctx.user!)
+    return this.operatorService.removeOperator(operatorId, ctx.user!)
   }
 }

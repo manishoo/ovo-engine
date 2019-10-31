@@ -52,11 +52,11 @@ export default class OperatorService {
       .select('-session -presistedPassword')
   }
 
-  async removeOperator(id: string, user: ContextUser): Promise<Operator | null> {
+  async removeOperator(id: ObjectId, user: ContextUser): Promise<Operator | null> {
     const removeOperator = await OperatorModel.deleteById(id, DeleteBy.user(user))
     if (!removeOperator) throw new Errors.NotFound('Operator not found')
 
-    const operator = await OperatorModel.findOneWithDeleted({ _id: new ObjectId(id) })
+    const operator = await OperatorModel.findOneWithDeleted({ _id: id })
     if (!operator) throw new Errors.System()
 
     await redis.del(RedisKeys.operatorSession(operator.session))

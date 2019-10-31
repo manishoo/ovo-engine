@@ -364,14 +364,14 @@ export class ListRecipesArgs {
   @Max(30)
   size?: number
 
-  @Field({ nullable: true })
-  lastId?: string
+  @Field(type => ObjectId, { nullable: true })
+  lastId?: ObjectId
 
   @Field({ nullable: true })
   nameSearchQuery?: string
 
-  @Field({ nullable: true })
-  userId?: string
+  @Field(type => ObjectId, { nullable: true })
+  userId?: ObjectId
 
   @Field(type => [String], { nullable: true })
   tags?: string[]
