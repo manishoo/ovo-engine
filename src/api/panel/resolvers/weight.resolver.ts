@@ -4,7 +4,7 @@
  */
 
 import WeightService from '@Services/food/weight.service'
-import { Role } from '@Types/common'
+import { Role, ObjectId } from '@Types/common'
 import { Weight, WeightInput } from '@Types/weight'
 import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql'
@@ -24,7 +24,7 @@ export default class WeightResolver {
   @Authorized([Role.operator])
   @Mutation(returns => Weight)
   async createWeight(
-    @Arg('foodId') foodId: string,
+    @Arg('foodId') foodId: ObjectId,
     @Arg('weightInput', type => WeightInput) weightInput: WeightInput,
     @Ctx() ctx: Context
   ) {

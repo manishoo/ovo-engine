@@ -4,7 +4,7 @@
  */
 
 import FoodGroupService from '@Services/food-group/food-group.service'
-import { Role, TranslationInput } from '@Types/common'
+import { Role, TranslationInput, ObjectId } from '@Types/common'
 import { FoodGroupInput, ParentFoodGroup } from '@Types/food-group'
 import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
@@ -24,7 +24,7 @@ export default class FoodGroupResolver {
   @Authorized(Role.operator)
   @Query(returns => ParentFoodGroup)
   async foodGroup(
-    @Arg('id', type => String) id: string,
+    @Arg('id', type => String) id: ObjectId,
     @Ctx() ctx: Context,
   ) {
     return this.foodGroupService.getFoodGroup(id)
@@ -50,10 +50,10 @@ export default class FoodGroupResolver {
   @Authorized(Role.operator)
   @Mutation(returns => Boolean)
   async deleteFoodGroup(
-    @Arg('id') foodGroupID: string,
+    @Arg('id') foodGroupId: ObjectId,
     @Ctx() ctx: Context,
   ) {
-    return this.foodGroupService.removeFoodGroup(foodGroupID, ctx.user!)
+    return this.foodGroupService.removeFoodGroup(foodGroupId, ctx.user!)
   }
 
   @Authorized(Role.operator)
