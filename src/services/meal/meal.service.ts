@@ -173,11 +173,10 @@ export default class MealService {
     }))
   }
 
-  async get(id?: string, slug?: string): Promise<Meal> {
+  async get(id?: ObjectId, slug?: string): Promise<Meal> {
     let query: any = {}
 
     if (id) {
-      if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
       query._id = id
     } else if (slug) {
       query.slug = slug
@@ -290,9 +289,7 @@ export default class MealService {
     }
   }
 
-  async delete(id: string, user: ContextUser, bulkDelete?: boolean): Promise<string[]> {
-    if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
-
+  async delete(id: ObjectId, user: ContextUser, bulkDelete?: boolean): Promise<string[]> {
     let meal = await MealModel.findById(id)
     if (!meal) throw new Errors.NotFound('meal not found')
 
@@ -315,9 +312,7 @@ export default class MealService {
     return deletedMealIds
   }
 
-  async update(id: string, mealInput: MealInput, userId: string): Promise<Meal> {
-    if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
-
+  async update(id: ObjectId, mealInput: MealInput, userId: string): Promise<Meal> {
     let meal = await MealModel.findById(id)
       .populate('author')
       .exec()
