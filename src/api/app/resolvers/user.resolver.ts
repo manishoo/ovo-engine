@@ -4,7 +4,7 @@
  */
 
 import UserService from '@Services/user/user.service'
-import { Role } from '@Types/common'
+import { Role, ObjectId } from '@Types/common'
 import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, NutritionProfileInput, UpdateNutritionProfileResponse } from '@Types/user'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
@@ -39,7 +39,7 @@ export default class UserResolver {
   @Authorized(Role.user)
   @Mutation(returns => User)
   async updateUser(
-    @Arg('id') userId: string,
+    @Arg('id') userId: ObjectId,
     @Arg('user') user: UserUpdateInput,
     @Ctx() ctx: Context,
   ) {
@@ -51,13 +51,13 @@ export default class UserResolver {
   async me(
     @Ctx() ctx: Context,
   ) {
-    return this.userService.userProfile(ctx.user!.id, ctx.user!.id)
+    return this.userService.userProfile(ctx.user!.id, new ObjectId(ctx.user!.id))
   }
 
   @Query(returns => BaseUser)
   async user(
     @Ctx() ctx: Context,
-    @Arg('userId', { nullable: true }) userId?: string,
+    @Arg('userId', { nullable: true }) userId?: ObjectId,
     @Arg('username', { nullable: true }) username?: string,
   ) {
     return this.userService.userProfile(ctx.user && ctx.user.id, userId, username)

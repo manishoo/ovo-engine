@@ -4,7 +4,7 @@
  */
 
 import FoodMapperService from '@Services/food-mapper/food-mapper.service'
-import { Role } from '@Types/common'
+import { Role, ObjectId } from '@Types/common'
 import { FoodMap, FoodMapInput, FoodMapList, FoodMapListArgs } from '@Types/food-map'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
@@ -33,7 +33,7 @@ export default class FoodMapperResolver {
   @Authorized([Role.operator])
   @Mutation(returns => FoodMap)
   async mapFood(
-    @Arg('foodMapId') foodMapId: string,
+    @Arg('foodMapId') foodMapId: ObjectId,
     @Arg('foodMapInput') foodMapInput: FoodMapInput,
     @Ctx() ctx: Context
   ) {

@@ -36,7 +36,7 @@ export default class FoodClassService {
         /**
          * Search group and subgroups
          * */
-        $in: [new ObjectId(foodGroupId), ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
+        $in: [foodGroupId, ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
       }
     }
 
@@ -141,17 +141,17 @@ export default class FoodClassService {
     }
   }
 
-  async getFoodClass(foodClassID: string): Promise<FoodClass> {
-    const foodClass = await FoodClassModel.findById(new ObjectId(foodClassID))
+  async getFoodClass(foodClassID: ObjectId): Promise<FoodClass> {
+    const foodClass = await FoodClassModel.findById(foodClassID)
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     return foodClass
   }
 
-  async editFoodClass(foodClassID: string, foodClassInput: FoodClassInput): Promise<FoodClass> {
+  async editFoodClass(foodClassId: ObjectId, foodClassInput: FoodClassInput): Promise<FoodClass> {
     const foodGroups = await populateFoodGroups(foodClassInput.foodGroups)
 
-    const foodClass = await FoodClassModel.findById(foodClassID)
+    const foodClass = await FoodClassModel.findById(foodClassId)
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     let foodClassFullImagePath: string | undefined
@@ -241,8 +241,8 @@ export default class FoodClassService {
     return savedFoodClass
   }
 
-  async deleteFoodClass(foodClassID: string, user: ContextUser): Promise<String> {
-    const foodClass = await FoodClassModel.findById(new ObjectId(foodClassID))
+  async deleteFoodClass(foodClassId: ObjectId, user: ContextUser): Promise<String> {
+    const foodClass = await FoodClassModel.findById(foodClassId)
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
     const foodCount = await FoodModel.countDocuments({ foodClass: foodClass._id })

@@ -26,8 +26,9 @@ export default class FoodService {
     // noop
   }
 
-  async getFood(foodId: string) {
-    return FoodModel.findById(foodId)
+  async getFood(foodId: ObjectId) {
+    let food = await FoodModel.findById(foodId)
+    if (!food) throw new Errors.NotFound('Food not found')
   }
 
   async listFoods({ page, size, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
@@ -74,9 +75,7 @@ export default class FoodService {
     }
   }
 
-  async updateFood(foodId: string, foodInput: FoodInput): Promise<Food | null> {
-    if (!ObjectId.isValid(foodId)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
-
+  async updateFood(foodId: ObjectId, foodInput: FoodInput): Promise<Food | null> {
     const food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('food not found')
 
@@ -125,9 +124,7 @@ export default class FoodService {
     return food.save()
   }
 
-  async deleteFood(foodID: string, user: ContextUser, restore?: boolean): Promise<Food> {
-    if (!ObjectId.isValid(foodID)) throw new Errors.UserInput('invalid food ID', { 'foodID': 'invalid food ID' })
-
+  async deleteFood(foodID: ObjectId, user: ContextUser, restore?: boolean): Promise<Food> {
     const food = await FoodModel.findOneWithDeleted({ _id: new ObjectId(foodID) })
     if (!food) throw new Errors.NotFound('food not found')
 
@@ -140,7 +137,7 @@ export default class FoodService {
     return food
   }
 
-  async createFood(foodClassID: string, foodInput: FoodInput): Promise<Food> {
+  async createFood(foodClassID: ObjectId, foodInput: FoodInput): Promise<Food> {
     if (!ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
     const foodClass = await FoodClassModel.findById(foodClassID)

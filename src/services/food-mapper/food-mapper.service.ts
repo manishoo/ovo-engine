@@ -14,6 +14,7 @@ import { RedisKeys } from '@Types/redis'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
+import { ObjectId } from '@Types/common'
 
 
 @Service()
@@ -45,7 +46,7 @@ export default class FoodMapperService {
     }
   }
 
-  async mapFood(foodMapId: string, foodMapInput: FoodMapInput): Promise<FoodMap> {
+  async mapFood(foodMapId: ObjectId, foodMapInput: FoodMapInput): Promise<FoodMap> {
     let foodMap = await FoodMapModel.findById(foodMapId)
     if (!foodMap) throw new Errors.NotFound('food map not found')
 
