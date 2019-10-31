@@ -37,17 +37,17 @@ export default class DietService {
     })
   }
 
-  async list(variables?: ListDietArgs): Promise<Diet[]> {
+  async list({ searchSlug, searchFoodClass, searchFoodGroup }: ListDietArgs): Promise<Diet[]> {
     let query: any = {}
 
-    if (variables && variables.searchSlug) {
-      query['slug'] = { $regex: variables.searchSlug, $options: 'i' }
+    if (searchSlug) {
+      query['slug'] = { $regex: searchSlug, $options: 'i' }
     }
-    if (variables && variables.searchFoodClass) {
-      query['foodClassIncludes'] = { $in: variables.searchFoodClass }
+    if (searchFoodClass) {
+      query['foodClassIncludes'] = { $in: searchFoodClass }
     }
-    if (variables && variables.searchFoodGroup) {
-      query['foodGroupIncludes'] = { $in: variables.searchFoodGroup }
+    if (searchFoodGroup) {
+      query['foodGroupIncludes'] = { $in: searchFoodGroup }
     }
     return DietModel.find(query)
   }
