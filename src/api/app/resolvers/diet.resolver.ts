@@ -34,8 +34,9 @@ export default class DietResolver {
   @Query(returns => [Diet])
   async diets(
     @Ctx() ctx: Context,
-    @Args() variables?: ListDietArgs,
+    @Args() args?: ListDietArgs,
   ) {
-    return this.dietService.list(variables)
+    return this.dietService.list(args)
+
   }
 }
