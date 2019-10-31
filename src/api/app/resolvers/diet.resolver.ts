@@ -6,10 +6,9 @@
 import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Diet, DietInput } from '@Types/diet'
-import { Role } from '@Types/common'
+import { Role, ObjectId } from '@Types/common'
 import DietService from '@Services/diet/diet.service'
 import { Context } from '@Utils/context'
-import { ObjectId } from '@Types/common'
 
 
 @Service()
@@ -32,6 +31,13 @@ export default class DietResolver {
   }
 
   @Authorized(Role.operator)
+  @Mutation(returns => ObjectId)
+  async deleteDiet(
+    @Arg('dietId') dietId: ObjectId,
+    @Ctx() ctx: Context,
+  ) {
+    return this.dietService.delete(dietId, ctx.user!)
+  }
   @Mutation(returns => Diet)
   async updateDiet(
     @Arg('dietId') dietId: ObjectId,
