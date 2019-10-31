@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql'
+import { Arg, Authorized, Ctx, Mutation, Resolver, Query, Args } from 'type-graphql'
 import { Service } from 'typedi'
-import { Diet, DietInput } from '@Types/diet'
+import { Diet, DietInput, ListDietArgs } from '@Types/diet'
 import { Role, ObjectId } from '@Types/common'
 import DietService from '@Services/diet/diet.service'
 import { Context } from '@Utils/context'
@@ -31,6 +31,15 @@ export default class DietResolver {
   }
 
   @Authorized(Role.operator)
+
+  @Query(returns => [Diet])
+  async diets(
+    @Args() args: ListDietArgs,
+    @Ctx() ctx: Context,
+  ) {
+    return this.dietService.list(args)
+  }
+
   @Mutation(returns => ObjectId)
   async deleteDiet(
     @Arg('dietId') dietId: ObjectId,
