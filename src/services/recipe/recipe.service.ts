@@ -43,13 +43,13 @@ export default class RecipeService {
     // noop
   }
 
-  async get(id?: string, slug?: string) {
+  async get(id?: ObjectId, slug?: string) {
     if (!id && !slug) throw new Errors.Validation('Recipe id or slug must be provided')
 
     const query: { slug?: string, _id?: ObjectId } = {}
 
     if (id) {
-      query._id = new ObjectId(id)
+      query._id = id
     }
     if (slug) {
       query.slug = slug
@@ -272,7 +272,7 @@ export default class RecipeService {
     return transformRecipe(createdRecipe, userId)
   }
 
-  async delete(id: string, user: ContextUser) {
+  async delete(id: ObjectId, user: ContextUser) {
     if (!user) throw new Errors.Forbidden('not allowed')
     if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid recipe ID')
 
@@ -289,7 +289,7 @@ export default class RecipeService {
     return removedRecipe.id
   }
 
-  async update(recipeId: string, data: Partial<RecipeInput>, lang: LanguageCode, user: ContextUser) {
+  async update(recipeId: ObjectId, data: Partial<RecipeInput>, lang: LanguageCode, user: ContextUser) {
     const query: any = { _id: recipeId }
 
     /**
@@ -417,7 +417,7 @@ export default class RecipeService {
     return transformRecipe(await recipe.save(), user && user.id)
   }
 
-  async tag(recipePublicId: string, tagSlugs: string[], user: ContextUser): Promise<Recipe> {
+  async tag(recipePublicId: ObjectId, tagSlugs: string[], user: ContextUser): Promise<Recipe> {
     return this.update(recipePublicId, {}, LanguageCode.en, user)
   }
 }

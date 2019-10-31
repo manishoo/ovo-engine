@@ -12,7 +12,7 @@ import { Service } from 'typedi'
 
 @Service()
 export default class WeightService {
-  async create(foodId: string, weightInput: WeightInput): Promise<Weight> {
+  async create(foodId: ObjectId, weightInput: WeightInput): Promise<Weight> {
     const weight: Weight = {
       ...weightInput,
       id: new ObjectId(),

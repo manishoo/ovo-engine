@@ -5,7 +5,7 @@
 
 import RecipeService from '@Services/recipe/recipe.service'
 import TagService from '@Services/tag/tag.service'
-import { Role } from '@Types/common'
+import { Role, ObjectId } from '@Types/common'
 import { ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse } from '@Types/recipe'
 import { Tag } from '@Types/tag'
 import { Context } from '@Utils/context'
@@ -28,7 +28,7 @@ export default class RecipeResolver {
   async recipe(
     @Ctx() ctx: Context,
     @Arg('slug', { nullable: true }) slug?: string,
-    @Arg('id', { nullable: true }) id?: string,
+    @Arg('id', { nullable: true }) id?: ObjectId,
   ) {
     return this.recipeService.get(id, slug)
   }
@@ -70,7 +70,7 @@ export default class RecipeResolver {
   @Authorized()
   @Mutation(returns => Recipe)
   async updateRecipe(
-    @Arg('recipeId') recipeId: string,
+    @Arg('recipeId') recipeId: ObjectId,
     @Arg('recipe') recipe: RecipeInput,
     @Ctx() ctx: Context,
   ) {
@@ -80,7 +80,7 @@ export default class RecipeResolver {
   @Authorized()
   @Mutation(returns => String)
   async deleteRecipe(
-    @Arg('recipeId') recipeId: string,
+    @Arg('recipeId') recipeId: ObjectId,
     @Ctx() ctx: Context,
   ) {
     return this.recipeService.delete(recipeId, ctx.user!)
@@ -89,7 +89,7 @@ export default class RecipeResolver {
   @Authorized()
   @Mutation(returns => Recipe)
   async tagRecipe(
-    @Arg('recipeId') recipeId: string,
+    @Arg('recipeId') recipeId: ObjectId,
     @Arg('tags', type => [String]) tagSlugs: string[],
     @Ctx() ctx: Context,
   ): Promise<Recipe> {

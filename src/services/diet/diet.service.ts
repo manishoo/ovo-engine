@@ -4,7 +4,7 @@
  */
 
 import { Service } from 'typedi'
-import { DietInput, Diet } from '@Types/diet'
+import { DietInput, Diet, ListDietArgs } from '@Types/diet'
 import Errors from '@Utils/errors'
 import { DietModel } from '@Models/diet.model'
 import { ObjectId } from '@Types/common'
@@ -43,6 +43,22 @@ export default class DietService {
 
     return diet
   }
+
+  async list({ searchSlug, searchFoodClass, searchFoodGroup }: ListDietArgs): Promise<Diet[]> {
+    let query: any = {}
+
+    if (searchSlug) {
+      query['slug'] = { $regex: searchSlug, $options: 'i' }
+    }
+    if (searchFoodClass) {
+      query['foodClassIncludes'] = { $in: searchFoodClass }
+    }
+    if (searchFoodGroup) {
+      query['foodGroupIncludes'] = { $in: searchFoodGroup }
+    }
+    return DietModel.find(query)
+  }
+
   async delete(dietId: ObjectId, operator: ContextUser): Promise<ObjectId> {
     let diet = await DietModel.findById(dietId)
     if (!diet) throw new Errors.NotFound('Diet not found')

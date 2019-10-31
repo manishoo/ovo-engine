@@ -4,7 +4,7 @@
  */
 
 import MealService from '@Services/meal/meal.service'
-import { Role } from '@Types/common'
+import { Role, ObjectId } from '@Types/common'
 import { ListMealsArgs, Meal, MealInput, MealListResponse } from '@Types/meal'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
@@ -25,7 +25,7 @@ export default class MealResolver {
   @Query(returns => Meal)
   async meal(
     @Ctx() ctx: Context,
-    @Arg('id', { nullable: true }) id?: string,
+    @Arg('id', { nullable: true }) id?: ObjectId,
     @Arg('slug', { nullable: true }) slug?: string,
   ) {
     return this.mealService.get(id, slug)
@@ -53,7 +53,7 @@ export default class MealResolver {
   @Authorized(Role.user)
   @Mutation(returns => Meal)
   async updateMeal(
-    @Arg('id') id: string,
+    @Arg('id') id: ObjectId,
     @Arg('data') data: MealInput,
     @Ctx() ctx: Context,
   ) {
@@ -63,7 +63,7 @@ export default class MealResolver {
   @Authorized(Role.user)
   @Mutation(returns => [String])
   async deleteMeal(
-    @Arg('id') id: string,
+    @Arg('id') id: ObjectId,
     @Arg('bulkDelete', { nullable: true, defaultValue: false }) bulkDelete: boolean,
     @Ctx() ctx: Context,
   ) {
