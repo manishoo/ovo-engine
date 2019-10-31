@@ -5,7 +5,7 @@
 
 import { ObjectType, Field, InputType, ArgsType } from 'type-graphql'
 import { Translation, ObjectId, TranslationInput } from '@Types/common'
-import { ArrayUnique } from 'class-validator'
+import { ArrayUnique, ArrayNotEmpty } from 'class-validator'
 
 
 @ObjectType()
@@ -21,10 +21,12 @@ export class Diet {
   slug: string
 
   @Field(type => [ObjectId])
+  @ArrayNotEmpty()
   @ArrayUnique()
   foodClassIncludes: ObjectId[]
 
   @Field(type => [ObjectId])
+  @ArrayNotEmpty()
   @ArrayUnique()
   foodGroupIncludes: ObjectId[]
 }
@@ -38,10 +40,12 @@ export class DietInput {
   slug: string
 
   @Field(type => [ObjectId])
+  @ArrayNotEmpty()
   @ArrayUnique()
   foodClassIncludes: ObjectId[]
 
   @Field(type => [ObjectId])
+  @ArrayNotEmpty()
   @ArrayUnique()
   foodGroupIncludes: ObjectId[]
 }
@@ -52,8 +56,12 @@ export class ListDietArgs {
   searchSlug?: string
 
   @Field(type => [ObjectId], { nullable: true })
+  @ArrayUnique()
+  @ArrayNotEmpty()
   searchFoodClass?: ObjectId[]
 
   @Field(type => [ObjectId], { nullable: true })
+  @ArrayNotEmpty()
+  @ArrayUnique()
   searchFoodGroup?: ObjectId[]
 }
