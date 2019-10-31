@@ -47,6 +47,6 @@ export default class DietService {
     const deleted = await diet.delete(DeleteBy.user(operator))
     if (!deleted) throw new Errors.System('Something went wrong')
 
-    return deleted.id
+    return diet.id
   }
 }
