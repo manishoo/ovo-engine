@@ -38,4 +38,12 @@ export default class DietResolver {
   ) {
     return this.dietService.delete(dietId, ctx.user!)
   }
+  @Mutation(returns => Diet)
+  async updateDiet(
+    @Arg('dietId') dietId: ObjectId,
+    @Arg('diet') diet: DietInput,
+    @Ctx() ctx: Context,
+  ) {
+    return this.dietService.update(dietId, diet)
+  }
 }
