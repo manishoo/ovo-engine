@@ -9,7 +9,7 @@ import HouseholdService from '@Services/household/household.service'
 import { PersistedPassword } from '@Types/auth'
 import { Image, Ref, Status, Role, WeightMeasurement } from '@Types/common'
 import { Household } from '@Types/household'
-import { ActivityLevel, Gender, Goal, Height, UserMeal, SocialNetworks, User, WeightUnit } from '@Types/user'
+import { ActivityLevel, Gender, Goal, Height, UserMeal, SocialNetworks, User, WeightUnit, NutritionProfile } from '@Types/user'
 import { Length } from 'class-validator'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { Container } from 'typedi'
@@ -95,6 +95,8 @@ export class UserSchema extends Typegoose implements User {
   /**
    * physical attributes
    * */
+  @prop()
+  nutritionProfile?: NutritionProfile
 
   @prop()
   height?: Height

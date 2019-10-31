@@ -53,20 +53,21 @@ export default async function main() {
 
     return food.save()
   }))
-  const foodClassesSaved = await Promise.all(foodClasses.map(async food => {
-    food.name = addFaTranslation(food.name)
-    const foodGroup = foodGroupsSaved.find(p => String(p._id) === String(food.foodGroup._id))
-    if (!foodGroup) throw new Error('no food class for this food')
-    food.foodGroup = foodGroup
-    return food.save()
-  }))
-  await Promise.all(foods.map(async food => {
-    food.name = addFaTranslation(food.name)
-    const foodClass = foodClassesSaved.find(p => String(p._id) === String(food.foodClass))
-    if (!foodClass) throw new Error('no food class for this food')
-    food.origFoodClassName = foodClass.name
-    food.foodGroup = foodClass.foodGroup as FoodGroupSchema
-
-    return food.save()
-  }))
+  // TODO food group structure changed and these functions need to be changed
+  // const foodClassesSaved = await Promise.all(foodClasses.map(async food => {
+  //   food.name = addFaTranslation(food.name)
+  //   const foodGroup = foodGroupsSaved.find(p => String(p._id) === String(food.foodGroup._id))
+  //   if (!foodGroup) throw new Error('no food class for this food')
+  //   food.foodGroup = foodGroup
+  //   return food.save()
+  // }))
+  // await Promise.all(foods.map(async food => {
+  //   food.name = addFaTranslation(food.name)
+  //   const foodClass = foodClassesSaved.find(p => String(p._id) === String(food.foodClass))
+  //   if (!foodClass) throw new Error('no food class for this food')
+  //   food.origFoodClassName = foodClass.name
+  //   food.foodGroup = foodClass.foodGroup as FoodGroupSchema
+  //
+  //   return food.save()
+  // }))
 }

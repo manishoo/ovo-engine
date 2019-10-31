@@ -7,22 +7,27 @@ import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
-import { ObjectId, Role, Status } from '@Types/common'
+import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
-import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, DecodedUser } from '@Types/user'
 import { ContextUser, ContextUserType } from '@Utils/context'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
+import decodeJwtToken from '@Utils/decode-jwt-token'
+import MailingService from '@Services/mail/mail.service'
+import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
+import generateRecoverLink from './utils/generate-recover-link'
 
 
 @Service()
 export default class UserService {
   constructor(
     // service injection
-    private readonly uploadService: UploadService
+    private readonly uploadService: UploadService,
+    private readonly mailingService: MailingService,
   ) {
     // noop
   }
@@ -101,7 +106,7 @@ export default class UserService {
     }
   }
 
-  async update(userInput: UserUpdateInput, userId: string): Promise<User> {
+  async update(userInput: UserUpdateInput, userId: ObjectId): Promise<User> {
     let user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('user not found')
 
@@ -122,7 +127,7 @@ export default class UserService {
     return user.save()
   }
 
-  async userProfile(selfId?: string, userId?: string, username?: string): Promise<User | BaseUser> {
+  async userProfile(selfId?: string, userId?: ObjectId, username?: string): Promise<User | BaseUser> {
     let user
 
     /**
@@ -130,7 +135,7 @@ export default class UserService {
      * */
     user = await UserModel.findOne({
       $or: [
-        { userId: ObjectId(userId) },
+        { userId: new ObjectId(userId) },
         { username },
       ]
     })
@@ -182,4 +187,37 @@ export default class UserService {
     return !!user
   }
 
+  async requestRecoverPassword(email: string, locale: LanguageCode): Promise<Boolean> {
+
+    const user = await UserModel.findOne({ email })
+    if (!user) throw new Errors.NotFound('User not found')
+
+    let userFirstName: string = ''
+    if (user.firstName) {
+      userFirstName = user.firstName
+    } else {
+      userFirstName = 'User'
+    }
+    this.mailingService.sendMail([{
+      name: userFirstName,
+      email: user.email,
+      senderAddress: 'recover',
+      subject: `Password recover for ${user.firstName}`,
+      template: getRecoverTemplate(locale),
+      recover: generateRecoverLink(user.id)
+    }])
+    return true
+  }
+
+  async changeUserPassword(token: string, password: string) {
+    const decoded = decodeJwtToken(token) as DecodedUser
+
+    const user = await UserModel.findById(decoded.id!)
+    if (!user) throw new Errors.NotFound('User not found')
+
+    user.password = await generateHashPassword(password)
+    await user.save()
+
+    return true
+  }
 }

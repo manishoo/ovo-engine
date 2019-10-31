@@ -4,8 +4,8 @@
  */
 
 import UserService from '@Services/user/user.service'
-import { Role } from '@Types/common'
-import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
+import { Role, ObjectId } from '@Types/common'
+import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, NutritionProfileInput, UpdateNutritionProfileResponse } from '@Types/user'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
@@ -39,7 +39,7 @@ export default class UserResolver {
   @Authorized(Role.user)
   @Mutation(returns => User)
   async updateUser(
-    @Arg('id') userId: string,
+    @Arg('id') userId: ObjectId,
     @Arg('user') user: UserUpdateInput,
     @Ctx() ctx: Context,
   ) {
@@ -51,13 +51,13 @@ export default class UserResolver {
   async me(
     @Ctx() ctx: Context,
   ) {
-    return this.userService.userProfile(ctx.user!.id, ctx.user!.id)
+    return this.userService.userProfile(ctx.user!.id, new ObjectId(ctx.user!.id))
   }
 
   @Query(returns => BaseUser)
   async user(
     @Ctx() ctx: Context,
-    @Arg('userId', { nullable: true }) userId?: string,
+    @Arg('userId', { nullable: true }) userId?: ObjectId,
     @Arg('username', { nullable: true }) username?: string,
   ) {
     return this.userService.userProfile(ctx.user && ctx.user.id, userId, username)
@@ -69,5 +69,30 @@ export default class UserResolver {
     @Ctx() ctx: Context,
   ) {
     return this.userService.doesUsernameExist(username)
+  }
+
+  @Authorized(Role.user)
+  @Mutation(returns => UpdateNutritionProfileResponse)
+  async updateNutritionProfile(
+    @Arg('nutritionProfile') nutritionProfile: NutritionProfileInput,
+    @Ctx() ctx: Context,
+  ) {
+    return {
+      userId: '5d6cd273eff1e93a034aeb5b',
+      nutritionProfile: {
+        calories: nutritionProfile.calories,
+        protein: nutritionProfile.protein,
+        carb: nutritionProfile.carb,
+        fat: nutritionProfile.fat
+      }
+    }
+  }
+
+  @Query(returns => Boolean)
+  async requestRecoverPassword(
+    @Arg('email') email: string,
+    @Ctx() ctx: Context,
+  ) {
+    return this.userService.requestRecoverPassword(email, ctx.lang)
   }
 }
