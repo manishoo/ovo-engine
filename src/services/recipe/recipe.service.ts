@@ -72,10 +72,13 @@ export default class RecipeService {
       variables.page = 1
     }
 
-    const query: any = {
+    let query: any = {
       //status: RecipeStatus.public,
     }
-    let sort: any = {}
+
+    let sort: any = {
+      likes: -1
+    }
 
     if (variables.userId) {
       const me = await UserModel.findById(variables.userId)
@@ -96,17 +99,13 @@ export default class RecipeService {
       query['ingredients.food._id'] = { $in: variables.ingredients }
     }
 
-    if (variables.popular) {
-      sort['likes'] = -1
-    }
-
     if (variables.latest) {
       sort['createdAt'] = -1
     }
 
     if (variables.diets) {
       let diets = await Promise.all(variables.diets.map(async dietId => {
-        return await this.dietService.getDiet(dietId)
+        return this.dietService.getDiet(dietId)
       }))
       let foodClassIds: ObjectId[] = []
 
@@ -134,7 +133,7 @@ export default class RecipeService {
       query.createdAt = { $lt: recipe.createdAt }
     }
 
-    const recipies: Recipe[] = await RecipeModel.aggregate([
+    const recipies = await RecipeModel.aggregate([
       {
         $match: query
       },
@@ -152,14 +151,14 @@ export default class RecipeService {
           from: 'users',
           localField: 'author',
           foreignField: '_id',
-          as: 'author'
+          as: 'authors'
         }
       },
     ])
+
     recipies.map(recipe => {
-      let authors = recipe.author as Author[]
-      recipe.author = authors[0]
-      recipe.author.id = recipe.author._id!.toString()
+      recipe.author = recipe.authors as Author[][0]
+      recipe.author.id = recipe.author._id
     })
 
     return {

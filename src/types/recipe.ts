@@ -223,7 +223,7 @@ export class Recipe {
   difficulty?: RecipeDifficulty
 
   @Field(type => Author)
-  author: Ref<Author> | Author[]
+  author: Ref<Author>
 
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
@@ -256,9 +256,6 @@ export class Recipe {
 
   @Field(type => RecipeStatus)
   status: RecipeStatus
-
-  @Field({ defaultValue: false })
-  likedByUser: boolean
 }
 
 @ObjectType()
@@ -378,9 +375,6 @@ export class ListRecipesArgs {
 
   @Field(type => [String], { nullable: true })
   tags?: string[]
-
-  @Field({ nullable: true })
-  popular?: boolean
 
   @Field({ nullable: true })
   latest?: boolean

@@ -74,8 +74,6 @@ export class RecipeSchema extends Typegoose implements Recipe {
   get likesCount(): number {
     return this.likes.length
   }
-
-  likedByUser: boolean
 }
 
 export const RecipeModel = new RecipeSchema().getModelForClass(RecipeSchema, {
