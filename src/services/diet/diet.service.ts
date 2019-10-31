@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Service } from 'typedi'\
+import { Service } from 'typedi'
 import { DietInput, Diet, ListDietArgs } from '@Types/diet'
 import Errors from '@Utils/errors'
 import { DietModel } from '@Models/diet.model'
