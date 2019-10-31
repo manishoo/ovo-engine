@@ -6,7 +6,7 @@
 import { Recipe } from '@Types/recipe'
 
 
-export function transformRecipe(recipe: Recipe/* nstanceType<RecipeSchema> */, userId?: string) {
+export function transformRecipe(recipe: Recipe, userId?: string) {
   recipe.userLikedRecipe = !!recipe.likes.find(p => String(p) === userId)
   recipe.likesCount = recipe.likes.length
   recipe.id = recipe._id.toString()
