@@ -20,6 +20,7 @@ import decodeJwtToken from '@Utils/decode-jwt-token'
 import MailingService from '@Services/mail/mail.service'
 import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
 import generateRecoverLink from './utils/generate-recover-link'
+import DietService from '@Services/diet/diet.service'
 
 
 @Service()
@@ -28,6 +29,7 @@ export default class UserService {
     // service injection
     private readonly uploadService: UploadService,
     private readonly mailingService: MailingService,
+    private readonly dietService: DietService,
   ) {
     // noop
   }
@@ -67,7 +69,7 @@ export default class UserService {
     const checkEmail = await UserModel.findOne({ email: user.email })
     if (checkEmail) throw new Errors.UserInput('user creation error', { username: 'This email is already in use' })
 
-    let newUser = await UserModel.create(<Partial<User>>{
+    let createUser = <Partial<User>>{
       username: user.username,
       password: await generateHashPassword(user.password),
       role: Role.user,
@@ -79,7 +81,12 @@ export default class UserService {
         url: generateAvatarUrl(user.username),
         source: 'generated-avatar'
       }
-    })
+    }
+    if (user.dietId) {
+      const diet = await this.dietService.get(user.dietId)
+      createUser.diet = diet
+    }
+    let newUser = await UserModel.create(createUser)
     return {
       user: newUser,
       session: newUser.session,
@@ -114,6 +121,10 @@ export default class UserService {
       user.avatar = {
         url: await this.uploadService.processUpload(userInput.avatar, userInput.username, `images/users/${user.id}`)
       }
+    }
+    if (userInput.dietId) {
+      const diet = await this.dietService.get(userInput.dietId)
+      user.diet = diet
     }
 
     user.username = userInput.username

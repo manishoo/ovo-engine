@@ -37,6 +37,13 @@ export default class DietService {
     })
   }
 
+  async get(dietId: ObjectId) {
+    let diet = await DietModel.findById(dietId)
+    if (!diet) throw new Errors.NotFound('Diet not found')
+
+    return diet
+  }
+
   async list({ searchSlug, searchFoodClass, searchFoodGroup }: ListDietArgs): Promise<Diet[]> {
     let query: any = {}
 

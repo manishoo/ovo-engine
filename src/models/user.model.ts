@@ -15,6 +15,7 @@ import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-de
 import { Container } from 'typedi'
 import { plugin, pre, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
+import { Diet } from '@Types/diet'
 
 
 export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -136,6 +137,9 @@ export class UserSchema extends Typegoose implements User {
 
   @prop()
   timeZone?: string
+
+  @prop()
+  diet?: Diet
 }
 
 export const UserModel = new UserSchema().getModelForClass(UserSchema, {
