@@ -46,7 +46,7 @@ export default class FoodClassResolver {
     @Arg('foodClass') foodClass: FoodClassInput,
     @Ctx() ctx: Context,
   ) {
-    return this.foodClassService.editFoodClass(foodClassId, foodClass)
+    return this.foodClassService.updateFoodClass(foodClassId, foodClass)
   }
 
   @Authorized(Role.operator)
