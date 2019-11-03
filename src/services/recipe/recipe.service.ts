@@ -73,7 +73,7 @@ export default class RecipeService {
     }
 
     let query: any = {
-      //status: RecipeStatus.public,
+      status: RecipeStatus.public,
     }
 
     let sort: any = {
