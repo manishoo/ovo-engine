@@ -30,6 +30,7 @@ import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
 import { Author } from '@Types/user'
 import DietService from '@Services/diet/diet.service'
 import FoodClassService from '@Services/food-class/food-class.service'
+import { FoodClassModel } from '@Models/food-class.model'
 
 
 @Service()
@@ -73,7 +74,7 @@ export default class RecipeService {
     }
 
     let query: any = {
-      status: RecipeStatus.public,
+      //status: RecipeStatus.public,
     }
 
     let sort: any = {
@@ -108,16 +109,13 @@ export default class RecipeService {
       let foodClassIds: ObjectId[] = []
 
       await Promise.all(diets.map(async diet => {
-        await Promise.all(diet.foodGroupIncludes.map(async foodGroupId => {
-          /**
-           * get foodClass list by their foodGroup
-           */
-          let foodClassesByFoodGroup = await this.foodClassService.getFoodClassesByFoodGroup(foodGroupId)
-          foodClassesByFoodGroup.map(fc => {
-            foodClassIds.push(fc._id)
-          })
-        }))
+        let foodClassQuery: any = {}
+        foodClassQuery['foodGroup._id'] = { $in: diet.foodGroupIncludes }
 
+        let foodClasses = await FoodClassModel.find(foodClassQuery)
+        foodClasses.map(foodClass => {
+          foodClassIds.push(foodClass._id)
+        })
         foodClassIds = [...foodClassIds, ...diet.foodClassIncludes]
       }))
 
