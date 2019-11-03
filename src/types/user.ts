@@ -11,6 +11,7 @@ import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
 import { IsEmail, IsPhoneNumber, Min, Max } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
+import { Diet } from '@Types/diet'
 
 
 export enum Gender {
@@ -241,6 +242,8 @@ export class User extends BaseUser {
   gender?: Gender
   @Field(type => NutritionProfile, { nullable: true })
   nutritionProfile?: NutritionProfile
+  @Field(type => Diet, { nullable: true })
+  diet?: Diet
   foodAllergies?: string[]
   status?: Status
   meals?: UserMeal[]
@@ -268,6 +271,8 @@ export class UserRegistrationInput {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
+  @Field(type => ObjectId, { nullable: true })
+  dietId?: ObjectId
 }
 
 @ArgsType()
@@ -302,6 +307,8 @@ export class UserUpdateInput {
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
+  @Field(type => ObjectId, { nullable: true })
+  dietId?: ObjectId
 }
 
 @ObjectType()

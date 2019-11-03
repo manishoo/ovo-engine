@@ -105,7 +105,7 @@ export default class RecipeService {
 
     if (variables.diets) {
       let diets = await Promise.all(variables.diets.map(async dietId => {
-        return this.dietService.getDiet(dietId)
+        return this.dietService.get(dietId)
       }))
       let foodClassIds: ObjectId[] = []
 
