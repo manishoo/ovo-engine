@@ -146,7 +146,7 @@ export default class UserService {
      * */
     user = await UserModel.findOne({
       $or: [
-        { userId: new ObjectId(userId) },
+        { userId: userId },
         { username },
       ]
     })
@@ -155,7 +155,7 @@ export default class UserService {
 
     let userInfo: User | BaseUser
 
-    if (userId === selfId) {
+    if (userId && (userId.toString() === selfId)) {
       userInfo = {
         id: user.id,
         username: user.username,

@@ -20,7 +20,7 @@ export default class UploadService {
           stream
             .on('error', (error: any) => {
               if (stream.truncated)
-              // Delete the truncated file.
+                // Delete the truncated file.
                 fs.unlinkSync(path)
               reject(error)
             })

@@ -75,7 +75,7 @@ export default class RecipeService {
       const me = await UserModel.findById(variables.userId)
       if (!me) throw new Errors.System('something went wrong')
 
-      query['author'] = new ObjectId(variables.userId)
+      query['author'] = variables.userId
     }
 
     if (variables.tags) {

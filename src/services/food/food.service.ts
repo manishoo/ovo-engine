@@ -125,7 +125,7 @@ export default class FoodService {
   }
 
   async deleteFood(foodID: ObjectId, user: ContextUser, restore?: boolean): Promise<Food> {
-    const food = await FoodModel.findOneWithDeleted({ _id: new ObjectId(foodID) })
+    const food = await FoodModel.findOneWithDeleted({ _id: foodID })
     if (!food) throw new Errors.NotFound('food not found')
 
     if (restore) {
