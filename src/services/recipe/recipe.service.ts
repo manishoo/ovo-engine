@@ -157,7 +157,7 @@ export default class RecipeService {
     ])
 
     recipies.map(recipe => {
-      recipe.author = recipe.authors as Author[][0]
+      recipe.author = recipe.authors[0] as Author[]
       recipe.author.id = recipe.author._id
     })
 
