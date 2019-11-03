@@ -85,7 +85,7 @@ export class MealInput {
 
 @ObjectType()
 export class MealItemBase {
-  @Field(type => ObjectId)
+  @Field()
   readonly id: ObjectId
 
   @Field()

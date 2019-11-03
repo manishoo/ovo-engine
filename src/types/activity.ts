@@ -37,7 +37,7 @@ export class ActivityInput {
   @Field({ nullable: true })
   icon?: string
 
-  @Field(type => ObjectId)
+  @Field()
   activityGroupId: ObjectId
 }
 
