@@ -66,7 +66,7 @@ export default class CalendarService {
     for (let activity of activities) {
       let day = await getDayByTime(userId, activity.time)
 
-      let dbActivity = await this.activityService.getActivity(activity.activityId)
+      let dbActivity = await this.activityService.activity(activity.activityId)
 
       let newActivity: UserActivity = {
         ...dbActivity.toObject(),
