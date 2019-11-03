@@ -104,9 +104,7 @@ export default class RecipeService {
     }
 
     if (variables.diets) {
-      let diets = await Promise.all(variables.diets.map(async dietId => {
-        return this.dietService.get(dietId)
-      }))
+      let diets = await Promise.all(variables.diets.map(async dietId => this.dietService.get(dietId)))
       let foodClassIds: ObjectId[] = []
 
       await Promise.all(diets.map(async diet => {
@@ -133,7 +131,7 @@ export default class RecipeService {
       query.createdAt = { $lt: recipe.createdAt }
     }
 
-    const recipies = await RecipeModel.aggregate([
+    const recipes = await RecipeModel.aggregate([
       {
         $match: query
       },
@@ -156,14 +154,14 @@ export default class RecipeService {
       },
     ])
 
-    recipies.map(recipe => {
+    recipes.map(recipe => {
       recipe.author = recipe.authors[0] as Author[]
       recipe.author.id = recipe.author._id
     })
 
     return {
-      recipes: recipies.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),
-      pagination: createPagination(variables.page, variables.size, recipies.length),
+      recipes: recipes.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),
+      pagination: createPagination(variables.page, variables.size, recipes.length),
     }
   }
 
