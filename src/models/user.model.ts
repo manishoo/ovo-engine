@@ -16,6 +16,7 @@ import { Container } from 'typedi'
 import { plugin, pre, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
 import { Diet } from '@Types/diet'
+import userConfig from '@Config/user-config'
 
 
 export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -96,7 +97,7 @@ export class UserSchema extends Typegoose implements User {
   /**
    * physical attributes
    * */
-  @prop()
+  @prop({default: userConfig.defaultNutritionProfile })
   nutritionProfile: NutritionProfile
 
   @prop()
