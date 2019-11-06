@@ -7,7 +7,9 @@ import { Service } from 'typedi'
 import { Meal } from '@Types/meal'
 import UserService from '@Services/user/user.service'
 import { MealModel } from '@Models/meal.model'
-import math from 'mathjs'
+import Errors from '@Utils/errors'
+
+const math = require('mathjs')
 
 @Service()
 export default class SuggestionService {
@@ -48,7 +50,18 @@ export default class SuggestionService {
 
     const meals = await MealModel.find(biasConditions, null, { plain: true })
 
-    const weights = [1, 1, 1, 1, 1] // this weights indicate the importance of each parameter of our input features
+    if (meals.length === 0) {
+      throw new Errors.NotFound('no meal suggestion found')
+    }
+
+    // this weights indicate the importance of each parameter of our input features
+    const weights = [
+      1, // bias
+      1, // calories
+      1, // carb
+      1, // protein
+      1, // fat
+    ]
     const userTargetNuts = {
       calories: nutritionProfile.calories / mealsCount,
       protein: nutritionProfile.protein.average / mealsCount,
@@ -81,7 +94,7 @@ export default class SuggestionService {
         nutDiff.fat = Math.abs(fats.amount - userTargetNuts.fat)
       }
 
-      const inputs = [1, nutDiff.calories, nutDiff.carb, nutDiff.protein, nutDiff.carb]
+      const inputs = [1, nutDiff.calories, nutDiff.carb, nutDiff.protein, nutDiff.fat]
 
       const rank = (math.multiply(inputs, weights) as number[])[0]
       return { id, rank }

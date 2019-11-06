@@ -11,7 +11,6 @@ import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
 import {
   BaseUser,
-  NutritionProfile,
   User,
   UserAuthResponse,
   UserLoginArgs,
@@ -86,32 +85,6 @@ export default class UserService {
     const checkEmail = await UserModel.findOne({ email: user.email })
     if (checkEmail) throw new Errors.UserInput('user creation error', { username: 'This email is already in use' })
 
-    const defaultNutritionProfile: NutritionProfile = {
-      isStrict: false,
-      calories: 2000,
-      carb: {
-        max: 250,
-        min: 200,
-        get average(): number {
-          return this.max + this.min / 2
-        }
-      },
-      fat: {
-        max: 90,
-        min: 80,
-        get average(): number {
-          return this.max + this.min / 2
-        }
-      },
-      protein: {
-        max: 170,
-        min: 150,
-        get average(): number {
-          return this.max + this.min / 2
-        }
-      },
-    }
-
     let createUser = <Partial<User>>{
       username: user.username,
       password: await generateHashPassword(user.password),
@@ -120,7 +93,6 @@ export default class UserService {
       firstName: user.firstName,
       middleName: user.middleName,
       lastName: user.lastName,
-      nutritionProfile: defaultNutritionProfile,
       avatar: {
         url: generateAvatarUrl(user.username),
         source: 'generated-avatar'

@@ -12,6 +12,7 @@ import { GraphQLUpload } from 'apollo-server'
 import { IsEmail, IsPhoneNumber } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 import { Diet } from '@Types/diet'
+import userConfig from '@Config/user-config'
 
 
 export enum Gender {
@@ -240,7 +241,7 @@ export class User extends BaseUser {
   bodyFat?: number
   @Field(type => Gender, { nullable: true })
   gender?: Gender
-  @Field(type => NutritionProfile)
+  @Field(type => NutritionProfile, { defaultValue: userConfig.defaultNutritionProfile })
   nutritionProfile: NutritionProfile
   @Field(type => Diet, { nullable: true })
   diet?: Diet
