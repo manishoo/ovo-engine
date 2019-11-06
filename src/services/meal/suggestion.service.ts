@@ -98,7 +98,7 @@ export default class SuggestionService {
 
       const inputs = [1, nutDiff.calories, nutDiff.carb, nutDiff.protein, nutDiff.fat]
 
-      const rank = (math.multiply(inputs, weights) as number[])[0]
+      const rank = math.multiply(inputs, weights) as number
       return { id, rank }
     }))
 
