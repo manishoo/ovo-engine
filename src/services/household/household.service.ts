@@ -15,7 +15,7 @@ export default class HouseholdService {
       const newHousehold = new HouseholdModel(data)
       return newHousehold.save()
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw e
     }
   }

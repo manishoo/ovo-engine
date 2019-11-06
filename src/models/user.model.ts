@@ -4,19 +4,29 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
+import userConfig from '@Config/user-config'
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { PersistedPassword } from '@Types/auth'
 import { Image, Ref, Role, Status } from '@Types/common'
+import { Diet } from '@Types/diet'
 import { Household } from '@Types/household'
-import { ActivityLevel, Gender, Goal, Height, UserMeal, SocialNetworks, User, WeightUnit, NutritionProfile } from '@Types/user'
+import {
+  ActivityLevel,
+  Gender,
+  Goal,
+  Height,
+  NutritionProfile,
+  SocialNetworks,
+  User,
+  UserMeal,
+  WeightUnit
+} from '@Types/user'
 import { Length } from 'class-validator'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { Container } from 'typedi'
 import { plugin, pre, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
-import { Diet } from '@Types/diet'
-import userConfig from '@Config/user-config'
 
 
 export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
@@ -97,7 +107,7 @@ export class UserSchema extends Typegoose implements User {
   /**
    * physical attributes
    * */
-  @prop({default: userConfig.defaultNutritionProfile })
+  @prop({ default: userConfig.defaultNutritionProfile })
   nutritionProfile: NutritionProfile
 
   @prop()
@@ -121,7 +131,7 @@ export class UserSchema extends Typegoose implements User {
   @prop({ required: true, enum: Status, default: Status.active })
   status: Status
 
-  @prop({ default: [] })
+  @prop()
   meals: UserMeal[]
 
   @prop({ ref: MealPlanSchema })

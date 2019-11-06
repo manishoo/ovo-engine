@@ -247,4 +247,13 @@ export default class UserService {
 
     return true
   }
+
+  async getTempData(token: string): Promise<any> {
+    const data = await redis.get(`${RedisKeys.userTempData}:${token}`)
+    if (data) {
+      return JSON.parse(data)
+    }
+
+    return null
+  }
 }

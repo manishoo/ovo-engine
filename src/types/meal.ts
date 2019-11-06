@@ -86,7 +86,7 @@ export class MealInput {
 @ObjectType()
 export class MealItemBase {
   @Field()
-  readonly id: ObjectId
+  id: ObjectId
 
   @Field()
   amount: number
