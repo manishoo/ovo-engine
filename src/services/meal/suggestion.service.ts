@@ -8,6 +8,7 @@ import { Meal } from '@Types/meal'
 import UserService from '@Services/user/user.service'
 import { MealModel } from '@Models/meal.model'
 import math from 'mathjs'
+import Errors from '@Utils/errors'
 
 @Service()
 export default class SuggestionService {
@@ -47,6 +48,10 @@ export default class SuggestionService {
     }
 
     const meals = await MealModel.find(biasConditions, null, { plain: true })
+
+    if (meals.length === 0) {
+      throw new Errors.NotFound('no meal suggestion found')
+    }
 
     const weights = [1, 1, 1, 1, 1] // this weights indicate the importance of each parameter of our input features
     const userTargetNuts = {
