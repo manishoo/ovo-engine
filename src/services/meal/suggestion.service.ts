@@ -23,27 +23,29 @@ export default class SuggestionService {
   async suggestMeal(userId: string): Promise<Meal> {
     const {
       nutritionProfile,
+      meals: userMeals,
     } = await this.userService.getUserById(userId)
     /* TODO bias conditions: diet, exclude foods and food classes */
     // TODO get user diet
     // TODO get user excluded foods and food classes
     const biasConditions: any = {}
 
-    const mealsCount = 4 // temporary user meal count(same weight for each meal)
+    const mealsCount = userMeals.length || 4
 
+    const mealWeight = 1 / mealsCount
     if (nutritionProfile.isStrict) {
       biasConditions.nutrition = {
         'proteins.amount': {
-          $gte: nutritionProfile.protein.min / mealsCount,
-          $lte: nutritionProfile.protein.max / mealsCount
+          $gte: nutritionProfile.protein.min * mealWeight,
+          $lte: nutritionProfile.protein.max * mealWeight
         },
         'totalCarbs.amount': {
-          $gte: nutritionProfile.carb.min / mealsCount,
-          $lte: nutritionProfile.carb.max / mealsCount
+          $gte: nutritionProfile.carb.min * mealWeight,
+          $lte: nutritionProfile.carb.max * mealWeight
         },
         'fats.amount': {
-          $gte: nutritionProfile.fat.min / mealsCount,
-          $lte: nutritionProfile.fat.max / mealsCount
+          $gte: nutritionProfile.fat.min * mealWeight,
+          $lte: nutritionProfile.fat.max * mealWeight
         },
       }
     }

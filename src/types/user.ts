@@ -247,7 +247,7 @@ export class User extends BaseUser {
   diet?: Diet
   foodAllergies?: string[]
   status?: Status
-  meals?: UserMeal[]
+  meals: UserMeal[]
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
   activityLevel?: ActivityLevel

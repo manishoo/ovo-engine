@@ -122,7 +122,7 @@ export class UserSchema extends Typegoose implements User {
   status: Status
 
   @prop({ default: [] })
-  meals?: UserMeal[]
+  meals: UserMeal[]
 
   @prop({ ref: MealPlanSchema })
   mealPlans?: Ref<MealPlanSchema>[]
