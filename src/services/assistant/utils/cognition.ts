@@ -188,7 +188,6 @@ export default class Cognition {
 }
 
 function askForName(lang: LanguageCode) {
-  console.log('lang', lang)
   return [
     createMessage(__({ phrase: 'assistantAskName', locale: lang }), {
       expect: AssistantExpectations.nickname,
