@@ -5,6 +5,7 @@
 
 export const RedisKeys = {
   foodMapperJobRunning: 'food_mapper:job_running',
+  userTempData: 'user:registerDataTemp',
   userSession: (session: string) => `user:session:${session}`,
   operatorSession: (session: string) => `operator:session:${session}`,
 }

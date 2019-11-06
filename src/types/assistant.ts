@@ -4,7 +4,8 @@
  */
 
 import { Item } from '@Types/common'
-import { Field, Float, ObjectType } from 'type-graphql'
+import { User, UserMeal } from '@Types/user'
+import { Field, Float, ObjectType, registerEnumType } from 'type-graphql'
 
 
 @ObjectType()
@@ -24,8 +25,8 @@ export class MacroNutrientDistribution {
 
 @ObjectType()
 export class MessageAdditionalData {
-  @Field({ nullable: true })
-  expect?: string
+  @Field(type => AssistantExpectations, { nullable: true })
+  expect?: AssistantExpectations
   @Field({ nullable: true })
   value?: string
   @Field(type => Boolean, { nullable: true })
@@ -36,24 +37,28 @@ export class MessageAdditionalData {
   foods?: string[]
   @Field(type => MacroNutrientDistribution, { nullable: true })
   mealPlanSettings?: MacroNutrientDistribution
+  @Field(type => [UserMeal], { nullable: true })
+  meals?: UserMeal[]
+  @Field(type => User, { nullable: true })
+  user?: User
 }
 
 @ObjectType()
 export class Message {
   @Field()
   id: string
-  @Field()
-  sender: string
+  @Field(type => MessageSender)
+  sender: MessageSender
   @Field()
   text: string
   @Field()
   timestamp: string
-  @Field()
-  type: string
+  @Field(type => MessageType)
+  type: MessageType
   @Field(type => [Item], { nullable: true })
   items?: Item[]
-  @Field({ nullable: true })
-  expect?: string
+  @Field(type => AssistantExpectations, { nullable: true })
+  expect?: AssistantExpectations
   @Field({ nullable: true })
   data?: MessageAdditionalData
 }
@@ -74,11 +79,11 @@ export class MessageBackgroundInformation {
   user?: any
 }
 
-export enum CONTEXTS {
+export enum ConversationContext {
   introduction = 'introduction'
 }
 
-export enum EXPECTATIONS {
+export enum AssistantExpectations {
   gender = 'gender',
   nickname = 'nickname',
   age = 'age',
@@ -98,6 +103,11 @@ export enum EXPECTATIONS {
   mealPlan = 'mealPlan',
 }
 
+registerEnumType(AssistantExpectations, {
+  name: 'AssistantExpectations',
+  description: 'AssistantExpectations'
+})
+
 export enum GUEST_TEMP_FIELDS {
   nickname = 'nickname',
   age = 'age',
@@ -109,18 +119,35 @@ export enum GUEST_TEMP_FIELDS {
   tdee = 'tdee',
   goal = 'goal',
   allergies = 'allergies',
+  meals = 'meals',
 }
 
-export enum INPUT_TYPES {
+export enum MessageType {
+  text = 'text',
   number = 'number',
-  form = 'form',
+  email = 'email',
+  password = 'password',
   select = 'select',
+  form = 'form',
   food = 'food',
   weight = 'weight',
   height = 'height',
   mealPlanSettings = 'mealPlanSettings',
+  mealPlan = 'mealPlan',
+  meals = 'meals',
 }
 
-export enum DIETS {
-  keto = 'Ketogenic',
+registerEnumType(MessageType, {
+  name: 'MessageType',
+  description: 'Message Type'
+})
+
+export enum MessageSender {
+  assistant = 'assistant',
+  user = 'user',
 }
+
+registerEnumType(MessageSender, {
+  name: 'MessageSender',
+  description: 'Message Senders'
+})
