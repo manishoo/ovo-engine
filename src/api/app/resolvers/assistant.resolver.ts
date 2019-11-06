@@ -5,7 +5,7 @@
 
 import AssistantService from '@Services/assistant/assistant.service'
 import { createMessage } from '@Services/assistant/utils/utils'
-import { MessagePayload } from '@Types/assistant'
+import { MessagePayload, MessageSenders } from '@Types/assistant'
 import { Context } from '@Utils/context'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
@@ -37,7 +37,7 @@ export default class AssistantResolver {
     }
 
     return this.assistantService.conversation({
-      messages: message ? [createMessage(message, data, 'user')] : [],
+      messages: message ? [createMessage(message, data, MessageSenders.user)] : [],
       token
     }, ctx.lang)
   }

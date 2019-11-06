@@ -125,6 +125,7 @@ export default class MealService {
 
         return {
           ...found,
+          id: item.id || new ObjectId(),
           alternativeMealItems: allMealItems.filter(p => p.id !== found.id).map(alternativeMealItem => ({
             ...alternativeMealItem,
             alternativeMealItems: undefined,
@@ -394,6 +395,8 @@ export default class MealService {
       if (mealItemInput.alternativeMealItems) {
         const mealItems = await this.validateMealItems(mealItemInput.alternativeMealItems as MealItemInput[])
         baseMealItem.alternativeMealItems = mealItems.map(mealItem => {
+          mealItem.id = new ObjectId()
+
           if (mealItem.food) {
             const food = mealItem.food as Food
             mealItem.food = food._id
@@ -418,6 +421,7 @@ export default class MealService {
         }
 
         return {
+          id: new ObjectId(),
           ...baseMealItem,
           amount: mealItemInput.amount,
           food,
@@ -430,6 +434,7 @@ export default class MealService {
         if (!recipe) throw new Errors.NotFound('recipe not found')
 
         return {
+          id: new ObjectId(),
           ...baseMealItem,
           amount: mealItemInput.amount,
           recipe,

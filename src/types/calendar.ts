@@ -14,6 +14,12 @@ import { Field, InputType, ObjectType } from 'type-graphql'
 
 @ObjectType()
 export class DayMeal {
+  @Field({ nullable: true })
+  userMeal?: ObjectId
+
+  @Field({ nullable: true })
+  name?: string
+
   @Field(type => MealType)
   type: MealType
 

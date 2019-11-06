@@ -37,6 +37,7 @@
 
   "assistantExplainTDEE": "خب پس حدودا بدنت {{tdee}} کالری در روز میسوزونه",
   "assistantAskGoal": "**هدف**ت چیه؟",
+  "assistantAskMeals": "چندتا وعده داری؟",
 
   "assistantAllergy1": "Okay great, now lets talk about foods",
   "assistantAllergy2": "Is there any food you're allergic to?",
@@ -55,6 +56,8 @@
 
   "assistant4": "Now, I would like to ask you about your current routine in order to make the transition to a new eating habit go as smoothly as possible",
   "askMealRoutine": "What do you normally eat for {{mealName}}",
+
+  "assistantError": "متوجه نشدم، دوباره میگی؟",
 
   "mealPlanSettings": "Set the settings",
 
