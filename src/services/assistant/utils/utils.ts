@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Message, MessageAdditionalData, MessageSenders, MessageType } from '@Types/assistant'
+import { Message, MessageAdditionalData, MessageSender, MessageType } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
 import { ActivityLevel, Gender, Goal, UserMeal } from '@Types/user'
 import { __ } from 'i18n'
@@ -170,10 +170,10 @@ export function generateGenderSelect(lang: LanguageCode) {
   ]
 }
 
-export function createMessage(text: string, data: any = {}, sender?: MessageSenders): Message {
+export function createMessage(text: string, data: any = {}, sender?: MessageSender): Message {
   return {
     id: uuid(),
-    sender: sender || MessageSenders.assistant,
+    sender: sender || MessageSender.assistant,
     text,
     timestamp: String(Date.now()),
     type: data.type ? data.type : MessageType.text,

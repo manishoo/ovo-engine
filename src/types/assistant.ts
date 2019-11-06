@@ -47,8 +47,8 @@ export class MessageAdditionalData {
 export class Message {
   @Field()
   id: string
-  @Field(type => MessageSenders)
-  sender: MessageSenders
+  @Field(type => MessageSender)
+  sender: MessageSender
   @Field()
   text: string
   @Field()
@@ -142,12 +142,12 @@ registerEnumType(MessageType, {
   description: 'Message Type'
 })
 
-export enum MessageSenders {
+export enum MessageSender {
   assistant = 'assistant',
   user = 'user',
 }
 
-registerEnumType(MessageSenders, {
-  name: 'MessageSenders',
+registerEnumType(MessageSender, {
+  name: 'MessageSender',
   description: 'Message Senders'
 })
