@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { LanguageCode } from '@Types/common'
 import dotenv from 'dotenv'
 
 
@@ -87,6 +88,11 @@ export default {
   },
   jwt: {
     key: process.env.JWT_KEY || 'jwtPrivateKey',
-  }
+  },
+  defaultLocale: LanguageCode.en,
+  supportedLanguages: [
+    LanguageCode.en,
+    LanguageCode.fa,
+  ],
 }
 
