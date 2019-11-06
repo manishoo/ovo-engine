@@ -54,7 +54,14 @@ export default class SuggestionService {
       throw new Errors.NotFound('no meal suggestion found')
     }
 
-    const weights = [1, 1, 1, 1, 1] // this weights indicate the importance of each parameter of our input features
+    // this weights indicate the importance of each parameter of our input features
+    const weights = [
+      1, // bias
+      1, // calories
+      1, // carb
+      1, // protein
+      1, // fat
+    ]
     const userTargetNuts = {
       calories: nutritionProfile.calories / mealsCount,
       protein: nutritionProfile.protein.average / mealsCount,
