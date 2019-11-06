@@ -10,7 +10,7 @@ import { Diet } from '@Types/diet'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
-import { ArrayNotEmpty, IsEmail, IsPhoneNumber, Max, Min } from 'class-validator'
+import { ArrayNotEmpty, IsEmail, IsPhoneNumber } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -267,7 +267,7 @@ export class User extends BaseUser {
   bodyFat?: number
   @Field(type => Gender, { nullable: true })
   gender?: Gender
-  @Field(type => NutritionProfile, { defaultValue: userConfig.defaultNutritionProfile })
+  @Field(type => NutritionProfile)
   nutritionProfile: NutritionProfile
   @Field(type => Diet, { nullable: true })
   diet?: Diet
