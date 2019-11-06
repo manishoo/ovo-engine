@@ -5,7 +5,7 @@
 
 import { Service } from 'typedi'
 import { Meal } from '@Types/meal'
-import UserSettingService from '@Services/user/user-setting.service'
+import UserService from '@Services/user/user.service'
 import { MealModel } from '@Models/meal.model'
 import math from 'mathjs'
 
@@ -13,13 +13,15 @@ import math from 'mathjs'
 export default class SuggestionService {
   constructor(
     // service injection
-    private readonly userSettingService: UserSettingService,
+    private readonly userService: UserService,
   ) {
     // noop
   }
 
   async suggestMeal(userId: string): Promise<Meal> {
-    const nutritionProfile = await this.userSettingService.getUserNutritionProfile(userId)
+    const {
+      nutritionProfile,
+    } = await this.userService.getUserById(userId)
     /* TODO bias conditions: diet, exclude foods and food classes */
     // TODO get user diet
     // TODO get user excluded foods and food classes

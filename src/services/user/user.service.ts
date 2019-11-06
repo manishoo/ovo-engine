@@ -71,6 +71,14 @@ export default class UserService {
     }
   }
 
+  async getUserById(userId: string): Promise<User> {
+    const user = await UserModel.findById(userId)
+
+    if (!user) throw new Errors.NotFound('User not found')
+
+    return user
+  }
+
   async register(user: UserRegistrationInput): Promise<UserAuthResponse> {
     const checkUser = await UserModel.findOne({ username: user.username })
     if (checkUser) throw new Errors.UserInput('user creation error', { username: 'This username already exists' })
