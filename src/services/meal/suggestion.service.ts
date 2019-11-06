@@ -7,8 +7,9 @@ import { Service } from 'typedi'
 import { Meal } from '@Types/meal'
 import UserService from '@Services/user/user.service'
 import { MealModel } from '@Models/meal.model'
-import math from 'mathjs'
 import Errors from '@Utils/errors'
+
+const math = require('mathjs')
 
 @Service()
 export default class SuggestionService {
