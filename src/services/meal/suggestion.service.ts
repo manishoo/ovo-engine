@@ -3,13 +3,15 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import redis from '@Config/connections/redis'
+import moment from 'moment'
+import { Types } from 'mongoose'
+import mealConfig from '@Config/meal'
 import { Service } from 'typedi'
 import { Meal } from '@Types/meal'
 import UserService from '@Services/user/user.service'
 import { MealModel } from '@Models/meal.model'
 import Errors from '@Utils/errors'
-
-const math = require('mathjs')
 
 @Service()
 export default class SuggestionService {
@@ -26,84 +28,62 @@ export default class SuggestionService {
       meals: userMeals,
     } = await this.userService.getUserById(userId)
     /* TODO bias conditions: diet, exclude foods and food classes */
-    // TODO get user diet
-    // TODO get user excluded foods and food classes
     const biasConditions: any = {}
 
     const mealsCount = userMeals.length || 4
-
     const mealWeight = 1 / mealsCount
+
+    const targetCalories = nutritionProfile.calories * mealWeight
     if (nutritionProfile.isStrict) {
       biasConditions.nutrition = {
         'proteins.amount': {
           $gte: nutritionProfile.protein.min * mealWeight,
-          $lte: nutritionProfile.protein.max * mealWeight
+          $lte: nutritionProfile.protein.max * mealWeight,
         },
         'totalCarbs.amount': {
           $gte: nutritionProfile.carb.min * mealWeight,
-          $lte: nutritionProfile.carb.max * mealWeight
+          $lte: nutritionProfile.carb.max * mealWeight,
         },
         'fats.amount': {
           $gte: nutritionProfile.fat.min * mealWeight,
-          $lte: nutritionProfile.fat.max * mealWeight
+          $lte: nutritionProfile.fat.max * mealWeight,
         },
       }
     }
 
-    const meals = await MealModel.find(biasConditions, null, { plain: true })
+    // find the previous suggestions from a set which belongs to the user
+    const previousSuggestionsRedisKey = `meal-suggestion:user-${userId}`
+    const now = moment().unix()
+    const suggestionExpirationTime = moment().add(-mealConfig.mealSuggestionCycleHours, 'hour').unix()
+    const previousSuggestions = await redis.zrevrangebyscore(previousSuggestionsRedisKey, now, suggestionExpirationTime)
 
-    if (meals.length === 0) {
-      throw new Errors.NotFound('no meal suggestion found')
+    biasConditions._id = { $nin: previousSuggestions.map((it: any) => Types.ObjectId(it)) }
+
+    const meal = await MealModel.aggregate([
+      { $match: { ...biasConditions, deleted: false } },
+      // create a field which keeps the difference of the user target calories and the food calories
+      { $addFields: { caloriesDiff: { $abs: { $subtract: ['$nutrition.calories.amount', targetCalories] } } } },
+      { $sort: { caloriesDiff: 1 } },
+      { $limit: 1 }
+    ]).then(it => it[0])
+
+    if (!meal) {
+      // if there is any exclusion, clear them and try once more
+      if (previousSuggestions.length !== 0) {
+        await redis.del(previousSuggestionsRedisKey)
+        return this.suggestMeal(userId)
+      } else {
+        throw new Errors.NotFound('no meal suggestion found')
+      }
     }
 
-    // this weights indicate the importance of each parameter of our input features
-    const weights = [
-      1, // bias
-      1, // calories
-      1, // carb
-      1, // protein
-      1, // fat
-    ]
-    const userTargetNuts = {
-      calories: nutritionProfile.calories / mealsCount,
-      protein: nutritionProfile.protein.average / mealsCount,
-      carb: nutritionProfile.carb.average / mealsCount,
-      fat: nutritionProfile.fat.average / mealsCount,
-    }
+    /*
+    * add the meal id into an ordered set belong to the user,
+    * this list will expire after the `suggestionExpirationTime` have passed
+    * */
+    await redis.zadd(previousSuggestionsRedisKey, String(now), meal._id)
+    await redis.expireat(previousSuggestionsRedisKey, moment().add(mealConfig.mealSuggestionCycleHours, 'hour').unix())
 
-    const rankedMeals = await Promise.all(meals.map(async (meal) => {
-      const id = meal._id
-
-      if (!meal.nutrition) return { id, rank: 0 }
-
-      const { calories, proteins, totalCarbs, fats } = meal.nutrition
-
-      const nutDiff = { ...userTargetNuts } // set some init values
-
-      if (calories) {
-        nutDiff.calories = Math.abs(calories.amount - userTargetNuts.calories)
-      }
-
-      if (proteins) {
-        nutDiff.protein = Math.abs(proteins.amount - userTargetNuts.protein)
-      }
-
-      if (totalCarbs) {
-        nutDiff.carb = Math.abs(totalCarbs.amount - userTargetNuts.carb)
-      }
-
-      if (fats) {
-        nutDiff.fat = Math.abs(fats.amount - userTargetNuts.fat)
-      }
-
-      const inputs = [1, nutDiff.calories, nutDiff.carb, nutDiff.protein, nutDiff.fat]
-
-      const rank = math.multiply(inputs, weights) as number
-      return { id, rank }
-    }))
-
-    rankedMeals.sort((a, b) => a.rank - b.rank) // sort descending
-
-    return (await MealModel.findById(rankedMeals[0].id))!!
+    return meal
   }
 }
