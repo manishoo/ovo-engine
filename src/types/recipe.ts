@@ -13,7 +13,7 @@ import {
   Timing,
   TimingInput,
   Translation,
-  TranslationInput
+  TranslationInput,
 } from '@Types/common'
 import { IngredientFood, Nutrition } from '@Types/food'
 import { Tag, TagType } from '@Types/tag'
@@ -22,7 +22,6 @@ import { Weight } from '@Types/weight'
 import { ContextUser } from '@Utils/context'
 import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
-import { Types } from 'mongoose'
 import { ArgsType, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -50,7 +49,7 @@ registerEnumType(RecipeDifficulty, {
 
 @ObjectType()
 export class RecipeTag {
-  _id?: Types.ObjectId
+  _id?: ObjectId
 
   @Field()
   slug: string
@@ -64,7 +63,7 @@ export class RecipeTag {
 
 @InputType()
 export class RecipeTagInput {
-  _id?: Types.ObjectId
+  _id?: ObjectId
 
   @Field()
   slug: string
@@ -364,14 +363,14 @@ export class ListRecipesArgs {
   @Max(30)
   size?: number
 
-  @Field({ nullable: true })
-  lastId?: string
+  @Field(type => ObjectId, { nullable: true })
+  lastId?: ObjectId
 
   @Field({ nullable: true })
   nameSearchQuery?: string
 
-  @Field({ nullable: true })
-  userId?: string
+  @Field(type => ObjectId, { nullable: true })
+  userId?: ObjectId
 
   @Field(type => [String], { nullable: true })
   tags?: string[]

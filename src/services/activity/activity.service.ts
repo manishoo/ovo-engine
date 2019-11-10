@@ -28,7 +28,7 @@ export default class ActivityService {
     return ActivityGroupModel.find()
   }
 
-  async addActivity(activity: ActivityInput): Promise<Activity> {
+  async createActivity(activity: ActivityInput): Promise<Activity> {
     let creatingActivity: Partial<Activity> = {}
     let activityGroup = await ActivityGroupModel.findById(activity.activityGroupId)
     if (!activityGroup) throw new Errors.UserInput('Invalid activity group', { 'activityGroupId': 'ActivityGroup not found' })
@@ -45,7 +45,7 @@ export default class ActivityService {
     return createActivity
   }
 
-  async addActivityGroup(slug: string, name: TranslationInput[]): Promise<ActivityGroup> {
+  async createActivityGroup(slug: string, name: TranslationInput[]): Promise<ActivityGroup> {
     let query: any = {}
     query['slug'] = slug
 
@@ -62,7 +62,7 @@ export default class ActivityService {
     return activityGroup
   }
 
-  async getActivity(activityId: string) {
+  async activity(activityId: string) {
     const activity = await ActivityModel.findById(activityId)
       .populate('activityGroup')
 

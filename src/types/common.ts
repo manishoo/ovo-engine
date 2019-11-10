@@ -172,4 +172,8 @@ export class TimingInput {
 
 export declare type Ref<T> = T | mongoose.Types.ObjectId
 
-export class ObjectId extends mongoose.Types.ObjectId {}
+export class ObjectId extends mongoose.Types.ObjectId {
+  constructor(key?: string | number) {
+    super(key)
+  }
+}

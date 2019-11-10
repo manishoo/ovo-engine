@@ -125,6 +125,7 @@ export default class MealService {
 
         return {
           ...found,
+          id: item.id || new ObjectId(),
           alternativeMealItems: allMealItems.filter(p => p.id !== found.id).map(alternativeMealItem => ({
             ...alternativeMealItem,
             alternativeMealItems: undefined,
@@ -173,11 +174,10 @@ export default class MealService {
     }))
   }
 
-  async get(id?: string, slug?: string): Promise<Meal> {
+  async get(id?: ObjectId, slug?: string): Promise<Meal> {
     let query: any = {}
 
     if (id) {
-      if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
       query._id = id
     } else if (slug) {
       query.slug = slug
@@ -290,9 +290,7 @@ export default class MealService {
     }
   }
 
-  async delete(id: string, user: ContextUser, bulkDelete?: boolean): Promise<string[]> {
-    if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
-
+  async delete(id: ObjectId, user: ContextUser, bulkDelete?: boolean): Promise<string[]> {
     let meal = await MealModel.findById(id)
     if (!meal) throw new Errors.NotFound('meal not found')
 
@@ -315,9 +313,7 @@ export default class MealService {
     return deletedMealIds
   }
 
-  async update(id: string, mealInput: MealInput, userId: string): Promise<Meal> {
-    if (!ObjectId.isValid(id)) throw new Errors.Validation('invalid meal id')
-
+  async update(id: ObjectId, mealInput: MealInput, userId: string): Promise<Meal> {
     let meal = await MealModel.findById(id)
       .populate('author')
       .exec()
@@ -399,6 +395,8 @@ export default class MealService {
       if (mealItemInput.alternativeMealItems) {
         const mealItems = await this.validateMealItems(mealItemInput.alternativeMealItems as MealItemInput[])
         baseMealItem.alternativeMealItems = mealItems.map(mealItem => {
+          mealItem.id = new ObjectId()
+
           if (mealItem.food) {
             const food = mealItem.food as Food
             mealItem.food = food._id
@@ -423,6 +421,7 @@ export default class MealService {
         }
 
         return {
+          id: new ObjectId(),
           ...baseMealItem,
           amount: mealItemInput.amount,
           food,
@@ -435,6 +434,7 @@ export default class MealService {
         if (!recipe) throw new Errors.NotFound('recipe not found')
 
         return {
+          id: new ObjectId(),
           ...baseMealItem,
           amount: mealItemInput.amount,
           recipe,

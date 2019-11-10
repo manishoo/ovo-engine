@@ -5280,14 +5280,14 @@ export default async function main() {
   })
 
   for (let activityData of activities) {
-    let activityGroup = await activityService.addActivityGroup(activityData.activityGroupName, [{
+    let activityGroup = await activityService.createActivityGroup(activityData.activityGroupName, [{
       locale: LanguageCode.en,
       text: activityData.activityGroupName,
       verified: true
     }])
 
     if (!Number.isNaN(Number(activityData.met))) {
-      let activity = await activityService.addActivity({
+      let activity = await activityService.createActivity({
         activityGroupId: new ObjectId(activityGroup.id),
         activityTypeName: [{ locale: LanguageCode.en, text: activityData.activityName }],
         met: Number(activityData.met)

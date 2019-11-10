@@ -6,10 +6,11 @@
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import { PersistedPassword } from '@Types/auth'
 import { Image, ObjectId, Ref, Role, Status } from '@Types/common'
+import { Diet } from '@Types/diet'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
-import { IsEmail, IsPhoneNumber, Min, Max } from 'class-validator'
+import { ArrayNotEmpty, IsEmail, IsPhoneNumber, Max, Min } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -21,6 +22,33 @@ export enum Gender {
 registerEnumType(Gender, {
   name: 'Gender',
   description: 'Gender'
+})
+
+export enum MealSize {
+  tiny = 'tiny',
+  small = 'small',
+  normal = 'normal',
+  big = 'big',
+  huge = 'huge',
+}
+
+registerEnumType(MealSize, {
+  name: 'MealSize',
+  description: 'Meal Size'
+})
+
+export enum MealAvailableTime {
+  noTime = '5',
+  littleTime = '15',
+  someTime = '30',
+  moreTime = '45',
+  lotsOfTime = '60',
+  noLimit = 'noLimit',
+}
+
+registerEnumType(MealAvailableTime, {
+  name: 'MealAvailableTime',
+  description: 'Meal Available Time'
 })
 
 export enum ActivityLevel {
@@ -85,16 +113,16 @@ export class WeightUnit {
 @ObjectType()
 export class UserMeal {
   @Field()
+  id: string
+  @Field()
   name: string
   @Field()
   time: string
-  @Field(type => Int)
-  energyPercentageOfDay: number
-  @Field(type => Int)
-  availableTime?: number
-  @Field(type => Int)
-  mealFor?: number
-  @Field(type => Boolean)
+  @Field(type => MealSize, { nullable: true })
+  size?: MealSize
+  @Field(type => MealAvailableTime, { nullable: true })
+  availableTime?: MealAvailableTime
+  @Field(type => Boolean, { nullable: true })
   cook?: boolean
 }
 
@@ -241,9 +269,13 @@ export class User extends BaseUser {
   gender?: Gender
   @Field(type => NutritionProfile, { nullable: true })
   nutritionProfile?: NutritionProfile
+  @Field(type => Diet, { nullable: true })
+  diet?: Diet
   foodAllergies?: string[]
   status?: Status
-  meals?: UserMeal[]
+  @ArrayNotEmpty()
+  @Field(type => [UserMeal])
+  meals: UserMeal[]
   mealPlans?: Ref<MealPlanSchema>[]
   household?: Ref<Household>
   activityLevel?: ActivityLevel
@@ -268,6 +300,8 @@ export class UserRegistrationInput {
   middleName?: string
   @Field({ nullable: true })
   lastName?: string
+  @Field(type => ObjectId, { nullable: true })
+  dietId?: ObjectId
 }
 
 @ArgsType()
@@ -302,6 +336,8 @@ export class UserUpdateInput {
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
+  @Field(type => ObjectId, { nullable: true })
+  dietId?: ObjectId
 }
 
 @ObjectType()

@@ -23,7 +23,7 @@ export default class MealPlanService {
       const newPlan = new MealPlanModel(data)
       return newPlan.save()
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw e
     }
   }

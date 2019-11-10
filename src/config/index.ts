@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { LanguageCode } from '@Types/common'
 import dotenv from 'dotenv'
 
 
@@ -80,13 +81,18 @@ export default {
   uploadUrl: 'uploads',
   imagesUrl: process.env.IMAGE_URL || '127.0.0.1',
   mail: {
-    apiKey: process.env.MAIL_API_KEY,
+    apiKey: process.env.MAIL_API_KEY || 'secret',
     domain: process.env.MAIL_DOMAIN,
     senderName: process.env.MAIL_SENDER_NAME,
     senderDomain: process.env.MAIL_SENDER_DOMAIN,
   },
   jwt: {
     key: process.env.JWT_KEY || 'jwtPrivateKey',
-  }
+  },
+  defaultLocale: LanguageCode.en,
+  supportedLanguages: [
+    LanguageCode.en,
+    LanguageCode.fa,
+  ],
 }
 

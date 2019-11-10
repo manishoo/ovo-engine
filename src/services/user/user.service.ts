@@ -20,6 +20,7 @@ import decodeJwtToken from '@Utils/decode-jwt-token'
 import MailingService from '@Services/mail/mail.service'
 import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
 import generateRecoverLink from './utils/generate-recover-link'
+import DietService from '@Services/diet/diet.service'
 
 
 @Service()
@@ -28,6 +29,7 @@ export default class UserService {
     // service injection
     private readonly uploadService: UploadService,
     private readonly mailingService: MailingService,
+    private readonly dietService: DietService,
   ) {
     // noop
   }
@@ -67,7 +69,7 @@ export default class UserService {
     const checkEmail = await UserModel.findOne({ email: user.email })
     if (checkEmail) throw new Errors.UserInput('user creation error', { username: 'This email is already in use' })
 
-    let newUser = await UserModel.create(<Partial<User>>{
+    let createUser = <Partial<User>>{
       username: user.username,
       password: await generateHashPassword(user.password),
       role: Role.user,
@@ -79,7 +81,12 @@ export default class UserService {
         url: generateAvatarUrl(user.username),
         source: 'generated-avatar'
       }
-    })
+    }
+    if (user.dietId) {
+      const diet = await this.dietService.get(user.dietId)
+      createUser.diet = diet
+    }
+    let newUser = await UserModel.create(createUser)
     return {
       user: newUser,
       session: newUser.session,
@@ -106,7 +113,7 @@ export default class UserService {
     }
   }
 
-  async update(userInput: UserUpdateInput, userId: string): Promise<User> {
+  async update(userInput: UserUpdateInput, userId: ObjectId): Promise<User> {
     let user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('user not found')
 
@@ -114,6 +121,10 @@ export default class UserService {
       user.avatar = {
         url: await this.uploadService.processUpload(userInput.avatar, userInput.username, `images/users/${user.id}`)
       }
+    }
+    if (userInput.dietId) {
+      const diet = await this.dietService.get(userInput.dietId)
+      user.diet = diet
     }
 
     user.username = userInput.username
@@ -127,7 +138,7 @@ export default class UserService {
     return user.save()
   }
 
-  async userProfile(selfId?: string, userId?: string, username?: string): Promise<User | BaseUser> {
+  async userProfile(selfId?: string, userId?: ObjectId, username?: string): Promise<User | BaseUser> {
     let user
 
     /**
@@ -135,7 +146,7 @@ export default class UserService {
      * */
     user = await UserModel.findOne({
       $or: [
-        { userId: new ObjectId(userId) },
+        { userId: userId },
         { username },
       ]
     })
@@ -144,7 +155,7 @@ export default class UserService {
 
     let userInfo: User | BaseUser
 
-    if (userId === selfId) {
+    if (userId && (userId.toString() === selfId)) {
       userInfo = {
         id: user.id,
         username: user.username,
@@ -219,5 +230,14 @@ export default class UserService {
     await user.save()
 
     return true
+  }
+
+  async getTempData(token: string): Promise<any> {
+    const data = await redis.get(`${RedisKeys.userTempData}:${token}`)
+    if (data) {
+      return JSON.parse(data)
+    }
+
+    return null
   }
 }

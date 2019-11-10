@@ -86,7 +86,7 @@ export class MealInput {
 @ObjectType()
 export class MealItemBase {
   @Field()
-  readonly id: ObjectId
+  id: ObjectId
 
   @Field()
   amount: number
@@ -154,6 +154,6 @@ export class ListMealsArgs {
   @Max(30)
   size?: number
 
-  @Field({ nullable: true })
-  authorId?: string
+  @Field(type => ObjectId, { nullable: true })
+  authorId?: ObjectId
 }
