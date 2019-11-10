@@ -132,7 +132,6 @@ export default class MealService {
           })),
         } as MealItem
       })
-
       const createdMeal = await MealModel.create({
         author: meal.author,
         description: meal.description,
@@ -316,14 +315,32 @@ export default class MealService {
   async update(id: ObjectId, mealInput: MealInput, userId: string): Promise<Meal> {
     let meal = await MealModel.findById(id)
       .populate('author')
+      .populate({
+        path: 'items.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.recipe',
+        model: RecipeModel
+      })
+      .populate({
+        path: 'items.alternativeMealItems.food',
+        model: FoodModel
+      })
+      .populate({
+        path: 'items.alternativeMealItems.recipe',
+        model: RecipeModel
+      })
       .exec()
 
     if (!meal) throw new Errors.NotFound('meal not found')
+
     const author = meal.author as Author
-    if (author.id !== userId) throw new Errors.Forbidden('update failed. you only can update your own meals')
+    if (author.id !== userId) throw new Errors.Forbidden('Update failed. you only can update your own meals')
 
     meal.name = mealInput.name
     meal.description = mealInput.description
+    meal.nutrition = calculateMealNutrition(meal.items)
     meal.items = mealInput.items.map(inputItem => ({
       id: inputItem.id,
       amount: inputItem.amount,
@@ -336,7 +353,6 @@ export default class MealService {
         alternativeMealItems: undefined,
       })),
     } as MealItem))
-    meal.nutrition = calculateMealNutrition(meal.items)
 
     let savedMeal = await meal.save()
     const populatedMeal = await MealModel.findById(savedMeal._id)
