@@ -129,6 +129,7 @@ export default class RecipeService {
       query.createdAt = { $lt: recipe.createdAt }
     }
 
+    const totalCount = await RecipeModel.count(query)
     const recipes = await RecipeModel.aggregate([
       {
         $match: query
@@ -149,17 +150,17 @@ export default class RecipeService {
           foreignField: '_id',
           as: 'authors'
         }
-      },
+      }
     ])
 
     recipes.map(recipe => {
-      recipe.author = recipe.authors[0] as Author[]
+      recipe.author = recipe.authors[0] as Author
       recipe.author.id = recipe.author._id
     })
 
     return {
       recipes: recipes.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),
-      pagination: createPagination(variables.page, variables.size, recipes.length),
+      pagination: createPagination(variables.page, variables.size, totalCount),
     }
   }
 
