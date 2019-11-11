@@ -110,23 +110,9 @@ export default class RecipeService {
       let foodClassIds: ObjectId[] = []
 
       await Promise.all(diets.map(async diet => {
-        let foodGroupQuery: any = {}
-        let foodGroupByParentId: ObjectId[] = []
+        let foodClassIdsByFoodGroups = await this.foodClassService.getFoodClassesByFoodGroups(diet.foodGroupIncludes)
 
-        foodGroupQuery['parentFoodGroup'] = { $in: diet.foodGroupIncludes }
-        let foodGroupByParent = await FoodGroupModel.find(foodGroupQuery)
-        foodGroupByParent.map(foodGroup => {
-          foodGroupByParentId.push(foodGroup.id)
-        })
-
-        let foodClassQuery: any = {}
-        foodClassQuery['foodGroup._id'] = { $in: [...diet.foodGroupIncludes, ...foodGroupByParentId] }
-
-        let foodClasses = await FoodClassModel.find(foodClassQuery)
-        foodClasses.map(foodClass => {
-          foodClassIds.push(foodClass._id)
-        })
-        foodClassIds = [...foodClassIds, ...diet.foodClassIncludes]
+        foodClassIds = [...foodClassIds, ...diet.foodClassIncludes, ...foodClassIdsByFoodGroups]
       }))
 
       query['ingredients.food.foodClass'] = { $in: foodClassIds }

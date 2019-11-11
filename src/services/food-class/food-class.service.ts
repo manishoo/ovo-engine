@@ -286,10 +286,26 @@ export default class FoodClassService {
     return foodClass.save()
   }
 
-  async getFoodClassesByFoodGroup(foodGroupId: ObjectId) {
-    let q: any = {}
-    q['foodGroup._id'] = foodGroupId
-    return FoodClassModel.find(q)
+  async getFoodClassesByFoodGroups(foodGroupIds: ObjectId[]): Promise<ObjectId[]> {
+    let foodClassIds: ObjectId[] = []
+    let foodGroupQuery: any = {}
+    let foodGroupByParentId: ObjectId[] = []
+
+    foodGroupQuery['parentFoodGroup'] = { $in: foodGroupIds }
+    let foodGroupByParent = await FoodGroupModel.find(foodGroupQuery)
+    foodGroupByParent.map(foodGroup => {
+      foodGroupByParentId.push(foodGroup.id)
+    })
+
+    let foodClassQuery: any = {}
+    foodClassQuery['foodGroup._id'] = { $in: [...foodGroupIds, ...foodGroupByParentId] }
+
+    let foodClasses = await FoodClassModel.find(foodClassQuery)
+    foodClasses.map(foodClass => {
+      foodClassIds.push(foodClass._id)
+    })
+
+    return foodClassIds
   }
 }
 
