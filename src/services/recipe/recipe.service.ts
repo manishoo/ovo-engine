@@ -31,6 +31,7 @@ import { Author } from '@Types/user'
 import DietService from '@Services/diet/diet.service'
 import FoodClassService from '@Services/food-class/food-class.service'
 import { FoodClassModel } from '@Models/food-class.model'
+import { FoodGroupModel } from '@Models/food-group.model'
 
 
 @Service()
@@ -109,8 +110,17 @@ export default class RecipeService {
       let foodClassIds: ObjectId[] = []
 
       await Promise.all(diets.map(async diet => {
+        let foodGroupQuery: any = {}
+        let foodGroupByParentId: ObjectId[] = []
+
+        foodGroupQuery['parentFoodGroup'] = { $in: diet.foodGroupIncludes }
+        let foodGroupByParent = await FoodGroupModel.find(foodGroupQuery)
+        foodGroupByParent.map(foodGroup => {
+          foodGroupByParentId.push(foodGroup.id)
+        })
+
         let foodClassQuery: any = {}
-        foodClassQuery['foodGroup._id'] = { $in: diet.foodGroupIncludes }
+        foodClassQuery['foodGroup._id'] = { $in: [...diet.foodGroupIncludes, ...foodGroupByParentId] }
 
         let foodClasses = await FoodClassModel.find(foodClassQuery)
         foodClasses.map(foodClass => {
