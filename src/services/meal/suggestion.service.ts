@@ -5,7 +5,10 @@
 
 import redis from '@Config/connections/redis'
 import mealConfig from '@Config/meal'
+import { FoodModel } from '@Models/food.model'
 import { MealModel } from '@Models/meal.model'
+import { RecipeModel } from '@Models/recipe.model'
+import getIncludedFoodClassIdsInDiets from '@Services/diet/utils/get-food-class-ids-from-diets'
 import UserService from '@Services/user/user.service'
 import { ObjectId } from '@Types/common'
 import { Meal } from '@Types/meal'
@@ -29,9 +32,24 @@ export default class SuggestionService {
     const {
       nutritionProfile,
       meals: userMeals,
+      diet,
     } = await this.userService.getUserById(userId)
-    /* TODO bias conditions: diet, exclude foods and food classes */
+
+    /* TODO bias conditions: user excluded foods and food classes */
     const biasConditions: any = {}
+
+    /**
+     * Apply user diet
+     * */
+    if (diet) {
+      const includedFoodClassIdsInDiet = await getIncludedFoodClassIdsInDiets([diet])
+
+      const foodsInDiet = await FoodModel.find({ foodClass: { $in: includedFoodClassIdsInDiet } })
+      const recipesInDiet = await RecipeModel.find({ 'ingredients.food.foodClass': { $in: includedFoodClassIdsInDiet } })
+
+      biasConditions['items.food'] = { $not: { $elemMatch: { $not: { $in: foodsInDiet.map(food => food._id) } } } }
+      biasConditions['items.recipe'] = { $not: { $elemMatch: { $not: { $in: recipesInDiet.map(recipe => recipe._id) } } } }
+    }
 
     const mealsCount = userMeals.length || 4
     const mealWeight = 1 / mealsCount

@@ -139,8 +139,7 @@ export default class UserService {
       }
     }
     if (userInput.dietId) {
-      const diet = await this.dietService.get(userInput.dietId)
-      user.diet = diet
+      user.diet = await this.dietService.get(userInput.dietId)
     }
 
     user.username = userInput.username
