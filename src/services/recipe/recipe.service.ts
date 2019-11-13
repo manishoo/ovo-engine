@@ -3,13 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import DietService from '@Services/diet/diet.service'
-import FoodClassService from '@Services/food-class/food-class.service'
+import getFoodClassIdsFromDiets from '@Services/diet/utils/get-food-class-ids-from-diets'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
 import {
@@ -39,7 +38,6 @@ export default class RecipeService {
     // service injection
     private readonly uploadService: UploadService,
     private readonly dietService: DietService,
-    private readonly foodClassService: FoodClassService,
   ) {
     // noop
   }
@@ -105,22 +103,9 @@ export default class RecipeService {
     }
 
     if (variables.diets) {
-      let diets = await Promise.all(variables.diets.map(async dietId => this.dietService.get(dietId)))
+      const diets = await Promise.all(variables.diets.map(async dietId => this.dietService.get(dietId)))
 
-      const allFoodGroupIncludes: ObjectId[] = []
-      const allFoodClassIncludes: ObjectId[] = []
-
-      diets.map(diet => {
-        allFoodGroupIncludes.push(...diet.foodGroupIncludes)
-        allFoodClassIncludes.push(...diet.foodClassIncludes)
-      })
-
-      const foodClasses = await FoodClassModel.find({
-        _id: { $in: allFoodClassIncludes },
-        'foodGroups.0.id': { $in: allFoodGroupIncludes }
-      }).select('_id').exec()
-
-      query['ingredients.food.foodClass'] = { $in: foodClasses.map(fc => fc._id) }
+      query['ingredients.food.foodClass'] = { $not: { $elemMatch: { $not: { $in: getFoodClassIdsFromDiets(diets) } } } }
     }
 
     if (variables.lastId) {

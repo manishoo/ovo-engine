@@ -9,7 +9,15 @@ import { UserModel } from '@Models/user.model'
 import UploadService from '@Services/upload/upload.service'
 import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
-import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, DecodedUser } from '@Types/user'
+import {
+  BaseUser,
+  User,
+  UserAuthResponse,
+  UserLoginArgs,
+  UserRegistrationInput,
+  UserUpdateInput,
+  DecodedUser,
+} from '@Types/user'
 import { ContextUser, ContextUserType } from '@Utils/context'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
@@ -60,6 +68,14 @@ export default class UserService {
         .catch(logError('findBySession->redis.setex'))
       return user
     }
+  }
+
+  async getUserById(userId: string): Promise<User> {
+    const user = await UserModel.findById(userId)
+
+    if (!user) throw new Errors.NotFound('User not found')
+
+    return user
   }
 
   async register(user: UserRegistrationInput): Promise<UserAuthResponse> {
@@ -123,8 +139,7 @@ export default class UserService {
       }
     }
     if (userInput.dietId) {
-      const diet = await this.dietService.get(userInput.dietId)
-      user.diet = diet
+      user.diet = await this.dietService.get(userInput.dietId)
     }
 
     user.username = userInput.username
