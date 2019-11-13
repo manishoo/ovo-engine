@@ -3,10 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
+import DietService from '@Services/diet/diet.service'
+import FoodClassService from '@Services/food-class/food-class.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
 import {
@@ -18,6 +21,7 @@ import {
   RecipesListResponse,
   RecipeStatus
 } from '@Types/recipe'
+import { Author } from '@Types/user'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
@@ -27,11 +31,6 @@ import slug from 'slug'
 import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
 import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
-import { Author } from '@Types/user'
-import DietService from '@Services/diet/diet.service'
-import FoodClassService from '@Services/food-class/food-class.service'
-import { FoodClassModel } from '@Models/food-class.model'
-import { FoodGroupModel } from '@Models/food-group.model'
 
 
 @Service()
@@ -107,15 +106,21 @@ export default class RecipeService {
 
     if (variables.diets) {
       let diets = await Promise.all(variables.diets.map(async dietId => this.dietService.get(dietId)))
-      let foodClassIds: ObjectId[] = []
 
-      await Promise.all(diets.map(async diet => {
-        let foodClassIdsByFoodGroups = await this.foodClassService.getFoodClassesByFoodGroups(diet.foodGroupIncludes)
+      const allFoodGroupIncludes: ObjectId[] = []
+      const allFoodClassIncludes: ObjectId[] = []
 
-        foodClassIds = [...foodClassIds, ...diet.foodClassIncludes, ...foodClassIdsByFoodGroups]
-      }))
+      diets.map(diet => {
+        allFoodGroupIncludes.push(...diet.foodGroupIncludes)
+        allFoodClassIncludes.push(...diet.foodClassIncludes)
+      })
 
-      query['ingredients.food.foodClass'] = { $in: foodClassIds }
+      const foodClasses = await FoodClassModel.find({
+        _id: { $in: allFoodClassIncludes },
+        'foodGroups.0.id': { $in: allFoodGroupIncludes }
+      }).select('_id').exec()
+
+      query['ingredients.food.foodClass'] = { $in: foodClasses.map(fc => fc._id) }
     }
 
     if (variables.lastId) {
