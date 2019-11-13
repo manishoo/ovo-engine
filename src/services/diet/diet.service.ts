@@ -85,5 +85,6 @@ export default class DietService {
     diet.foodGroupIncludes = dietInput.foodGroupIncludes
 
     return diet.save()
+
   }
 }
