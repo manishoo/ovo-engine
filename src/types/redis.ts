@@ -8,4 +8,5 @@ export const RedisKeys = {
   userTempData: 'user:registerDataTemp',
   userSession: (session: string) => `user:session:${session}`,
   operatorSession: (session: string) => `operator:session:${session}`,
+  previousSuggestions: (userId: string) => `meal-suggestion:user-${userId}`
 }

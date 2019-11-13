@@ -4,14 +4,17 @@
  */
 
 import redis from '@Config/connections/redis'
-import moment from 'moment'
-import { Types } from 'mongoose'
 import mealConfig from '@Config/meal'
-import { Service } from 'typedi'
-import { Meal } from '@Types/meal'
-import UserService from '@Services/user/user.service'
 import { MealModel } from '@Models/meal.model'
+import UserService from '@Services/user/user.service'
+import { ObjectId } from '@Types/common'
+import { Meal } from '@Types/meal'
+import { RedisKeys } from '@Types/redis'
 import Errors from '@Utils/errors'
+import addHours from 'date-fns/addHours'
+import subHours from 'date-fns/subHours'
+import { Service } from 'typedi'
+
 
 @Service()
 export default class SuggestionService {
@@ -52,15 +55,15 @@ export default class SuggestionService {
     }
 
     // find the previous suggestions from a set which belongs to the user
-    const previousSuggestionsRedisKey = `meal-suggestion:user-${userId}`
-    const now = moment().unix()
-    const suggestionExpirationTime = moment().add(-mealConfig.mealSuggestionCycleHours, 'hour').unix()
-    const previousSuggestions = await redis.zrevrangebyscore(previousSuggestionsRedisKey, now, suggestionExpirationTime)
+    const previousSuggestionsRedisKey = RedisKeys.previousSuggestions(userId)
+    const now = Date.now()
+    const suggestionExpirationTime = subHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime()
+    const previousSuggestions: string[] = await redis.zrevrangebyscore(previousSuggestionsRedisKey, now, suggestionExpirationTime)
 
-    biasConditions._id = { $nin: previousSuggestions.map((it: any) => Types.ObjectId(it)) }
+    biasConditions._id = { $nin: previousSuggestions.map(it => new ObjectId(it)) }
 
-    const meal = await MealModel.aggregate([
-      { $match: { ...biasConditions, deleted: false } },
+    const meal: Meal = await MealModel.aggregate([
+      { $match: { ...biasConditions, deleted: { $ne: true } } },
       // create a field which keeps the difference of the user target calories and the food calories
       { $addFields: { caloriesDiff: { $abs: { $subtract: ['$nutrition.calories.amount', targetCalories] } } } },
       { $sort: { caloriesDiff: 1 } },
@@ -81,8 +84,8 @@ export default class SuggestionService {
     * add the meal id into an ordered set belong to the user,
     * this list will expire after the `suggestionExpirationTime` have passed
     * */
-    await redis.zadd(previousSuggestionsRedisKey, String(now), meal._id)
-    await redis.expireat(previousSuggestionsRedisKey, moment().add(mealConfig.mealSuggestionCycleHours, 'hour').unix())
+    await redis.zadd(previousSuggestionsRedisKey, String(now), String(meal._id))
+    await redis.expireat(previousSuggestionsRedisKey, addHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime())
 
     return meal
   }
