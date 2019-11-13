@@ -6,12 +6,13 @@
 import express from 'express'
 import i18n from 'i18n'
 import path from 'path'
+import config from '@Config'
 
 
-export default async ({ app }: { app: express.Application }) => {
+export default ({ app }: { app: express.Application }) => {
   i18n.configure({
-    defaultLocale: 'en',
-    directory: path.join(__dirname, '/../../../locales'),
+    defaultLocale: config.defaultLocale,
+    directory: path.join(__dirname, '/../../locales'),
     updateFiles: false,
   })
   app.use(i18n.init)

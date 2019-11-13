@@ -3,10 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
+import DietService from '@Services/diet/diet.service'
+import FoodClassService from '@Services/food-class/food-class.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
 import {
@@ -18,6 +21,7 @@ import {
   RecipesListResponse,
   RecipeStatus
 } from '@Types/recipe'
+import { Author } from '@Types/user'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
@@ -34,6 +38,8 @@ export default class RecipeService {
   constructor(
     // service injection
     private readonly uploadService: UploadService,
+    private readonly dietService: DietService,
+    private readonly foodClassService: FoodClassService,
   ) {
     // noop
   }
@@ -67,8 +73,12 @@ export default class RecipeService {
       variables.page = 1
     }
 
-    const query: any = {
+    let query: any = {
       status: RecipeStatus.public,
+    }
+
+    let sort: any = {
+      likes: -1
     }
 
     if (variables.userId) {
@@ -86,23 +96,68 @@ export default class RecipeService {
       query['title.text'] = { $regex: variables.nameSearchQuery }
     }
 
-    if (variables.lastId) {
-      if (!ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
+    if (variables.ingredients) {
+      query['ingredients.food._id'] = { $in: variables.ingredients }
+    }
 
+    if (variables.latest) {
+      sort['createdAt'] = -1
+    }
+
+    if (variables.diets) {
+      let diets = await Promise.all(variables.diets.map(async dietId => this.dietService.get(dietId)))
+
+      const allFoodGroupIncludes: ObjectId[] = []
+      const allFoodClassIncludes: ObjectId[] = []
+
+      diets.map(diet => {
+        allFoodGroupIncludes.push(...diet.foodGroupIncludes)
+        allFoodClassIncludes.push(...diet.foodClassIncludes)
+      })
+
+      const foodClasses = await FoodClassModel.find({
+        _id: { $in: allFoodClassIncludes },
+        'foodGroups.0.id': { $in: allFoodGroupIncludes }
+      }).select('_id').exec()
+
+      query['ingredients.food.foodClass'] = { $in: foodClasses.map(fc => fc._id) }
+    }
+
+    if (variables.lastId) {
       const recipe = await RecipeModel.findById(variables.lastId)
       if (!recipe) throw new Errors.NotFound('recipe not found')
 
       query.createdAt = { $lt: recipe.createdAt }
     }
-    const recipes = await RecipeModel.find(query)
-      .sort({
-        createdAt: -1,
-      })
-      .limit(variables.size)
-      .skip((variables.page - 1) * variables.size)
-      .populate('author')
-      .exec()
+
     const totalCount = await RecipeModel.count(query)
+    const recipes = await RecipeModel.aggregate([
+      {
+        $match: query
+      },
+      {
+        $sort: sort,
+      },
+      {
+        $limit: variables.size,
+      },
+      {
+        $skip: (variables.page - 1) * variables.size
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'author',
+          foreignField: '_id',
+          as: 'authors'
+        }
+      }
+    ])
+
+    recipes.map(recipe => {
+      recipe.author = recipe.authors[0] as Author
+      recipe.author.id = recipe.author._id
+    })
 
     return {
       recipes: recipes.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),

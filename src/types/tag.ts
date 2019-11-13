@@ -3,10 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Ref, Translation, TranslationInput } from '@Types/common'
+import { ObjectId, Ref, Translation, TranslationInput } from '@Types/common'
 import { User } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
-import { Types } from 'mongoose'
 import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -41,7 +40,7 @@ export class TagInput {
 
 @ObjectType()
 export class Tag {
-  _id?: Types.ObjectId
+  _id?: ObjectId
   @Field({ nullable: true })
   slug?: string
   @Field(type => [Translation], { nullable: true })

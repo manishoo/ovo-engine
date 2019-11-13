@@ -32,11 +32,14 @@ export default class FoodClassService {
     let query: any = {}
 
     if (foodGroupId) {
+      let foodGroups = await FoodGroupModel.find({ parentFoodGroup: foodGroupId })
+
       query['foodGroup._id'] = {
         /**
          * Search group and subgroups
          * */
-        $in: [foodGroupId, ...(await FoodGroupModel.find({ parentFoodGroup: foodGroupId }))]
+
+        $in: [foodGroupId, ...(foodGroups.map(fg => { return fg._id }))]
       }
     }
 
