@@ -62,7 +62,7 @@ export default class MealService {
     /**
      * Create meal instances
      * */
-    if (bulkCreate) {
+    if (bulkCreate && me.role !== Role.user) {
       const mealInstances = await this.createMealInstances(mealToBeCreated)
       createdMeals.push(...mealInstances)
     } else {
