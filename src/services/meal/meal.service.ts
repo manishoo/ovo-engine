@@ -193,7 +193,6 @@ export default class MealService {
 
         if ((i >> j).toString(2)[(i >> j).toString(2).length - 1] === '1') {
           mealItemIncludes.push(optionals[j])
-          console.log('ITEM: ', optionals[j])
         }
       }
       mealItems.push([...constants, ...mealItemIncludes])
