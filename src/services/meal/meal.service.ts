@@ -26,8 +26,6 @@ import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
 @Service()
 export default class MealService {
   async create(mealInput: MealInput, userId: string, bulkCreate?: boolean): Promise<Meal[]> {
-    if (!ObjectId.isValid(userId)) throw new Errors.Validation('invalid user id')
-
     let meal: Partial<Meal> = {}
 
     /**
@@ -48,6 +46,7 @@ export default class MealService {
     }
 
     const mealItems = await this.validateMealItems(mealInput.items)
+
     const timing = calculateMealTiming(mealItems)
     const nutrition = calculateMealNutrition(mealItems)
 
@@ -291,14 +290,12 @@ export default class MealService {
     let query: any = {}
 
     if (variables.authorId) {
-      if (!ObjectId.isValid(variables.authorId)) throw new Errors.Validation('Invalid author id')
       let author = await UserModel.findById(variables.authorId)
       if (!author) throw new Errors.NotFound('Author not found')
       query['author'] = author._id
     }
 
     if (variables.lastId) {
-      if (!ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
 
       const meal = await MealModel.findById(variables.lastId)
       if (!meal) throw new Errors.NotFound('meal not found')
@@ -492,8 +489,6 @@ export default class MealService {
       }
 
       if (mealItemInput.food) {
-        if (!ObjectId.isValid(mealItemInput.food.toString())) throw new Errors.Validation('Invalid food id')
-
         const food = await FoodModel.findById(mealItemInput.food.toString())
         if (!food) throw new Errors.NotFound('food not found')
         if (mealItemInput.weight) {
@@ -511,8 +506,6 @@ export default class MealService {
           isOptional: mealItemInput.isOptional,
         } as MealItem
       } else if (mealItemInput.recipe) {
-        if (!ObjectId.isValid(mealItemInput.recipe.toString())) throw new Errors.Validation('Invalid recipe id')
-
         const recipe = await RecipeModel.findById(mealItemInput.recipe.toString())
         if (!recipe) throw new Errors.NotFound('recipe not found')
 

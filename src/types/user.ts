@@ -10,7 +10,7 @@ import { Diet } from '@Types/diet'
 import { Event } from '@Types/event'
 import { Household } from '@Types/household'
 import { GraphQLUpload } from 'apollo-server'
-import { ArrayNotEmpty, IsEmail, IsPhoneNumber, Max, Min } from 'class-validator'
+import { ArrayNotEmpty, IsEmail, IsPhoneNumber } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
@@ -152,30 +152,24 @@ export class SocialNetworksInput {
 
 @ObjectType()
 export class TargetNutrition {
-  @Field({ nullable: true })
-  min?: number
+  @Field()
+  min: number
 
-  @Field({ nullable: true })
-  max?: number
+  @Field()
+  max: number
 
-  @Field({ nullable: true })
-  @Min(0)
-  @Max(100)
-  percent?: number
+  get average() {
+    return this.min + this.max / 2
+  }
 }
 
 @InputType()
 export class TargetNutritionInput {
-  @Field({ nullable: true })
-  min?: number
+  @Field()
+  min: number
 
-  @Field({ nullable: true })
-  max?: number
-
-  @Field({ nullable: true })
-  @Min(0)
-  @Max(100)
-  percent?: number
+  @Field()
+  max: number
 }
 
 @ObjectType()
@@ -191,6 +185,9 @@ export class NutritionProfile {
 
   @Field(type => TargetNutrition)
   fat: TargetNutrition
+
+  @Field()
+  isStrict: boolean
 }
 
 @InputType()
@@ -206,6 +203,9 @@ export class NutritionProfileInput {
 
   @Field(type => TargetNutritionInput)
   fat: TargetNutritionInput
+
+  @Field()
+  isStrict: boolean
 }
 
 @ObjectType()
@@ -267,8 +267,8 @@ export class User extends BaseUser {
   bodyFat?: number
   @Field(type => Gender, { nullable: true })
   gender?: Gender
-  @Field(type => NutritionProfile, { nullable: true })
-  nutritionProfile?: NutritionProfile
+  @Field(type => NutritionProfile)
+  nutritionProfile: NutritionProfile
   @Field(type => Diet, { nullable: true })
   diet?: Diet
   foodAllergies?: string[]
