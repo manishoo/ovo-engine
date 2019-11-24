@@ -411,7 +411,7 @@ export default class MealService {
       recipe: inputItem.recipe,
       weight: inputItem.weight,
       author: meal!.author,
-      alternativeMealItems: inputItem.alternativeMealItems.map(alternativeMealItem => ({//TODO isOptional
+      alternativeMealItems: inputItem.alternativeMealItems.map(alternativeMealItem => ({
         ...alternativeMealItem,
         alternativeMealItems: undefined,
       })),
