@@ -10,6 +10,7 @@ import {
   ObjectId,
   Pagination,
   Ref,
+  Role,
   Timing,
   TimingInput,
   Translation,
@@ -22,12 +23,13 @@ import { Weight } from '@Types/weight'
 import { ContextUser } from '@Utils/context'
 import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
-import { ArgsType, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
+import { ArgsType, Authorized, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
 export enum RecipeStatus {
   private = 'private',
   public = 'public',
+  review = 'review',
 }
 
 registerEnumType(RecipeStatus, {
@@ -383,6 +385,10 @@ export class ListRecipesArgs {
 
   @Field(type => [ObjectId], { nullable: true })
   diets?: ObjectId[]
+
+  @Field(type => RecipeStatus, { nullable: true })
+  @Authorized(Role.operator)
+  status?: RecipeStatus
 
   viewerUser?: ContextUser
 }
