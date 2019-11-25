@@ -28,18 +28,16 @@ export default class FoodClassService {
     // noop
   }
 
-  async listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified }: ListFoodClassesArgs): Promise<FoodClassListResponse> {
+  async listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified }: ListFoodClassesArgs, locale: LanguageCode): Promise<FoodClassListResponse> {
     let query: any = {}
 
     if (foodGroupId) {
-      let foodGroups = await FoodGroupModel.find({ parentFoodGroup: foodGroupId })
-
-      query['foodGroup._id'] = {
-        /**
-         * Search group and subgroups
-         * */
-
-        $in: [foodGroupId, ...(foodGroups.map(fg => { return fg._id }))]
+      query['foodGroups'] = {
+        $elemMatch: {
+          $elemMatch: {
+            id: foodGroupId
+          }
+        }
       }
     }
 
@@ -111,7 +109,7 @@ export default class FoodClassService {
     if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
     if (page < 1) page = 1
 
-    let foodClasses: FoodClass[] = []
+    let foodClasses = []
 
     if (nameSearchQuery) {
       /**
@@ -130,12 +128,24 @@ export default class FoodClassService {
       foodClasses = sortedArray.map((i: any) => dbFoodClasses.find(a => a._id.toString() === i.id.toString()))
       foodClasses = foodClasses.slice((size) * (page - 1), ((size) * (page - 1)) + (size - 1))
     } else {
-      foodClasses = await FoodClassModel.find(query)
-        .limit(size)
-        .skip(size * (page - 1))
-        .sort({
-          'name.text': 1,
-        })
+      foodClasses = await FoodClassModel.aggregate([
+        { $match: query },
+        { $addFields: { '__origName': '$name' } },
+        /**
+         * In order to sort by some locale
+         * */
+        { $unwind: '$name' },
+        { $match: { 'name.locale': locale } },
+        { $sort: { 'name.text': 1 } },
+        { $skip: size * (page - 1) },
+        { $limit: size },
+      ]).allowDiskUse(true)
+
+      foodClasses = foodClasses.map(fc => {
+        fc.name = fc.__origName
+        fc.id = String(fc._id)
+        return fc
+      })
     }
 
     return {
