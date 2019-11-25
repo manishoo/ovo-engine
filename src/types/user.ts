@@ -218,7 +218,7 @@ export class UpdateNutritionProfileResponse {
 }
 
 @ObjectType()
-export class BaseUser {
+export class BasicUser {
   _id?: ObjectId
   @Field()
   id?: string
@@ -236,19 +236,19 @@ export class BaseUser {
   avatar: Image
   @Field(type => SocialNetworks, { defaultValue: {} })
   socialNetworks: SocialNetworks
+  @Field(type => Role)
+  role: Role
 }
 
 @ObjectType()
-export class Author extends BaseUser {
+export class Author extends BasicUser {
 }
 
 @ObjectType()
-export class User extends BaseUser {
+export class User extends BasicUser {
   password: PersistedPassword
   @Field()
   session?: string
-  @Field(type => Role)
-  role?: Role
   @Field()
   @IsEmail()
   email: string

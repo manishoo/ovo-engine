@@ -10,7 +10,7 @@ import UploadService from '@Services/upload/upload.service'
 import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
 import {
-  BaseUser,
+  BasicUser,
   User,
   UserAuthResponse,
   UserLoginArgs,
@@ -153,7 +153,7 @@ export default class UserService {
     return user.save()
   }
 
-  async userProfile(selfId?: string, userId?: ObjectId, username?: string): Promise<User | BaseUser> {
+  async userProfile(selfId?: string, userId?: ObjectId, username?: string): Promise<User | BasicUser> {
     let user
 
     /**
@@ -168,7 +168,7 @@ export default class UserService {
 
     if (!user) throw new Errors.NotFound('User not found')
 
-    let userInfo: User | BaseUser
+    let userInfo: User | BasicUser
 
     if (userId && (userId.toString() === selfId)) {
       userInfo = {
@@ -201,7 +201,7 @@ export default class UserService {
         bio: user.bio,
         avatar: user.avatar,
         socialNetworks: user.socialNetworks,
-      } as BaseUser
+      } as BasicUser
     }
 
     return userInfo
