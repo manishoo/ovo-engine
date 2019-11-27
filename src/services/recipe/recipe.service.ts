@@ -8,7 +8,6 @@ import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import DietService from '@Services/diet/diet.service'
-import getFoodClassIdsFromDiets from '@Services/diet/utils/get-food-class-ids-from-diets'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
 import {
@@ -63,53 +62,53 @@ export default class RecipeService {
     return transformRecipe(recipe)
   }
 
-  async list(variables: ListRecipesArgs): Promise<RecipesListResponse> {
-    if (!variables.size) {
-      variables.size = 10
+  async list(args: ListRecipesArgs): Promise<RecipesListResponse> {
+    if (!args.size) {
+      args.size = 10
     }
-    if (!variables.page) {
-      variables.page = 1
+    if (!args.page) {
+      args.page = 1
     }
 
     let query: any = {
-      status: RecipeStatus.public,
+      status: args.status || RecipeStatus.public,
     }
 
     let sort: any = {
       likes: -1
     }
 
-    if (variables.userId) {
-      const me = await UserModel.findById(variables.userId)
+    if (args.userId) {
+      const me = await UserModel.findById(args.userId)
       if (!me) throw new Errors.System('something went wrong')
 
-      query['author'] = variables.userId
+      query['author'] = args.userId
     }
 
-    if (variables.tags) {
-      query['tags'] = { $in: variables.tags }
+    if (args.tags) {
+      query['tags'] = { $in: args.tags }
     }
 
-    if (variables.nameSearchQuery) {
-      query['title.text'] = { $regex: variables.nameSearchQuery }
+    if (args.nameSearchQuery) {
+      query['title.text'] = { $regex: args.nameSearchQuery }
     }
 
-    if (variables.ingredients) {
-      query['ingredients.food._id'] = { $in: variables.ingredients }
+    if (args.ingredients) {
+      query['ingredients.food._id'] = { $in: args.ingredients }
     }
 
-    if (variables.latest) {
+    if (args.latest) {
       sort['createdAt'] = -1
     }
 
-    if (variables.diets) {
-      const diets = await Promise.all(variables.diets.map(async dietId => this.dietService.get(dietId)))
+    if (args.diets) {
+      const diets = await Promise.all(args.diets.map(async dietId => this.dietService.get(dietId)))
 
-      query['ingredients.food.foodClass'] = { $not: { $elemMatch: { $not: { $in: getFoodClassIdsFromDiets(diets) } } } }
+      query['ingredients.food.foodClass'] = { $not: { $elemMatch: { $not: { $in: await this.dietService.getFoodClassIdsFromDiets(diets) } } } }
     }
 
-    if (variables.lastId) {
-      const recipe = await RecipeModel.findById(variables.lastId)
+    if (args.lastId) {
+      const recipe = await RecipeModel.findById(args.lastId)
       if (!recipe) throw new Errors.NotFound('recipe not found')
 
       query.createdAt = { $lt: recipe.createdAt }
@@ -124,10 +123,10 @@ export default class RecipeService {
         $sort: sort,
       },
       {
-        $limit: variables.size,
+        $limit: args.size,
       },
       {
-        $skip: (variables.page - 1) * variables.size
+        $skip: (args.page - 1) * args.size
       },
       {
         $lookup: {
@@ -145,8 +144,8 @@ export default class RecipeService {
     })
 
     return {
-      recipes: recipes.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),
-      pagination: createPagination(variables.page, variables.size, totalCount),
+      recipes: recipes.map(recipe => transformRecipe(recipe, args.viewerUser ? args.viewerUser.id : undefined)),
+      pagination: createPagination(args.page, args.size, totalCount),
     }
   }
 
@@ -279,7 +278,7 @@ export default class RecipeService {
      * If you're a User, you can
      * only update your own recipe
      * */
-    if (user.role !== Role.operator) {
+    if (user.role !== Role.operator && user.role !== Role.admin) {
       query['author'] = new ObjectId(user.id)
     }
 
@@ -386,9 +385,16 @@ export default class RecipeService {
 
     if (data.status) {
       switch (data.status) {
+        /**
+         * All users can do this
+         * */
         case RecipeStatus.private:
+        case RecipeStatus.review:
           recipe.status = data.status
           break
+        /**
+         * Only operators and admins can make a recipe public
+         * */
         case RecipeStatus.public:
           if (user.role === Role.operator || user.role === Role.admin) {
             recipe.status = data.status
