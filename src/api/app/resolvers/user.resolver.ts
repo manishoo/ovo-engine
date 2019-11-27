@@ -5,7 +5,7 @@
 
 import UserService from '@Services/user/user.service'
 import { Role, ObjectId } from '@Types/common'
-import { BaseUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, NutritionProfileInput, UpdateNutritionProfileResponse } from '@Types/user'
+import { BasicUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput, NutritionProfileInput, UpdateNutritionProfileResponse } from '@Types/user'
 import { Context } from '@Utils/context'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
@@ -54,7 +54,7 @@ export default class UserResolver {
     return this.userService.userProfile(ctx.user!.id, new ObjectId(ctx.user!.id))
   }
 
-  @Query(returns => BaseUser)
+  @Query(returns => BasicUser)
   async user(
     @Ctx() ctx: Context,
     @Arg('userId', { nullable: true }) userId?: ObjectId,
