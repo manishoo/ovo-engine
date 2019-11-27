@@ -11,8 +11,11 @@ import MealService from '@Services/meal/meal.service'
 import { UserActivity } from '@Types/activity'
 import { Day, DayMeal, DayMealInput, LogActivityInput } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
+import Errors from '@Utils/errors'
+import addDays from 'date-fns/addDays'
+import subDays from 'date-fns/subDays'
 import { Service } from 'typedi'
-import { getDayByTime } from './utils/get-day-by-time'
+import { InstanceType } from 'typegoose'
 
 
 @Service()
@@ -44,12 +47,12 @@ export default class CalendarService {
 
   async logMeal(dayMealInput: DayMealInput, userId: string): Promise<Day> {
     let meal: DayMeal = {
-      type: dayMealInput.type,
+      id: new ObjectId(),
       time: dayMealInput.time,
       items: await this.mealService.validateMealItems(dayMealInput.items),
     }
 
-    let day = await getDayByTime(userId, dayMealInput.time!)
+    let day = await this.findOrCreateDayByTime(userId, dayMealInput.time!)
 
     if (day.meals) {
       day.meals = [...day.meals, meal]
@@ -64,7 +67,7 @@ export default class CalendarService {
     let days = []
 
     for (let activity of activities) {
-      let day = await getDayByTime(userId, activity.time)
+      let day = await this.findOrCreateDayByTime(userId, activity.time)
 
       let dbActivity = await this.activityService.activity(activity.activityId)
 
@@ -86,5 +89,53 @@ export default class CalendarService {
     }
 
     return days
+  }
+
+  async findOrCreateDayByTime(userId: string, time: Date): Promise<InstanceType<Day>> {
+    const nextDayOfTime = addDays(new Date(time), 1)
+    const lastDayOfTime = subDays(new Date(time), 1)
+
+    let userActiveDays = await CalendarModel.aggregate([
+      {
+        $match: {
+          user: new ObjectId(userId),
+          date: { $gte: lastDayOfTime, $lte: nextDayOfTime }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            month: { $month: '$date' },
+            day: { $dayOfMonth: '$date' },
+            year: { $year: '$date' }
+          },
+          items: { $addToSet: '$_id' }
+        }
+      }
+    ])
+
+    let dayId = null
+    userActiveDays.map(activeDay => {
+      if (
+        (activeDay._id.year == time.getFullYear()) &&
+        (activeDay._id.month == time.getMonth() + 1) &&
+        (activeDay._id.day == time.getDate())) {
+
+        dayId = activeDay.items[0]
+      }
+    })
+
+    let day
+    if (!dayId) {
+      day = await CalendarModel.create({
+        date: time,
+        user: userId,
+      })
+      dayId = day.id
+    }
+    day = await CalendarModel.findById(dayId)
+    if (!day) throw new Errors.System('Something went wrong')
+
+    return day
   }
 }

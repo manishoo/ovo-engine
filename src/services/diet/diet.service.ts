@@ -3,13 +3,14 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Service } from 'typedi'
-import { DietInput, Diet, ListDietArgs } from '@Types/diet'
-import Errors from '@Utils/errors'
 import { DietModel } from '@Models/diet.model'
+import { FoodClassModel } from '@Models/food-class.model'
 import { ObjectId } from '@Types/common'
-import { DeleteBy } from '@Utils/delete-by'
+import { Diet, DietInput, ListDietArgs } from '@Types/diet'
 import { ContextUser } from '@Utils/context'
+import { DeleteBy } from '@Utils/delete-by'
+import Errors from '@Utils/errors'
+import { Service } from 'typedi'
 import validateFoodClasses from './utils/validate-food-classes'
 import validateFoodGroups from './utils/validate-food-groups'
 
@@ -86,5 +87,22 @@ export default class DietService {
 
     return diet.save()
 
+  }
+
+  async getFoodClassIdsFromDiets(diets: Diet[]): Promise<ObjectId[]> {
+    const allFoodGroupIncludes: ObjectId[] = []
+    const allFoodClassIncludes: ObjectId[] = []
+
+    diets.map(diet => {
+      allFoodGroupIncludes.push(...diet.foodGroupIncludes)
+      allFoodClassIncludes.push(...diet.foodClassIncludes)
+    })
+
+    const foodClasses = await FoodClassModel.find({
+      _id: { $in: allFoodClassIncludes },
+      'foodGroups.0.id': { $in: allFoodGroupIncludes }
+    }).select('_id').exec()
+
+    return foodClasses.map(fc => fc._id)
   }
 }
