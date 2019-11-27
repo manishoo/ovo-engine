@@ -28,18 +28,16 @@ export default class FoodClassService {
     // noop
   }
 
-  async listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified }: ListFoodClassesArgs): Promise<FoodClassListResponse> {
+  async listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified }: ListFoodClassesArgs, locale: LanguageCode): Promise<FoodClassListResponse> {
     let query: any = {}
 
     if (foodGroupId) {
-      let foodGroups = await FoodGroupModel.find({ parentFoodGroup: foodGroupId })
-
-      query['foodGroup._id'] = {
-        /**
-         * Search group and subgroups
-         * */
-
-        $in: [foodGroupId, ...(foodGroups.map(fg => { return fg._id }))]
+      query['foodGroups'] = {
+        $elemMatch: {
+          $elemMatch: {
+            id: foodGroupId
+          }
+        }
       }
     }
 
@@ -111,7 +109,7 @@ export default class FoodClassService {
     if (page > Math.ceil(counts / size)) page = Math.ceil(counts / size)
     if (page < 1) page = 1
 
-    let foodClasses: FoodClass[] = []
+    let foodClasses = []
 
     if (nameSearchQuery) {
       /**

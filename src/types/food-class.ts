@@ -37,7 +37,7 @@ export class FoodClassTaxonomy {
 export class FoodClass {
   readonly _id: ObjectId
   @Field()
-  readonly id: string
+  id: string
   @Field(type => [Translation])
   name: Translation[]
   @Field(type => [Translation], { nullable: true })
