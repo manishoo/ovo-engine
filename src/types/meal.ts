@@ -138,6 +138,15 @@ export class MealItemInputBase {
 
   @Field(type => Boolean, { defaultValue: false })
   isOptional?: boolean
+
+  @Field({ nullable: true })
+  customUnit?: string
+
+  @Field({ nullable: true })
+  gramWeight?: number
+
+  @Field(type => [TranslationInput], { nullable: true })
+  description?: TranslationInput[]
 }
 
 @InputType()

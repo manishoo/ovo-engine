@@ -15,7 +15,7 @@ export const processUpload = async (upload: any, name: string, location: string)
 }
 
 function storeFS({ stream, filename, name, location }: { stream: any, filename: string, name: string, location: string }): Promise<{ path: string }> {
-  const path = `${config.uploadUrl}/${location}/${name}.jpg`
+  const path = `${config.uploadUrl}/${location}/${name}.png`
   return new Promise((resolve, reject) =>
     stream
       .on('error', (error: any) => {

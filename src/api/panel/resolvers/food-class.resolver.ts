@@ -36,7 +36,7 @@ export default class FoodClassResolver {
     @Args() { page, size, foodGroupId, nameSearchQuery, verified }: ListFoodClassesArgs,
     @Ctx() ctx: Context,
   ) {
-    return this.foodClassService.listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified })
+    return this.foodClassService.listFoodClasses({ page, size, foodGroupId, nameSearchQuery, verified }, ctx.lang)
   }
 
   @Authorized(Role.operator)
