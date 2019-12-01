@@ -7,24 +7,24 @@ import { UserSchema } from '@Models/user.model'
 import { UserActivity } from '@Types/activity'
 import { MealType, ObjectId, Pagination, Ref } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
-import { User } from '@Types/user'
+import { User, UserMeal } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
 
 @ObjectType()
 export class DayMeal {
-  @Field({ nullable: true })
-  userMeal?: ObjectId
+  @Field()
+  id: ObjectId
 
-  @Field({ nullable: true })
-  name?: string
-
-  @Field(type => MealType)
-  type: MealType
+  @Field(type => UserMeal, { nullable: true })
+  userMeal?: UserMeal
 
   @Field({ nullable: true })
   time?: Date
+
+  @Field({ nullable: true })
+  mealId?: ObjectId
 
   @Field(type => [MealItem])
   @ArrayNotEmpty()

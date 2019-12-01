@@ -12,9 +12,13 @@ export default async function populateFoodGroups(foodGroupIds: string[][]): Prom
 
   return foodGroupIds.map(fgs => (
     fgs.map(fg => {
-      const foundFg = foodGroups.find(p => p.id === fg)
+      const foundFg = foodGroups.find(p => String(p._id) === fg)
       if (!foundFg) throw new Error('invalid food group')
-      return foundFg
+      return {
+        ...foundFg,
+        id: foundFg._id,
+        name: foundFg.name,
+      }
     })
   ))
 }

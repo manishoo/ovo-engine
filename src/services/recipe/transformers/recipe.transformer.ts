@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { RecipeSchema } from '@Models/recipe.model'
-import { InstanceType } from 'typegoose'
+import { Recipe } from '@Types/recipe'
 
 
-export function transformRecipe(recipe: InstanceType<RecipeSchema>, userId?: string) {
-  recipe.userLikedRecipe = recipe.likedByUser(userId!)
-
+export function transformRecipe(recipe: Recipe, userId?: string) {
+  recipe.userLikedRecipe = !!recipe.likes.find(p => String(p) === userId)
+  recipe.likesCount = recipe.likes.length
+  recipe.id = recipe._id.toString()
   /**
    * Transform ingredients by attaching their _id to id field
    * */

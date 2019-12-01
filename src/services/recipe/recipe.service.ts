@@ -7,6 +7,7 @@ import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
+import DietService from '@Services/diet/diet.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
 import {
@@ -18,6 +19,7 @@ import {
   RecipesListResponse,
   RecipeStatus
 } from '@Types/recipe'
+import { Author } from '@Types/user'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
@@ -34,6 +36,7 @@ export default class RecipeService {
   constructor(
     // service injection
     private readonly uploadService: UploadService,
+    private readonly dietService: DietService,
   ) {
     // noop
   }
@@ -59,54 +62,90 @@ export default class RecipeService {
     return transformRecipe(recipe)
   }
 
-  async list(variables: ListRecipesArgs): Promise<RecipesListResponse> {
-    if (!variables.size) {
-      variables.size = 10
+  async list(args: ListRecipesArgs): Promise<RecipesListResponse> {
+    if (!args.size) {
+      args.size = 10
     }
-    if (!variables.page) {
-      variables.page = 1
-    }
-
-    const query: any = {
-      status: RecipeStatus.public,
+    if (!args.page) {
+      args.page = 1
     }
 
-    if (variables.userId) {
-      const me = await UserModel.findById(variables.userId)
+    let query: any = {
+      status: args.status || RecipeStatus.public,
+    }
+
+    let sort: any = {
+      likes: -1
+    }
+
+    if (args.userId) {
+      const me = await UserModel.findById(args.userId)
       if (!me) throw new Errors.System('something went wrong')
 
-      query['author'] = variables.userId
+      query['author'] = args.userId
     }
 
-    if (variables.tags) {
-      query['tags'] = { $in: variables.tags }
+    if (args.tags) {
+      query['tags'] = { $in: args.tags }
     }
 
-    if (variables.nameSearchQuery) {
-      query['title.text'] = { $regex: variables.nameSearchQuery }
+    if (args.nameSearchQuery) {
+      query['title.text'] = { $regex: args.nameSearchQuery }
     }
 
-    if (variables.lastId) {
-      if (!ObjectId.isValid(variables.lastId)) throw new Errors.Validation('LastId is not valid')
+    if (args.ingredients) {
+      query['ingredients.food._id'] = { $in: args.ingredients }
+    }
 
-      const recipe = await RecipeModel.findById(variables.lastId)
+    if (args.latest) {
+      sort['createdAt'] = -1
+    }
+
+    if (args.diets) {
+      const diets = await Promise.all(args.diets.map(async dietId => this.dietService.get(dietId)))
+
+      query['ingredients.food.foodClass'] = { $not: { $elemMatch: { $not: { $in: await this.dietService.getFoodClassIdsFromDiets(diets) } } } }
+    }
+
+    if (args.lastId) {
+      const recipe = await RecipeModel.findById(args.lastId)
       if (!recipe) throw new Errors.NotFound('recipe not found')
 
       query.createdAt = { $lt: recipe.createdAt }
     }
-    const recipes = await RecipeModel.find(query)
-      .sort({
-        createdAt: -1,
-      })
-      .limit(variables.size)
-      .skip((variables.page - 1) * variables.size)
-      .populate('author')
-      .exec()
+
     const totalCount = await RecipeModel.count(query)
+    const recipes = await RecipeModel.aggregate([
+      {
+        $match: query
+      },
+      {
+        $sort: sort,
+      },
+      {
+        $limit: args.size,
+      },
+      {
+        $skip: (args.page - 1) * args.size
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'author',
+          foreignField: '_id',
+          as: 'authors'
+        }
+      }
+    ])
+
+    recipes.map(recipe => {
+      recipe.author = recipe.authors[0] as Author
+      recipe.author.id = recipe.author._id
+    })
 
     return {
-      recipes: recipes.map(recipe => transformRecipe(recipe, variables.viewerUser ? variables.viewerUser.id : undefined)),
-      pagination: createPagination(variables.page, variables.size, totalCount),
+      recipes: recipes.map(recipe => transformRecipe(recipe, args.viewerUser ? args.viewerUser.id : undefined)),
+      pagination: createPagination(args.page, args.size, totalCount),
     }
   }
 
@@ -239,7 +278,7 @@ export default class RecipeService {
      * If you're a User, you can
      * only update your own recipe
      * */
-    if (user.role !== Role.operator) {
+    if (user.role !== Role.operator && user.role !== Role.admin) {
       query['author'] = new ObjectId(user.id)
     }
 
@@ -346,9 +385,16 @@ export default class RecipeService {
 
     if (data.status) {
       switch (data.status) {
+        /**
+         * All users can do this
+         * */
         case RecipeStatus.private:
+        case RecipeStatus.review:
           recipe.status = data.status
           break
+        /**
+         * Only operators and admins can make a recipe public
+         * */
         case RecipeStatus.public:
           if (user.role === Role.operator || user.role === Role.admin) {
             recipe.status = data.status

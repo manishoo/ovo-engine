@@ -21,6 +21,7 @@ export interface FoodClassSchema extends SoftDeleteModel<SoftDeleteDocument> {
   deletedByType: String,
 })
 @index({ 'name.text': 1 })
+@index({ 'name.text': 'text' })
 export class FoodClassSchema extends Typegoose implements FoodClass {
   readonly _id: ObjectId
   readonly id: string
