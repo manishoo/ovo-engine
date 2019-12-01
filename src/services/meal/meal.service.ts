@@ -59,7 +59,6 @@ export default class MealService {
     let mealsToBeCreated = await this.createMealsByOptionalItem(mealToBeCreated)
 
     let createdMeals: Meal[] = []
-
     /**
      * Create meal instances
      * */
@@ -70,9 +69,12 @@ export default class MealService {
         createdMeals.push(...mealInstances)
       })
     } else {
-      const createMeal = await MealModel.create(mealToBeCreated)
-      let createdMeal = await this.get(createMeal._id)
-      createdMeals.push(createdMeal)
+      await Promise.all(mealsToBeCreated.map(async mealToBeCreated => {
+
+        const createMeal = await MealModel.create(mealToBeCreated)
+        let createdMeal = await this.get(createMeal._id)
+        createdMeals.push(createdMeal)
+      }))
     }
 
     return createdMeals
@@ -108,34 +110,7 @@ export default class MealService {
           timing: calculateMealTiming(mealItems),
           nutrition: calculateMealNutrition(mealItems),
         } as Meal)
-        const populatedMeal = await MealModel.findById(createdMeal._id)
-          .populate('author')
-          .populate({
-            path: 'items.food',
-            model: FoodModel
-          })
-          .populate({
-            path: 'items.alternativeMealItems.food',
-            model: FoodModel
-          })
-          .populate({
-            path: 'items.recipe',
-            model: RecipeModel,
-            populate: {
-              path: 'author',
-              model: UserModel,
-            },
-          })
-          .populate({
-            path: 'items.alternativeMealItems.recipe',
-            model: RecipeModel,
-            populate: {
-              path: 'author',
-              model: UserModel,
-            },
-          })
-          .exec()
-        if (!populatedMeal) throw new Errors.System('Something went wrong')
+        const populatedMeal = await this.get(createdMeal._id)
 
         return populatedMeal
       }))
@@ -159,7 +134,9 @@ export default class MealService {
 
       let mealItemIncludes: MealItem[] = []
       for (let j = 0; j < optionals.length; j++) {
-
+        /**
+         * makes all the permutations
+         */
         if ((i >> j).toString(2)[(i >> j).toString(2).length - 1] === '1') {
           mealItemIncludes.push(optionals[j])
         }
