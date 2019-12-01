@@ -24,8 +24,8 @@ export default class DietService {
   }
 
   async create(diet: DietInput): Promise<Diet> {
-    let checkExistance = await DietModel.findOne({ slug: diet.slug.toLowerCase() })
-    if (checkExistance) throw new Errors.Validation('Diet already exists')
+    let checkExistence = await DietModel.findOne({ slug: diet.slug.toLowerCase() })
+    if (checkExistence) throw new Errors.Validation('Diet already exists')
 
     await validateFoodClasses(diet.foodClassIncludes)
     await validateFoodGroups(diet.foodGroupIncludes)
