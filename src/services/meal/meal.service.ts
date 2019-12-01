@@ -9,7 +9,6 @@ import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import { ObjectId, Role } from '@Types/common'
-import { Food } from '@Types/food'
 import { ListMealsArgs, Meal, MealInput, MealItem, MealItemInput, MealListResponse } from '@Types/meal'
 import { Recipe } from '@Types/recipe'
 import { Author } from '@Types/user'
@@ -67,38 +66,11 @@ export default class MealService {
       createdMeals.push(...mealInstances)
     } else {
       const createMeal = await MealModel.create(mealToBeCreated)
-      let createdMeal = await MealModel.findById(createMeal._id)
-        .populate('author')
-        .populate({
-          path: 'items.food',
-          model: FoodModel
-        })
-        .populate({
-          path: 'items.alternativeMealItems.food',
-          model: FoodModel
-        })
-        .populate({
-          path: 'items.recipe',
-          model: RecipeModel,
-          populate: {
-            path: 'author',
-            model: UserModel,
-          },
-        })
-        .populate({
-          path: 'items.alternativeMealItems.recipe',
-          model: RecipeModel,
-          populate: {
-            path: 'author',
-            model: UserModel,
-          },
-        })
-        .exec()
-      if (!createdMeal) throw new Errors.System('Something went wrong')
+      let createdMeal = await this.get(createMeal._id)
       createdMeals.push(createdMeal)
     }
 
-    return createdMeals.map(transformMeal)
+    return createdMeals
   }
 
   async createMealInstances(meal: Meal) {
@@ -129,36 +101,7 @@ export default class MealService {
         timing: calculateMealTiming(mealItems),
         nutrition: calculateMealNutrition(mealItems),
       } as Meal)
-      const populatedMeal = await MealModel.findById(createdMeal._id)
-        .populate('author')
-        .populate({
-          path: 'items.food',
-          model: FoodModel
-        })
-        .populate({
-          path: 'items.alternativeMealItems.food',
-          model: FoodModel
-        })
-        .populate({
-          path: 'items.recipe',
-          model: RecipeModel,
-          populate: {
-            path: 'author',
-            model: UserModel,
-          },
-        })
-        .populate({
-          path: 'items.alternativeMealItems.recipe',
-          model: RecipeModel,
-          populate: {
-            path: 'author',
-            model: UserModel,
-          },
-        })
-        .exec()
-      if (!populatedMeal) throw new Errors.System('Something went wrong')
-
-      return populatedMeal
+      return this.get(createdMeal._id)
     }))
   }
 
@@ -177,30 +120,8 @@ export default class MealService {
     }
     let meal = await MealModel.findOne(query)
       .populate('author')
-      .populate({
-        path: 'items.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.alternativeMealItems.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.recipe',
-        model: RecipeModel,
-        populate: {
-          path: 'author',
-          model: UserModel,
-        },
-      })
-      .populate({
-        path: 'items.alternativeMealItems.recipe',
-        model: RecipeModel,
-        populate: {
-          path: 'author',
-          model: UserModel,
-        },
-      })
+      .populate('items.recipe.author')
+      .populate('items.alternativeMealItems.recipe.author')
       .exec()
     if (!meal) throw new Errors.NotFound('meal not found')
 
@@ -233,30 +154,8 @@ export default class MealService {
       .limit(variables.size)
       .skip(variables.size * (variables.page - 1))
       .populate('author')
-      .populate({
-        path: 'items.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.alternativeMealItems.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.recipe',
-        model: RecipeModel,
-        populate: {
-          path: 'author',
-          model: UserModel,
-        },
-      })
-      .populate({
-        path: 'items.alternativeMealItems.recipe',
-        model: RecipeModel,
-        populate: {
-          path: 'author',
-          model: UserModel,
-        },
-      })
+      .populate('items.recipe.author')
+      .populate('items.alternativeMealItems.recipe.author')
       .exec()
 
     meals.map((meal, index) => {
@@ -302,22 +201,6 @@ export default class MealService {
   async update(id: ObjectId, mealInput: MealInput, userId: string): Promise<Meal> {
     let meal = await MealModel.findById(id)
       .populate('author')
-      .populate({
-        path: 'items.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.recipe',
-        model: RecipeModel
-      })
-      .populate({
-        path: 'items.alternativeMealItems.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.alternativeMealItems.recipe',
-        model: RecipeModel
-      })
       .exec()
 
     if (!meal) throw new Errors.NotFound('meal not found')
@@ -342,36 +225,8 @@ export default class MealService {
     } as MealItem))
 
     let savedMeal = await meal.save()
-    const populatedMeal = await MealModel.findById(savedMeal._id)
-      .populate('author')
-      .populate({
-        path: 'items.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.alternativeMealItems.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.recipe',
-        model: RecipeModel,
-        populate: {
-          path: 'author',
-          model: UserModel,
-        },
-      })
-      .populate({
-        path: 'items.alternativeMealItems.recipe',
-        model: RecipeModel,
-        populate: {
-          path: 'author',
-          model: UserModel,
-        },
-      })
-      .exec()
-    if (!populatedMeal) throw new Errors.System('Something went wrong')
 
-    return transformMeal(populatedMeal)
+    return this.get(savedMeal._id)
   }
 
   async validateMealItems(mealInputItems: MealItemInput[]): Promise<MealItem[]> {
@@ -400,14 +255,6 @@ export default class MealService {
         baseMealItem.alternativeMealItems = mealItems.map(mealItem => {
           mealItem.id = new ObjectId()
 
-          if (mealItem.food) {
-            const food = mealItem.food as Food
-            mealItem.food = food._id
-          } else if (mealItem.recipe) {
-            const recipe = mealItem.recipe as Recipe
-            mealItem.recipe = recipe._id
-          }
-
           return mealItem
         })
       }
@@ -425,7 +272,10 @@ export default class MealService {
           id: new ObjectId(),
           ...baseMealItem,
           amount: mealItemInput.amount,
-          food,
+          food: {
+            ...food.toObject(),
+            id: String(food._id),
+          },
           weight: mealItemInput.weight,
         } as MealItem
       } else if (mealItemInput.recipe) {
@@ -436,7 +286,10 @@ export default class MealService {
           id: new ObjectId(),
           ...baseMealItem,
           amount: mealItemInput.amount,
-          recipe,
+          recipe: {
+            ...recipe.toObject(),
+            id: String(recipe._id),
+          },
         } as MealItem
       }
 
