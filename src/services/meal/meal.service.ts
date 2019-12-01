@@ -25,64 +25,98 @@ import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
 @Service()
 export default class MealService {
   async create(mealInput: MealInput, userId: string, bulkCreate?: boolean): Promise<Meal[]> {
-    let meal: Partial<Meal> = {}
+    let masterMealData: Partial<Meal> = {}
 
     /**
      * Attach Author
      * */
     let me = await UserModel.findById(userId)
     if (!me) throw new Errors.NotFound('User not found')
-    meal.author = me._id
+    masterMealData.author = me._id
 
     /**
      * Optional fields
      * */
     if (mealInput.name) {
-      meal.name = mealInput.name
+      masterMealData.name = mealInput.name
     }
     if (mealInput.description) {
-      meal.description = mealInput.description
+      masterMealData.description = mealInput.description
     }
 
-    const mealItems = await this.validateMealItems(mealInput.items)
+    const masterMealMealItems = await this.validateMealItems(mealInput.items)
 
-    const timing = calculateMealTiming(mealItems)
-    const nutrition = calculateMealNutrition(mealItems)
+    const masterMealTiming = calculateMealTiming(masterMealMealItems)
+    const masterMealNutrition = calculateMealNutrition(masterMealMealItems)
 
-    const mealToBeCreated = new MealModel({
-      ...meal,
-      items: mealItems,
-      timing,
-      nutrition,
+    const masterMealToBeCreated = new MealModel({
+      ...masterMealData,
+      items: masterMealMealItems,
+      timing: masterMealTiming,
+      nutrition: masterMealNutrition,
     })
 
-    let mealsToBeCreated = await this.createMealsByOptionalItem(mealToBeCreated)
-
-    let createdMeals: Meal[] = []
+    let mealsToBeCreated: Meal[] = []
     /**
-     * Create meal instances
+     * Create meal permutations
      * */
-    if (bulkCreate && me.role !== Role.user) {
-      const mealInstanceArrays = await this.createMealInstances(mealsToBeCreated)
+    if (bulkCreate && (me.role !== Role.user)) {
+      const mealPermutations = await this._createMealPermutations(masterMealToBeCreated)
 
-      mealInstanceArrays.map(mealInstances => {
-        createdMeals.push(...mealInstances)
-      })
+      mealsToBeCreated.push(...mealPermutations)
     } else {
       await Promise.all(mealsToBeCreated.map(async mealToBeCreated => {
-
-        const createMeal = await MealModel.create(mealToBeCreated)
-        let createdMeal = await this.get(createMeal._id)
-        createdMeals.push(createdMeal)
+        const createdMeal = await MealModel.create(mealToBeCreated)
+        mealsToBeCreated.push(await this.get(createdMeal._id))
       }))
     }
 
-    return createdMeals
+    return mealsToBeCreated
   }
 
-  async createMealInstances(meals: Meal[]) {
+  private async _createMealPermutations(meal: Meal): Promise<Meal[]> {
+    let optionals: MealItem[] = []
+    let constants: MealItem[] = []
 
-    return Promise.all(meals.map(meal => {
+    meal.items.map(mealItem => {
+      if (mealItem.isOptional) {
+        optionals.push(mealItem)
+      } else {
+        constants.push(mealItem)
+      }
+    })
+
+    let mealItemOptionalPermutations: MealItem[][] = []
+
+    /**
+     * create optional permutations
+     */
+    for (let i = 0; i < Math.pow(2, optionals.length); i++) {
+      let mealItemIncludes: MealItem[] = []
+      for (let j = 0; j < optionals.length; j++) {
+        if ((i >> j).toString(2)[(i >> j).toString(2).length - 1] === '1') {
+          mealItemIncludes.push(optionals[j])
+        }
+      }
+      mealItemOptionalPermutations.push([...constants, ...mealItemIncludes])
+    }
+
+    const optionalMeals = await Promise.all(mealItemOptionalPermutations.map(async mealItems => {
+      return new MealModel({
+        author: meal.author,
+        description: meal.description,
+        items: mealItems,
+        instanceOf: meal._id,
+        timing: calculateMealTiming(mealItems),
+        nutrition: calculateMealNutrition(mealItems),
+      } as Meal)
+    }))
+
+    let finalMeals: Meal[] = []
+    /**
+     * create meal alternative permutations
+     */
+    await Promise.all(optionalMeals.map(meal => {
       const arrayOfArrayOfMealItemIds = generateAllCases(meal.items.map((mealItem, i) => ([meal.items[i], ...mealItem.alternativeMealItems].map(j => j.id.toString()!))))
 
       return Promise.all(arrayOfArrayOfMealItemIds.map(async arrayOfMealItemIds => {
@@ -110,50 +144,12 @@ export default class MealService {
           timing: calculateMealTiming(mealItems),
           nutrition: calculateMealNutrition(mealItems),
         } as Meal)
-        const populatedMeal = await this.get(createdMeal._id)
 
-        return populatedMeal
+        finalMeals.push(await this.get(createdMeal._id))
       }))
     }))
-  }
 
-  async createMealsByOptionalItem(meal: Meal) {
-    let optionals: MealItem[] = []
-    let constants: MealItem[] = []
-
-    meal.items.map(mealItem => {
-      if (mealItem.isOptional) {
-        optionals.push(mealItem)
-      } else {
-        constants.push(mealItem)
-      }
-    })
-
-    let mealItems: MealItem[][] = []
-    for (let i = 0; i < Math.pow(2, optionals.length); i++) {
-
-      let mealItemIncludes: MealItem[] = []
-      for (let j = 0; j < optionals.length; j++) {
-        /**
-         * makes all the permutations
-         */
-        if ((i >> j).toString(2)[(i >> j).toString(2).length - 1] === '1') {
-          mealItemIncludes.push(optionals[j])
-        }
-      }
-      mealItems.push([...constants, ...mealItemIncludes])
-    }
-
-    return Promise.all(mealItems.map(async mealItem => {
-      const createdMeal = await MealModel.create({
-        author: meal.author,
-        description: meal.description,
-        items: mealItem,
-        timing: calculateMealTiming(mealItem),
-        nutrition: calculateMealNutrition(mealItem),
-      } as Meal)
-      return this.get(createdMeal._id)
-    }))
+    return finalMeals
   }
 
   async get(id?: ObjectId, slug?: string): Promise<Meal> {
