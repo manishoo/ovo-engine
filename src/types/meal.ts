@@ -108,6 +108,9 @@ export class MealItemBase {
 
   @Field(type => [Translation], { nullable: true })
   description?: Translation[]
+
+  @Field(type => Boolean, { defaultValue: false })
+  isOptional?: boolean
 }
 
 @ObjectType()
@@ -132,6 +135,9 @@ export class MealItemInputBase {
 
   @Field({ nullable: true })
   weight?: string
+
+  @Field(type => Boolean, { defaultValue: false })
+  isOptional?: boolean
 
   @Field({ nullable: true })
   customUnit?: string
