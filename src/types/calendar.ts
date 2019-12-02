@@ -5,8 +5,8 @@
 
 import { UserSchema } from '@Models/user.model'
 import { UserActivity } from '@Types/activity'
-import { MealType, ObjectId, Pagination, Ref } from '@Types/common'
-import { MealItem, MealItemInput } from '@Types/meal'
+import { ObjectId, Pagination, Ref } from '@Types/common'
+import { MealItem, MealItemInput } from '@Types/ingredient'
 import { User, UserMeal } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import { Field, InputType, ObjectType } from 'type-graphql'
@@ -33,12 +33,6 @@ export class DayMeal {
 
 @InputType()
 export class DayMealInput {
-  @Field(type => MealType)
-  type: MealType
-
-  @Field(type => Date)
-  time: Date
-
   @Field(type => [MealItemInput])
   @ArrayNotEmpty()
   items: MealItemInput[]

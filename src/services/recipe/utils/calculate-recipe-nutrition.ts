@@ -3,8 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Nutrition } from '@Types/food'
-import { Ingredient } from '@Types/recipe'
+import { CustomUnit } from '@Types/common'
+import { Food, Nutrition } from '@Types/food'
+import { Ingredient } from '@Types/ingredient'
 import { Weight } from '@Types/weight'
 import { calculateNutrition, scaleFoodNutrition } from '@Utils/calculate-nutrition'
 
@@ -13,18 +14,18 @@ export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
   ingredients.map(ingredient => {
-    if (!ingredient.amount || !ingredient.food) return
+    if (!ingredient.amount || !ingredient.item) return
 
     let weightId
-    if (ingredient.weight) {
-      if (ingredient.weight.hasOwnProperty('id')) {
-        const weight = ingredient.weight as Weight
-        weightId = weight.id!.toString()
-      } else {
-        weightId = ingredient.weight.toString()
-      }
+    let gramWeight
+
+    if (ingredient.unit && ingredient.unit instanceof Weight) {
+      weightId = ingredient.unit.id.toString()
+    } else if (ingredient.unit instanceof CustomUnit) {
+      gramWeight = ingredient.unit.gramWeight
     }
-    calculateNutrition(scaleFoodNutrition(ingredient.food, ingredient.amount, weightId, ingredient.gramWeight), totalNutrition)
+
+    calculateNutrition(scaleFoodNutrition(ingredient.item as Food, ingredient.amount, weightId, gramWeight), totalNutrition)
   })
 
   return totalNutrition

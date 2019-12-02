@@ -50,7 +50,7 @@ export class FoodSchema extends Typegoose implements Food {
   @prop({ required: true })
   origFoodClassName: Translation[]
   @prop()
-  origFoodGroups: FoodGroup[][]
+  origFoodGroups: Partial<FoodGroup>[][]
   @prop({ default: [], required: true })
   contents: FoodContent[]
   @prop({ default: {} })

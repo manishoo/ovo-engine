@@ -9,8 +9,9 @@ import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import { ObjectId, Role } from '@Types/common'
-import { ListMealsArgs, Meal, MealInput, MealItem, MealItemInput, MealListResponse } from '@Types/meal'
-import { Recipe } from '@Types/recipe'
+import { Food } from '@Types/food'
+import { MealItem, MealItemInput } from '@Types/ingredient'
+import { ListMealsArgs, Meal, MealInput, MealListResponse } from '@Types/meal'
 import { Author } from '@Types/user'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
@@ -205,19 +206,8 @@ export default class MealService {
       .populate('items.alternativeMealItems.recipe.author')
       .exec()
 
-    meals.map((meal, index) => {
-      if (index === 3) {
-        meal.items.map((i, ind) => {
-          if (i.recipe) {
-            const r = i.recipe as Recipe
-          }
-        })
-      }
-      transformMeal(meal)
-    })
-
     return {
-      meals,
+      meals: meals.map(meal => transformMeal(meal)),
       pagination: createPagination(variables.page, variables.size, counts),
     }
   }
@@ -258,19 +248,7 @@ export default class MealService {
     meal.name = mealInput.name
     meal.description = mealInput.description
     meal.nutrition = calculateMealNutrition(meal.items)
-    meal.items = mealInput.items.map(inputItem => ({
-      id: inputItem.id,
-      amount: inputItem.amount,
-      food: inputItem.food,
-      recipe: inputItem.recipe,
-      weight: inputItem.weight,
-      author: meal!.author,
-      alternativeMealItems: inputItem.alternativeMealItems.map(alternativeMealItem => ({
-        ...alternativeMealItem,
-        alternativeMealItems: undefined,
-      })),
-    } as MealItem))
-
+    meal.items = await this.validateMealItems(mealInput.items)
     let savedMeal = await meal.save()
 
     return this.get(savedMeal._id)
@@ -295,46 +273,65 @@ export default class MealService {
         })
       }
 
-      const baseMealItem: Partial<MealItem> = {}
+      const baseMealItem: Partial<MealItem> = {
+        id: mealItemInput.id || new ObjectId(),
+        amount: mealItemInput.amount,
+        isOptional: mealItemInput.isOptional,
+      }
 
+      /**
+       * Check and set the alternative meal items
+       * */
       if (mealItemInput.alternativeMealItems) {
         const mealItems = await this.validateMealItems(mealItemInput.alternativeMealItems as MealItemInput[])
         baseMealItem.alternativeMealItems = mealItems.map(mealItem => {
-          mealItem.id = new ObjectId()
+          if (!mealItem.id) mealItem.id = new ObjectId()
 
           return mealItem
         })
       }
 
-      if (mealItemInput.food) {
-        const food = await FoodModel.findById(mealItemInput.food.toString())
-        if (!food) throw new Errors.NotFound('food not found')
-        if (mealItemInput.weight) {
+      /**
+       * Check and select the unit
+       * */
+      switch (mealItemInput.unit) {
+        case 'customUnit':
+          baseMealItem.unit = mealItemInput.customUnit
+          break
+        case 'g':
+          baseMealItem.unit = undefined
+          break
+        default:
+          /**
+           * If the selected unit was a weightId
+           * */
+          if (mealItemInput.food) {
+            const food = baseMealItem.item as Food
+            const foundWeight = food.weights.find(w => w.id!.toString() == mealItemInput.unit)
+            if (!foundWeight) throw new Errors.Validation('Unit is not valid')
 
-          const foundWeight = food.weights.find(w => w.id!.toString() === mealItemInput.weight)
-          if (!foundWeight) throw new Errors.UserInput('Wront weight', { 'weight': 'This weight is not available for the following food' })
-        }
+            baseMealItem.unit = foundWeight
+          }
+      }
+
+      if (mealItemInput.food) {
+        const food = await FoodModel.findById(mealItemInput.food)
+        if (!food) throw new Errors.NotFound('food not found')
 
         return {
-          id: new ObjectId(),
           ...baseMealItem,
-          amount: mealItemInput.amount,
-          food: {
+          unit: {
             ...food.toObject(),
             id: String(food._id),
           },
-          weight: mealItemInput.weight,
-          isOptional: mealItemInput.isOptional,
         } as MealItem
       } else if (mealItemInput.recipe) {
-        const recipe = await RecipeModel.findById(mealItemInput.recipe.toString())
+        const recipe = await RecipeModel.findById(mealItemInput.recipe)
         if (!recipe) throw new Errors.NotFound('recipe not found')
 
         return {
-          id: new ObjectId(),
           ...baseMealItem,
-          amount: mealItemInput.amount,
-          recipe: {
+          unit: {
             ...recipe.toObject(),
             id: String(recipe._id),
           },

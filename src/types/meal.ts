@@ -4,19 +4,20 @@
  */
 
 import { UserSchema } from '@Models/user.model'
-import { ObjectId, Pagination, Ref, Timing, Translation, TranslationInput } from '@Types/common'
-import { Food, Nutrition } from '@Types/food'
-import { Recipe } from '@Types/recipe'
+import {
+  ObjectId,
+  Pagination,
+  Ref,
+  Timing,
+  Translation,
+  TranslationInput
+} from '@Types/common'
+import { Nutrition } from '@Types/food'
+import { MealItem, MealItemInput } from '@Types/ingredient'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
 import { Author } from './user'
-import { Weight } from './weight'
 
-
-export enum MealItemType {
-  recipe = 'recipe',
-  food = 'food',
-}
 
 @ObjectType()
 export class MealListResponse {
@@ -81,78 +82,6 @@ export class MealInput {
   @Field(type => [MealItemInput])
   @ArrayNotEmpty()
   items: MealItemInput[]
-}
-
-@ObjectType()
-export class MealItemBase {
-  @Field()
-  id: ObjectId
-
-  @Field()
-  amount: number
-
-  @Field(type => Food, { nullable: true })
-  food?: Ref<Food>
-
-  @Field(type => Recipe, { nullable: true })
-  recipe?: Ref<Recipe>
-
-  @Field(type => Weight, { nullable: true })
-  weight?: Weight | string
-
-  @Field({ nullable: true })
-  customUnit?: string
-
-  @Field({ nullable: true })
-  gramWeight?: number
-
-  @Field(type => [Translation], { nullable: true })
-  description?: Translation[]
-
-  @Field(type => Boolean, { defaultValue: false })
-  isOptional?: boolean
-}
-
-@ObjectType()
-export class MealItem extends MealItemBase {
-  @Field(type => [MealItemBase], { defaultValue: [] })
-  alternativeMealItems: MealItemBase[]
-}
-
-@InputType()
-export class MealItemInputBase {
-  @Field({ defaultValue: ObjectId, nullable: true })
-  readonly id?: ObjectId
-
-  @Field()
-  amount: number
-
-  @Field(type => String, { nullable: true })
-  food?: Ref<Food>
-
-  @Field(type => String, { nullable: true })
-  recipe?: Ref<Recipe>
-
-  @Field({ nullable: true })
-  weight?: string
-
-  @Field(type => Boolean, { defaultValue: false })
-  isOptional?: boolean
-
-  @Field({ nullable: true })
-  customUnit?: string
-
-  @Field({ nullable: true })
-  gramWeight?: number
-
-  @Field(type => [TranslationInput], { nullable: true })
-  description?: TranslationInput[]
-}
-
-@InputType()
-export class MealItemInput extends MealItemInputBase {
-  @Field(type => [MealItemInputBase], { defaultValue: [] })
-  alternativeMealItems: MealItemInputBase[]
 }
 
 @ArgsType()

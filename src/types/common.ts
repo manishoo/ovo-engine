@@ -177,3 +177,19 @@ export class ObjectId extends mongoose.Types.ObjectId {
     super(key)
   }
 }
+
+@ObjectType()
+export class CustomUnit {
+  @Field(type => [Translation])
+  name: Translation[]
+  @Field({ nullable: true })
+  gramWeight?: number
+}
+
+@InputType()
+export class CustomUnitInput {
+  @Field(type => [TranslationInput])
+  name: TranslationInput[]
+  @Field({ nullable: true })
+  gramWeight?: number
+}

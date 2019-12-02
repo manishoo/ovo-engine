@@ -12,11 +12,11 @@ import { prop } from 'typegoose'
 export class Weight {
   @prop({ default: ObjectId })
   @Field(type => String)
-  id?: string | ObjectId
+  id: string | ObjectId
   @Field()
   amount: number
-  @Field()
-  gramWeight: number
+  @Field({ nullable: true })
+  gramWeight?: number
   @Field()
   seq: number
   @Field(type => [Translation])
