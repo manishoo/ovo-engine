@@ -14,9 +14,8 @@ import DietService from '@Services/diet/diet.service'
 import UserService from '@Services/user/user.service'
 import { Day, DayMeal } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
-import { Food } from '@Types/food'
-import { Meal, MealItem, MealItemBase } from '@Types/meal'
-import { Recipe } from '@Types/recipe'
+import { Ingredient, MealItem } from '@Types/ingredient'
+import { Meal } from '@Types/meal'
 import { RedisKeys } from '@Types/redis'
 import { UserMeal } from '@Types/user'
 import Errors from '@Utils/errors'
@@ -27,7 +26,7 @@ import subHours from 'date-fns/subHours'
 import { Service } from 'typedi'
 
 
-async function selectAlternativeMealItem(userId: string, meal: DayMeal, mealItem: MealItem): Promise<MealItemBase> {
+async function selectAlternativeMealItem(userId: string, meal: DayMeal, mealItem: MealItem): Promise<Ingredient> {
   const previousMealItemSuggestionsRedisKey = RedisKeys.previousMealItemSuggestions(userId, String(meal.id))
   const now = Date.now()
   const suggestionExpirationTime = subHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime()
@@ -219,15 +218,6 @@ export default class SuggestionService {
     await day.save()
 
     if (!suggestedMealItem) throw new Errors.System()
-    /**
-     * Populate meal item
-     * */
-    if (suggestedMealItem.recipe) {
-      suggestedMealItem.recipe = (await RecipeModel.findById(suggestedMealItem.recipe)) as Recipe
-    } else if (suggestedMealItem.food) {
-      suggestedMealItem.food = (await FoodModel.findById(suggestedMealItem.food)) as Food
-    }
-
     return suggestedMealItem
   }
 
@@ -277,6 +267,7 @@ export default class SuggestionService {
       day.meals.push(dayMeal)
     }
 
+    await day.save()
     if (!dayMeal) throw new Errors.System('Something went wrong')
     return dayMeal
   }

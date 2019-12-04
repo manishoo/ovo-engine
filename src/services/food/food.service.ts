@@ -7,18 +7,20 @@ import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import putDefaultFoodsOnTop from '@Services/food/utils/put-default-foods-on-top'
 import UploadService from '@Services/upload/upload.service'
-import { ObjectId } from '@Types/common'
+import { ObjectId, CustomUnit } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
-import { WeightInput, Weight } from '@Types/weight'
+import { Weight, WeightInput } from '@Types/weight'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
 import MealService from '@Services/meal/meal.service'
-import { MealItemInput, MealInput } from '@Types/meal'
+import { MealInput } from '@Types/meal'
 import { Author } from '@Types/user'
 import determineWeightIsObject from '@Utils/determine-weight-is-object'
+import { MealItem, MealItemInput } from '@Types/ingredient'
+import { Recipe } from '@Types/recipe'
 
 
 @Service()
@@ -86,14 +88,12 @@ export default class FoodService {
     const food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('food not found')
 
-    let weights: WeightInput[] = []
+    let weights: Weight[] = []
     foodInput.weights.map(weight => {
-      if (weight.id) {
-        weights.push(weight)
-      } else {
-        weight.id = new ObjectId()
-        weights.push(weight)
-      }
+      weights.push({
+        id: weight.id || new ObjectId(),
+        ...weight,
+      })
     })
 
     if (foodInput.image) {
@@ -137,47 +137,52 @@ export default class FoodService {
       await this.mealService.update(meal._id!, {
         ...meal,
         items: [
-          ...meal.items.map(item => {
-            let food = item.food as Food
-
-            let weightId: ObjectId = new ObjectId()
-            if (item.weight) {
-              if (determineWeightIsObject(item.weight)) {
-                weightId = item.weight.id!
-              } else {
-                weightId = item.weight
-              }
+          ...meal.items.map(mealItem => {
+            let unit
+            if (mealItem.unit && mealItem.unit instanceof Weight) {
+              unit = mealItem.unit.id!.toString()
+            } else if (mealItem.unit && mealItem.unit instanceof CustomUnit) {
+              unit = 'customUnit'
+            } else {
+              unit = 'g'
             }
 
-            let partialMealItem = {
-              id: item.id,
-              amount: item.amount,
-              recipe: item.recipe,
-              weight: weightId,
-              customUnit: item.customUnit,
-              gramWeight: item.gramWeight,
-              description: item.description,
-              alternativeMealItems: [],
+            let recipeId
+            if (mealItem.item && mealItem.item instanceof Recipe) {
+              recipeId = new ObjectId(mealItem.item.id)
             }
-            if (food && food.id == savedFood.id) {
+            let foodId
+            if (mealItem.item && mealItem.item instanceof Food) {
+              foodId = new ObjectId(mealItem.item.id)
+            }
+            let baseMealItem: Partial<MealItemInput> = {
+              id: mealItem.id,
+              name: mealItem.name,
+              amount: mealItem.amount,
+              unit: unit,
+              customUnit: mealItem.customUnit,
+              description: mealItem.description,
+              isOptional: mealItem.isOptional,
+              recipe: recipeId,
+            }
+
+            if (mealItem.item!.id === savedFood.id) {
               return {
-                ...partialMealItem,
-                food: savedFood,
+                ...baseMealItem,
+                food: savedFood.id
               } as MealItemInput
             } else {
               return {
-                ...partialMealItem,
-                food: item.food,
+                ...baseMealItem,
+                food: foodId
               } as MealItemInput
             }
-          }),
+          })
         ]
-      } as MealInput, author.id!)
+      }, author.id!)
 
     }))
-    //find meals containing savedFood
-    //update meals
-    //return 
+
     return savedFood
   }
 

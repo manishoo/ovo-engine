@@ -15,8 +15,8 @@ export class Weight {
   id?: ObjectId
   @Field()
   amount: number
-  @Field()
-  gramWeight: number
+  @Field({ nullable: true })
+  gramWeight?: number
   @Field()
   seq: number
   @Field(type => [Translation])

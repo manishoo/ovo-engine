@@ -82,7 +82,10 @@ export default class FoodMapperService {
    * link it to all recipes which have an ingredient
    * with the same name as the FoodMap.text
    * */
-  async mapFoodToRecipeIngredients(foodMap: FoodMap, food: IngredientFood) {
+  async mapFoodToRecipeIngredients(foodMap: FoodMap, ingredientFood: IngredientFood) {
+    const food = await FoodModel.findById(ingredientFood.id)
+    if (!food) throw new Errors.System()
+
     const recipes = await RecipeModel.find({ ingredients: { $elemMatch: { 'name.text': foodMap.text } } })
 
     /**
@@ -108,8 +111,7 @@ export default class FoodMapperService {
           if (ingredient.name) {
             ingredient.name.map(name => {
               if (name.text === foodMap.text) {
-                ingredient.food = food
-                ingredient.thumbnail = food.thumbnail
+                ingredient.item = food
               }
             })
           }

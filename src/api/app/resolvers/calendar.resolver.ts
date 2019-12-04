@@ -4,15 +4,16 @@
  */
 
 import CalendarService from '@Services/calendar/calendar.service'
-import { BodyMeasurementInput, Day, DayMealInput, LogActivityInput } from '@Types/calendar'
+import { BodyMeasurementInput, Day, DayMeal, LogActivityInput } from '@Types/calendar'
 import { LanguageCode, MealType, Role } from '@Types/common'
+import { MealItemInput } from '@Types/ingredient'
 import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 
 
 @Service()
-@Resolver(of => Day)
+@Resolver()
 export default class CalendarResolver {
   constructor(
     // service injection
@@ -32,12 +33,14 @@ export default class CalendarResolver {
   }
 
   @Authorized(Role.user)
-  @Mutation(returns => Day)
+  @Mutation(returns => DayMeal)
   async logMeal(
-    @Arg('meal', type => DayMealInput) mealInput: DayMealInput,
+    @Arg('date') date: Date,
+    @Arg('userMealId') userMealId: string,
+    @Arg('mealItems', type => [MealItemInput]) mealItemInputs: MealItemInput[],
     @Ctx() ctx: Context,
   ) {
-    return this.calendarService.logMeal(mealInput, ctx.user!.id)
+    return this.calendarService.logMeal(date, userMealId, mealItemInputs, ctx.user!.id)
   }
 
   @Authorized(Role.user)

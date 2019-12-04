@@ -612,8 +612,8 @@ export class FoodBase {
 
   origFoodClassName: Translation[]
 
-  @Field(type => FoodGroup)
-  origFoodGroups: FoodGroup[][]
+  @Field(type => [[FoodGroup]])
+  origFoodGroups: Partial<FoodGroup>[][]
 
   @Field(type => Nutrition)
   nutrition: Nutrition
