@@ -107,14 +107,3 @@ export class IngredientInput {
   description?: TranslationInput[]
 }
 
-@ObjectType()
-export class MealItem extends Ingredient {
-  @Field(type => [Ingredient])
-  alternativeMealItems: Ingredient[]
-}
-
-@InputType()
-export class MealItemInput extends IngredientInput {
-  @Field(type => [IngredientInput])
-  alternativeMealItems: IngredientInput[]
-}

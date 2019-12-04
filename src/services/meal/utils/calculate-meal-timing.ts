@@ -5,8 +5,8 @@
 
 import { Timing } from '@Types/common'
 import { Food } from '@Types/food'
-import { MealItem } from '@Types/ingredient'
 import { Recipe } from '@Types/recipe'
+import { MealItem } from '@Types/meal'
 
 
 export default function calculateMealTiming(mealItems: MealItem[]): Timing {

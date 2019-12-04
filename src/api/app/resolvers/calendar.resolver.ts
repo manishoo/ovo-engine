@@ -6,10 +6,10 @@
 import CalendarService from '@Services/calendar/calendar.service'
 import { BodyMeasurementInput, Day, DayMeal, LogActivityInput } from '@Types/calendar'
 import { LanguageCode, MealType, Role } from '@Types/common'
-import { MealItemInput } from '@Types/ingredient'
 import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
+import { MealItemInput } from '@Types/meal'
 
 
 @Service()

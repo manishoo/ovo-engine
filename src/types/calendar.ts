@@ -6,10 +6,10 @@
 import { UserSchema } from '@Models/user.model'
 import { UserActivity } from '@Types/activity'
 import { ObjectId, Pagination, Ref } from '@Types/common'
-import { MealItem, MealItemInput } from '@Types/ingredient'
 import { User, UserMeal } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import { Field, InputType, ObjectType } from 'type-graphql'
+import { MealItem, MealItemInput } from '@Types/meal'
 
 
 @ObjectType()
