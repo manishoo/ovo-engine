@@ -6,7 +6,8 @@
 import mongoose from '@Config/connections/mongoose'
 import { ObjectId, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
-import { Meal, MealItem } from '@Types/meal'
+import { MealItem } from '@Types/ingredient'
+import { Meal } from '@Types/meal'
 import { Author } from '@Types/user'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
@@ -42,8 +43,6 @@ export class MealSchema extends Typegoose implements Meal {
 
   @prop({ default: {} })
   timing: Timing
-
-  likedByUser?: boolean
 
   @arrayProp({ itemsRef: UserSchema, default: [] })
   likes: Ref<UserSchema>[]

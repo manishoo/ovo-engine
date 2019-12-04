@@ -4,7 +4,8 @@
  */
 
 import { Timing } from '@Types/common'
-import { MealItem } from '@Types/meal'
+import { Food } from '@Types/food'
+import { MealItem } from '@Types/ingredient'
 import { Recipe } from '@Types/recipe'
 
 
@@ -16,18 +17,16 @@ export default function calculateMealTiming(mealItems: MealItem[]): Timing {
   }
 
   mealItems.map(mealItem => {
-    if (mealItem.food) {
+    if (mealItem.item instanceof Food) {
       /**
        * We'll assume foods don't have any timing
        * */
     }
-    if (mealItem.recipe) {
-      const recipe = mealItem.recipe as Recipe
-
+    if (mealItem.item instanceof Recipe) {
       timing = {
-        totalTime: timing.totalTime + recipe.timing.totalTime,
-        prepTime: timing.prepTime! + (recipe.timing.prepTime || 0),
-        cookTime: timing.cookTime! + (recipe.timing.cookTime || 0),
+        totalTime: timing.totalTime + mealItem.item.timing.totalTime,
+        prepTime: timing.prepTime! + (mealItem.item.timing.prepTime || 0),
+        cookTime: timing.cookTime! + (mealItem.item.timing.cookTime || 0),
       }
     }
   })

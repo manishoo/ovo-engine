@@ -9,7 +9,7 @@ import putDefaultFoodsOnTop from '@Services/food/utils/put-default-foods-on-top'
 import UploadService from '@Services/upload/upload.service'
 import { ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
-import { WeightInput } from '@Types/weight'
+import { Weight, WeightInput } from '@Types/weight'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
@@ -81,14 +81,12 @@ export default class FoodService {
     const food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('food not found')
 
-    let weights: WeightInput[] = []
+    let weights: Weight[] = []
     foodInput.weights.map(weight => {
-      if (weight.id) {
-        weights.push(weight)
-      } else {
-        weight['id'] = String(new ObjectId())
-        weights.push(weight)
-      }
+      weights.push({
+        id: weight.id || new ObjectId(),
+        ...weight,
+      })
     })
 
     if (foodInput.image) {

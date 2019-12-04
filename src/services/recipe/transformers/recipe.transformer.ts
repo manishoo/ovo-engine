@@ -10,12 +10,13 @@ export function transformRecipe(recipe: Recipe, userId?: string) {
   recipe.userLikedRecipe = !!recipe.likes.find(p => String(p) === userId)
   recipe.likesCount = recipe.likes.length
   recipe.id = recipe._id.toString()
+
   /**
    * Transform ingredients by attaching their _id to id field
    * */
   recipe.ingredients = recipe.ingredients.map(i => {
-    if (i.food) {
-      i.food.id = String(i.food._id)
+    if (i.item) {
+      i.item.id = String(i.item._id)
     }
 
     return i

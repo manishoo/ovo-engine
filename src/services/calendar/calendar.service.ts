@@ -9,8 +9,9 @@ import { RecipeModel } from '@Models/recipe.model'
 import ActivityService from '@Services/activity/activity.service'
 import MealService from '@Services/meal/meal.service'
 import { UserActivity } from '@Types/activity'
-import { Day, DayMeal, DayMealInput, LogActivityInput } from '@Types/calendar'
+import { Day, DayMeal, LogActivityInput } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
+import { MealItemInput } from '@Types/ingredient'
 import Errors from '@Utils/errors'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
@@ -45,22 +46,24 @@ export default class CalendarService {
       })
   }
 
-  async logMeal(dayMealInput: DayMealInput, userId: string): Promise<Day> {
-    let meal: DayMeal = {
-      id: new ObjectId(),
-      time: dayMealInput.time,
-      items: await this.mealService.validateMealItems(dayMealInput.items),
-    }
+  async logMeal(date: Date, userMealId: string, mealItemInputs: MealItemInput[], userId: string): Promise<DayMeal> {
+    let day = await this.findOrCreateDayByTime(userId, date!)
 
-    let day = await this.findOrCreateDayByTime(userId, dayMealInput.time!)
+    let loggedMeal = undefined
+    day.meals = await Promise.all(day.meals.map(async meal => {
+      if (meal.userMeal && (meal.userMeal.id === userMealId)) {
+        loggedMeal = {
+          ...meal,
+          items: await this.mealService.validateMealItems(mealItemInputs),
+        }
+        return loggedMeal
+      }
 
-    if (day.meals) {
-      day.meals = [...day.meals, meal]
-    } else {
-      day.meals = [meal]
-    }
-
-    return day.save()
+      return meal
+    }))
+    await day.save()
+    if (!loggedMeal) throw new Errors.System()
+    return loggedMeal
   }
 
   async logActivity(activities: LogActivityInput[], userId: string): Promise<Day[]> {

@@ -38,11 +38,11 @@ registerEnumType(MealSize, {
 })
 
 export enum MealAvailableTime {
-  noTime = '5',
-  littleTime = '15',
-  someTime = '30',
-  moreTime = '45',
-  lotsOfTime = '60',
+  noTime = 'noTime',
+  littleTime = 'littleTime',
+  someTime = 'someTime',
+  moreTime = 'moreTime',
+  lotsOfTime = 'lotsOfTime',
   noLimit = 'noLimit',
 }
 
@@ -112,6 +112,22 @@ export class WeightUnit {
 
 @ObjectType()
 export class UserMeal {
+  @Field()
+  id: string
+  @Field()
+  name: string
+  @Field()
+  time: string
+  @Field(type => MealSize, { nullable: true })
+  size?: MealSize
+  @Field(type => MealAvailableTime, { nullable: true })
+  availableTime?: MealAvailableTime
+  @Field(type => Boolean, { nullable: true })
+  cook?: boolean
+}
+
+@InputType()
+export class UserMealInput {
   @Field()
   id: string
   @Field()
