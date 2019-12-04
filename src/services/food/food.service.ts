@@ -9,19 +9,24 @@ import putDefaultFoodsOnTop from '@Services/food/utils/put-default-foods-on-top'
 import UploadService from '@Services/upload/upload.service'
 import { ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
-import { WeightInput } from '@Types/weight'
+import { WeightInput, Weight } from '@Types/weight'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
+import MealService from '@Services/meal/meal.service'
+import { MealItemInput, MealInput } from '@Types/meal'
+import { Author } from '@Types/user'
+import determineWeightIsObject from '@Utils/determine-weight-is-object'
 
 
 @Service()
 export default class FoodService {
   constructor(
     // service injection
-    private readonly uploadService: UploadService
+    private readonly uploadService: UploadService,
+    private readonly mealService: MealService,
   ) {
     // noop
   }
@@ -86,7 +91,7 @@ export default class FoodService {
       if (weight.id) {
         weights.push(weight)
       } else {
-        weight['id'] = String(new ObjectId())
+        weight.id = new ObjectId()
         weights.push(weight)
       }
     })
@@ -123,7 +128,57 @@ export default class FoodService {
       food.foodClass = foodInput.foodClassId
     }
 
-    return food.save()
+    let savedFood = await food.save()
+    let updatingMeals = await this.mealService.list({ foodId: savedFood._id })
+
+    await Promise.all(updatingMeals.meals.map(async meal => {
+
+      const author = meal.author as Author
+      await this.mealService.update(meal._id!, {
+        ...meal,
+        items: [
+          ...meal.items.map(item => {
+            let food = item.food as Food
+
+            let weightId: ObjectId = new ObjectId()
+            if (item.weight) {
+              if (determineWeightIsObject(item.weight)) {
+                weightId = item.weight.id!
+              } else {
+                weightId = item.weight
+              }
+            }
+
+            let partialMealItem = {
+              id: item.id,
+              amount: item.amount,
+              recipe: item.recipe,
+              weight: weightId,
+              customUnit: item.customUnit,
+              gramWeight: item.gramWeight,
+              description: item.description,
+              alternativeMealItems: [],
+            }
+            if (food && food.id == savedFood.id) {
+              return {
+                ...partialMealItem,
+                food: savedFood,
+              } as MealItemInput
+            } else {
+              return {
+                ...partialMealItem,
+                food: item.food,
+              } as MealItemInput
+            }
+          }),
+        ]
+      } as MealInput, author.id!)
+
+    }))
+    //find meals containing savedFood
+    //update meals
+    //return 
+    return savedFood
   }
 
   async delete(foodID: ObjectId, user: ContextUser, restore?: boolean): Promise<Food> {
@@ -147,7 +202,7 @@ export default class FoodService {
 
     let weights: WeightInput[] = []
     foodInput.weights.map(weight => {
-      weight['id'] = String(new ObjectId())
+      weight.id = new ObjectId()
       weights.push(weight)
     })
 

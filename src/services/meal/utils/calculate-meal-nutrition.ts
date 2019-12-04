@@ -7,6 +7,8 @@ import { Food, Nutrition } from '@Types/food'
 import { MealItemBase } from '@Types/meal'
 import { Recipe } from '@Types/recipe'
 import { calculateNutrition, scaleFoodNutrition, scaleRecipeNutrition } from '@Utils/calculate-nutrition'
+import { ObjectId } from '@Types/common'
+import determineWeightIsObject from '@Utils/determine-weight-is-object'
 
 
 export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
@@ -25,13 +27,12 @@ export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
     } else if (mealItem.food) {
       const food = mealItem.food as Food
       if (food.nutrition) {
-        let weightId
+        let weightId: ObjectId = new ObjectId()
         if (mealItem.weight) {
-          if (typeof mealItem.weight === 'string') {
-            weightId = mealItem.weight
+          if (determineWeightIsObject(mealItem.weight)) {
+            weightId = mealItem.weight.id!
           } else {
-            weightId = mealItem.weight.id
-            weightId = weightId!.toString()
+            weightId = mealItem.weight
           }
         }
 
@@ -42,3 +43,7 @@ export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
 
   return totalNutrition
 }
+
+
+
+

@@ -7,6 +7,7 @@ import { Nutrition } from '@Types/food'
 import { Ingredient } from '@Types/recipe'
 import { Weight } from '@Types/weight'
 import { calculateNutrition, scaleFoodNutrition } from '@Utils/calculate-nutrition'
+import { ObjectId } from '@Types/common'
 
 
 export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
@@ -15,13 +16,13 @@ export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
   ingredients.map(ingredient => {
     if (!ingredient.amount || !ingredient.food) return
 
-    let weightId
+    let weightId: ObjectId = new ObjectId()
     if (ingredient.weight) {
-      if (ingredient.weight.hasOwnProperty('id')) {
-        const weight = ingredient.weight as Weight
-        weightId = weight.id!.toString()
+      let weight = ingredient.weight as Weight
+      if (weight.id) {
+        weightId = weight.id
       } else {
-        weightId = ingredient.weight.toString()
+        weightId = ingredient as ObjectId
       }
     }
     calculateNutrition(scaleFoodNutrition(ingredient.food, ingredient.amount, weightId, ingredient.gramWeight), totalNutrition)

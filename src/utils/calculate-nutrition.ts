@@ -6,6 +6,7 @@
 import { IngredientFood, NutrientUnit, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import Errors from '@Utils/errors'
+import { ObjectId } from '@Types/common'
 
 
 export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutrition) {
@@ -22,7 +23,7 @@ export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutriti
   })
 }
 
-export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, weightId?: string, customGramWeight?: number): Nutrition {
+export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, weightId?: ObjectId, customGramWeight?: number): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
   /**
@@ -40,14 +41,16 @@ export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, wei
   return totalNutrition
 }
 
-function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: string, customGramWeight?: number) {
+function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: ObjectId, customGramWeight?: number) {
   let totalAmount = baseAmount
   /**
    * If the food had a weight,
    * use the weight's {gramWeight}
    * */
   if (weightId) {
-    const foundWeight = food.weights.find(w => w.id == weightId)
+    console.log('main: ', weightId.toString())
+    food.weights.map(f => console.log(f.id!.toString()))
+    const foundWeight = food.weights.find(w => w.id!.toString() == weightId.toString())
     if (!foundWeight) throw new Errors.Validation('Weight id not valid')
     totalAmount = foundWeight.gramWeight * foodAmount
   } else if (customGramWeight) {

@@ -188,11 +188,18 @@ export default class MealService {
     }
 
     if (variables.lastId) {
-
       const meal = await MealModel.findById(variables.lastId)
       if (!meal) throw new Errors.NotFound('meal not found')
 
       query.createdAt = { $lt: meal.createdAt }
+    }
+
+    if (variables.foodId) {
+      query['items.food._id'] = variables.foodId
+    }
+
+    if (variables.recipeId) {
+      query['items.recipe._id'] = variables.recipeId
     }
 
     const counts = await MealModel.countDocuments(query)
@@ -205,14 +212,7 @@ export default class MealService {
       .populate('items.alternativeMealItems.recipe.author')
       .exec()
 
-    meals.map((meal, index) => {
-      if (index === 3) {
-        meal.items.map((i, ind) => {
-          if (i.recipe) {
-            const r = i.recipe as Recipe
-          }
-        })
-      }
+    meals.map(meal => {
       transformMeal(meal)
     })
 
@@ -258,18 +258,20 @@ export default class MealService {
     meal.name = mealInput.name
     meal.description = mealInput.description
     meal.nutrition = calculateMealNutrition(meal.items)
-    meal.items = mealInput.items.map(inputItem => ({
-      id: inputItem.id,
-      amount: inputItem.amount,
-      food: inputItem.food,
-      recipe: inputItem.recipe,
-      weight: inputItem.weight,
-      author: meal!.author,
-      alternativeMealItems: inputItem.alternativeMealItems.map(alternativeMealItem => ({
-        ...alternativeMealItem,
-        alternativeMealItems: undefined,
-      })),
-    } as MealItem))
+    meal.items = mealInput.items.map(inputItem => {
+      return ({
+        id: inputItem.id,
+        amount: inputItem.amount,
+        food: inputItem.food,
+        recipe: inputItem.recipe,
+        weight: inputItem.weight,
+        author: meal!.author,
+        alternativeMealItems: inputItem.alternativeMealItems.map(alternativeMealItem => ({
+          ...alternativeMealItem,
+          alternativeMealItems: undefined,
+        })),
+      } as MealItem)
+    })
 
     let savedMeal = await meal.save()
 
@@ -310,8 +312,7 @@ export default class MealService {
         const food = await FoodModel.findById(mealItemInput.food.toString())
         if (!food) throw new Errors.NotFound('food not found')
         if (mealItemInput.weight) {
-
-          const foundWeight = food.weights.find(w => w.id!.toString() === mealItemInput.weight)
+          const foundWeight = food.weights.find(w => w.id!.toString() == mealItemInput!.weight!.toString())
           if (!foundWeight) throw new Errors.UserInput('Wront weight', { 'weight': 'This weight is not available for the following food' })
         }
 

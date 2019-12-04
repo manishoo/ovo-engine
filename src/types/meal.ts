@@ -98,7 +98,7 @@ export class MealItemBase {
   recipe?: Ref<Recipe>
 
   @Field(type => Weight, { nullable: true })
-  weight?: Weight | string
+  weight?: Weight | ObjectId
 
   @Field({ nullable: true })
   customUnit?: string
@@ -133,8 +133,8 @@ export class MealItemInputBase {
   @Field(type => String, { nullable: true })
   recipe?: Ref<Recipe>
 
-  @Field({ nullable: true })
-  weight?: string
+  @Field(type => ObjectId, { nullable: true })
+  weight?: ObjectId
 
   @Field(type => Boolean, { defaultValue: false })
   isOptional?: boolean
@@ -171,4 +171,10 @@ export class ListMealsArgs {
 
   @Field(type => ObjectId, { nullable: true })
   authorId?: ObjectId
+
+  @Field(type => ObjectId, { nullable: true })
+  foodId?: ObjectId
+
+  @Field(type => ObjectId, { nullable: true })
+  recipeId?: ObjectId
 }

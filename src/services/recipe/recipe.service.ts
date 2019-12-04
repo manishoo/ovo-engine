@@ -219,7 +219,7 @@ export default class RecipeService {
           ingredient.name = food.name
 
           if (ingredientInput.weight) {
-            const foundWeight = food.weights.find(w => w.id!.toString() == ingredientInput.weight)
+            const foundWeight = food.weights.find(w => w.id!.toString() == ingredientInput.weight!.toString())
             if (!foundWeight) throw new Errors.Validation('Weight is not valid')
 
             ingredient.weight = foundWeight
@@ -318,7 +318,7 @@ export default class RecipeService {
           thumbnail: ingredient.thumbnail || food.thumbnail,
           description: ingredient.description,
           food: food,
-          weight: food.weights.find(w => w.id == ingredient.weight),
+          weight: food.weights.find(w => w.id!.toString() == ingredient.weight!.toString()),
         }
       }))
     }
