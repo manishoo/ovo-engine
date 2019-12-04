@@ -16,11 +16,9 @@ import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
 import MealService from '@Services/meal/meal.service'
-import { MealInput } from '@Types/meal'
 import { Author } from '@Types/user'
-import determineWeightIsObject from '@Utils/determine-weight-is-object'
-import { MealItem, MealItemInput } from '@Types/ingredient'
 import { Recipe } from '@Types/recipe'
+import { MealItemInput } from '@Types/meal'
 
 
 @Service()

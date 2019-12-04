@@ -211,8 +211,8 @@ export class Recipe {
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
 
-  @Field(type => String, { nullable: true })
-  tags?: Ref<Tag>[]
+  @Field(type => [String])
+  tags: Ref<Tag>[]
 
   @Field(type => LanguageCode, { nullable: true })
   languages: LanguageCode[]

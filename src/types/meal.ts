@@ -13,10 +13,10 @@ import {
   TranslationInput
 } from '@Types/common'
 import { Nutrition } from '@Types/food'
-import { MealItem, MealItemInput } from '@Types/ingredient'
+import { Ingredient, IngredientInput } from '@Types/ingredient'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
-import { Author } from './user'
+import { Author } from '@Types/user'
 
 
 @ObjectType()
@@ -25,6 +25,18 @@ export class MealListResponse {
   meals: Meal[]
   @Field(type => Pagination)
   pagination: Pagination
+}
+
+@ObjectType()
+export class MealItem extends Ingredient {
+  @Field(type => [Ingredient])
+  alternativeMealItems: Ingredient[]
+}
+
+@InputType()
+export class MealItemInput extends IngredientInput {
+  @Field(type => [IngredientInput])
+  alternativeMealItems: IngredientInput[]
 }
 
 @ObjectType()

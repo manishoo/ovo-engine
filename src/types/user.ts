@@ -118,10 +118,10 @@ export class UserMeal {
   name: string
   @Field()
   time: string
-  @Field(type => MealSize, { nullable: true })
-  size?: MealSize
-  @Field(type => MealAvailableTime, { nullable: true })
-  availableTime?: MealAvailableTime
+  @Field(type => MealSize)
+  size: MealSize
+  @Field(type => MealAvailableTime)
+  availableTime: MealAvailableTime
   @Field(type => Boolean, { nullable: true })
   cook?: boolean
 }
@@ -134,10 +134,10 @@ export class UserMealInput {
   name: string
   @Field()
   time: string
-  @Field(type => MealSize, { nullable: true })
-  size?: MealSize
-  @Field(type => MealAvailableTime, { nullable: true })
-  availableTime?: MealAvailableTime
+  @Field(type => MealSize )
+  size: MealSize
+  @Field(type => MealAvailableTime)
+  availableTime: MealAvailableTime
   @Field(type => Boolean, { nullable: true })
   cook?: boolean
 }

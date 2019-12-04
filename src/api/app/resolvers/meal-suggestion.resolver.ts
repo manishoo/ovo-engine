@@ -5,10 +5,10 @@
 
 import MealSuggestionService from '@Services/meal/suggestion.service'
 import { Day, DayMeal } from '@Types/calendar'
-import { MealItem } from '@Types/ingredient'
 import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
+import { MealItem } from '@Types/meal'
 
 
 @Service()
