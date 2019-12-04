@@ -24,7 +24,7 @@ export default class UserSettingsService {
     const foundUserMealIndex = user.meals.findIndex(p => p.id === userMealInput.id)
     if (foundUserMealIndex === -1) throw new Errors.NotFound('User meal not found')
 
-    const userMeal = {
+    const userMeal: UserMeal = {
       id: userMealInput.id,
       name: userMealInput.name,
       time: userMealInput.time,
