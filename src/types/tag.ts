@@ -41,8 +41,8 @@ export class TagInput {
 @ObjectType()
 export class Tag {
   _id?: ObjectId
-  @Field({ nullable: true })
-  slug?: string
+  @Field()
+  slug: string
   @Field(type => [Translation], { nullable: true })
   title?: Translation[]
   @Field(type => [Translation], { nullable: true })
@@ -51,7 +51,6 @@ export class Tag {
   type: TagType
   @Field(type => String, { nullable: true })
   user?: Ref<User>
-
   createdAt?: Date
   updatedAt?: Date
 }

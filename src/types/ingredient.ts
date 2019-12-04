@@ -13,13 +13,27 @@ import { createUnionType, Field, InputType, ObjectType } from 'type-graphql'
 export const IngredientItemUnion = createUnionType({
   name: 'IngredientItem',
   description: 'Recipe or Food',
-  types: [Recipe, Food],
+  types: () => [Recipe, Food],
+  resolveType(value) {
+    if (value.hasOwnProperty('name')) {
+      return 'Food'
+    } else {
+      return 'Recipe'
+    }
+  }
 })
 
 export const IngredientUnitUnion = createUnionType({
   name: 'IngredientUnit',
   description: 'Weight or CustomUnit',
   types: () => [Weight, CustomUnit],
+  resolveType(value) {
+    if (value.hasOwnProperty('id')) {
+      return 'Weight'
+    } else {
+      return 'CustomUnit'
+    }
+  }
 })
 
 @ObjectType()
@@ -28,6 +42,7 @@ export class Ingredient {
   id: ObjectId
 
   @Field(type => [Translation], {
+    nullable: true,
     description: 'The plain name of the ingredient in the case it was not associated with a food or recipe'
   })
   name?: Translation[]
@@ -63,6 +78,7 @@ export class IngredientInput {
   readonly id?: ObjectId
 
   @Field(type => [TranslationInput], {
+    nullable: true,
     description: 'If the ingredient wasn\'t associated with a food or recipe, this field can be used as the plain name of an ingredient'
   })
   name?: TranslationInput[]
@@ -93,12 +109,12 @@ export class IngredientInput {
 
 @ObjectType()
 export class MealItem extends Ingredient {
-  @Field(type => [Ingredient], { defaultValue: [] })
+  @Field(type => [Ingredient])
   alternativeMealItems: Ingredient[]
 }
 
 @InputType()
 export class MealItemInput extends IngredientInput {
-  @Field(type => [IngredientInput], { defaultValue: [] })
+  @Field(type => [IngredientInput])
   alternativeMealItems: IngredientInput[]
 }
