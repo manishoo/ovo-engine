@@ -56,7 +56,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   origin?: RecipeOrigin
   @prop()
-  tags?: Ref<Tag>[]
+  tags: Ref<Tag>[]
   @prop()
   updatedAt?: Date
   @prop()

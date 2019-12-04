@@ -9,9 +9,7 @@ import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import { ObjectId, Role } from '@Types/common'
-import { Food } from '@Types/food'
-import { MealItem, MealItemInput } from '@Types/ingredient'
-import { ListMealsArgs, Meal, MealInput, MealListResponse } from '@Types/meal'
+import { ListMealsArgs, Meal, MealInput, MealListResponse, MealItem, MealItemInput } from '@Types/meal'
 import { Author } from '@Types/user'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
@@ -66,10 +64,8 @@ export default class MealService {
 
       mealsToBeCreated.push(...mealPermutations)
     } else {
-      await Promise.all(mealsToBeCreated.map(async mealToBeCreated => {
-        const createdMeal = await MealModel.create(mealToBeCreated)
-        mealsToBeCreated.push(await this.get(createdMeal._id))
-      }))
+      const createdMeal = await MealModel.create(masterMealToBeCreated)
+      mealsToBeCreated.push(await this.get(createdMeal._id))
     }
 
     return mealsToBeCreated
@@ -168,8 +164,8 @@ export default class MealService {
     }
     let meal = await MealModel.findOne(query)
       .populate('author')
-      .populate('items.recipe.author')
-      .populate('items.alternativeMealItems.recipe.author')
+      .populate('items.item.author')
+      .populate('items.alternativeMealItems.item.author')
       .exec()
     if (!meal) throw new Errors.NotFound('meal not found')
 
@@ -292,7 +288,7 @@ export default class MealService {
       }
 
       /**
-       * Check and select the unit
+       * Check and select the unit: part 1
        * */
       switch (mealItemInput.unit) {
         case 'customUnit':
@@ -301,26 +297,25 @@ export default class MealService {
         case 'g':
           baseMealItem.unit = undefined
           break
-        default:
-          /**
-           * If the selected unit was a weightId
-           * */
-          if (mealItemInput.food) {
-            const food = baseMealItem.item as Food
-            const foundWeight = food.weights.find(w => w.id!.toString() == mealItemInput.unit)
-            if (!foundWeight) throw new Errors.Validation('Unit is not valid')
-
-            baseMealItem.unit = foundWeight
-          }
       }
 
       if (mealItemInput.food) {
         const food = await FoodModel.findById(mealItemInput.food)
         if (!food) throw new Errors.NotFound('food not found')
 
+        /**
+         * Check and select the unit: part 2
+         * */
+        if (!mealItemInput.unit) {
+          const foundWeight = food.weights.find(w => w.id!.toString() == mealItemInput.unit)
+          if (!foundWeight) throw new Errors.Validation('Unit is not valid')
+
+          baseMealItem.unit = foundWeight
+        }
+
         return {
           ...baseMealItem,
-          unit: {
+          item: {
             ...food.toObject(),
             id: String(food._id),
           },
@@ -331,7 +326,7 @@ export default class MealService {
 
         return {
           ...baseMealItem,
-          unit: {
+          item: {
             ...recipe.toObject(),
             id: String(recipe._id),
           },

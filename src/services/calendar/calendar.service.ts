@@ -11,12 +11,12 @@ import MealService from '@Services/meal/meal.service'
 import { UserActivity } from '@Types/activity'
 import { Day, DayMeal, LogActivityInput } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
-import { MealItemInput } from '@Types/ingredient'
 import Errors from '@Utils/errors'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
 import { Service } from 'typedi'
 import { InstanceType } from 'typegoose'
+import { MealItemInput } from '@Types/meal'
 
 
 @Service()
