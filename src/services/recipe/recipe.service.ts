@@ -64,23 +64,8 @@ export default class RecipeService {
       args.page = 1
     }
 
-    let query: any = {}
-
-    if (args.viewerUser && args.status && isAuthorized([Role.operator], args.viewerUser.role)) {
-      /**
-       * If the user is authorized and has selected a status
-       * */
-      query.$or = [{ status: args.status }]
-    } else if (this._isMine()) {
-      /**
-       * If the user is viewing their own recipes
-       * */
-      query.$or = [{ status: RecipeStatus.review }, { status: RecipeStatus.private }, { status: RecipeStatus.public }]
-    } else {
-      /**
-       * everyone can view public recipes
-       * */
-      query.$or = [{ status: RecipeStatus.public }]
+    let query: any = {
+      status: args.status || RecipeStatus.public,
     }
 
     let sort: any = {
