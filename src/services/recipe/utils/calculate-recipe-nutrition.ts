@@ -9,6 +9,7 @@ import { Ingredient } from '@Types/ingredient'
 import { Weight } from '@Types/weight'
 import { calculateNutrition, scaleFoodNutrition } from '@Utils/calculate-nutrition'
 import { ObjectId } from '@Types/common'
+import { determineWeightIsObject, determineCustomUnitIsObject } from '@Utils/determine-object'
 
 
 export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
@@ -20,9 +21,9 @@ export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
     let weightId
     let gramWeight
 
-    if (ingredient.unit && ingredient.unit instanceof Weight) {
+    if (ingredient.unit && determineWeightIsObject(ingredient.unit)) {
       weightId = ingredient.unit.id!
-    } else if (ingredient.unit instanceof CustomUnit) {
+    } else if (ingredient.unit && determineCustomUnitIsObject(ingredient.unit)) {
       gramWeight = ingredient.unit.gramWeight
     }
 

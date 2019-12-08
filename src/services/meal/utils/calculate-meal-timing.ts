@@ -7,6 +7,7 @@ import { Timing } from '@Types/common'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import { MealItem } from '@Types/meal'
+import { determineFoodIsObject, determineRecipeIsObject } from '@Utils/determine-object'
 
 
 export default function calculateMealTiming(mealItems: MealItem[]): Timing {
@@ -17,12 +18,12 @@ export default function calculateMealTiming(mealItems: MealItem[]): Timing {
   }
 
   mealItems.map(mealItem => {
-    if (mealItem.item instanceof Food) {
+    if (mealItem.item && determineFoodIsObject(mealItem.item)) {
       /**
        * We'll assume foods don't have any timing
        * */
     }
-    if (mealItem.item instanceof Recipe) {
+    if (mealItem.item && determineRecipeIsObject(mealItem.item)) {
       timing = {
         totalTime: timing.totalTime + mealItem.item.timing.totalTime,
         prepTime: timing.prepTime! + (mealItem.item.timing.prepTime || 0),

@@ -9,6 +9,7 @@ import { Ingredient } from '@Types/ingredient'
 import { Recipe } from '@Types/recipe'
 import { Weight } from '@Types/weight'
 import { calculateNutrition, scaleFoodNutrition, scaleRecipeNutrition } from '@Utils/calculate-nutrition'
+import { determineRecipeIsObject, determineFoodIsObject, determineWeightIsObject, determineCustomUnitIsObject } from '@Utils/determine-object'
 
 
 export function calculateMealNutrition(items: Ingredient[]): Nutrition {
@@ -19,20 +20,20 @@ export function calculateMealNutrition(items: Ingredient[]): Nutrition {
    * and add to {totalNutrition}
    * */
   items.map(mealItem => {
-    if (mealItem.item instanceof Recipe) {
+    if (mealItem.item && determineRecipeIsObject(mealItem.item)) {
       if (mealItem.item.nutrition && mealItem.amount) {
         calculateNutrition(scaleRecipeNutrition(mealItem.item, mealItem.amount), totalNutrition)
       }
-    } else if (mealItem.item instanceof Food) {
+    } else if (mealItem.item && determineFoodIsObject(mealItem.item)) {
       if (mealItem.item.nutrition && mealItem.amount) {
         if (!mealItem.amount || !mealItem.item) return
 
         let weightId
         let gramWeight
 
-        if (mealItem.unit && mealItem.unit instanceof Weight) {
+        if (mealItem.unit && determineWeightIsObject(mealItem.unit)) {
           weightId = mealItem.unit.id!
-        } else if (mealItem.unit instanceof CustomUnit) {
+        } else if (mealItem.unit && determineCustomUnitIsObject(mealItem.item)) {
           gramWeight = mealItem.unit.gramWeight
         }
 

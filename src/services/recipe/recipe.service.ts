@@ -23,6 +23,9 @@ import slug from 'slug'
 import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
 import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
+import MealService from '@Services/meal/meal.service'
+import { determineWeightIsObject, determineCustomUnitIsObject, determineRecipeIsObject, determineFoodIsObject } from '@Utils/determine-object'
+import { MealItemInput } from '@Types/meal'
 
 
 @Service()
@@ -31,6 +34,7 @@ export default class RecipeService {
     // service injection
     private readonly uploadService: UploadService,
     private readonly dietService: DietService,
+    private readonly mealService: MealService,
   ) {
     // noop
   }
@@ -406,7 +410,62 @@ export default class RecipeService {
       }
     }
 
-    return transformRecipe(await recipe.save(), user && user.id)
+    let savedRecipe = transformRecipe(await recipe.save(), user && user.id)
+    let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedRecipe._id })
+
+    await Promise.all(updatingMeals.meals.map(async meal => {
+
+      const author = meal.author as Author
+      await this.mealService.update(meal._id!, {
+        ...meal,
+        items: [
+          ...meal.items.map(mealItem => {
+
+            let unit
+            if (mealItem.unit && determineWeightIsObject(mealItem.unit)) {
+              unit = mealItem.unit.id!.toString()
+            } else if (mealItem.unit && determineCustomUnitIsObject(mealItem.unit)) {
+              unit = 'customUnit'
+            } else {
+              unit = 'g'
+            }
+
+            let recipeId
+            if (mealItem.item && determineRecipeIsObject(mealItem.item)) {
+              recipeId = new ObjectId(mealItem.item.id)
+            }
+            let foodId
+            if (mealItem.item && determineFoodIsObject(mealItem.item)) {
+              foodId = new ObjectId(mealItem.item.id)
+            }
+            let baseMealItem: Partial<MealItemInput> = {
+              id: mealItem.id,
+              name: mealItem.name,
+              amount: mealItem.amount,
+              unit: unit,
+              customUnit: mealItem.customUnit,
+              description: mealItem.description,
+              isOptional: mealItem.isOptional,
+              food: foodId,
+            }
+
+            if (mealItem.item!.id === savedRecipe.id) {
+              return {
+                ...baseMealItem,
+                recipe: new ObjectId(savedRecipe.id)
+              } as MealItemInput
+            } else {
+              return {
+                ...baseMealItem,
+                recipe: recipeId
+              } as MealItemInput
+            }
+          })
+        ]
+      }, author.id!)
+    }))
+
+    return savedRecipe
   }
 
   async tag(recipePublicId: ObjectId, tagSlugs: string[], user: ContextUser): Promise<Recipe> {

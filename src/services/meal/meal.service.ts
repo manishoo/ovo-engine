@@ -191,12 +191,8 @@ export default class MealService {
       query.createdAt = { $lt: meal.createdAt }
     }
 
-    if (variables.foodId) {
-      query['items.food._id'] = variables.foodId
-    }
-
-    if (variables.recipeId) {
-      query['items.recipe._id'] = variables.recipeId
+    if (variables.foodOrRecipeId) {
+      query['items.item._id'] = variables.foodOrRecipeId
     }
 
     const counts = await MealModel.countDocuments(query)
@@ -244,7 +240,6 @@ export default class MealService {
       .exec()
 
     if (!meal) throw new Errors.NotFound('meal not found')
-
     const author = meal.author as Author
     if (author.id !== userId) throw new Errors.Forbidden('Update failed. you only can update your own meals')
 
@@ -321,7 +316,7 @@ export default class MealService {
         /**
          * Check and select the unit: part 2
          * */
-        if (!mealItemInput.unit) {
+        if (mealItemInput.unit && ObjectId.isValid(mealItemInput.unit)) {
           const foundWeight = food.weights.find(w => w.id!.toString() == mealItemInput.unit)
           if (!foundWeight) throw new Errors.Validation('Unit is not valid')
 

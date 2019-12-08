@@ -114,8 +114,5 @@ export class ListMealsArgs {
   authorId?: ObjectId
 
   @Field(type => ObjectId, { nullable: true })
-  foodId?: ObjectId
-
-  @Field(type => ObjectId, { nullable: true })
-  recipeId?: ObjectId
+  foodOrRecipeId?: ObjectId
 }

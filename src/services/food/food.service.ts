@@ -19,6 +19,7 @@ import MealService from '@Services/meal/meal.service'
 import { Author } from '@Types/user'
 import { Recipe } from '@Types/recipe'
 import { MealItemInput } from '@Types/meal'
+import { determineWeightIsObject, determineCustomUnitIsObject, determineRecipeIsObject, determineFoodIsObject } from '@Utils/determine-object'
 
 
 @Service()
@@ -127,7 +128,7 @@ export default class FoodService {
     }
 
     let savedFood = await food.save()
-    let updatingMeals = await this.mealService.list({ foodId: savedFood._id })
+    let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedFood._id })
 
     await Promise.all(updatingMeals.meals.map(async meal => {
 
@@ -136,21 +137,22 @@ export default class FoodService {
         ...meal,
         items: [
           ...meal.items.map(mealItem => {
+
             let unit
-            if (mealItem.unit && mealItem.unit instanceof Weight) {
+            if (mealItem.unit && determineWeightIsObject(mealItem.unit)) {
               unit = mealItem.unit.id!.toString()
-            } else if (mealItem.unit && mealItem.unit instanceof CustomUnit) {
+            } else if (mealItem.unit && determineCustomUnitIsObject(mealItem.unit)) {
               unit = 'customUnit'
             } else {
               unit = 'g'
             }
 
             let recipeId
-            if (mealItem.item && mealItem.item instanceof Recipe) {
+            if (mealItem.item && determineRecipeIsObject(mealItem.item)) {
               recipeId = new ObjectId(mealItem.item.id)
             }
             let foodId
-            if (mealItem.item && mealItem.item instanceof Food) {
+            if (mealItem.item && determineFoodIsObject(mealItem.item)) {
               foodId = new ObjectId(mealItem.item.id)
             }
             let baseMealItem: Partial<MealItemInput> = {
@@ -178,7 +180,6 @@ export default class FoodService {
           })
         ]
       }, author.id!)
-
     }))
 
     return savedFood
