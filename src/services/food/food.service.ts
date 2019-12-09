@@ -26,14 +26,14 @@ export default class FoodService {
     // noop
   }
 
-  async getFood(foodId: ObjectId) {
+  async get(foodId: ObjectId) {
     let food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('Food not found')
 
     return food
   }
 
-  async listFoods({ page, size, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
+  async list({ page, size, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
     if (foodClassId) {
       query['foodClass'] = new ObjectId(foodClassId)

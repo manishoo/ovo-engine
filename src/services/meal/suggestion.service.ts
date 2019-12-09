@@ -11,6 +11,7 @@ import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
 import CalendarService from '@Services/calendar/calendar.service'
 import DietService from '@Services/diet/diet.service'
+import MealService from '@Services/meal/meal.service'
 import UserService from '@Services/user/user.service'
 import { Day, DayMeal } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
@@ -50,6 +51,7 @@ export default class SuggestionService {
     private readonly userService: UserService,
     private readonly dietService: DietService,
     private readonly calendarService: CalendarService,
+    private readonly mealService: MealService,
   ) {
     // noop
   }
@@ -131,33 +133,7 @@ export default class SuggestionService {
     await redis.zadd(previousSuggestionsRedisKey, String(now), String(meal._id))
     await redis.expireat(previousSuggestionsRedisKey, addHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime())
 
-    const finalMeal = await MealModel.findById(meal._id)
-      .populate('author')
-      .populate({
-        path: 'items.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.alternativeMealItems.food',
-        model: FoodModel
-      })
-      .populate({
-        path: 'items.recipe',
-        model: RecipeModel,
-        populate: {
-          path: 'author',
-          model: UserModel,
-        },
-      })
-      .populate({
-        path: 'items.alternativeMealItems.recipe',
-        model: RecipeModel,
-        populate: {
-          path: 'author',
-          model: UserModel,
-        },
-      })
-      .exec()
+    const finalMeal = this.mealService.get(meal._id)
     if (!finalMeal) throw new Errors.System('Something went wrong')
 
     return finalMeal

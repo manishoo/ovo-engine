@@ -10,12 +10,20 @@ import { Weight } from '@Types/weight'
 import { createUnionType, Field, InputType, ObjectType } from 'type-graphql'
 
 
+export function determineIfIsFood(value: Food | Recipe): value is Food {
+  return 'name' in value
+}
+
+export function determineIfIsWeight(value: Weight | CustomUnit): value is Weight {
+  return 'id' in value
+}
+
 export const IngredientItemUnion = createUnionType({
   name: 'IngredientItem',
   description: 'Recipe or Food',
   types: () => [Recipe, Food],
   resolveType(value) {
-    if (value.hasOwnProperty('name')) {
+    if (determineIfIsFood(value)) {
       return 'Food'
     } else {
       return 'Recipe'
@@ -28,7 +36,7 @@ export const IngredientUnitUnion = createUnionType({
   description: 'Weight or CustomUnit',
   types: () => [Weight, CustomUnit],
   resolveType(value) {
-    if (value.hasOwnProperty('id')) {
+    if (determineIfIsWeight(value)) {
       return 'Weight'
     } else {
       return 'CustomUnit'

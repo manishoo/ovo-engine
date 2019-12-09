@@ -15,8 +15,8 @@ export default {
   panelUrl: process.env.PANEL_URL || '127.0.0.1',
   panelPort: Number(process.env.PANEL_PORT),
 
-  get appFullAddressForExternalUse() {
-    return process.env.CORE_APP_ADDRESS || `http://${this.appUrl}:${this.appPort}`
+  get fullAppAddress() {
+    return process.env.CORE_APP_ADDRESS || `http://${this.appUrl}:${this.appPort}${process.env.NODE_ENV === 'development' ? `/${this.uploadUrl}` : ''}`
   },
 
   supernovaUrl: process.env.SUPERNOVA_URL,
