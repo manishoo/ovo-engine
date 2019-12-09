@@ -14,7 +14,6 @@ import { Food } from '@Types/food'
 import { Ingredient, IngredientInput } from '@Types/ingredient'
 import { Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse, RecipeStatus } from '@Types/recipe'
 import { Author } from '@Types/user'
-import { isAuthorized } from '@Utils/authChecker'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
@@ -71,7 +70,7 @@ export default class RecipeService {
       return args.viewerUser && args.userId && args.viewerUser.id === String(args.userId)
     }
 
-    if (args.viewerUser && args.status && isAuthorized([Role.operator], args.viewerUser.role)) {
+    if (args.viewerUser && args.status) {
       /**
        * If the user is an operator and has selected a status
        * */
