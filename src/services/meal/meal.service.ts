@@ -7,7 +7,12 @@ import { FoodModel } from '@Models/food.model'
 import { MealModel } from '@Models/meal.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
+import DietService from '@Services/diet/diet.service'
+import FoodService from '@Services/food/food.service'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
+import RecipeService from '@Services/recipe/recipe.service'
+import UploadService from '@Services/upload/upload.service'
+import { transformRecipeUser } from '@Services/user/transformers/recipe-user.transformer'
 import { ObjectId, Role } from '@Types/common'
 import { ListMealsArgs, Meal, MealInput, MealListResponse, MealItem, MealItemInput } from '@Types/meal'
 import { Author } from '@Types/user'
@@ -23,6 +28,14 @@ import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
 
 @Service()
 export default class MealService {
+  constructor(
+    // service injection
+    private readonly recipeService: RecipeService,
+    private readonly foodService: FoodService,
+  ) {
+    // noop
+  }
+
   async create(mealInput: MealInput, userId: string, bulkCreate?: boolean): Promise<Meal[]> {
     let masterMealData: Partial<Meal> = {}
 
@@ -164,8 +177,6 @@ export default class MealService {
     }
     let meal = await MealModel.findOne(query)
       .populate('author')
-      .populate('items.item.author')
-      .populate('items.alternativeMealItems.item.author')
       .exec()
     if (!meal) throw new Errors.NotFound('meal not found')
 
@@ -198,8 +209,6 @@ export default class MealService {
       .limit(variables.size)
       .skip(variables.size * (variables.page - 1))
       .populate('author')
-      .populate('items.recipe.author')
-      .populate('items.alternativeMealItems.recipe.author')
       .exec()
 
     return {
@@ -300,7 +309,7 @@ export default class MealService {
       }
 
       if (mealItemInput.food) {
-        const food = await FoodModel.findById(mealItemInput.food)
+        const food = await this.foodService.get(mealItemInput.food)
         if (!food) throw new Errors.NotFound('food not found')
 
         /**
@@ -321,15 +330,12 @@ export default class MealService {
           },
         } as MealItem
       } else if (mealItemInput.recipe) {
-        const recipe = await RecipeModel.findById(mealItemInput.recipe)
+        const recipe = await this.recipeService.get(mealItemInput.recipe)
         if (!recipe) throw new Errors.NotFound('recipe not found')
 
         return {
           ...baseMealItem,
-          item: {
-            ...recipe.toObject(),
-            id: String(recipe._id),
-          },
+          item: recipe,
         } as MealItem
       }
 
