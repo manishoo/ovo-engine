@@ -21,7 +21,7 @@ export default class FoodResolver {
     // noop
   }
 
-  //@Authorized([Role.operator, Role.user])
+  @Authorized([Role.operator, Role.user])
   @Query(returns => Food)
   async food(
     @Arg('id') id: ObjectId,
@@ -39,7 +39,7 @@ export default class FoodResolver {
     return this.foodService.list(args)
   }
 
-  //@Authorized([Role.operator, Role.user])
+  @Authorized([Role.operator, Role.user])
   @Mutation(returns => Food)
   async updateFood(
     @Arg('foodId') foodId: ObjectId,
@@ -59,7 +59,7 @@ export default class FoodResolver {
     return this.foodService.delete(foodId, ctx.user!, restore)
   }
 
-  //@Authorized([Role.operator, Role.user])
+  @Authorized([Role.operator, Role.user])
   @Mutation(returns => Food)
   async createFood(
     @Arg('foodClassId') foodClassId: ObjectId,
@@ -68,5 +68,4 @@ export default class FoodResolver {
   ) {
     return this.foodService.create(foodClassId, food)
   }
-
 }
