@@ -255,7 +255,6 @@ export default class MealService {
     meal.name = mealInput.name
     meal.description = mealInput.description
     meal.nutrition = calculateMealNutrition(meal.items)
-
     meal.items = await this.validateMealItems(mealInput.items)
 
     let savedMeal = await meal.save()
