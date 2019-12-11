@@ -3,14 +3,18 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { User } from '@Types/user'
+import { Author, User } from '@Types/user'
 
 
-export function transformRecipeUser(user: User): Partial<User> {
+export function transformRecipeUser(user: User): Author {
   return {
-    id: user.id,
+    id: String(user._id),
     username: user.username,
     firstName: user.firstName,
     lastName: user.lastName,
+    bio: user.bio,
+    avatar: user.avatar,
+    socialNetworks: user.socialNetworks,
+    role: user.role,
   }
 }

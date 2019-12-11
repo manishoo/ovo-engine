@@ -27,7 +27,7 @@ export default class FoodResolver {
     @Arg('id') id: ObjectId,
     @Ctx() ctx: Context,
   ) {
-    return this.foodService.getFood(id)
+    return this.foodService.get(id)
   }
 
   @Authorized([Role.operator, Role.user])
@@ -36,7 +36,7 @@ export default class FoodResolver {
     @Args() args: FoodListArgs,
     @Ctx() ctx: Context,
   ) {
-    return this.foodService.listFoods(args)
+    return this.foodService.list(args)
   }
 
   @Authorized([Role.operator, Role.user])

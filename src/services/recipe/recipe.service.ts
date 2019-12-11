@@ -53,7 +53,7 @@ export default class RecipeService {
 
     if (!recipe) throw new Errors.NotFound('Recipe not found')
 
-    return transformRecipe(recipe)
+    return transformRecipe(recipe.toObject())
   }
 
   async list(args: ListRecipesArgs): Promise<RecipesListResponse> {
@@ -64,8 +64,29 @@ export default class RecipeService {
       args.page = 1
     }
 
-    let query: any = {
-      status: args.status || RecipeStatus.public,
+    let query: any = {}
+
+    function isMine() {
+      return args.viewerUser && args.userId && args.viewerUser.id === String(args.userId)
+    }
+
+    if (args.viewerUser && args.status) {
+      /**
+       * If the user is an operator and has selected a status
+       * */
+      query.$or = [{ status: args.status }]
+    } else if (!isMine()) {
+      /**
+       * If the user hadn't selected a status, show public recipes
+       * */
+      query.$or = [{ status: RecipeStatus.public }]
+      /**
+       * If the user had selected showMyRecipes argument,
+       * also include their recipes in the result
+       * */
+      if (args.showMyRecipes) {
+        query.$or.push({ author: args.userId })
+      }
     }
 
     let sort: any = {
@@ -144,7 +165,6 @@ export default class RecipeService {
   }
 
   async create(data: RecipeInput, lang: LanguageCode, userId: string): Promise<Recipe> {
-
     const author = await UserModel.findById(userId)
     if (!author) throw new Errors.NotFound('author not found')
 
@@ -205,70 +225,73 @@ export default class RecipeService {
     recipe.nutrition = calculateRecipeNutrition(recipe.ingredients!)
 
     let createdRecipe = await RecipeModel.create(recipe)
+    createdRecipe = createdRecipe.toObject()
     createdRecipe.author = author
 
     return transformRecipe(createdRecipe, userId)
   }
 
   private async _validateIngredients(ingredientInput: IngredientInput) {
-      let ingredient: Partial<Ingredient> = {}
+    let ingredient: Partial<Ingredient> = {
+      id: ingredientInput.id || new ObjectId(),
+    }
 
     ingredient.amount = ingredientInput.amount || 1
     ingredient.description = ingredientInput.description
 
-      /**
-       * If the ingredient didn't have an associated food or recipe
-       * it must have a name, otherwise, it's invalid
-       * */
-      if (!ingredientInput.food && !ingredientInput.recipe) {
-        if (!ingredientInput.name) {
-          throw new Errors.UserInput('incomplete data', { 'name': 'either food or name should be entered' })
-        }
-        ingredient.name = ingredientInput.name
-      } else {
-        if (ingredientInput.food) {
-          /**
-           * If the ingredient had an associated food
-           * */
-          const food = await FoodModel.findById(ingredientInput.food)
-          if (!food) throw new Errors.NotFound('food not found')
-
-          ingredient.item = food
-        } else {
-          /**
-           * If the ingredient had an associated recipe
-           * */
-          const recipe = await RecipeModel.findById(ingredientInput.recipe)
-          if (!recipe) throw new Errors.NotFound('recipe not found')
-
-          ingredient.item = recipe
-        }
-
+    /**
+     * If the ingredient didn't have an associated food or recipe
+     * it must have a name, otherwise, it's invalid
+     * */
+    if (!ingredientInput.food && !ingredientInput.recipe) {
+      if (!ingredientInput.name) {
+        throw new Errors.UserInput('incomplete data', { 'name': 'either food or name should be entered' })
+      }
+      ingredient.name = ingredientInput.name
+    } else {
+      if (ingredientInput.food) {
         /**
-         * Check and select the unit
+         * If the ingredient had an associated food
          * */
-        switch (ingredientInput.unit) {
-          case 'customUnit':
-            ingredient.unit = ingredientInput.customUnit
-            break
-          case 'g':
-            ingredient.unit = undefined
-            break
-          default:
-            /**
-             * If the selected unit was a weightId
-             * */
-            if (ingredientInput.food) {
-              const food = ingredient.item as Food
-              const foundWeight = food.weights.find(w => w.id!.toString() == ingredientInput.unit)
-              if (!foundWeight) throw new Errors.Validation('Unit is not valid')
+        const food = await FoodModel.findById(ingredientInput.food)
+        if (!food) throw new Errors.NotFound('food not found')
 
-              ingredient.unit = foundWeight
-            }
-        }
+        ingredient.item = food
+      } else {
+        /**
+         * If the ingredient had an associated recipe
+         * */
+        const recipe = await RecipeModel.findById(ingredientInput.recipe)
+        if (!recipe) throw new Errors.NotFound('recipe not found')
+
+        ingredient.item = recipe
       }
 
-      return ingredient as Ingredient
+      /**
+       * Check and select the unit
+       * */
+      switch (ingredientInput.unit) {
+        case 'customUnit':
+          ingredient.unit = ingredientInput.customUnit
+          break
+        case 'g':
+          ingredient.unit = undefined
+          break
+        default:
+          /**
+           * If the selected unit was a weightId
+           * */
+          if (ingredientInput.food) {
+            const food = ingredient.item as Food
+            const foundWeight = food.weights.find(w => w.id!.toString() == ingredientInput.unit)
+            if (!foundWeight) throw new Errors.Validation('Unit is not valid')
+
+            ingredient.unit = foundWeight
+          }
+      }
+    }
+
+    return ingredient as Ingredient
   }
 
   async delete(id: ObjectId, user: ContextUser) {
@@ -407,7 +430,9 @@ export default class RecipeService {
       }
     }
 
-    return transformRecipe(await recipe.save(), user && user.id)
+    const savedRecipe = await recipe.save()
+
+    return transformRecipe(savedRecipe.toObject(), user && user.id)
   }
 
   async tag(recipePublicId: ObjectId, tagSlugs: string[], user: ContextUser): Promise<Recipe> {
