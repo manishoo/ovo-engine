@@ -236,7 +236,7 @@ export default class RecipeService {
       id: ingredientInput.id || new ObjectId(),
     }
 
-    ingredient.amount = ingredientInput.amount
+    ingredient.amount = ingredientInput.amount || 1
     ingredient.description = ingredientInput.description
 
     /**
@@ -423,6 +423,7 @@ export default class RecipeService {
          * */
         case RecipeStatus.public:
           if (user.role === Role.operator || user.role === Role.admin) {
+            if (!recipe.nutrition) throw new Errors.Validation('Recipe nutrition cannot be calculated. Please map all ingredients')
             recipe.status = data.status
           }
           break

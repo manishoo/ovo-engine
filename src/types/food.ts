@@ -615,8 +615,8 @@ export class FoodBase {
   @Field(type => [[FoodGroup]])
   origFoodGroups: Partial<FoodGroup>[][]
 
-  @Field(type => Nutrition)
-  nutrition: Nutrition
+  @Field(type => Nutrition, { nullable: true })
+  nutrition?: Nutrition
 }
 
 @ObjectType()
