@@ -8,7 +8,7 @@ import userConfig from '@Config/user-config'
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Ref, Role, Status } from '@Types/common'
+import { Image, Ref, Role, Status, LanguageCode } from '@Types/common'
 import { Diet } from '@Types/diet'
 import { Household } from '@Types/household'
 import {
@@ -107,7 +107,7 @@ export class UserSchema extends Typegoose implements User {
   /**
    * physical attributes
    * */
-  @prop({ default: userConfig.defaultNutritionProfile })
+  @prop({ default: () => userConfig.defaultNutritionProfile })
   nutritionProfile: NutritionProfile
 
   @prop()
@@ -131,7 +131,7 @@ export class UserSchema extends Typegoose implements User {
   @prop({ required: true, enum: Status, default: Status.active })
   status: Status
 
-  @prop()
+  @prop({ default: () => userConfig.defaultUserMeals(LanguageCode.en) })
   meals: UserMeal[]
 
   @prop({ ref: MealPlanSchema })

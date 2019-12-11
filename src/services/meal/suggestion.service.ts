@@ -277,20 +277,23 @@ export default class SuggestionService {
     if (!user) throw new Errors.NotFound('User not found')
 
     const day = await this.calendarService.findOrCreateDayByTime(userId, date)
-    day.meals = await Promise.all((user.meals as UserMeal[]).map(async userMeal => {
+    let days: DayMeal[] = []
+    for (let i = 0; i < user.meals.length; i++) {
+      user.meals[i]
       let time = day.date
-      time = setHours(time, Number(userMeal.time.split(':')[0]))
-      time = setMinutes(time, Number(userMeal.time.split(':')[1]))
+      time = setHours(time, Number(user.meals[i].time.split(':')[0]))
+      time = setMinutes(time, Number(user.meals[i].time.split(':')[1]))
       const selectedMeal = await this.findBestMeal(userId)
 
-      return {
+      days.push({
         id: new ObjectId(),
-        userMeal,
+        userMeal: user.meals[i],
         mealId: selectedMeal._id,
         items: selectedMeal.items,
         time,
-      }
-    }))
+      })
+    }
+    day.meals = days
 
     return day.save()
   }
