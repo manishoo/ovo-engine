@@ -335,5 +335,9 @@ export class ListRecipesArgs {
   @Authorized(Role.operator)
   status?: RecipeStatus
 
+  @Field({ nullable: true })
+  @Authorized()
+  showMyRecipes?: boolean
+
   viewerUser?: ContextUser
 }
