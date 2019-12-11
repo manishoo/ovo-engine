@@ -44,7 +44,3 @@ export function calculateMealNutrition(items: Ingredient[]): Nutrition {
 
   return totalNutrition
 }
-
-
-
-
