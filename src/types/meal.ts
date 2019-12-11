@@ -79,7 +79,7 @@ export class Meal {
   @Field(type => Date)
   updatedAt?: Date
 
-  @Field()
+  @Field({ nullable: true })
   instanceOf?: ObjectId
 }
 

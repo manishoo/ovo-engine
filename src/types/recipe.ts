@@ -205,8 +205,8 @@ export class Recipe {
   @Field(type => Timing)
   timing: Timing
 
-  @Field(type => Nutrition)
-  nutrition: Nutrition
+  @Field(type => Nutrition, { nullable: true })
+  nutrition?: Nutrition
 
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
@@ -334,6 +334,10 @@ export class ListRecipesArgs {
   @Field(type => RecipeStatus, { nullable: true })
   @Authorized(Role.operator)
   status?: RecipeStatus
+
+  @Field({ nullable: true })
+  @Authorized()
+  showMyRecipes?: boolean
 
   viewerUser?: ContextUser
 }

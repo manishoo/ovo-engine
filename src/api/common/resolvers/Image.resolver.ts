@@ -14,6 +14,6 @@ export default class ImageResolver implements ResolverInterface<Image> {
   url(@Root() image: Image) {
     if (image.url.includes('http')) return image.url
 
-    return `${config.appFullAddressForExternalUse}/${image.url}`
+    return `${config.fullAppAddress}/${image.url}`
   }
 }

@@ -57,7 +57,7 @@ export default class RecipeService {
 
     if (!recipe) throw new Errors.NotFound('Recipe not found')
 
-    return transformRecipe(recipe)
+    return transformRecipe(recipe.toObject())
   }
 
   async list(args: ListRecipesArgs): Promise<RecipesListResponse> {
@@ -68,8 +68,29 @@ export default class RecipeService {
       args.page = 1
     }
 
-    let query: any = {
-      status: args.status || RecipeStatus.public,
+    let query: any = {}
+
+    function isMine() {
+      return args.viewerUser && args.userId && args.viewerUser.id === String(args.userId)
+    }
+
+    if (args.viewerUser && args.status) {
+      /**
+       * If the user is an operator and has selected a status
+       * */
+      query.$or = [{ status: args.status }]
+    } else if (!isMine()) {
+      /**
+       * If the user hadn't selected a status, show public recipes
+       * */
+      query.$or = [{ status: RecipeStatus.public }]
+      /**
+       * If the user had selected showMyRecipes argument,
+       * also include their recipes in the result
+       * */
+      if (args.showMyRecipes) {
+        query.$or.push({ author: args.userId })
+      }
     }
 
     let sort: any = {
@@ -148,7 +169,6 @@ export default class RecipeService {
   }
 
   async create(data: RecipeInput, lang: LanguageCode, userId: string): Promise<Recipe> {
-
     const author = await UserModel.findById(userId)
     if (!author) throw new Errors.NotFound('author not found')
 
@@ -209,15 +229,18 @@ export default class RecipeService {
     recipe.nutrition = calculateRecipeNutrition(recipe.ingredients!)
 
     let createdRecipe = await RecipeModel.create(recipe)
+    createdRecipe = createdRecipe.toObject()
     createdRecipe.author = author
 
     return transformRecipe(createdRecipe, userId)
   }
 
   private async _validateIngredients(ingredientInput: IngredientInput) {
-    let ingredient: Partial<Ingredient> = {}
+    let ingredient: Partial<Ingredient> = {
+      id: ingredientInput.id || new ObjectId(),
+    }
 
-    ingredient.amount = ingredientInput.amount
+    ingredient.amount = ingredientInput.amount || 1
     ingredient.description = ingredientInput.description
 
     /**
@@ -404,6 +427,7 @@ export default class RecipeService {
          * */
         case RecipeStatus.public:
           if (user.role === Role.operator || user.role === Role.admin) {
+            if (!recipe.nutrition) throw new Errors.Validation('Recipe nutrition cannot be calculated. Please map all ingredients')
             recipe.status = data.status
           }
           break
