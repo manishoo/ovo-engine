@@ -213,8 +213,8 @@ export default class RecipeService {
   private async _validateIngredients(ingredientInput: IngredientInput) {
       let ingredient: Partial<Ingredient> = {}
 
-      ingredient.amount = ingredientInput.amount
-      ingredient.description = ingredientInput.description
+    ingredient.amount = ingredientInput.amount || 1
+    ingredient.description = ingredientInput.description
 
       /**
        * If the ingredient didn't have an associated food or recipe
@@ -400,6 +400,7 @@ export default class RecipeService {
          * */
         case RecipeStatus.public:
           if (user.role === Role.operator || user.role === Role.admin) {
+            if (!recipe.nutrition) throw new Errors.Validation('Recipe nutrition cannot be calculated. Please map all ingredients')
             recipe.status = data.status
           }
           break
