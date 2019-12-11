@@ -17,7 +17,7 @@ import { ObjectId } from '@Types/common'
 import { Ingredient } from '@Types/ingredient'
 import { Meal, MealItem } from '@Types/meal'
 import { RedisKeys } from '@Types/redis'
-import { UserMeal } from '@Types/user'
+import { UserMeal, MealSize } from '@Types/user'
 import Errors from '@Utils/errors'
 import addHours from 'date-fns/addHours'
 import setHours from 'date-fns/setHours'
@@ -54,12 +54,13 @@ export default class SuggestionService {
     // noop
   }
 
-  async findBestMeal(userId: string): Promise<Meal> {
+  async findBestMeal(userId: string, mealSize?: MealSize): Promise<Meal> {
     const {
       nutritionProfile,
       meals: userMeals,
       diet,
     } = await this.userService.getUserById(userId)
+    mealSize = mealSize || MealSize.normal
 
     /* TODO bias conditions: user excluded foods and food classes */
     const biasConditions: any = {}
@@ -76,9 +77,11 @@ export default class SuggestionService {
       biasConditions['items.food'] = { $not: { $elemMatch: { $nin: foodsInDiet.map(food => food._id) } } }
       biasConditions['items.recipe'] = { $not: { $elemMatch: { $nin: recipesInDiet.map(recipe => recipe._id) } } }
     }
-
-    const mealsCount = userMeals.length || 4
-    const mealWeight = 1 / mealsCount
+    let totalWeights = 0
+    userMeals.map(userMeal => {
+      totalWeights += parseInt(userMeal.size)
+    })
+    const mealWeight = parseInt(mealSize) / totalWeights
 
     const targetCalories = nutritionProfile.calories * mealWeight
     if (nutritionProfile.isStrict) {
@@ -239,7 +242,7 @@ export default class SuggestionService {
     if (foundMeal) {
       day.meals = await Promise.all(day.meals.map(async meal => {
         if (meal.userMeal && (meal.userMeal.id === userMealId)) {
-          const bestMeal = await this.findBestMeal(userId)
+          const bestMeal = await this.findBestMeal(userId, meal.userMeal.size)
 
           dayMeal = {
             ...meal,
