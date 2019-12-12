@@ -10,9 +10,7 @@ import { Recipe } from "@Types/recipe"
 
 
 export function determineWeightIsObject(weight: Weight | ObjectId | CustomUnit): weight is Weight {
-  if (weight.hasOwnProperty('amount')) return true
-
-  return false
+  return 'id' in weight
 }
 
 export function determineCustomUnitIsObject(unit: CustomUnit | ObjectId): unit is CustomUnit {
