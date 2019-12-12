@@ -28,8 +28,8 @@ export enum MealSize {
   tiny = '1',
   small = '2',
   normal = '3',
-  big = '4',
-  huge = '5',
+  big = '5',
+  huge = '8',
 }
 
 registerEnumType(MealSize, {
