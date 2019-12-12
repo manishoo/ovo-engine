@@ -22,7 +22,7 @@ export function determineCustomUnitIsObject(unit: CustomUnit | ObjectId): unit i
 }
 
 export function determineFoodIsObject(food: Food | ObjectId | Recipe): food is Food {
-  if (food.hasOwnProperty('weights')) return true
+  if ('weights' in food) return true
 
   return false
 }
