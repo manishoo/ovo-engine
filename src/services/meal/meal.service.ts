@@ -8,7 +8,8 @@ import { UserModel } from '@Models/user.model'
 import FoodService from '@Services/food/food.service'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import RecipeService from '@Services/recipe/recipe.service'
-import { ObjectId, Role } from '@Types/common'
+import { ObjectId, Pagination, Role } from '@Types/common'
+import { determineIfIsFood } from '@Types/ingredient'
 import { ListMealsArgs, Meal, MealInput, MealListResponse, MealItem, MealItemInput } from '@Types/meal'
 import { Author } from '@Types/user'
 import { ContextUser } from '@Utils/context'
@@ -17,7 +18,7 @@ import Errors from '@Utils/errors'
 import generateAllCases from '@Utils/generate-all-cases'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
-import { transformMeal } from './transformes/meal.transformer'
+import { transformMeal } from './transformers/meal.transformer'
 import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
@@ -201,8 +202,8 @@ export default class MealService {
       query.createdAt = { $lt: meal.createdAt }
     }
 
-    if (variables.foodOrRecipeId) {
-      query['items.item._id'] = variables.foodOrRecipeId
+    if (variables.ingredientId) {
+      query['items.item._id'] = variables.ingredientId
     }
 
     const counts = await MealModel.countDocuments(query)
@@ -344,76 +345,28 @@ export default class MealService {
     }))
   }
 
-  async updateMealsByFoodOrRecipe(updatingMeals: MealListResponse, savedFoodOrRecipe: Food | Recipe) {
-    return Promise.all(updatingMeals.meals.map(async meal => {
+  async updateMealsByIngredient(ingredient: Food | Recipe) {
+    let paginationCursor: Partial<Pagination> = {
+      page: 1,
+      hasNext: true,
+      size: 100,
+    }
 
-      const author = meal.author as Author
-      await this.mealService.update(meal._id!, {
-        ...meal,
-        items: [
-          ...meal.items.map(mealItem => {
+    while(paginationCursor.hasNext) {
+      const { meals, pagination } = await this.list({ ingredientId: ingredient._id, size: paginationCursor.size, page: paginationCursor.page })
 
-            let unit
-            if (mealItem.unit && determineWeightIsObject(mealItem.unit)) {
-              unit = mealItem.unit.id.toString()
-            } else if (mealItem.unit && determineCustomUnitIsObject(mealItem.unit)) {
-              unit = 'customUnit'
-            } else {
-              unit = 'g'
-            }
+      await Promise.all(meals.map(async meal => {
+        meal.items = meal.items.map(mealItem => {
+          if (mealItem.item && (mealItem.item.id === ingredient.id)) {
+            mealItem.item = ingredient
+          }
 
-            let recipeId
-            if (mealItem.item && determineRecipeIsObject(mealItem.item)) {
-              recipeId = new ObjectId(mealItem.item.id)
-            }
-            let foodId
-            if (mealItem.item && determineFoodIsObject(mealItem.item)) {
-              foodId = new ObjectId(mealItem.item.id)
-            }
-            let baseMealItem: Partial<MealItemInput> = {
-              id: mealItem.id,
-              name: mealItem.name,
-              amount: mealItem.amount,
-              unit: unit,
-              customUnit: mealItem.customUnit,
-              description: mealItem.description,
-              isOptional: mealItem.isOptional,
-            }
+          return mealItem
+        })
+        return meal.save()
+      }))
 
-            if (determineFoodIsObject(savedFoodOrRecipe)) {
-              baseMealItem.recipe = recipeId
-            } else {
-              baseMealItem.food = foodId
-            }
-
-            if (determineFoodIsObject(savedFoodOrRecipe)) {
-              if (mealItem.item!.id === savedFoodOrRecipe.id) {
-                return {
-                  ...baseMealItem,
-                  food: new ObjectId(savedFoodOrRecipe.id)
-                } as MealItemInput
-              } else {
-                return {
-                  ...baseMealItem,
-                  food: foodId
-                } as MealItemInput
-              }
-            } else {
-              if (mealItem.item!.id === savedFoodOrRecipe.id) {
-                return {
-                  ...baseMealItem,
-                  recipe: new ObjectId(savedFoodOrRecipe.id)
-                } as MealItemInput
-              } else {
-                return {
-                  ...baseMealItem,
-                  recipe: recipeId
-                } as MealItemInput
-              }
-            }
-          })
-        ]
-      }, author.id!)
-    }))
+      paginationCursor = pagination
+    }
   }
 }

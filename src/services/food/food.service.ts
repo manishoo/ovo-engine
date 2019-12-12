@@ -124,13 +124,11 @@ export default class FoodService {
     }
 
     let savedFood = await food.save()
-    let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedFood._id, size: 100, page: 1 })
-    await this.mealService.updateMealsByFoodOrRecipe(updatingMeals, savedFood as Food)
 
-    for (let p = 2; p < updatingMeals.pagination.totalPages; p++) {
-      let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedFood._id, size: 100, page: p })
-      await this.mealService.updateMealsByFoodOrRecipe(updatingMeals, savedFood as Food)
-    }
+    /**
+     * Update all meals that have this food
+     * */
+    await this.mealService.updateMealsByIngredient(savedFood)
 
     return savedFood
   }

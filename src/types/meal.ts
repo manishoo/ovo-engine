@@ -4,25 +4,19 @@
  */
 
 import { UserSchema } from '@Models/user.model'
-import {
-  ObjectId,
-  Pagination,
-  Ref,
-  Timing,
-  Translation,
-  TranslationInput
-} from '@Types/common'
+import { ObjectId, Pagination, Ref, Timing, Translation, TranslationInput } from '@Types/common'
 import { Nutrition } from '@Types/food'
 import { Ingredient, IngredientInput } from '@Types/ingredient'
+import { Author } from '@Types/user'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
-import { Author } from '@Types/user'
+import { InstanceType } from 'typegoose'
 
 
 @ObjectType()
 export class MealListResponse {
   @Field(type => [Meal])
-  meals: Meal[]
+  meals: InstanceType<Meal>[]
   @Field(type => Pagination)
   pagination: Pagination
 }
@@ -114,5 +108,5 @@ export class ListMealsArgs {
   authorId?: ObjectId
 
   @Field(type => ObjectId, { nullable: true })
-  foodOrRecipeId?: ObjectId
+  ingredientId?: ObjectId
 }

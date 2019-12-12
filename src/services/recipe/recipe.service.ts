@@ -8,6 +8,7 @@ import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import DietService from '@Services/diet/diet.service'
+import MealService from '@Services/meal/meal.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
 import { Food } from '@Types/food'
@@ -23,7 +24,6 @@ import slug from 'slug'
 import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
 import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
-import MealService from '@Services/meal/meal.service'
 
 
 @Service()
@@ -433,13 +433,11 @@ export default class RecipeService {
     }
 
     let savedRecipe = transformRecipe(await recipe.save(), user && user.id)
-    let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedRecipe._id, size: 100, page: 1 })
-    await this.mealService.updateMealsByFoodOrRecipe(updatingMeals, savedRecipe)
 
-    for (let p = 2; p <= updatingMeals.pagination.totalPages; p++) {
-      let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedRecipe._id, size: 100, page: p })
-      await this.mealService.updateMealsByFoodOrRecipe(updatingMeals, savedRecipe)
-    }
+    /**
+     * Update all meals that have this recipe
+     * */
+    await this.mealService.updateMealsByIngredient(savedRecipe)
 
     return savedRecipe
   }
