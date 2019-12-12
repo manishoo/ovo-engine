@@ -9,18 +9,18 @@ import { Food } from "@Types/food"
 import { Recipe } from "@Types/recipe"
 
 
-export function determineWeightIsObject(weight: Weight | ObjectId | CustomUnit): weight is Weight {
+export function determineIfItsWeightOrObject(weight: Weight | CustomUnit | ObjectId): weight is Weight {
   return 'id' in weight
 }
 
-export function determineCustomUnitIsObject(unit: CustomUnit | ObjectId): unit is CustomUnit {
+export function determineIfItsCustomUnit(unit: CustomUnit): unit is CustomUnit {
   return 'gramWeight' in unit
 }
 
-export function determineFoodIsObject(food: Food | ObjectId | Recipe): food is Food {
+export function determineIfItsFood(food: Food | Recipe): food is Food {
   return 'name' in food
 }
 
-export function determineRecipeIsObject(recipe: Recipe | ObjectId | Food): recipe is Recipe {
+export function determineIfItsRecipe(recipe: Recipe | Food): recipe is Recipe {
   return 'serving' in recipe
 }

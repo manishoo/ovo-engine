@@ -6,7 +6,7 @@
 import { Food, Nutrition } from '@Types/food'
 import { Ingredient } from '@Types/ingredient'
 import { calculateNutrition, scaleFoodNutrition } from '@Utils/calculate-nutrition'
-import { determineWeightIsObject, determineCustomUnitIsObject } from '@Utils/determine-object'
+import { determineIfItsWeightOrObject, determineIfItsCustomUnit } from '@Utils/determine-object'
 
 
 export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
@@ -18,9 +18,9 @@ export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
     let weightId
     let gramWeight
 
-    if (ingredient.unit && determineWeightIsObject(ingredient.unit)) {
+    if (ingredient.unit && determineIfItsWeightOrObject(ingredient.unit)) {
       weightId = ingredient.unit.id
-    } else if (ingredient.unit && determineCustomUnitIsObject(ingredient.unit)) {
+    } else if (ingredient.unit && determineIfItsCustomUnit(ingredient.unit)) {
       gramWeight = ingredient.unit.gramWeight
     }
 

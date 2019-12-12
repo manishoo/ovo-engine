@@ -9,7 +9,6 @@ import FoodService from '@Services/food/food.service'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import RecipeService from '@Services/recipe/recipe.service'
 import { ObjectId, Pagination, Role } from '@Types/common'
-import { determineIfIsFood } from '@Types/ingredient'
 import { ListMealsArgs, Meal, MealInput, MealListResponse, MealItem, MealItemInput } from '@Types/meal'
 import { Author } from '@Types/user'
 import { ContextUser } from '@Utils/context'
@@ -22,7 +21,7 @@ import { transformMeal } from './transformers/meal.transformer'
 import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
-import { determineWeightIsObject, determineCustomUnitIsObject, determineRecipeIsObject, determineFoodIsObject } from '@Utils/determine-object'
+import { determineIfItsWeightOrObject, determineIfItsCustomUnit, determineIfItsRecipe, determineIfItsFood } from '@Utils/determine-object'
 
 
 @Service()
@@ -352,7 +351,7 @@ export default class MealService {
       size: 100,
     }
 
-    while(paginationCursor.hasNext) {
+    while (paginationCursor.hasNext) {
       const { meals, pagination } = await this.list({ ingredientId: ingredient._id, size: paginationCursor.size, page: paginationCursor.page })
 
       await Promise.all(meals.map(async meal => {
