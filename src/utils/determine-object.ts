@@ -22,7 +22,5 @@ export function determineFoodIsObject(food: Food | ObjectId | Recipe): food is F
 }
 
 export function determineRecipeIsObject(recipe: Recipe | ObjectId | Food): recipe is Recipe {
-  if ('serving' in recipe) return true
-
-  return false
+  return 'serving' in recipe
 }
