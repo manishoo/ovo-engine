@@ -278,16 +278,15 @@ export default class SuggestionService {
 
     const day = await this.calendarService.findOrCreateDayByTime(userId, date)
     let days: DayMeal[] = []
-    for (let i = 0; i < user.meals.length; i++) {
-      user.meals[i]
+    for (let userMeal of user.meals) {
       let time = day.date
-      time = setHours(time, Number(user.meals[i].time.split(':')[0]))
-      time = setMinutes(time, Number(user.meals[i].time.split(':')[1]))
+      time = setHours(time, Number(userMeal.time.split(':')[0]))
+      time = setMinutes(time, Number(userMeal.time.split(':')[1]))
       const selectedMeal = await this.findBestMeal(userId)
 
       days.push({
         id: new ObjectId(),
-        userMeal: user.meals[i],
+        userMeal: userMeal,
         mealId: selectedMeal._id,
         items: selectedMeal.items,
         time,
