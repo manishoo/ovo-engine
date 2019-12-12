@@ -20,9 +20,7 @@ export function determineCustomUnitIsObject(unit: CustomUnit | ObjectId): unit i
 }
 
 export function determineFoodIsObject(food: Food | ObjectId | Recipe): food is Food {
-  if ('weights' in food) return true
-
-  return false
+  return 'name' in food
 }
 
 export function determineRecipeIsObject(recipe: Recipe | ObjectId | Food): recipe is Recipe {
