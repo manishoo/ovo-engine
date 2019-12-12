@@ -29,14 +29,16 @@ export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, wei
   /**
    * Iterate nutrition fields
    * */
-  Object.keys(food.nutrition).map(fieldName => {
-    const nutrient = food.nutrition[fieldName]!
+  if (food.nutrition) {
+    Object.keys(food.nutrition).map(fieldName => {
+      const nutrient = food.nutrition![fieldName]!
 
-    totalNutrition[fieldName] = {
-      amount: getFoodNutrientAmount(food, foodAmount, nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, weightId, customGramWeight),
-      unit: nutrient.unit,
-    }
-  })
+      totalNutrition[fieldName] = {
+        amount: getFoodNutrientAmount(food, foodAmount, nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, weightId, customGramWeight),
+        unit: nutrient.unit,
+      }
+    })
+  }
 
   return totalNutrition
 }
@@ -68,14 +70,16 @@ export function scaleRecipeNutrition(recipe: Recipe, serving: number): Nutrition
   /**
    * Iterate nutrition fields
    * */
-  Object.keys(recipe.nutrition).map(fieldName => {
-    const nutrient = recipe.nutrition[fieldName]!
+  if (recipe.nutrition) {
+    Object.keys(recipe.nutrition).map(fieldName => {
+      const nutrient = recipe.nutrition![fieldName]!
 
-    totalNutrition[fieldName] = {
-      amount: getRecipeNutrientAmount(nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, serving),
-      unit: nutrient.unit,
-    }
-  })
+      totalNutrition[fieldName] = {
+        amount: getRecipeNutrientAmount(nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, serving),
+        unit: nutrient.unit,
+      }
+    })
+  }
 
   return totalNutrition
 }
