@@ -286,7 +286,7 @@ export default class SuggestionService {
 
       dayMeals.push({
         id: new ObjectId(),
-        userMeal: userMeal,
+        userMeal,
         mealId: selectedMeal._id,
         items: selectedMeal.items,
         time,
