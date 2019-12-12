@@ -283,6 +283,9 @@ export default class MealService {
         id: mealItemInput.id || new ObjectId(),
         amount: mealItemInput.amount,
         isOptional: mealItemInput.isOptional,
+        customUnit: mealItemInput.customUnit,
+        description: mealItemInput.description,
+        name: mealItemInput.name,
       }
 
       /**

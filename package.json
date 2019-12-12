@@ -55,7 +55,6 @@
     "type-graphql": "^0.17.5",
     "typedi": "^0.8.0",
     "typegoose": "^5.9.0",
-    "typescript": "^3.7.3",
     "uuid": "^3.3.2",
     "winston": "^3.1.0",
     "words-to-numbers": "^1.5.1"
@@ -99,6 +98,7 @@
     "promise-retry": "^1.1.1",
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.6.0",
-    "tscpaths": "0.0.7"
+    "tscpaths": "0.0.7",
+    "typescript": "^3.7.3"
   }
 }
