@@ -7,7 +7,7 @@ import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import putDefaultFoodsOnTop from '@Services/food/utils/put-default-foods-on-top'
 import UploadService from '@Services/upload/upload.service'
-import { ObjectId, CustomUnit } from '@Types/common'
+import { ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
 import { Weight, WeightInput } from '@Types/weight'
 import { ContextUser } from '@Utils/context'
@@ -16,10 +16,6 @@ import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
 import MealService from '@Services/meal/meal.service'
-import { Author } from '@Types/user'
-import { Recipe } from '@Types/recipe'
-import { MealItemInput } from '@Types/meal'
-import { determineWeightIsObject, determineCustomUnitIsObject, determineRecipeIsObject, determineFoodIsObject } from '@Utils/determine-object'
 
 
 @Service()
@@ -128,59 +124,13 @@ export default class FoodService {
     }
 
     let savedFood = await food.save()
-    let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedFood._id })
+    let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedFood._id, size: 100, page: 1 })
+    await this.mealService.updateMealsByFoodOrRecipe(updatingMeals, savedFood as Food)
 
-    await Promise.all(updatingMeals.meals.map(async meal => {
-
-      const author = meal.author as Author
-      await this.mealService.update(meal._id!, {
-        ...meal,
-        items: [
-          ...meal.items.map(mealItem => {
-
-            let unit
-            if (mealItem.unit && determineWeightIsObject(mealItem.unit)) {
-              unit = mealItem.unit.id!.toString()
-            } else if (mealItem.unit && determineCustomUnitIsObject(mealItem.unit)) {
-              unit = 'customUnit'
-            } else {
-              unit = 'g'
-            }
-
-            let recipeId
-            if (mealItem.item && determineRecipeIsObject(mealItem.item)) {
-              recipeId = new ObjectId(mealItem.item.id)
-            }
-            let foodId
-            if (mealItem.item && determineFoodIsObject(mealItem.item)) {
-              foodId = new ObjectId(mealItem.item.id)
-            }
-            let baseMealItem: Partial<MealItemInput> = {
-              id: mealItem.id,
-              name: mealItem.name,
-              amount: mealItem.amount,
-              unit: unit,
-              customUnit: mealItem.customUnit,
-              description: mealItem.description,
-              isOptional: mealItem.isOptional,
-              recipe: recipeId,
-            }
-
-            if (mealItem.item!.id === savedFood.id) {
-              return {
-                ...baseMealItem,
-                food: savedFood.id
-              } as MealItemInput
-            } else {
-              return {
-                ...baseMealItem,
-                food: foodId
-              } as MealItemInput
-            }
-          })
-        ]
-      }, author.id!)
-    }))
+    for (let p = 2; p < updatingMeals.pagination.totalPages; p++) {
+      let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedFood._id, size: 100, page: p })
+      await this.mealService.updateMealsByFoodOrRecipe(updatingMeals, savedFood as Food)
+    }
 
     return savedFood
   }
@@ -245,5 +195,4 @@ export default class FoodService {
 
     return food.save()
   }
-
 }

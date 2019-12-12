@@ -24,8 +24,6 @@ import { Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
 import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
 import MealService from '@Services/meal/meal.service'
-import { determineWeightIsObject, determineCustomUnitIsObject, determineRecipeIsObject, determineFoodIsObject } from '@Utils/determine-object'
-import { MealItemInput } from '@Types/meal'
 
 
 @Service()
@@ -435,59 +433,13 @@ export default class RecipeService {
     }
 
     let savedRecipe = transformRecipe(await recipe.save(), user && user.id)
-    let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedRecipe._id })
+    let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedRecipe._id, size: 100, page: 1 })
+    await this.mealService.updateMealsByFoodOrRecipe(updatingMeals, savedRecipe)
 
-    await Promise.all(updatingMeals.meals.map(async meal => {
-
-      const author = meal.author as Author
-      await this.mealService.update(meal._id!, {
-        ...meal,
-        items: [
-          ...meal.items.map(mealItem => {
-
-            let unit
-            if (mealItem.unit && determineWeightIsObject(mealItem.unit)) {
-              unit = mealItem.unit.id!.toString()
-            } else if (mealItem.unit && determineCustomUnitIsObject(mealItem.unit)) {
-              unit = 'customUnit'
-            } else {
-              unit = 'g'
-            }
-
-            let recipeId
-            if (mealItem.item && determineRecipeIsObject(mealItem.item)) {
-              recipeId = new ObjectId(mealItem.item.id)
-            }
-            let foodId
-            if (mealItem.item && determineFoodIsObject(mealItem.item)) {
-              foodId = new ObjectId(mealItem.item.id)
-            }
-            let baseMealItem: Partial<MealItemInput> = {
-              id: mealItem.id,
-              name: mealItem.name,
-              amount: mealItem.amount,
-              unit: unit,
-              customUnit: mealItem.customUnit,
-              description: mealItem.description,
-              isOptional: mealItem.isOptional,
-              food: foodId,
-            }
-
-            if (mealItem.item!.id === savedRecipe.id) {
-              return {
-                ...baseMealItem,
-                recipe: new ObjectId(savedRecipe.id)
-              } as MealItemInput
-            } else {
-              return {
-                ...baseMealItem,
-                recipe: recipeId
-              } as MealItemInput
-            }
-          })
-        ]
-      }, author.id!)
-    }))
+    for (let p = 2; p <= updatingMeals.pagination.totalPages; p++) {
+      let updatingMeals = await this.mealService.list({ foodOrRecipeId: savedRecipe._id, size: 100, page: p })
+      await this.mealService.updateMealsByFoodOrRecipe(updatingMeals, savedRecipe)
+    }
 
     return savedRecipe
   }

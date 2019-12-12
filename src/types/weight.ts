@@ -12,7 +12,7 @@ import { prop } from 'typegoose'
 export class Weight {
   @prop({ default: ObjectId })
   @Field(type => ObjectId)
-  id?: ObjectId
+  id: ObjectId
   @Field()
   amount: number
   @Field({ nullable: true })

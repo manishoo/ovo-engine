@@ -3,12 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { CustomUnit } from '@Types/common'
 import { Food, Nutrition } from '@Types/food'
 import { Ingredient } from '@Types/ingredient'
-import { Weight } from '@Types/weight'
 import { calculateNutrition, scaleFoodNutrition } from '@Utils/calculate-nutrition'
-import { ObjectId } from '@Types/common'
 import { determineWeightIsObject, determineCustomUnitIsObject } from '@Utils/determine-object'
 
 
@@ -22,7 +19,7 @@ export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
     let gramWeight
 
     if (ingredient.unit && determineWeightIsObject(ingredient.unit)) {
-      weightId = ingredient.unit.id!
+      weightId = ingredient.unit.id
     } else if (ingredient.unit && determineCustomUnitIsObject(ingredient.unit)) {
       gramWeight = ingredient.unit.gramWeight
     }

@@ -50,7 +50,7 @@ function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrien
    * use the weight's {gramWeight}
    * */
   if (weightId) {
-    const foundWeight = food.weights.find(w => w.id!.toString() == weightId.toString())
+    const foundWeight = food.weights.find(w => w.id.toString() == weightId.toString())
     if (!foundWeight) throw new Errors.Validation('Weight id not valid')
     totalAmount = (foundWeight.gramWeight || 0) * foodAmount
   } else if (customGramWeight) {

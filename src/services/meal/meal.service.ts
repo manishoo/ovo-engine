@@ -3,16 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodModel } from '@Models/food.model'
 import { MealModel } from '@Models/meal.model'
-import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
-import DietService from '@Services/diet/diet.service'
 import FoodService from '@Services/food/food.service'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import RecipeService from '@Services/recipe/recipe.service'
-import UploadService from '@Services/upload/upload.service'
-import { transformRecipeUser } from '@Services/user/transformers/recipe-user.transformer'
 import { ObjectId, Role } from '@Types/common'
 import { ListMealsArgs, Meal, MealInput, MealListResponse, MealItem, MealItemInput } from '@Types/meal'
 import { Author } from '@Types/user'
@@ -24,6 +19,9 @@ import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
 import { transformMeal } from './transformes/meal.transformer'
 import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
+import { Food } from '@Types/food'
+import { Recipe } from '@Types/recipe'
+import { determineWeightIsObject, determineCustomUnitIsObject, determineRecipeIsObject, determineFoodIsObject } from '@Utils/determine-object'
 
 
 @Service()
@@ -32,6 +30,7 @@ export default class MealService {
     // service injection
     private readonly recipeService: RecipeService,
     private readonly foodService: FoodService,
+    private readonly mealService: MealService,
   ) {
     // noop
   }
@@ -313,12 +312,6 @@ export default class MealService {
       if (mealItemInput.food) {
         const food = await this.foodService.get(mealItemInput.food)
         if (!food) throw new Errors.NotFound('food not found')
-        /*
-               if (mealItemInput.weight) {
-                 const foundWeight = food.weights.find(w => w.id!.toString() == mealItemInput!.weight!.toString())
-                 if (!foundWeight) throw new Errors.UserInput('Wront weight', { 'weight': 'This weight is not available for the following food' })
-               }
-               */
 
         /**
          * Check and select the unit: part 2
@@ -348,6 +341,79 @@ export default class MealService {
       }
 
       throw new Errors.System('Something went wrong')
+    }))
+  }
+
+  async updateMealsByFoodOrRecipe(updatingMeals: MealListResponse, savedFoodOrRecipe: Food | Recipe) {
+    return Promise.all(updatingMeals.meals.map(async meal => {
+
+      const author = meal.author as Author
+      await this.mealService.update(meal._id!, {
+        ...meal,
+        items: [
+          ...meal.items.map(mealItem => {
+
+            let unit
+            if (mealItem.unit && determineWeightIsObject(mealItem.unit)) {
+              unit = mealItem.unit.id.toString()
+            } else if (mealItem.unit && determineCustomUnitIsObject(mealItem.unit)) {
+              unit = 'customUnit'
+            } else {
+              unit = 'g'
+            }
+
+            let recipeId
+            if (mealItem.item && determineRecipeIsObject(mealItem.item)) {
+              recipeId = new ObjectId(mealItem.item.id)
+            }
+            let foodId
+            if (mealItem.item && determineFoodIsObject(mealItem.item)) {
+              foodId = new ObjectId(mealItem.item.id)
+            }
+            let baseMealItem: Partial<MealItemInput> = {
+              id: mealItem.id,
+              name: mealItem.name,
+              amount: mealItem.amount,
+              unit: unit,
+              customUnit: mealItem.customUnit,
+              description: mealItem.description,
+              isOptional: mealItem.isOptional,
+            }
+
+            if (determineFoodIsObject(savedFoodOrRecipe)) {
+              baseMealItem.recipe = recipeId
+            } else {
+              baseMealItem.food = foodId
+            }
+
+            if (determineFoodIsObject(savedFoodOrRecipe)) {
+              if (mealItem.item!.id === savedFoodOrRecipe.id) {
+                return {
+                  ...baseMealItem,
+                  food: new ObjectId(savedFoodOrRecipe.id)
+                } as MealItemInput
+              } else {
+                return {
+                  ...baseMealItem,
+                  food: foodId
+                } as MealItemInput
+              }
+            } else {
+              if (mealItem.item!.id === savedFoodOrRecipe.id) {
+                return {
+                  ...baseMealItem,
+                  recipe: new ObjectId(savedFoodOrRecipe.id)
+                } as MealItemInput
+              } else {
+                return {
+                  ...baseMealItem,
+                  recipe: recipeId
+                } as MealItemInput
+              }
+            }
+          })
+        ]
+      }, author.id!)
     }))
   }
 }
