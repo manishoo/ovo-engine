@@ -14,9 +14,7 @@ export function determineWeightIsObject(weight: Weight | ObjectId | CustomUnit):
 }
 
 export function determineCustomUnitIsObject(unit: CustomUnit | ObjectId): unit is CustomUnit {
-  if (unit.hasOwnProperty('gramWeight')) return true
-
-  return false
+  return 'gramWeight' in unit
 }
 
 export function determineFoodIsObject(food: Food | ObjectId | Recipe): food is Food {
