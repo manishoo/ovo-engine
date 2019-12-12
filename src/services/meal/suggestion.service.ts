@@ -54,13 +54,13 @@ export default class SuggestionService {
     // noop
   }
 
-  async findBestMeal(userId: string, mealSize?: MealSize): Promise<Meal> {
+  async findBestMeal(userId: string, userMeal?: UserMeal): Promise<Meal> {
     const {
       nutritionProfile,
       meals: userMeals,
       diet,
     } = await this.userService.getUserById(userId)
-    mealSize = mealSize || MealSize.normal
+    let mealSize = userMeal ? userMeal.size : MealSize.normal
 
     /* TODO bias conditions: user excluded foods and food classes */
     const biasConditions: any = {}
@@ -242,7 +242,7 @@ export default class SuggestionService {
     if (foundMeal) {
       day.meals = await Promise.all(day.meals.map(async meal => {
         if (meal.userMeal && (meal.userMeal.id === userMealId)) {
-          const bestMeal = await this.findBestMeal(userId, meal.userMeal.size)
+          const bestMeal = await this.findBestMeal(userId, meal.userMeal)
 
           dayMeal = {
             ...meal,
