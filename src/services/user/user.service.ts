@@ -190,7 +190,9 @@ export default class UserService {
         gender: user.gender,
         household: user.household,
         activityLevel: user.activityLevel,
-      } as User
+        meals: user.meals,
+        nutritionProfile: user.nutritionProfile,
+      } as Omit<User, 'password'>
     } else {
       userInfo = {
         id: user.id,
@@ -201,6 +203,7 @@ export default class UserService {
         bio: user.bio,
         avatar: user.avatar,
         socialNetworks: user.socialNetworks,
+        role: user.role,
       } as BasicUser
     }
 

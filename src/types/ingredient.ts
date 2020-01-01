@@ -8,22 +8,15 @@ import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import { Weight } from '@Types/weight'
 import { createUnionType, Field, InputType, ObjectType } from 'type-graphql'
+import { determineIfItsFood, determineIfItsWeightOrObject } from '@Utils/determine-object'
 
-
-export function determineIfIsFood(value: Food | Recipe): value is Food {
-  return 'name' in value
-}
-
-export function determineIfIsWeight(value: Weight | CustomUnit): value is Weight {
-  return 'id' in value
-}
 
 export const IngredientItemUnion = createUnionType({
   name: 'IngredientItem',
   description: 'Recipe or Food',
   types: () => [Recipe, Food],
   resolveType(value) {
-    if (determineIfIsFood(value)) {
+    if (determineIfItsFood(value)) {
       return 'Food'
     } else {
       return 'Recipe'
@@ -36,7 +29,7 @@ export const IngredientUnitUnion = createUnionType({
   description: 'Weight or CustomUnit',
   types: () => [Weight, CustomUnit],
   resolveType(value) {
-    if (determineIfIsWeight(value)) {
+    if (determineIfItsWeightOrObject(value)) {
       return 'Weight'
     } else {
       return 'CustomUnit'

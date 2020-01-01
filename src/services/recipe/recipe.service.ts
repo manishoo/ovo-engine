@@ -8,6 +8,7 @@ import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import DietService from '@Services/diet/diet.service'
+import MealService from '@Services/meal/meal.service'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
 import { Food } from '@Types/food'
@@ -31,6 +32,7 @@ export default class RecipeService {
     // service injection
     private readonly uploadService: UploadService,
     private readonly dietService: DietService,
+    private readonly mealService: MealService,
   ) {
     // noop
   }
@@ -430,9 +432,14 @@ export default class RecipeService {
       }
     }
 
-    const savedRecipe = await recipe.save()
+    let savedRecipe = transformRecipe(await recipe.save(), user && user.id)
 
-    return transformRecipe(savedRecipe.toObject(), user && user.id)
+    /**
+     * Update all meals that have this recipe
+     * */
+    await this.mealService.updateMealsByIngredient(savedRecipe)
+
+    return savedRecipe
   }
 
   async tag(recipePublicId: ObjectId, tagSlugs: string[], user: ContextUser): Promise<Recipe> {

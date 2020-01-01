@@ -46,7 +46,7 @@ export default class FoodResolver {
     @Arg('food') food: FoodInput,
     @Ctx() ctx: Context,
   ) {
-    return this.foodService.updateFood(foodId, food)
+    return this.foodService.update(foodId, food)
   }
 
   @Authorized([Role.operator, Role.user])
@@ -56,7 +56,7 @@ export default class FoodResolver {
     @Ctx() ctx: Context,
     @Arg('restore', { nullable: true }) restore?: boolean,
   ) {
-    return this.foodService.deleteFood(foodId, ctx.user!, restore)
+    return this.foodService.delete(foodId, ctx.user!, restore)
   }
 
   @Authorized([Role.operator, Role.user])
@@ -66,7 +66,6 @@ export default class FoodResolver {
     @Arg('food') food: FoodInput,
     @Ctx() ctx: Context,
   ) {
-    return this.foodService.createFood(foodClassId, food)
+    return this.foodService.create(foodClassId, food)
   }
-
 }

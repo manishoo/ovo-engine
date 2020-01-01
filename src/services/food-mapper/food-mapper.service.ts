@@ -57,7 +57,7 @@ export default class FoodMapperService {
     foodMap.units = foodMapInput.units.map(unit => ({
       text: unit.text,
       foodId: unit.foodId,
-      weight: food.weights.find(w => w.id == unit.weightId),
+      weight: food.weights.find(w => w.id.toString() == unit.weightId),
     }))
     foodMap.food = foodMapInput.food
 

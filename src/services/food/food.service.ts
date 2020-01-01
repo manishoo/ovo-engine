@@ -15,13 +15,15 @@ import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
+import MealService from '@Services/meal/meal.service'
 
 
 @Service()
 export default class FoodService {
   constructor(
     // service injection
-    private readonly uploadService: UploadService
+    private readonly uploadService: UploadService,
+    private readonly mealService: MealService,
   ) {
     // noop
   }
@@ -77,7 +79,7 @@ export default class FoodService {
     }
   }
 
-  async updateFood(foodId: ObjectId, foodInput: FoodInput): Promise<Food | null> {
+  async update(foodId: ObjectId, foodInput: FoodInput): Promise<Food | null> {
     const food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('food not found')
 
@@ -121,10 +123,17 @@ export default class FoodService {
       food.foodClass = foodInput.foodClassId
     }
 
-    return food.save()
+    let savedFood = await food.save()
+
+    /**
+     * Update all meals that have this food
+     * */
+    await this.mealService.updateMealsByIngredient(savedFood)
+
+    return savedFood
   }
 
-  async deleteFood(foodID: ObjectId, user: ContextUser, restore?: boolean): Promise<Food> {
+  async delete(foodID: ObjectId, user: ContextUser, restore?: boolean): Promise<Food> {
     const food = await FoodModel.findOneWithDeleted({ _id: foodID })
     if (!food) throw new Errors.NotFound('food not found')
 
@@ -137,7 +146,7 @@ export default class FoodService {
     return food
   }
 
-  async createFood(foodClassID: ObjectId, foodInput: FoodInput): Promise<Food> {
+  async create(foodClassID: ObjectId, foodInput: FoodInput): Promise<Food> {
     if (!ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
     const foodClass = await FoodClassModel.findById(foodClassID)
@@ -145,7 +154,7 @@ export default class FoodService {
 
     let weights: WeightInput[] = []
     foodInput.weights.map(weight => {
-      weight['id'] = String(new ObjectId())
+      weight.id = new ObjectId()
       weights.push(weight)
     })
 
@@ -184,5 +193,4 @@ export default class FoodService {
 
     return food.save()
   }
-
 }

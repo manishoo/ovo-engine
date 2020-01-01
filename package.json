@@ -99,6 +99,6 @@
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.6.0",
     "tscpaths": "0.0.7",
-    "typescript": "^3.1.6"
+    "typescript": "^3.7.3"
   }
 }

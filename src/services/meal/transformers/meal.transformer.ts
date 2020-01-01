@@ -6,9 +6,10 @@
 import { transformRecipe } from '@Services/recipe/transformers/recipe.transformer'
 import { determineIfIsFood } from '@Types/ingredient'
 import { Meal } from '@Types/meal'
+import { InstanceType } from 'typegoose'
 
 
-export function transformMeal(meal: Meal) {
+export function transformMeal(meal: InstanceType<Meal>): InstanceType<Meal> {
   meal.items = meal.items.map(mealItem => {
     if (mealItem.item) {
       if (determineIfIsFood(mealItem.item)) {

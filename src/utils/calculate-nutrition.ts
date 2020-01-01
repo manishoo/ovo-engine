@@ -6,6 +6,7 @@
 import { IngredientFood, NutrientUnit, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import Errors from '@Utils/errors'
+import { ObjectId } from '@Types/common'
 
 
 export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutrition) {
@@ -22,32 +23,34 @@ export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutriti
   })
 }
 
-export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, weightId?: string, customGramWeight?: number): Nutrition {
+export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, weightId?: ObjectId, customGramWeight?: number): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
   /**
    * Iterate nutrition fields
    * */
-  Object.keys(food.nutrition).map(fieldName => {
-    const nutrient = food.nutrition[fieldName]!
+  if (food.nutrition) {
+    Object.keys(food.nutrition).map(fieldName => {
+      const nutrient = food.nutrition![fieldName]!
 
-    totalNutrition[fieldName] = {
-      amount: getFoodNutrientAmount(food, foodAmount, nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, weightId, customGramWeight),
-      unit: nutrient.unit,
-    }
-  })
+      totalNutrition[fieldName] = {
+        amount: getFoodNutrientAmount(food, foodAmount, nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, weightId, customGramWeight),
+        unit: nutrient.unit,
+      }
+    })
+  }
 
   return totalNutrition
 }
 
-function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: string, customGramWeight?: number) {
+function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: ObjectId, customGramWeight?: number) {
   let totalAmount = baseAmount
   /**
    * If the food had a weight,
    * use the weight's {gramWeight}
    * */
   if (weightId) {
-    const foundWeight = food.weights.find(w => w.id == weightId)
+    const foundWeight = food.weights.find(w => w.id.toString() == weightId.toString())
     if (!foundWeight) throw new Errors.Validation('Weight id not valid')
     totalAmount = (foundWeight.gramWeight || 0) * foodAmount
   } else if (customGramWeight) {
@@ -67,14 +70,16 @@ export function scaleRecipeNutrition(recipe: Recipe, serving: number): Nutrition
   /**
    * Iterate nutrition fields
    * */
-  Object.keys(recipe.nutrition).map(fieldName => {
-    const nutrient = recipe.nutrition[fieldName]!
+  if (recipe.nutrition) {
+    Object.keys(recipe.nutrition).map(fieldName => {
+      const nutrient = recipe.nutrition![fieldName]!
 
-    totalNutrition[fieldName] = {
-      amount: getRecipeNutrientAmount(nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, serving),
-      unit: nutrient.unit,
-    }
-  })
+      totalNutrition[fieldName] = {
+        amount: getRecipeNutrientAmount(nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, serving),
+        unit: nutrient.unit,
+      }
+    })
+  }
 
   return totalNutrition
 }

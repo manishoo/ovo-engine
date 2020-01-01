@@ -3,17 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodModel } from '@Models/food.model'
 import { MealModel } from '@Models/meal.model'
-import { RecipeModel } from '@Models/recipe.model'
 import { UserModel } from '@Models/user.model'
-import DietService from '@Services/diet/diet.service'
 import FoodService from '@Services/food/food.service'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import RecipeService from '@Services/recipe/recipe.service'
-import UploadService from '@Services/upload/upload.service'
-import { transformRecipeUser } from '@Services/user/transformers/recipe-user.transformer'
-import { ObjectId, Role } from '@Types/common'
+import { ObjectId, Pagination, Role } from '@Types/common'
 import { ListMealsArgs, Meal, MealInput, MealListResponse, MealItem, MealItemInput } from '@Types/meal'
 import { Author } from '@Types/user'
 import { ContextUser } from '@Utils/context'
@@ -22,8 +17,11 @@ import Errors from '@Utils/errors'
 import generateAllCases from '@Utils/generate-all-cases'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
-import { transformMeal } from './transformes/meal.transformer'
+import { transformMeal } from './transformers/meal.transformer'
 import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
+import { Food } from '@Types/food'
+import { Recipe } from '@Types/recipe'
+import { determineIfItsWeightOrObject, determineIfItsCustomUnit, determineIfItsRecipe, determineIfItsFood } from '@Utils/determine-object'
 
 
 @Service()
@@ -32,6 +30,7 @@ export default class MealService {
     // service injection
     private readonly recipeService: RecipeService,
     private readonly foodService: FoodService,
+    private readonly mealService: MealService,
   ) {
     // noop
   }
@@ -196,11 +195,14 @@ export default class MealService {
     }
 
     if (variables.lastId) {
-
       const meal = await MealModel.findById(variables.lastId)
       if (!meal) throw new Errors.NotFound('meal not found')
 
       query.createdAt = { $lt: meal.createdAt }
+    }
+
+    if (variables.ingredientId) {
+      query['items.item._id'] = variables.ingredientId
     }
 
     const counts = await MealModel.countDocuments(query)
@@ -246,7 +248,6 @@ export default class MealService {
       .exec()
 
     if (!meal) throw new Errors.NotFound('meal not found')
-
     const author = meal.author as Author
     if (author.id !== userId) throw new Errors.Forbidden('Update failed. you only can update your own meals')
 
@@ -282,6 +283,9 @@ export default class MealService {
         id: mealItemInput.id || new ObjectId(),
         amount: mealItemInput.amount,
         isOptional: mealItemInput.isOptional,
+        customUnit: mealItemInput.customUnit,
+        description: mealItemInput.description,
+        name: mealItemInput.name,
       }
 
       /**
@@ -315,7 +319,7 @@ export default class MealService {
         /**
          * Check and select the unit: part 2
          * */
-        if (!mealItemInput.unit) {
+        if (mealItemInput.unit && ObjectId.isValid(mealItemInput.unit)) {
           const foundWeight = food.weights.find(w => w.id!.toString() == mealItemInput.unit)
           if (!foundWeight) throw new Errors.Validation('Unit is not valid')
 
@@ -341,5 +345,30 @@ export default class MealService {
 
       throw new Errors.System('Something went wrong')
     }))
+  }
+
+  async updateMealsByIngredient(ingredient: Food | Recipe) {
+    let paginationCursor: Partial<Pagination> = {
+      page: 1,
+      hasNext: true,
+      size: 100,
+    }
+
+    while (paginationCursor.hasNext) {
+      const { meals, pagination } = await this.list({ ingredientId: ingredient._id, size: paginationCursor.size, page: paginationCursor.page })
+
+      await Promise.all(meals.map(async meal => {
+        meal.items = meal.items.map(mealItem => {
+          if (mealItem.item && (mealItem.item.id === ingredient.id)) {
+            mealItem.item = ingredient
+          }
+
+          return mealItem
+        })
+        return meal.save()
+      }))
+
+      paginationCursor = pagination
+    }
   }
 }
