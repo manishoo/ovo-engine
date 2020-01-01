@@ -25,11 +25,11 @@ registerEnumType(Gender, {
 })
 
 export enum MealSize {
-  tiny = 'tiny',
-  small = 'small',
-  normal = 'normal',
-  big = 'big',
-  huge = 'huge',
+  tiny = '1',
+  small = '2',
+  normal = '3',
+  big = '5',
+  huge = '8',
 }
 
 registerEnumType(MealSize, {
@@ -134,7 +134,7 @@ export class UserMealInput {
   name: string
   @Field()
   time: string
-  @Field(type => MealSize )
+  @Field(type => MealSize)
   size: MealSize
   @Field(type => MealAvailableTime)
   availableTime: MealAvailableTime

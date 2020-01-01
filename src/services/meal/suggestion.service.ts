@@ -56,7 +56,7 @@ export default class SuggestionService {
     // noop
   }
 
-  async findBestMeal(userId: string): Promise<Meal> {
+  async findBestMeal(userId: string, userMeal: UserMeal): Promise<Meal> {
     const {
       nutritionProfile,
       meals: userMeals,
@@ -79,8 +79,15 @@ export default class SuggestionService {
       biasConditions['items.recipe'] = { $not: { $elemMatch: { $nin: recipesInDiet.map(recipe => recipe._id) } } }
     }
 
-    const mealsCount = userMeals.length || 4
-    const mealWeight = 1 / mealsCount
+    /**
+     * Calculate the meal size relative to the
+     * size of other meals in the day
+     * */
+    let totalWeights = 0
+    userMeals.map(userMeal => {
+      totalWeights += parseInt(userMeal.size)
+    })
+    const mealWeight = parseInt(userMeal.size) / totalWeights
 
     const targetCalories = nutritionProfile.calories * mealWeight
     if (nutritionProfile.isStrict) {
@@ -100,7 +107,9 @@ export default class SuggestionService {
       }
     }
 
-    // find the previous suggestions from a set which belongs to the user
+    /**
+     * Find the previous suggestions from a set which belongs to the user
+     * */
     const previousSuggestionsRedisKey = RedisKeys.previousMealSuggestions(userId)
     const now = Date.now()
     const suggestionExpirationTime = subHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime()
@@ -110,26 +119,29 @@ export default class SuggestionService {
 
     const meal: Meal = await MealModel.aggregate([
       { $match: { ...biasConditions, deleted: { $ne: true } } },
-      // create a field which keeps the difference of the user target calories and the food calories
+      /**
+       * Create a field which keeps the difference of the user target calories and the food calories
+       * */
       { $addFields: { caloriesDiff: { $abs: { $subtract: ['$nutrition.calories.amount', targetCalories] } } } },
       { $sort: { caloriesDiff: 1 } },
       { $limit: 1 }
     ]).then(it => it[0])
 
     if (!meal) {
-      // if there is any exclusion, clear them and try once more
+      /**
+       * If there is any exclusion, clear them and try once more
+       * */
       if (previousSuggestions.length !== 0) {
         await redis.del(previousSuggestionsRedisKey)
-        return this.findBestMeal(userId)
+        return this.findBestMeal(userId, userMeal)
       } else {
         throw new Errors.NotFound('no meal suggestion found')
       }
     }
 
-    /*
-    * add the meal id into an ordered set belong to the user,
-    * this list will expire after the `suggestionExpirationTime` have passed
-    * */
+    /**
+     * Add the meal id into an ordered set belong to the user, this list will expire after the `suggestionExpirationTime` have passed
+     * */
     await redis.zadd(previousSuggestionsRedisKey, String(now), String(meal._id))
     await redis.expireat(previousSuggestionsRedisKey, addHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime())
 
@@ -215,7 +227,7 @@ export default class SuggestionService {
     if (foundMeal) {
       day.meals = await Promise.all(day.meals.map(async meal => {
         if (meal.userMeal && (meal.userMeal.id === userMealId)) {
-          const bestMeal = await this.findBestMeal(userId)
+          const bestMeal = await this.findBestMeal(userId, meal.userMeal)
 
           dayMeal = {
             ...meal,
@@ -228,7 +240,7 @@ export default class SuggestionService {
         return meal
       }))
     } else {
-      const bestMeal = await this.findBestMeal(userId)
+      const bestMeal = await this.findBestMeal(userId, userMeal)
       let time = day.date
       time = setHours(time, Number(userMeal.time.split(':')[0]))
       time = setMinutes(time, Number(userMeal.time.split(':')[1]))
@@ -258,7 +270,7 @@ export default class SuggestionService {
       let time = day.date
       time = setHours(time, Number(userMeal.time.split(':')[0]))
       time = setMinutes(time, Number(userMeal.time.split(':')[1]))
-      const selectedMeal = await this.findBestMeal(userId)
+      const selectedMeal = await this.findBestMeal(userId, userMeal)
 
       dayMeals.push({
         id: new ObjectId(),
