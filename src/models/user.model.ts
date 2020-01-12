@@ -8,7 +8,7 @@ import userConfig from '@Config/user-config'
 import { MealPlanSchema } from '@Models/meal-plan.model'
 import HouseholdService from '@Services/household/household.service'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Ref, Role, Status, LanguageCode } from '@Types/common'
+import { Image, LanguageCode, Ref, Role, Status } from '@Types/common'
 import { Diet } from '@Types/diet'
 import { Household } from '@Types/household'
 import {
@@ -16,6 +16,7 @@ import {
   Gender,
   Goal,
   Height,
+  Membership,
   NutritionProfile,
   SocialNetworks,
   User,
@@ -148,6 +149,9 @@ export class UserSchema extends Typegoose implements User {
 
   @prop()
   timeZone?: string
+
+  @prop()
+  membership?: Membership
 
   @prop()
   diet?: Diet

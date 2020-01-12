@@ -15,10 +15,11 @@ import MealService from '@Services/meal/meal.service'
 import UserService from '@Services/user/user.service'
 import { Day, DayMeal } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
+import { Diet } from '@Types/diet'
 import { Ingredient } from '@Types/ingredient'
 import { Meal, MealItem } from '@Types/meal'
 import { RedisKeys } from '@Types/redis'
-import { UserMeal } from '@Types/user'
+import { NutritionProfile, NutritionProfileInput, UserMeal, UserMealInput } from '@Types/user'
 import Errors from '@Utils/errors'
 import addHours from 'date-fns/addHours'
 import setHours from 'date-fns/setHours'
@@ -56,13 +57,7 @@ export default class SuggestionService {
     // noop
   }
 
-  async findBestMeal(userId: string, userMeal: UserMeal): Promise<Meal> {
-    const {
-      nutritionProfile,
-      meals: userMeals,
-      diet,
-    } = await this.userService.getUserById(userId)
-
+  async findBestMeal(userMeal: UserMeal, nutritionProfile: NutritionProfile | NutritionProfileInput, userMeals: UserMeal[], diet?: Diet, userId?: string): Promise<Meal> {
     /* TODO bias conditions: user excluded foods and food classes */
     const biasConditions: any = {}
 
@@ -110,10 +105,15 @@ export default class SuggestionService {
     /**
      * Find the previous suggestions from a set which belongs to the user
      * */
-    const previousSuggestionsRedisKey = RedisKeys.previousMealSuggestions(userId)
     const now = Date.now()
-    const suggestionExpirationTime = subHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime()
-    const previousSuggestions: string[] = await redis.zrevrangebyscore(previousSuggestionsRedisKey, now, suggestionExpirationTime)
+    let previousSuggestions: string[] = []
+    let previousSuggestionsRedisKey: string | null = null
+
+    if (userId) {
+      const previousSuggestionsRedisKey = RedisKeys.previousMealSuggestions(userId)
+      const suggestionExpirationTime = subHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime()
+      previousSuggestions = await redis.zrevrangebyscore(previousSuggestionsRedisKey, now, suggestionExpirationTime)
+    }
 
     biasConditions._id = { $nin: previousSuggestions.map(it => new ObjectId(it)) }
 
@@ -131,9 +131,9 @@ export default class SuggestionService {
       /**
        * If there is any exclusion, clear them and try once more
        * */
-      if (previousSuggestions.length !== 0) {
+      if (previousSuggestions.length !== 0 && previousSuggestionsRedisKey) {
         await redis.del(previousSuggestionsRedisKey)
-        return this.findBestMeal(userId, userMeal)
+        return this.findBestMeal(userMeal, nutritionProfile, userMeals, diet, userId)
       } else {
         throw new Errors.NotFound('no meal suggestion found')
       }
@@ -142,8 +142,10 @@ export default class SuggestionService {
     /**
      * Add the meal id into an ordered set belong to the user, this list will expire after the `suggestionExpirationTime` have passed
      * */
-    await redis.zadd(previousSuggestionsRedisKey, String(now), String(meal._id))
-    await redis.expireat(previousSuggestionsRedisKey, addHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime())
+    if (previousSuggestionsRedisKey) {
+      await redis.zadd(previousSuggestionsRedisKey, String(now), String(meal._id))
+      await redis.expireat(previousSuggestionsRedisKey, addHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime())
+    }
 
     const finalMeal = this.mealService.get(meal._id)
     if (!finalMeal) throw new Errors.System('Something went wrong')
@@ -227,7 +229,7 @@ export default class SuggestionService {
     if (foundMeal) {
       day.meals = await Promise.all(day.meals.map(async meal => {
         if (meal.userMeal && (meal.userMeal.id === userMealId)) {
-          const bestMeal = await this.findBestMeal(userId, meal.userMeal)
+          const bestMeal = await this.findBestMeal(meal.userMeal, user.nutritionProfile, user.meals, user.diet, userId)
 
           dayMeal = {
             ...meal,
@@ -240,7 +242,7 @@ export default class SuggestionService {
         return meal
       }))
     } else {
-      const bestMeal = await this.findBestMeal(userId, userMeal)
+      const bestMeal = await this.findBestMeal(userMeal, user.nutritionProfile, user.meals, user.diet, userId)
       let time = day.date
       time = setHours(time, Number(userMeal.time.split(':')[0]))
       time = setMinutes(time, Number(userMeal.time.split(':')[1]))
@@ -270,7 +272,7 @@ export default class SuggestionService {
       let time = day.date
       time = setHours(time, Number(userMeal.time.split(':')[0]))
       time = setMinutes(time, Number(userMeal.time.split(':')[1]))
-      const selectedMeal = await this.findBestMeal(userId, userMeal)
+      const selectedMeal = await this.findBestMeal(userMeal, user.nutritionProfile, user.meals, user.diet, userId)
 
       dayMeals.push({
         id: new ObjectId(),

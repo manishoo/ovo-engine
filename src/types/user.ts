@@ -78,6 +78,21 @@ export enum HeightUnits {
   cm = 'cm',
 }
 
+export enum MembershipType {
+  premium = 'premium',
+  pro = 'pro'
+}
+
+@ObjectType()
+export class Membership {
+  @Field()
+  type: MembershipType
+  @Field()
+  fromDate: Date
+  @Field()
+  toDate: Date
+}
+
 @ObjectType()
 export class Height {
   @Field()
@@ -296,6 +311,8 @@ export class User extends BasicUser {
   goal?: Goal
   @Field(type => [Event], { nullable: true })
   path?: Event[]
+  @Field(type => Membership, { nullable: true })
+  membership?: Membership
   timeZone?: string
 }
 
