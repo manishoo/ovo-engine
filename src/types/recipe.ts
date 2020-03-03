@@ -205,8 +205,8 @@ export class Recipe {
   @Field(type => Timing)
   timing: Timing
 
-  @Field(type => Nutrition, { nullable: true })
-  nutrition?: Nutrition
+  @Field(type => Nutrition)
+  nutrition: Nutrition
 
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
@@ -301,7 +301,7 @@ export class RecipeInput {
 
 @ArgsType()
 export class ListRecipesArgs {
-  @Field({ nullable: true })
+  @Field(type => Int, { nullable: true })
   @Min(1)
   page?: number
 
@@ -323,7 +323,7 @@ export class ListRecipesArgs {
   tags?: string[]
 
   @Field({ nullable: true })
-  latest?: boolean
+  sortByMostPopular?: boolean
 
   @Field(type => [ObjectId], { nullable: true })
   ingredients?: ObjectId[]

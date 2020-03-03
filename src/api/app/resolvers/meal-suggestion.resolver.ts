@@ -5,10 +5,12 @@
 
 import MealSuggestionService from '@Services/meal/suggestion.service'
 import { Day, DayMeal } from '@Types/calendar'
+import { ObjectId } from '@Types/common'
+import { MealItem } from '@Types/meal'
+import { NutritionProfileInput, UserMealInput } from '@Types/user'
 import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { MealItem } from '@Types/meal'
 
 
 @Service()
@@ -49,5 +51,15 @@ export default class MealSuggestionResolver {
     @Ctx() ctx: Context,
   ): Promise<Day> {
     return this.mealSuggestionService.suggestDay(date, ctx.user!.id)
+  }
+
+  @Mutation(returns => [DayMeal])
+  async suggestDayGuest(
+    @Ctx() ctx: Context,
+    @Arg('nutritionProfile', type => NutritionProfileInput) nutritionProfile: NutritionProfileInput,
+    @Arg('userMeals', type => [UserMealInput]) userMeals: UserMealInput[],
+    @Arg('dietId', { nullable: true }) dietId?: ObjectId,
+  ): Promise<DayMeal[]> {
+    return this.mealSuggestionService.suggestDayMeals(userMeals, nutritionProfile, dietId)
   }
 }

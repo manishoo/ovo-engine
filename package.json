@@ -7,6 +7,7 @@
     "start": "concurrently --kill-others \"npm run start:app\" \"npm run start:panel\"",
     "start:panel": "ts-node -r tsconfig-paths/register src/api/panel/index.ts",
     "start:app": "ts-node -r tsconfig-paths/register src/api/app/index.ts",
+    "script": "node -r ts-node/register -r tsconfig-paths/register --max_old_space_size=8192",
     "build": "gulp"
   },
   "authors": [
@@ -99,6 +100,6 @@
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.6.0",
     "tscpaths": "0.0.7",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.4"
   }
 }

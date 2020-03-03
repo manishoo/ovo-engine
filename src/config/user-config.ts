@@ -4,7 +4,7 @@
  */
 
 import { LanguageCode } from '@Types/common'
-import { MealAvailableTime, MealSize, NutritionProfile, UserMeal } from '@Types/user'
+import { MealAvailableTime, MealSize, NutritionProfile, NutritionProfileMode, UserMeal } from '@Types/user'
 import dotenv from 'dotenv'
 import { __ } from 'i18n'
 
@@ -49,9 +49,10 @@ export default {
     ]
   },
   defaultNutritionProfile: {
+    mode: NutritionProfileMode.range,
     isStrict: false,
     calories: 2000,
-    carb: {
+    carbs: {
       max: 250,
       min: 200,
       get average(): number {

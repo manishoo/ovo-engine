@@ -8,7 +8,7 @@ import { Image, ObjectId, Pagination, Translation, TranslationInput } from '@Typ
 import { FoodGroup } from '@Types/food-group'
 import { GraphQLUpload } from 'apollo-server'
 import { Max, Min } from 'class-validator'
-import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
+import { ArgsType, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 
 export enum FOOD_CLASS_TYPES {
@@ -94,11 +94,11 @@ export class FoodClassListResponse {
 
 @ArgsType()
 export class ListFoodClassesArgs {
-  @Field({ defaultValue: 1 })
+  @Field(type => Int, { defaultValue: 1 })
   @Min(1)
   page: number
 
-  @Field({ defaultValue: 10 })
+  @Field(type => Int, { defaultValue: 10 })
   @Min(1)
   @Max(30)
   size: number

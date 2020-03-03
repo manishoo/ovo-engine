@@ -38,7 +38,7 @@ export class Meal {
   _id?: ObjectId
 
   @Field()
-  id?: string
+  id: string
 
   @Field(type => [Translation], { nullable: true })
   name?: Translation[]
@@ -50,8 +50,8 @@ export class Meal {
   @ArrayNotEmpty()
   items: MealItem[]
 
-  @Field(type => Nutrition, { nullable: true })
-  nutrition?: Nutrition
+  @Field(type => Nutrition)
+  nutrition: Nutrition
 
   @Field(type => Author)
   author: Ref<Author>
@@ -75,6 +75,9 @@ export class Meal {
 
   @Field({ nullable: true })
   instanceOf?: ObjectId
+
+  @Field({ nullable: true })
+  hasPermutations?: boolean
 }
 
 @InputType()

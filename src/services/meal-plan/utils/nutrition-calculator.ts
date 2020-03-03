@@ -64,17 +64,17 @@ export default {
 
   calculateMacros(
     TDEE: number,
-    carb: number = config.constants.defaultMacroNutrientRatio.carb,
+    carbs: number = config.constants.defaultMacroNutrientRatio.carbs,
     fat: number = config.constants.defaultMacroNutrientRatio.fat,
     protein: number = config.constants.defaultMacroNutrientRatio.protein
   ) {
-    const sum = carb + fat + protein
+    const sum = carbs + fat + protein
     if (sum !== 100) {
       throw Error('Sum is not 100')
     }
 
     return {
-      carb: ((carb / 100) * TDEE) / 4,
+      carbs: ((carbs / 100) * TDEE) / 4,
       fat: ((fat / 100) * TDEE) / 9,
       protein: ((protein / 100) * TDEE) / 4,
     }

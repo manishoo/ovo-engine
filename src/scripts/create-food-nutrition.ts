@@ -15,8 +15,6 @@ const argv = require('minimist')(process.argv.slice(2))
  * NOTE: make sure this enum is the same fields in {Nutrition} type
  * */
 enum N {
-  saturatedFat = 'saturatedFat',
-  alaFattyAcid_unused = 'alaFattyAcid',
   alanine = 'alanine',
   alcohol = 'alcohol',
   alphaCarotene = 'alphaCarotene',
@@ -29,17 +27,13 @@ enum N {
   calories = 'calories',
   totalCarbs = 'totalCarbs',
   totalAvailableCarbs = 'totalAvailableCarbs',
-  carbsByDifference = 'carbsByDifference',
   cholesterol = 'cholesterol',
   choline = 'choline',
   copper = 'copper',
   cystine = 'cystine',
-  dhaFattyAcid_unused = 'dhaFattyAcid',
-  dpaFattyAcid_unused = 'dpaFattyAcid',
-  epaFattyAcid_unused = 'epaFattyAcid',
   fats = 'fats',
   fiber = 'fiber',
-  fluoride_unused = 'fluoride',
+  fluoride = 'fluoride',
   folate = 'folate',
   folateFood = 'folateFood',
   folateDFE = 'folateDFE',
@@ -49,7 +43,7 @@ enum N {
   glutamicAcid = 'glutamicAcid',
   glycine = 'glycine',
   histidine = 'histidine',
-  hydroxyproline_unused = 'hydroxyproline',
+  hydroxyproline = 'hydroxyproline',
   iron = 'iron',
   isoleucine = 'isoleucine',
   lactose = 'lactose',
@@ -84,15 +78,19 @@ enum N {
   theobromine = 'theobromine',
   thiamine = 'thiamine',
   threonine = 'threonine',
-  totalOmega3_unused = 'totalOmega3',
-  totalOmega6_unused = 'totalOmega6',
-  transFats_unused = 'transFats',
+  omega3 = 'omega3',
+  omega6 = 'omega6',
+  ALA = 'ALA',
+  DHA = 'DHA',
+  EPA = 'EPA',
+  DPA = 'DPA',
+  transFats = 'transFats',
   tryptophan = 'tryptophan',
   tyrosine = 'tyrosine',
   valine = 'valine',
   vitA = 'vitA',
   vitARAE = 'vitARAE',
-  vitAIU_unused = 'vitAIU',
+  vitAIU = 'vitAIU',
   vitB12 = 'vitB12',
   vitB6 = 'vitB6',
   vitC = 'vitC',
@@ -102,7 +100,6 @@ enum N {
   vitD2andD3 = 'vitD2andD3',
   vitD2 = 'vitD2',
   vitD3 = 'vitD3',
-  vitDUI_unused = 'vitDUI',
   vitE = 'vitE',
   vitK = 'vitK',
   water = 'water',
@@ -110,16 +107,17 @@ enum N {
   null = 'null'
 }
 
-const NUTRITIONS: { [k: string]: string | null } = {
+const NUTRITIONS: { [k: string]: string | string[] | null } = {
   'FAT': N.fats,
   'Protein, total': N.proteins,
   'Protein, total-N': N.proteinsTotalN,
   'Protein': N.proteins,
   'PROTEIN|PROTEINS': N.proteins,
   'Adjusted Protein': N.proteins,
+
   'Carbohydrates, total available': N.totalAvailableCarbs,
   'Carbohydrates, total': N.totalCarbs,
-  'Carbohydrate, by difference': N.carbsByDifference,
+  'Carbohydrate, by difference': N.totalCarbs,
   'CARBOHYDRATES': N.totalCarbs,
   'CARBOHYDRATE': N.totalCarbs,
   'CARBOHYDRATE|CARBOHYDRATES': N.totalCarbs,
@@ -162,7 +160,7 @@ const NUTRITIONS: { [k: string]: string | null } = {
   '22:1 undifferentiated': null,
   '22:4': null,
   'C22:5, n-3': null,
-  '22:5 n-3 (DPA)': null,
+  '22:5 n-3 (DPA)': N.DPA,
   '24:1 c': null,
   'Energy': N.calories,
   'Fatty acids, total saturated': N.saturatedFats,
@@ -253,12 +251,12 @@ const NUTRITIONS: { [k: string]: string | null } = {
   'C20:1, n-11': null,
   'C22:1, n-9': null,
   'C22:1, n-11': null,
-  'C18:2, n-6': null,
-  'C18:3, n-3': null,
-  'C18:4, n-3': null,
-  'C20:4, n-6': null,
-  'C20:5, n-3': null,
-  'C22:6, n-3': null,
+  'C18:2, n-6': N.omega6,
+  'C18:3, n-3': N.omega3,
+  'C18:4, n-3': N.omega3,
+  'C20:4, n-6': N.omega6,
+  'C20:5, n-3': N.omega3,
+  'C22:6, n-3': N.omega3,
 
   'Starch': N.starch,
   'Glucose (dextrose)': N.glucose,
@@ -277,7 +275,8 @@ const NUTRITIONS: { [k: string]: string | null } = {
   'Copper, Cu': N.copper,
   'Manganese, Mn': N.magnesium,
   'Selenium, Se': N.selenium,
-  'Vitamin A, IU': N.vitA,
+  'Vitamin A': N.vitA,
+  'Vitamin A, IU': N.vitAIU,
   'Retinol': N.retinol,
   'Vitamin A, RAE': N.vitARAE,
   'Carotene, alpha': N.alphaCarotene,
@@ -310,8 +309,8 @@ const NUTRITIONS: { [k: string]: string | null } = {
   '14:0': null,
   '16:0': null,
   '18:0': null,
-  '22:6 n-3 (DHA)': null,
-  '20:5 n-3 (EPA)': null,
+  '22:6 n-3 (DHA)': N.DHA,
+  '20:5 n-3 (EPA)': N.EPA,
   'Fatty acids, total monounsaturated': N.monounsaturatedFats,
   'Fatty acids, total polyunsaturated': N.polyunsaturatedFats,
 
@@ -320,12 +319,231 @@ const NUTRITIONS: { [k: string]: string | null } = {
   '24:0': null,
   '18:2 n-6 c,c': null,
   '18:3 n-6 c,c,c': null,
-  '18:3 n-3 c,c,c (ALA)': null,
+  '18:3 n-3 c,c,c (ALA)': N.ALA,
   'Menaquinone-4': null,
+
+  'Fluoride, F': N.fluoride,
+  'FLUORIDE': N.fluoride,
+  'Hydroxyproline': N.hydroxyproline,
+
+  // trans fatty acids FIXME VERY BAD!
+  'TRANS-1-(1-PROPENYL-DITHIO)-PROPANE': N.transFats,
+  'TRANS-2,3-DIMETHYL-5,6-DITHIA-CYCLO(2,2,1)HEPTANE-5-OXIDE': N.transFats,
+  'TRANS-3,5-DIETHYL-1,2,4,-TRITHIOLANE': N.transFats,
+  'TRANS-5-ETHYL-4,6,7-TRITHIA-2-DECENE-4-S-OXIDE': N.transFats,
+  'TRANS-CIS-5-ETHYL-4,6,7-TRITHIA-2,8-DECADIENE-4-S-OXIDE': N.transFats,
+  'TRANS-METHYLSULPHINOTHIOIC-ACID-S-1-PROPENYLESTER': N.transFats,
+  'TRANS-N-PROPYLSULPHINOTHIOIC-ACID-S-1-PROPENYLESTER': N.transFats,
+  'TRANS-S-(1-PROPENYL)-CYSTEINE-SULFOXIDE': N.transFats,
+  'TRANS-TRANS-5-ETHYL-4,6,7-TRITHIA-2,8-DECADIENE-4-S-OXIDE': N.transFats,
+  'TRANS-PENTYL-HYDRO-DISULFIDE': N.transFats,
+  'TRANS-PROPYL-2-PROPENYLDISULFIDE': N.transFats,
+  'TRANS-PROPENYL-PROPYL-DISULFIDE': N.transFats,
+  'TRANS-HEX-2-ENAL': N.transFats,
+  'TRANS-TETRAHYDRO-ALPHA-ALPHA-5-TRIMETHYL-5-VINYLFURFURYL-ALC': N.transFats,
+  'TRANS-BETA-OCIMENE': N.transFats,
+  'TRANS-ANETHOLE': N.transFats,
+  'TRANS-CARVEOL': N.transFats,
+  'TRANS-DIHYDROCARVONE': N.transFats,
+  'TRANS-P-MENTHA-2-EN-OL': N.transFats,
+  'TRANS-2-HEXEN-1-OL': N.transFats,
+  'TRANS-OCIMENE': N.transFats,
+  'TRANS-BETA-OCIMENE|TRANS-OCIMENE': N.transFats,
+  'TRANS-LIMONENE-OXIDE': N.transFats,
+  'TRANS-1,2-EPOXYLIMONENE': N.transFats,
+  'TRANS-CARVYL-ACETATE': N.transFats,
+  'TRANS-P-MENTHA-1(7),8-DIEN-2-OL': N.transFats,
+  'TRANS-P-MENTHA-2,8-DIEN-1-OL': N.transFats,
+  'TRANS-2-HEXENOL': N.transFats,
+  'TRANS-RESVERATROL': N.transFats,
+  'TRANS-10-OCTADECENOIC-ACID': N.transFats,
+  'TRANS-ALLO-OCIMENE': N.transFats,
+  'TRANS-LINALOOL-OXIDE': N.transFats,
+  'TRANS-METHYL-ISOEUGENOL': N.transFats,
+  'TRANS-DEHYDROMATRICARIA-ESTER': N.transFats,
+  'TRANS-NON-2-EN-1-AL': N.transFats,
+  'TRANS-HEPT-2-ENAL': N.transFats,
+  'TRANS-FERULIC-ACID': N.transFats,
+  'TRANS-2-OCTENAL': N.transFats,
+  'TRANS-GERANIC-ACID': N.transFats,
+  'TRANS-1-CARVEOL': N.transFats,
+  'TRANS-CARYOPHYLLENE-OXIDE': N.transFats,
+  'TRANS-LIMONENE-DIEPOXIDE': N.transFats,
+  'TRANS-LIMONENE-EPOXIDE': N.transFats,
+  'TRANS-ZEATIN': N.transFats,
+  'TRANS-2-METHOXY-CINNAMALDEHYDE': N.transFats,
+  'TRANS-2-METHOXY-CINNAMIC-ACID': N.transFats,
+  'TRANS-CINNAMALDEHYDE': N.transFats,
+  'TRANS-CINNAMIC-ACID': N.transFats,
+  'TRANS-LINALOL-OXIDE': N.transFats,
+  'TRANS-LIMONENE-1,2-OXIDE': N.transFats,
+  'TRANS-SABINENE-HYDRATE': N.transFats,
+  'TRANS-2-HEXENAL': N.transFats,
+  'TRANS-P-COUMARIC-ACID': N.transFats,
+  'TRANS-2-DECANAL': N.transFats,
+  'TRANS-2-DODECANAL': N.transFats,
+  'TRANS-TRIDEC-2-EN-1-AL': N.transFats,
+  'TRANS-TRIDECEN-(2)-AL-(1)': N.transFats,
+  'TRANS-CITRAL': N.transFats,
+  'TRANS-ZEAXANTHIN|ZEAXANTHIN': N.transFats,
+  'TRANS-ALPHA-BERGAMOTENE': N.transFats,
+  'TRANS-PINOCARVEOL': N.transFats,
+  'TRANS-CHLOROGENIC-ACID': N.transFats,
+  'TRANS-BETA-BERGAPTENE': N.transFats,
+  'TRANS-1,10-HEPTADECADIENE-5,7-DIYN-3-OL': N.transFats,
+  'TRANS-2(7)-2,6-DIMETHYLOCTA-4,6-DIENE': N.transFats,
+  'TRANS-ISOASARONE': N.transFats,
+  'TRANS-GAMMA-BISABOLENE': N.transFats,
+  'TRANS-P-MENTH-2-EN-1-OL': N.transFats,
+  'TRANS-2-NONENAL': N.transFats,
+  'TRANS-BETA-FARNESENE': N.transFats,
+  'TRANS-CARYOPHYLLENE': N.transFats,
+  'TRANS-1,8-TERPIN': N.transFats,
+  'TRANS-ACONITIC-ACID': N.transFats,
+  'TRANS-ABSCISIC-ACID': N.transFats,
+  'TRANS-5,6-LUTEIN-EPOXIDE': N.transFats,
+  'TRANS-NEROLIDOL': N.transFats,
+  'TRANS-METHYL-EUGENOL': N.transFats,
+  'TRANS-CAFFEIC-ACID': N.transFats,
+  'TRANS-LINOLEIC-ACID-METHYL-ESTER': N.transFats,
+  'TRANS-EN-YN-DICYCLOETHER': N.transFats,
+  'TRANS-ROSE-OXIDE': N.transFats,
+  'TRANS-2-HEPTANAL': N.transFats,
+  'TRANS-BETA-COPAENE': N.transFats,
+  'TRANS-CARVEOL-ACETATE': N.transFats,
+  'TRANS-CARVYL-FORMATE': N.transFats,
+  'TRANS-JASMONE': N.transFats,
+  'TRANS-VERBENOL': N.transFats,
+  'TRANS-CARVONE-OXIDE': N.transFats,
+  'TRANS-PIPERITOL': N.transFats,
+  'TRANS-ISOEUGENOL': N.transFats,
+  'TRANS-P-MENTH-2-ENOL': N.transFats,
+  'TRANS-3-ETHOXY-1-P-MENTHENE': N.transFats,
+  'TRANS-3-ETHOXY-P-MENTH-1-ENE': N.transFats,
+  'TRANS-4-ETHOXY-THUJANE': N.transFats,
+  'TRANS-SABINENE-HYDRATE-METHYL-ETHER': N.transFats,
+  'TRANS-Z-P-MENTHEN-1-OL': N.transFats,
+  'TRANS-THUJANOL': N.transFats,
+  'TRANS-SINAPIC-ACID': N.transFats,
+  'TRANS-EPOXYDIHYDROLINALOOL': N.transFats,
+  'TRANS-2-HEXENYL-ACETATE': N.transFats,
+  'TRANS-P-COUMAROYLQUINIC-ACID': N.transFats,
+  'TRANS-2,TRANS-4-DECADIENIC-ACID-ETHYL-ESTER': N.transFats,
+  'TRANS-2,TRANS-4-DECADIENIC-ACID-METHYL-ESTER': N.transFats,
+  'TRANS-2-DECADIENIC-ACID-ETHYL-ESTER': N.transFats,
+  'TRANS-2-DECADIENIC-ACID-METHYL-ESTER': N.transFats,
+  'TRANS-CAFFEOYLARBUTIN': N.transFats,
+  'TRANS-ISOCHLOROGENIC-ACID': N.transFats,
+  'TRANS-NEOCHLOROGENIC-ACID': N.transFats,
+  'TRANS-CAFFEOYLCALLERYANIN': N.transFats,
+  'TRANS-HEX-2-EN-1-OL': N.transFats,
+  'TRANS-MYRTENOL': N.transFats,
+  'TRANS-BETA-TERPINEOL': N.transFats,
+  'TRANS-2-PHENYLBUTANONE': N.transFats,
+  'TRANS-SABINOL': N.transFats,
+  'TRANS-SALVENE': N.transFats,
+  'TRANS-3-HEXENAL': N.transFats,
+  'TRANS-NONEN-2-OL': N.transFats,
+  'TRANS-OCTEN-2-AL': N.transFats,
+  'TRANS-OCTEN-2-OL': N.transFats,
+  'TRANS-N-FEROLOYL-PUTRESCINE': N.transFats,
+  'TRANS-TARAXANTHIN': N.transFats,
+  'TRANS-LUTEIN-5,6-EPOXIDE': N.transFats,
+  'TRANS-4-THUJANOL': N.transFats,
+  'TRANS-CINNAMYL-ALCOHOL': N.transFats,
+  'TRANS-COUTARIC-ACID': N.transFats,
+  'TRANS-CAFTARIC-ACID': N.transFats,
+  'TRANS-24-METHYL-23-DEHYDRO-LOPHENOL': N.transFats,
+  'TRANS-10-SHOGAOL': N.transFats,
+  'TRANS-12-SHOGAOL': N.transFats,
+  'TRANS-3-(2-4-5-TRIMETHOXY-PHENYL)-4-(TRANS-3-4-DIMETHOXY-STYRYL)-CYCLOHEXENE': N.transFats,
+  'TRANS-3-(3-4-DIMETHOXY-PHENYL)-4-(TRANS-3-4-DIMETHOXY-STYRYL)-CYCLOHEXENE': N.transFats,
+  'TRANS-6-SHOGAOL': N.transFats,
+  'TRANS-8-SHOGAOL': N.transFats,
+  'TRANS-BETA-SESQUIPHELLANDROL': N.transFats,
+  'trans-p-Feruloyl-beta-D-glucopyranoside': N.transFats,
+  'trans-p-Ferulyl alcohol 4-O-[6-(2-methyl-3-hydroxypropionyl)] glucopyranoside': N.transFats,
+  'trans-p-Coumaroyl beta-D-glucopyranoside': N.transFats,
+  'trans-p-Coumaric acid': N.transFats,
+  'trans-Anethol': N.transFats,
+  'trans-Cinnamic acid': N.transFats,
+  'trans-(-)-p-Mentha-1(7),5-dien-2-ol': N.transFats,
+  'trans-p-Sinapoyl beta-D-glucopyranoside': N.transFats,
+  'TRANS-2-NONEN-1-OL': N.transFats,
+  'TRANS-1-PROPENYL-ALLYL-THIOSULFINATE': N.transFats,
+  'TRANS-1-PROPENYL-METHYL-THIOSULFINATE': N.transFats,
+  'TRANS-S-(PROPENYL-1-YL)-CYSTEINE-DISULFIDE': N.transFats,
+  'TRANS-1-PROPENYL-METHYL-DISULFIDE': N.transFats,
+
+  // omega-3
+  'ALPHA-LINOLENIC-ACID': N.omega3,
+  'HEXADECATRIENOIC-ACID': N.omega3,
+  'STEARIDONIC ACID': N.omega3,
+
+  // '11,12-Epoxyeicosatrienoic acid': N.omega3,
+  // '14,15-Epoxy-5,8,11-eicosatrienoic acid': N.omega3,
+  // '15(S)-Hydroxyeicosatrienoic acid': N.omega3,
+  // '2,4,14-Eicosatrienoic acid isobutylamide': N.omega3,
+  // '2,4,8-Eicosatrienoic acid isobutylamide': N.omega3,
+  // '5,6-Epoxy-8,11,14-eicosatrienoic acid': N.omega3,
+  // '5,8,11-Eicosatrienoic acid': N.omega3,
+  // '8,11,14-Eicosatrienoic acid': N.omega3,
+  // '8,9-Epoxyeicosatrienoic acid': N.omega3,
+
+  // 'cis-8,11,14,17-Eicosatetraenoic acid': N.omega3,
+  'EICOSAPENTAENOIC-ACID': N.omega3,
+
+  // '4,8,12,15,19-Docosapentaenoic acid': N.omega3,
+  // '7Z,10Z,13Z,16Z,19Z-Docosapentaenoic acid': N.omega3, //clupanodonic acid
+
+  // 'Docosapentaenoic acid': [N.DPA, N.omega3, N.omega6],
+
+  // 'Tetracosapentaenoic acid (24:5n-3)': N.omega3,
+
+  // '6,9,12,15,18,21-Tetracosahexaenoic acid': N.omega3,
+  // 'Tetracosahexaenoic acid': N.omega3,
+
+  // omega-6
+  'LINOLENIC-ACID': N.omega6,
+  'CIS-LINOLENIC-ACID': N.omega6,
+
+  'CIS-GAMMA-LINOLEIC-ACID': N.omega6,
+  // 'Calendic acid': N.omega6,
+  'EICOSADIENOIC-ACID': N.omega6,
+  // 'Dihomolinolenic acid': N.omega6,
+  'ARACHIDONIC-ACID': N.omega6,
+  // 'Adrenic acid': N.omega6,
+  // '4,7,10,13,16-Docosapentaenoic acid': N.omega6, //osbond acid
+  // 'Tetracosatetraenoic acid (24:4n-6)': N.omega6,
+  // 'Tetracosapentaenoic acid (24:5n-6)': N.omega6,
+
 }
 
-function attachContentToNutrition(content: FoodContent, nutrition: Nutrition, contentOrigName: string, nutritionField: string) {
-  if (content.origContentName && (content.origContentName.toString() === contentOrigName)) {
+function attachContentToNutrition(content: FoodContent, nutrition: Nutrition, contentOrigName: string, nutritionField: string | string[]) {
+  if (!(content.origContentName && (content.origContentName.toString() === contentOrigName))) return
+  if (Array.isArray(nutritionField)) {
+    nutritionField.forEach(nf => {
+      if (nutrition[nf]) {
+        if ((content.unit !== nutrition[nf]!.unit) && nutrition[nf]!.amount && content.amount) {
+          console.log('=====>>>>>>>')
+          console.log('content: ', content.amount, content.unit, content.origContentName)
+          console.log('food nutrition: ', nutrition[nf]!.amount, nutrition[nf]!.unit, contentOrigName)
+          throw new Error('units not equal!')
+        }
+      }
+
+      let totalAmount = content.amount
+      if (nutrition[nf]) {
+        totalAmount += nutrition[nf]!.amount + content.amount
+      }
+
+      nutrition[nf] = {
+        id: String(content.content),
+        amount: totalAmount,
+        unit: content.unit
+      }
+    })
+  } else {
     if (nutrition[nutritionField]) {
       if ((content.unit !== nutrition[nutritionField]!.unit) && nutrition[nutritionField]!.amount && content.amount) {
         console.log('=====>>>>>>>')
@@ -484,11 +702,20 @@ export default async function main() {
     .select('contents nutrition')
     .exec()
 
-  await Promise.all(foods.map(async food => {
-    food.nutrition = createFoodNutritionFromContents(food.contents)
-    await food.save()
+  const arrays = []
+  const size = 500
+
+  while (foods.length > 0) {
+    arrays.push(foods.splice(0, size))
+  }
+
+  for (let i = 0; i < arrays.length; i++) {
+    await Promise.all(arrays[i].map(async food => {
+      food.nutrition = createFoodNutritionFromContents(food.contents)
+      await food.save()
+    }))
     process.stdout.write('.')
-  }))
+  }
 
   console.log('Script finished.')
 }

@@ -1,0 +1,285 @@
+{
+  "proteins": [
+    "g"
+  ],
+  "totalCarbs": [
+    "g"
+  ],
+  "fats": [
+    "g"
+  ],
+  "fiber": [
+    "g"
+  ],
+  "DPA": [
+    "g"
+  ],
+  "calories": [
+    "kcal"
+  ],
+  "starch": [
+    "g"
+  ],
+  "sucrose": [
+    "g"
+  ],
+  "glucose": [
+    "g"
+  ],
+  "fructose": [
+    "g"
+  ],
+  "lactose": [
+    "g"
+  ],
+  "maltose": [
+    "g"
+  ],
+  "alcohol": [
+    "g"
+  ],
+  "water": [
+    "g"
+  ],
+  "caffeine": [
+    "mg"
+  ],
+  "theobromine": [
+    "mg"
+  ],
+  "sugar": [
+    "g"
+  ],
+  "galactose": [
+    "g"
+  ],
+  "calcium": [
+    "mg"
+  ],
+  "iron": [
+    "mg"
+  ],
+  "magnesium": [
+    "mg"
+  ],
+  "phosphorus": [
+    "mg"
+  ],
+  "potassium": [
+    "mg"
+  ],
+  "sodium": [
+    "mg"
+  ],
+  "zinc": [
+    "mg"
+  ],
+  "copper": [
+    "mg"
+  ],
+  "selenium": [
+    "µg"
+  ],
+  "vitAIU": [
+    "α-TE"
+  ],
+  "retinol": [
+    "µg"
+  ],
+  "vitARAE": [
+    "ug_RAE"
+  ],
+  "betaCarotene": [
+    "µg"
+  ],
+  "alphaCarotene": [
+    "µg"
+  ],
+  "vitE": [
+    "mg"
+  ],
+  "vitD": [
+    "α-TE",
+    "µg"
+  ],
+  "vitD2andD3": [
+    "µg"
+  ],
+  "lycopene": [
+    "µg"
+  ],
+  "vitC": [
+    "mg"
+  ],
+  "thiamine": [
+    "mg"
+  ],
+  "riboflavin": [
+    "mg"
+  ],
+  "niacin": [
+    "mg"
+  ],
+  "pantothenicAcid": [
+    "mg"
+  ],
+  "vitB6": [
+    "mg"
+  ],
+  "folate": [
+    "µg"
+  ],
+  "vitB12": [
+    "µg"
+  ],
+  "choline": [
+    "mg"
+  ],
+  "vitK": [
+    "µg"
+  ],
+  "folateFood": [
+    "µg"
+  ],
+  "folateDFE": [
+    "ug_DFE"
+  ],
+  "betaine": [
+    "mg"
+  ],
+  "tryptophan": [
+    "g",
+    "mg"
+  ],
+  "threonine": [
+    "g",
+    "mg"
+  ],
+  "isoleucine": [
+    "g",
+    "mg"
+  ],
+  "leucine": [
+    "g",
+    "mg"
+  ],
+  "lysine": [
+    "g",
+    "mg"
+  ],
+  "methionine": [
+    "g",
+    "mg"
+  ],
+  "cystine": [
+    "g",
+    "mg"
+  ],
+  "phenylalanine": [
+    "g",
+    "mg"
+  ],
+  "tyrosine": [
+    "g",
+    "mg"
+  ],
+  "valine": [
+    "g",
+    "mg"
+  ],
+  "arginine": [
+    "g",
+    "mg"
+  ],
+  "histidine": [
+    "g",
+    "mg"
+  ],
+  "alanine": [
+    "g",
+    "mg"
+  ],
+  "asparticAcid": [
+    "g",
+    "mg"
+  ],
+  "glutamicAcid": [
+    "g",
+    "mg"
+  ],
+  "glycine": [
+    "g",
+    "mg"
+  ],
+  "proline": [
+    "g",
+    "mg"
+  ],
+  "serine": [
+    "g",
+    "mg"
+  ],
+  "cholesterol": [
+    "mg"
+  ],
+  "saturatedFats": [
+    "g"
+  ],
+  "DHA": [
+    "g"
+  ],
+  "EPA": [
+    "g"
+  ],
+  "monounsaturatedFats": [
+    "g"
+  ],
+  "polyunsaturatedFats": [
+    "g"
+  ],
+  "proteinsTotalN": [
+    "g"
+  ],
+  "totalAvailableCarbs": [
+    "g"
+  ],
+  "vitA": [
+    "RE"
+  ],
+  "vitD3": [
+    "µg"
+  ],
+  "vitD2": [
+    "µg"
+  ],
+  "totalNiacin": [
+    "NE"
+  ],
+  "niacinFromTryptophan": [
+    "mg"
+  ],
+  "vitCLAscorbic": [
+    "mg"
+  ],
+  "vitCLDehydroascorbic": [
+    "mg"
+  ],
+  "manganese": [
+    "mg"
+  ],
+  "omega6": [
+    "g"
+  ],
+  "omega3": [
+    "g"
+  ],
+  "ALA": [
+    "g"
+  ],
+  "fluoride": [
+    "µg"
+  ],
+  "hydroxyproline": [
+    "g"
+  ]
+}

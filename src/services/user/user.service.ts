@@ -6,29 +6,29 @@
 import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
+import DietService from '@Services/diet/diet.service'
+import MailingService from '@Services/mail/mail.service'
+import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
 import UploadService from '@Services/upload/upload.service'
-import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
+import { LanguageCode, ObjectId, Role, Status } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
 import {
   BasicUser,
+  DecodedUser,
   User,
   UserAuthResponse,
   UserLoginArgs,
   UserRegistrationInput,
   UserUpdateInput,
-  DecodedUser,
 } from '@Types/user'
 import { ContextUser, ContextUserType } from '@Utils/context'
+import decodeJwtToken from '@Utils/decode-jwt-token'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
-import decodeJwtToken from '@Utils/decode-jwt-token'
-import MailingService from '@Services/mail/mail.service'
-import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
 import generateRecoverLink from './utils/generate-recover-link'
-import DietService from '@Services/diet/diet.service'
 
 
 @Service()
@@ -219,7 +219,7 @@ export default class UserService {
   async requestRecoverPassword(email: string, locale: LanguageCode): Promise<Boolean> {
 
     const user = await UserModel.findOne({ email })
-    if (!user) throw new Errors.NotFound('User not found')
+    if (!user) return true
 
     let userFirstName: string = ''
     if (user.firstName) {
@@ -227,13 +227,16 @@ export default class UserService {
     } else {
       userFirstName = 'User'
     }
+
+    const recoverLink = generateRecoverLink(user.id)
+
     this.mailingService.sendMail([{
       name: userFirstName,
       email: user.email,
       senderAddress: 'recover',
       subject: `Password recover for ${user.firstName}`,
       template: getRecoverTemplate(locale),
-      recover: generateRecoverLink(user.id)
+      recover: recoverLink
     }])
     return true
   }
@@ -242,7 +245,7 @@ export default class UserService {
     const decoded = decodeJwtToken(token) as DecodedUser
 
     const user = await UserModel.findById(decoded.id!)
-    if (!user) throw new Errors.NotFound('User not found')
+    if (!user) throw new Errors.NotFound('Invalid token')
 
     user.password = await generateHashPassword(password)
     await user.save()

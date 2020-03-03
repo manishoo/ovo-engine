@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import jwt from 'jsonwebtoken'
 import Config from '@Config'
+import jwt from 'jsonwebtoken'
 
 
 export default function generateRecoverLink(userId: string): string {
@@ -13,5 +13,5 @@ export default function generateRecoverLink(userId: string): string {
     expiresIn: 60 * 60 //an hour
   })
 
-  return `${Config.supernovaUrl}/recover?key=${token}`
+  return `${Config.supernovaUrl}/new-password?t=${token}`
 }

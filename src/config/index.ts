@@ -69,7 +69,7 @@ export default {
     assistantConversationKey: 'assistant:conversation',
     userTempStorageKey: 'user:registerDataTemp',
     defaultMacroNutrientRatio: {
-      carb: 35,
+      carbs: 35,
       fat: 20,
       protein: 45,
     },

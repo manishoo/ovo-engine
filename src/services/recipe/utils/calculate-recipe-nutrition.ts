@@ -5,8 +5,9 @@
 
 import { Food, Nutrition } from '@Types/food'
 import { Ingredient } from '@Types/ingredient'
-import { calculateNutrition, scaleFoodNutrition } from '@Utils/calculate-nutrition'
-import { determineIfItsWeightOrObject, determineIfItsCustomUnit } from '@Utils/determine-object'
+import { Recipe } from '@Types/recipe'
+import { calculateNutrition, scaleFoodNutrition, scaleRecipeNutrition } from '@Utils/calculate-nutrition'
+import { determineIfItsCustomUnit, determineIfItsFood, determineIfItsWeightOrObject } from '@Utils/determine-object'
 
 
 export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
@@ -24,7 +25,11 @@ export function calculateRecipeNutrition(ingredients: Ingredient[]): Nutrition {
       gramWeight = ingredient.unit.gramWeight
     }
 
-    calculateNutrition(scaleFoodNutrition(ingredient.item as Food, ingredient.amount, weightId, gramWeight), totalNutrition)
+    if (determineIfItsFood(ingredient.item)) {
+      calculateNutrition(scaleFoodNutrition(ingredient.item as Food, ingredient.amount, weightId, gramWeight), totalNutrition)
+    } else {
+      calculateNutrition(scaleRecipeNutrition(ingredient.item as Recipe, ingredient.amount), totalNutrition)
+    }
   })
 
   return totalNutrition

@@ -21,21 +21,19 @@ import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import shortid from 'shortid'
 import slug from 'slug'
-import { Service } from 'typedi'
+import { Inject, Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
 import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
 
 
 @Service()
 export default class RecipeService {
-  constructor(
-    // service injection
-    private readonly uploadService: UploadService,
-    private readonly dietService: DietService,
-    private readonly mealService: MealService,
-  ) {
-    // noop
-  }
+  @Inject(type => MealService)
+  private readonly mealService: MealService
+  @Inject(type => UploadService)
+  private readonly uploadService: UploadService
+  @Inject(type => DietService)
+  private readonly dietService: DietService
 
   async get(id?: ObjectId, slug?: string) {
     if (!id && !slug) throw new Errors.Validation('Recipe id or slug must be provided')
@@ -66,7 +64,9 @@ export default class RecipeService {
       args.page = 1
     }
 
-    let query: any = {}
+    let query: any = {
+      deleted: { $ne: true }, //TODO: get an arg to show archives
+    }
 
     function isMine() {
       return args.viewerUser && args.userId && args.viewerUser.id === String(args.userId)
@@ -92,7 +92,7 @@ export default class RecipeService {
     }
 
     let sort: any = {
-      likes: -1
+      createdAt: -1
     }
 
     if (args.userId) {
@@ -107,15 +107,18 @@ export default class RecipeService {
     }
 
     if (args.nameSearchQuery) {
-      query['title.text'] = { $regex: args.nameSearchQuery }
+      query['title.text'] = {
+        $regex: args.nameSearchQuery,
+        $options: 'i',
+      }
     }
 
     if (args.ingredients) {
       query['ingredients.food._id'] = { $in: args.ingredients }
     }
 
-    if (args.latest) {
-      sort['createdAt'] = -1
+    if (args.sortByMostPopular) {
+      sort['likes'] = -1
     }
 
     if (args.diets) {
@@ -162,7 +165,7 @@ export default class RecipeService {
 
     return {
       recipes: recipes.map(recipe => transformRecipe(recipe, args.viewerUser ? args.viewerUser.id : undefined)),
-      pagination: createPagination(args.page, args.size, totalCount),
+      pagination: createPagination(args.page, args.size, totalCount, recipes),
     }
   }
 
@@ -225,7 +228,6 @@ export default class RecipeService {
       recipe.tags = tags
     }
     recipe.nutrition = calculateRecipeNutrition(recipe.ingredients!)
-
     let createdRecipe = await RecipeModel.create(recipe)
     createdRecipe = createdRecipe.toObject()
     createdRecipe.author = author
@@ -264,9 +266,11 @@ export default class RecipeService {
          * If the ingredient had an associated recipe
          * */
         const recipe = await RecipeModel.findById(ingredientInput.recipe)
+          .populate('author')
+          .exec()
         if (!recipe) throw new Errors.NotFound('recipe not found')
 
-        ingredient.item = recipe
+        ingredient.item = transformRecipe(recipe.toObject())
       }
 
       /**

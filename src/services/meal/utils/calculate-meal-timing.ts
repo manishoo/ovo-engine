@@ -23,9 +23,9 @@ export default function calculateMealTiming(mealItems: MealItem[]): Timing {
     }
     if (mealItem.item && determineIfItsRecipe(mealItem.item)) {
       timing = {
-        totalTime: timing.totalTime + mealItem.item.timing.totalTime,
-        prepTime: timing.prepTime! + (mealItem.item.timing.prepTime || 0),
-        cookTime: timing.cookTime! + (mealItem.item.timing.cookTime || 0),
+        totalTime: (timing.totalTime || 0) + (mealItem.item.timing.totalTime || 0),
+        prepTime: (timing.prepTime || 0) + (mealItem.item.timing.prepTime || 0),
+        cookTime: (timing.cookTime || 0) + (mealItem.item.timing.cookTime || 0),
       }
     }
   })

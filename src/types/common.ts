@@ -88,16 +88,16 @@ export class Image {
 
 @ObjectType()
 export class Pagination {
-  @Field()
+  @Field(type => Int)
   page: number
-  @Field()
+  @Field(type => Int)
   size: number
-  @Field()
+  @Field(type => Int)
   totalPages: number
   @Field()
   hasNext: boolean
 
-  @Field({ nullable: true })
+  @Field(type => Int, { nullable: true })
   totalCount?: number
   @Field({ nullable: true })
   lastId?: string
@@ -154,8 +154,8 @@ export class Timing {
   @Field(type => Int, { nullable: true })
   cookTime?: number
 
-  @Field(type => Int)
-  totalTime: number
+  @Field(type => Int, { nullable: true })
+  totalTime?: number
 }
 
 @InputType()
@@ -166,8 +166,8 @@ export class TimingInput {
   @Field(type => Int, { nullable: true })
   cookTime?: number
 
-  @Field(type => Int)
-  totalTime: number
+  @Field(type => Int, { nullable: true })
+  totalTime?: number
 }
 
 export declare type Ref<T> = T | mongoose.Types.ObjectId

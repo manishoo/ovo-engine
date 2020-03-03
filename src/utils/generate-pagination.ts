@@ -6,12 +6,13 @@
 import { Pagination } from '@Types/common'
 
 
-export function createPagination(page: number, size: number, count: number): Pagination {
+export function createPagination(page: number, size: number, count: number, items: {id: any}[] = []): Pagination {
   return {
-    page: page,
-    size: size,
+    page,
+    size,
     totalCount: count,
     totalPages: Math.ceil(count / size),
-    hasNext: count > 0 && page !== Math.ceil(count / size)
+    hasNext: count > 0 && page !== Math.ceil(count / size),
+    lastId: items.length > 0 ? items[items.length - 1].id : undefined,
   }
 }

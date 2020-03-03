@@ -6,6 +6,7 @@
 import { transformRecipeUser } from '@Services/user/transformers/recipe-user.transformer'
 import { Recipe } from '@Types/recipe'
 import { User } from '@Types/user'
+import { determineIfItsFood } from '@Utils/determine-object'
 
 
 export function transformRecipe(recipe: Recipe, userId?: string) {
@@ -20,6 +21,10 @@ export function transformRecipe(recipe: Recipe, userId?: string) {
   recipe.ingredients = recipe.ingredients.map(i => {
     if (i.item) {
       i.item.id = String(i.item._id)
+
+      if (!determineIfItsFood(i.item)) {
+        i.item = transformRecipe(i.item)
+      }
     }
 
     return i

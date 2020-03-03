@@ -8,13 +8,13 @@ import { FoodMapModel } from '@Models/food-map.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { calculateRecipeNutrition } from '@Services/recipe/utils/calculate-recipe-nutrition'
+import { ObjectId } from '@Types/common'
 import { IngredientFood } from '@Types/food'
 import { FoodMap, FoodMapInput, FoodMapList, FoodMapListArgs } from '@Types/food-map'
 import { RedisKeys } from '@Types/redis'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
-import { ObjectId } from '@Types/common'
 
 
 @Service()
@@ -42,7 +42,7 @@ export default class FoodMapperService {
 
     return {
       foodMaps,
-      pagination: createPagination(Math.abs(page), size, count)
+      pagination: createPagination(Math.abs(page), size, count, foodMaps)
     }
   }
 

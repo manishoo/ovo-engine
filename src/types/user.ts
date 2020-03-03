@@ -183,25 +183,37 @@ export class SocialNetworksInput {
 
 @ObjectType()
 export class TargetNutrition {
+  @Field({ nullable: true })
+  percentage?: number
+
   @Field()
   min: number
 
   @Field()
   max: number
-
-  get average() {
-    return this.min + this.max / 2
-  }
 }
 
 @InputType()
 export class TargetNutritionInput {
+  @Field({ nullable: true })
+  percentage?: number
+
   @Field()
   min: number
 
   @Field()
   max: number
 }
+
+export enum NutritionProfileMode {
+  percentage = 'percentage',
+  range = 'range',
+}
+
+registerEnumType(NutritionProfileMode, {
+  name: 'NutritionProfileMode',
+  description: 'Nutrition Profile Mode'
+})
 
 @ObjectType()
 export class NutritionProfile {
@@ -212,13 +224,16 @@ export class NutritionProfile {
   protein: TargetNutrition
 
   @Field(type => TargetNutrition)
-  carb: TargetNutrition
+  carbs: TargetNutrition
 
   @Field(type => TargetNutrition)
   fat: TargetNutrition
 
   @Field()
   isStrict: boolean
+
+  @Field(type => NutritionProfileMode)
+  mode: NutritionProfileMode
 }
 
 @InputType()
@@ -230,22 +245,16 @@ export class NutritionProfileInput {
   protein: TargetNutritionInput
 
   @Field(type => TargetNutritionInput)
-  carb: TargetNutritionInput
+  carbs: TargetNutritionInput
 
   @Field(type => TargetNutritionInput)
   fat: TargetNutritionInput
 
   @Field()
   isStrict: boolean
-}
 
-@ObjectType()
-export class UpdateNutritionProfileResponse {
-  @Field()
-  userId: ObjectId
-
-  @Field()
-  nutritionProfile: NutritionProfile
+  @Field(type => NutritionProfileMode)
+  mode: NutritionProfileMode
 }
 
 @ObjectType()

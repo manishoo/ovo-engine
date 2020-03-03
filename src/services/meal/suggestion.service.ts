@@ -92,8 +92,8 @@ export default class SuggestionService {
           $lte: nutritionProfile.protein.max * mealWeight,
         },
         'totalCarbs.amount': {
-          $gte: nutritionProfile.carb.min * mealWeight,
-          $lte: nutritionProfile.carb.max * mealWeight,
+          $gte: nutritionProfile.carbs.min * mealWeight,
+          $lte: nutritionProfile.carbs.max * mealWeight,
         },
         'fats.amount': {
           $gte: nutritionProfile.fat.min * mealWeight,
@@ -110,7 +110,7 @@ export default class SuggestionService {
     let previousSuggestionsRedisKey: string | null = null
 
     if (userId) {
-      const previousSuggestionsRedisKey = RedisKeys.previousMealSuggestions(userId)
+      previousSuggestionsRedisKey = RedisKeys.previousMealSuggestions(userId)
       const suggestionExpirationTime = subHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime()
       previousSuggestions = await redis.zrevrangebyscore(previousSuggestionsRedisKey, now, suggestionExpirationTime)
     }
@@ -285,5 +285,31 @@ export default class SuggestionService {
     day.meals = dayMeals
 
     return day.save()
+  }
+
+  async suggestDayMeals(userMeals: UserMealInput[], nutritionProfile: NutritionProfileInput, dietId?: ObjectId): Promise<DayMeal[]> {
+    let dayMeals: DayMeal[] = []
+
+    let diet: Diet | undefined = undefined
+    if (dietId) {
+      diet = await this.dietService.get(dietId)
+    }
+
+    for (let userMeal of userMeals) {
+      let time = new Date()
+      time = setHours(time, Number(userMeal.time.split(':')[0]))
+      time = setMinutes(time, Number(userMeal.time.split(':')[1]))
+      const selectedMeal = await this.findBestMeal(userMeal, nutritionProfile, userMeals, diet)
+
+      dayMeals.push({
+        id: new ObjectId(),
+        userMeal,
+        mealId: selectedMeal._id,
+        items: selectedMeal.items,
+        time,
+      })
+    }
+
+    return dayMeals
   }
 }

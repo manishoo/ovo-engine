@@ -4,7 +4,7 @@
  */
 
 import { UserModel } from '@Models/user.model'
-import { UserMeal, UserMealInput } from '@Types/user'
+import { NutritionProfile, NutritionProfileInput, UserMeal, UserMealInput } from '@Types/user'
 import Errors from '@Utils/errors'
 import { Service } from 'typedi'
 
@@ -38,6 +38,17 @@ export default class UserSettingsService {
     await user.save()
 
     return userMeal
+  }
+
+  async updateNutritionProfile(nutritionProfileInput: NutritionProfileInput, userId: string): Promise<NutritionProfile> {
+    const user = await UserModel.findById(userId)
+    if (!user) throw new Errors.NotFound('User not found')
+
+    user.nutritionProfile = nutritionProfileInput
+    user.markModified('nutritionProfile')
+    await user.save()
+
+    return user.nutritionProfile
   }
 
   async updateUserMeals(userMealInputs: UserMealInput[], userId: string): Promise<UserMeal[]> {

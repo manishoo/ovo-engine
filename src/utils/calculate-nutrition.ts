@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import { ObjectId } from '@Types/common'
 import { IngredientFood, NutrientUnit, Nutrition } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import Errors from '@Utils/errors'
-import { ObjectId } from '@Types/common'
 
 
 export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutrition) {
@@ -26,25 +26,26 @@ export function calculateNutrition(nutrition: Nutrition, totalNutrition: Nutriti
 export function scaleFoodNutrition(food: IngredientFood, foodAmount: number, weightId?: ObjectId, customGramWeight?: number): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
+  if (!food.nutrition) return totalNutrition
+
   /**
    * Iterate nutrition fields
    * */
-  if (food.nutrition) {
-    Object.keys(food.nutrition).map(fieldName => {
-      const nutrient = food.nutrition![fieldName]!
+  Object.keys(food.nutrition).map(fieldName => {
+    const nutrient = food.nutrition![fieldName]!
 
-      totalNutrition[fieldName] = {
-        amount: getFoodNutrientAmount(food, foodAmount, nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, weightId, customGramWeight),
-        unit: nutrient.unit,
-      }
-    })
-  }
+    totalNutrition[fieldName] = {
+      amount: getFoodNutrientAmount(food, foodAmount, nutrient, totalNutrition[fieldName] ? totalNutrition[fieldName]!.amount : 0, weightId, customGramWeight),
+      unit: nutrient.unit,
+    }
+  })
 
   return totalNutrition
 }
 
-function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrient: NutrientUnit, baseAmount: number, weightId?: ObjectId, customGramWeight?: number) {
-  let totalAmount = baseAmount
+function getFoodNutrientAmount(food: IngredientFood, amount: number, nutrient: NutrientUnit, existingNutrientAmount: number, weightId?: ObjectId, customGramWeight?: number) {
+  let totalGrams = 0
+
   /**
    * If the food had a weight,
    * use the weight's {gramWeight}
@@ -52,16 +53,23 @@ function getFoodNutrientAmount(food: IngredientFood, foodAmount: number, nutrien
   if (weightId) {
     const foundWeight = food.weights.find(w => w.id.toString() == weightId.toString())
     if (!foundWeight) throw new Errors.Validation('Weight id not valid')
-    totalAmount = (foundWeight.gramWeight || 0) * foodAmount
+    if (!foundWeight.gramWeight) throw new Errors.Validation('Found weight doesnt have gramWeight')
+
+    totalGrams = foundWeight.gramWeight * amount
   } else if (customGramWeight) {
-    totalAmount = customGramWeight * foodAmount
+    totalGrams = customGramWeight * amount
   } else {
-    totalAmount = foodAmount
+    totalGrams = amount
   }
 
-  totalAmount += (nutrient.amount / 100) * totalAmount
+  // 60g of protein
+  const totalNutrientAmount =
+    // 60g of sugar
+    totalGrams *
+    // 1g of protein in 100g
+    (nutrient.amount / 100)
 
-  return Number(totalAmount.toFixed(2))
+  return Number((totalNutrientAmount + existingNutrientAmount).toFixed(2))
 }
 
 export function scaleRecipeNutrition(recipe: Recipe, serving: number): Nutrition {

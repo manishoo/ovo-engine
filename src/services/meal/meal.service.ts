@@ -12,26 +12,23 @@ import { ObjectId, Pagination, Role } from '@Types/common'
 import { Food } from '@Types/food'
 import { ListMealsArgs, Meal, MealInput, MealItem, MealItemInput, MealListResponse } from '@Types/meal'
 import { Recipe } from '@Types/recipe'
-import { Author } from '@Types/user'
+import { Author, User } from '@Types/user'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import generateAllCases from '@Utils/generate-all-cases'
 import { createPagination } from '@Utils/generate-pagination'
-import { Service } from 'typedi'
+import { Inject, Service } from 'typedi'
 import { transformMeal } from './transformers/meal.transformer'
 import { calculateMealNutrition } from './utils/calculate-meal-nutrition'
 
 
 @Service()
 export default class MealService {
-  constructor(
-    // service injection
-    private readonly recipeService: RecipeService,
-    private readonly foodService: FoodService,
-  ) {
-    // noop
-  }
+  @Inject(type => RecipeService)
+  private readonly recipeService: RecipeService
+  @Inject(type => FoodService)
+  private readonly foodService: FoodService
 
   async create(mealInput: MealInput, userId: string, bulkCreate?: boolean): Promise<Meal[]> {
     let masterMealData: Partial<Meal> = {}
@@ -70,7 +67,7 @@ export default class MealService {
      * Create meal permutations
      * */
     if (bulkCreate && (me.role !== Role.user)) {
-      const mealPermutations = await this._createMealPermutations(masterMealToBeCreated)
+      const mealPermutations = await this._createMealPermutations(masterMealToBeCreated, me)
 
       mealsToBeCreated.push(...mealPermutations)
     } else {
@@ -78,10 +75,10 @@ export default class MealService {
       mealsToBeCreated.push(await this.get(createdMeal._id))
     }
 
-    return mealsToBeCreated
+    return mealsToBeCreated.slice(0, 5)
   }
 
-  private async _createMealPermutations(meal: Meal): Promise<Meal[]> {
+  private async _createMealPermutations(meal: Meal, me: User): Promise<Meal[]> {
     let optionals: MealItem[] = []
     let constants: MealItem[] = []
 
@@ -123,10 +120,10 @@ export default class MealService {
     /**
      * create meal alternative permutations
      */
-    await Promise.all(optionalMeals.map(meal => {
+    for (let meal of optionalMeals) {
       const arrayOfArrayOfMealItemIds = generateAllCases(meal.items.map((mealItem, i) => ([meal.items[i], ...mealItem.alternativeMealItems].map(j => j.id.toString()!))))
 
-      return Promise.all(arrayOfArrayOfMealItemIds.map(async arrayOfMealItemIds => {
+      for (let arrayOfMealItemIds of arrayOfArrayOfMealItemIds) {
         const mealItems = meal.items.map((item, index) => {
           const allMealItems = [item, ...item.alternativeMealItems]
 
@@ -143,18 +140,30 @@ export default class MealService {
             })),
           } as MealItem
         })
+
+        /**
+         * Create permutation but not the one that is like the masterMeal
+         * */
+        const isMaster = meal.items.map(mi => mi.item && String(mi.item.id)).join('_') === mealItems.map(mi => mi.item && String(mi.item.id)).join('_')
+
         const createdMeal = await MealModel.create({
           author: meal.author,
           description: meal.description,
           items: mealItems,
-          instanceOf: meal._id,
+          instanceOf: isMaster ? undefined : meal._id,
+          hasPermutations: true,
           timing: calculateMealTiming(mealItems),
           nutrition: calculateMealNutrition(mealItems),
         } as Meal)
 
-        finalMeals.push(await this.get(createdMeal._id))
-      }))
-    }))
+        /**
+         * Transform without using this.get to make one less query
+         * */
+        createdMeal.author = me
+
+        finalMeals.push(transformMeal(createdMeal))
+      }
+    }
 
     return finalMeals
   }
@@ -184,7 +193,9 @@ export default class MealService {
     if (!variables.page) variables.page = 1
     if (!variables.size) variables.size = 10
 
-    let query: any = {}
+    let query: any = {
+      instanceOf: { $exists: false }
+    }
 
     if (variables.authorId) {
       let author = await UserModel.findById(variables.authorId)
@@ -206,6 +217,9 @@ export default class MealService {
     const counts = await MealModel.countDocuments(query)
 
     const meals = await MealModel.find(query)
+      .sort({
+        createdAt: -1,
+      })
       .limit(variables.size)
       .skip(variables.size * (variables.page - 1))
       .populate('author')
@@ -213,11 +227,11 @@ export default class MealService {
 
     return {
       meals: meals.map(meal => transformMeal(meal)),
-      pagination: createPagination(variables.page, variables.size, counts),
+      pagination: createPagination(variables.page, variables.size, counts, meals),
     }
   }
 
-  async delete(id: ObjectId, user: ContextUser, bulkDelete?: boolean): Promise<string[]> {
+  async delete(id: ObjectId, user: ContextUser): Promise<string> {
     let meal = await MealModel.findById(id)
     if (!meal) throw new Errors.NotFound('meal not found')
 
@@ -226,18 +240,11 @@ export default class MealService {
     const deleted = await meal.delete(DeleteBy.user(user))
     if (!deleted) throw new Errors.System('something went wrong')
 
-    let deletedMealIds = []
-    deletedMealIds.push(deleted.id)
-
-    if (bulkDelete && meal.instanceOf) {
-      const meals = await MealModel.find({ instanceOf: { $in: [meal._id, meal.instanceOf] } })
-      await MealModel.delete({ instanceOf: { $in: [meal._id, meal.instanceOf] } }, DeleteBy.user(user))
-
-      //FIXME? Maybe I'm wrong?
-      deletedMealIds.push(...meals.map(m => m.id))
+    if (meal.hasPermutations) {
+      await MealModel.delete({ instanceOf: meal._id }, DeleteBy.user(user))
     }
 
-    return deletedMealIds
+    return deleted.id
   }
 
   async update(id: ObjectId, mealInput: MealInput, userId: string): Promise<Meal> {

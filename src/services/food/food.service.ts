@@ -3,9 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from '@Config/connections/mongoose'
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import putDefaultFoodsOnTop from '@Services/food/utils/put-default-foods-on-top'
+import MealService from '@Services/meal/meal.service'
 import UploadService from '@Services/upload/upload.service'
 import { ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
@@ -14,19 +16,15 @@ import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
-import { Service } from 'typedi'
-import MealService from '@Services/meal/meal.service'
+import { Inject, Service } from 'typedi'
 
 
 @Service()
 export default class FoodService {
-  constructor(
-    // service injection
-    private readonly uploadService: UploadService,
-    private readonly mealService: MealService,
-  ) {
-    // noop
-  }
+  @Inject(type => UploadService)
+  private readonly uploadService: UploadService
+  @Inject(type => MealService)
+  private readonly mealService: MealService
 
   async get(foodId: ObjectId) {
     let food = await FoodModel.findById(foodId)
@@ -75,8 +73,67 @@ export default class FoodService {
 
     return {
       foods: putDefaultFoodsOnTop(foods),
-      pagination: createPagination(page, size, count),
+      pagination: createPagination(page, size, count, foods),
     }
+  }
+
+  async create(foodClassID: ObjectId, foodInput: FoodInput): Promise<Food> {
+    if (!ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
+
+    const foodClass = await FoodClassModel.findById(foodClassID)
+    if (!foodClass) throw new Errors.NotFound('food class not found')
+
+    let weights: WeightInput[] = []
+    foodInput.weights.map(weight => {
+      weight.id = new ObjectId()
+      weights.push(weight)
+    })
+
+    const food = new FoodModel({
+      name: foodInput.name,
+      weights,
+      description: foodInput.description,
+      foodClass: foodClass._id,
+      origFoodClassName: foodClass.name,
+      origFoodGroups: foodClass.foodGroups,
+      nutrition: foodInput.nutrition,
+    } as Partial<Food>)
+
+    if (foodInput.image) {
+      food.image = {
+        url: await this.uploadService.processUpload(foodInput.image, 'full', `images/foods/${food.id}`)
+      }
+      if (!foodInput.thumbnail) {
+        food.thumbnail = {
+          url: await this.uploadService.processUpload(foodInput.image, 'thumb', `images/foods/${food.id}`)
+        }
+      }
+    }
+
+    if (foodInput.thumbnail) {
+      food.thumbnail = {
+        url: await this.uploadService.processUpload(foodInput.thumbnail, 'thumb', `images/foods/${food.id}`)
+      }
+    }
+
+    if (foodInput.nutrition) {
+      food.nutrition = {
+        ...foodInput.nutrition
+      }
+    }
+
+    const savedFood = await food.save()
+
+    /**
+     * If foodClass didn't have a default food
+     * select this food as the default food
+     * */
+    if (!foodClass.defaultFood) {
+      foodClass.defaultFood = savedFood._id
+      await foodClass.save()
+    }
+
+    return savedFood
   }
 
   async update(foodId: ObjectId, foodInput: FoodInput): Promise<Food | null> {
@@ -140,57 +197,33 @@ export default class FoodService {
     if (restore) {
       await food.restore()
     } else {
-      await food.delete(DeleteBy.user(user))
+      if (food.isDefault) {
+        mongoose.startSession()
+          .then(async (session) => {
+            session.startTransaction()
+            food.$session(session)
+
+            try {
+              food.isDefault = false
+              await food.save()
+
+              const foodClass = await FoodClassModel.findById(food.foodClass).session(session)
+              if (!foodClass) throw new Errors.System()
+
+              foodClass.defaultFood = undefined
+              await foodClass.save()
+
+              await session.commitTransaction()
+
+              await food.delete(DeleteBy.user(user))
+            } catch (e) {
+              await session.abortTransaction()
+              throw new Errors.System()
+            }
+          })
+      }
     }
 
     return food
-  }
-
-  async create(foodClassID: ObjectId, foodInput: FoodInput): Promise<Food> {
-    if (!ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
-
-    const foodClass = await FoodClassModel.findById(foodClassID)
-    if (!foodClass) throw new Errors.NotFound('food class not found')
-
-    let weights: WeightInput[] = []
-    foodInput.weights.map(weight => {
-      weight.id = new ObjectId()
-      weights.push(weight)
-    })
-
-    const food = new FoodModel({
-      name: foodInput.name,
-      weights,
-      description: foodInput.description,
-      foodClass: foodClass._id,
-      origFoodClassName: foodClass.name,
-      origFoodGroups: foodClass.foodGroups,
-      nutrition: foodInput.nutrition,
-    } as Partial<Food>)
-
-    if (foodInput.image) {
-      food.image = {
-        url: await this.uploadService.processUpload(foodInput.image, 'full', `images/foods/${food.id}`)
-      }
-      if (!foodInput.thumbnail) {
-        food.thumbnail = {
-          url: await this.uploadService.processUpload(foodInput.image, 'thumb', `images/foods/${food.id}`)
-        }
-      }
-    }
-
-    if (foodInput.thumbnail) {
-      food.thumbnail = {
-        url: await this.uploadService.processUpload(foodInput.thumbnail, 'thumb', `images/foods/${food.id}`)
-      }
-    }
-
-    if (foodInput.nutrition) {
-      food.nutrition = {
-        ...foodInput.nutrition
-      }
-    }
-
-    return food.save()
   }
 }
