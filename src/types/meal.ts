@@ -9,7 +9,7 @@ import { Nutrition } from '@Types/food'
 import { Ingredient, IngredientInput } from '@Types/ingredient'
 import { Author } from '@Types/user'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
-import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
+import { ArgsType, Field, FieldResolver, InputType, Int, ObjectType, Resolver, Root } from 'type-graphql'
 import { InstanceType } from 'typegoose'
 
 
@@ -23,8 +23,19 @@ export class MealListResponse {
 
 @ObjectType()
 export class MealItem extends Ingredient {
+  @Field({ nullable: true })
+  hasAlternatives?: boolean
+
   @Field(type => [Ingredient])
   alternativeMealItems: Ingredient[]
+}
+
+@Resolver(of => MealItem)
+export class MealItemResolver {
+  @FieldResolver(returns => Boolean)
+  hasAlternatives(@Root() mealItem: MealItem) {
+    return mealItem.alternativeMealItems.length > 0
+  }
 }
 
 @InputType()

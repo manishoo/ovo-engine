@@ -39,6 +39,6 @@ export default class AssistantResolver {
     return this.assistantService.conversation({
       messages: message ? [createMessage(message, data, MessageSender.user)] : [],
       token
-    }, ctx.lang)
+    }, ctx.lang, ctx.user)
   }
 }

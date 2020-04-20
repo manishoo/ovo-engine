@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { LanguageCode } from '@Types/common'
-import { MealAvailableTime, MealSize, NutritionProfile, NutritionProfileMode, UserMeal } from '@Types/user'
+import { LanguageCode, ObjectId } from '@Types/common'
+import { MealAvailableTime, MealSize, NutritionProfileInput, NutritionProfileMode, UserMeal } from '@Types/user'
 import dotenv from 'dotenv'
 import { __ } from 'i18n'
 
@@ -48,30 +48,36 @@ export default {
       }
     ]
   },
-  defaultNutritionProfile: {
-    mode: NutritionProfileMode.range,
-    isStrict: false,
-    calories: 2000,
-    carbs: {
-      max: 250,
-      min: 200,
-      get average(): number {
-        return this.max + this.min / 2
-      }
-    },
-    fat: {
-      max: 90,
-      min: 80,
-      get average(): number {
-        return this.max + this.min / 2
-      }
-    },
-    protein: {
-      max: 170,
-      min: 150,
-      get average(): number {
-        return this.max + this.min / 2
-      }
-    },
-  } as NutritionProfile,
+  get defaultNutritionProfile() {
+    return {
+      id: new ObjectId(),
+      mode: NutritionProfileMode.range,
+      isStrict: false,
+      calories: 2000,
+      carbs: {
+        percentage: 60,
+        max: 250,
+        min: 200,
+        get average(): number {
+          return this.max + this.min / 2
+        }
+      },
+      fat: {
+        percentage: 15,
+        max: 90,
+        min: 80,
+        get average(): number {
+          return this.max + this.min / 2
+        }
+      },
+      protein: {
+        percentage: 25,
+        max: 170,
+        min: 150,
+        get average(): number {
+          return this.max + this.min / 2
+        }
+      },
+    } as NutritionProfileInput
+  },
 }

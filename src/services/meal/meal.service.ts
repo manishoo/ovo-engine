@@ -10,11 +10,11 @@ import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
 import RecipeService from '@Services/recipe/recipe.service'
 import { ObjectId, Pagination, Role } from '@Types/common'
 import { Food } from '@Types/food'
+import { IngredientInput } from '@Types/ingredient'
 import { ListMealsArgs, Meal, MealInput, MealItem, MealItemInput, MealListResponse } from '@Types/meal'
 import { Recipe } from '@Types/recipe'
 import { Author, User } from '@Types/user'
 import { ContextUser } from '@Utils/context'
-import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import generateAllCases from '@Utils/generate-all-cases'
 import { createPagination } from '@Utils/generate-pagination'
@@ -30,7 +30,7 @@ export default class MealService {
   @Inject(type => FoodService)
   private readonly foodService: FoodService
 
-  async create(mealInput: MealInput, userId: string, bulkCreate?: boolean): Promise<Meal[]> {
+  async create(mealInput: MealInput, userId: string, bulkCreate?: boolean): Promise<Meal> {
     let masterMealData: Partial<Meal> = {}
 
     /**
@@ -62,110 +62,32 @@ export default class MealService {
       nutrition: masterMealNutrition,
     })
 
-    let mealsToBeCreated: Meal[] = []
     /**
      * Create meal permutations
      * */
     if (bulkCreate && (me.role !== Role.user)) {
-      const mealPermutations = await this._createMealPermutations(masterMealToBeCreated, me)
-
-      mealsToBeCreated.push(...mealPermutations)
-    } else {
-      const createdMeal = await MealModel.create(masterMealToBeCreated)
-      mealsToBeCreated.push(await this.get(createdMeal._id))
+      await this._createMealPermutations(masterMealToBeCreated, me)
     }
 
-    return mealsToBeCreated.slice(0, 5)
+    const createdMeal = await MealModel.create(masterMealToBeCreated)
+
+    return this.get(createdMeal._id)
   }
 
-  private async _createMealPermutations(meal: Meal, me: User): Promise<Meal[]> {
-    let optionals: MealItem[] = []
-    let constants: MealItem[] = []
+  async delete(id: ObjectId, user: ContextUser): Promise<string> {
+    let meal = await MealModel.findById(id)
+    if (!meal) throw new Errors.NotFound('meal not found')
 
-    meal.items.map(mealItem => {
-      if (mealItem.isOptional) {
-        optionals.push(mealItem)
-      } else {
-        constants.push(mealItem)
-      }
-    })
+    if (meal.author.toString() !== user.id) throw new Errors.Forbidden('You can only delete your own meals')
 
-    let mealItemOptionalPermutations: MealItem[][] = []
+    const deleted = await meal.delete()
+    if (!deleted) throw new Errors.System('something went wrong')
 
-    /**
-     * create optional permutations
-     */
-    for (let i = 0; i < Math.pow(2, optionals.length); i++) {
-      let mealItemIncludes: MealItem[] = []
-      for (let j = 0; j < optionals.length; j++) {
-        if ((i >> j).toString(2)[(i >> j).toString(2).length - 1] === '1') {
-          mealItemIncludes.push(optionals[j])
-        }
-      }
-      mealItemOptionalPermutations.push([...constants, ...mealItemIncludes])
+    if (meal.hasPermutations) {
+      await MealModel.deleteMany({ instanceOf: meal._id })
     }
 
-    const optionalMeals = await Promise.all(mealItemOptionalPermutations.map(async mealItems => {
-      return new MealModel({
-        author: meal.author,
-        description: meal.description,
-        items: mealItems,
-        instanceOf: meal._id,
-        timing: calculateMealTiming(mealItems),
-        nutrition: calculateMealNutrition(mealItems),
-      } as Meal)
-    }))
-
-    let finalMeals: Meal[] = []
-    /**
-     * create meal alternative permutations
-     */
-    for (let meal of optionalMeals) {
-      const arrayOfArrayOfMealItemIds = generateAllCases(meal.items.map((mealItem, i) => ([meal.items[i], ...mealItem.alternativeMealItems].map(j => j.id.toString()!))))
-
-      for (let arrayOfMealItemIds of arrayOfArrayOfMealItemIds) {
-        const mealItems = meal.items.map((item, index) => {
-          const allMealItems = [item, ...item.alternativeMealItems]
-
-          const targetId = arrayOfMealItemIds[index]
-          const found = allMealItems.find(p => p.id.toString() === targetId)
-          if (!found) throw new Errors.System('Something went wrong')
-
-          return {
-            ...found,
-            id: item.id || new ObjectId(),
-            alternativeMealItems: allMealItems.filter(p => p.id !== found.id).map(alternativeMealItem => ({
-              ...alternativeMealItem,
-              alternativeMealItems: undefined,
-            })),
-          } as MealItem
-        })
-
-        /**
-         * Create permutation but not the one that is like the masterMeal
-         * */
-        const isMaster = meal.items.map(mi => mi.item && String(mi.item.id)).join('_') === mealItems.map(mi => mi.item && String(mi.item.id)).join('_')
-
-        const createdMeal = await MealModel.create({
-          author: meal.author,
-          description: meal.description,
-          items: mealItems,
-          instanceOf: isMaster ? undefined : meal._id,
-          hasPermutations: true,
-          timing: calculateMealTiming(mealItems),
-          nutrition: calculateMealNutrition(mealItems),
-        } as Meal)
-
-        /**
-         * Transform without using this.get to make one less query
-         * */
-        createdMeal.author = me
-
-        finalMeals.push(transformMeal(createdMeal))
-      }
-    }
-
-    return finalMeals
+    return deleted.id
   }
 
   async get(id?: ObjectId, slug?: string): Promise<Meal> {
@@ -231,41 +153,7 @@ export default class MealService {
     }
   }
 
-  async delete(id: ObjectId, user: ContextUser): Promise<string> {
-    let meal = await MealModel.findById(id)
-    if (!meal) throw new Errors.NotFound('meal not found')
-
-    if (meal.author.toString() !== user.id) throw new Errors.Forbidden('You can only delete your own meals')
-
-    const deleted = await meal.delete(DeleteBy.user(user))
-    if (!deleted) throw new Errors.System('something went wrong')
-
-    if (meal.hasPermutations) {
-      await MealModel.delete({ instanceOf: meal._id }, DeleteBy.user(user))
-    }
-
-    return deleted.id
-  }
-
-  async update(id: ObjectId, mealInput: MealInput, userId: string): Promise<Meal> {
-    let meal = await MealModel.findById(id)
-      .populate('author')
-      .exec()
-
-    if (!meal) throw new Errors.NotFound('meal not found')
-    const author = meal.author as Author
-    if (author.id !== userId) throw new Errors.Forbidden('Update failed. you only can update your own meals')
-
-    meal.name = mealInput.name
-    meal.description = mealInput.description
-    meal.nutrition = calculateMealNutrition(meal.items)
-    meal.items = await this.validateMealItems(mealInput.items)
-    let savedMeal = await meal.save()
-
-    return this.get(savedMeal._id)
-  }
-
-  async validateMealItems(mealInputItems: MealItemInput[]): Promise<MealItem[]> {
+  async validateMealItems(mealInputItems: (MealItemInput | IngredientInput)[]): Promise<MealItem[]> {
     return Promise.all(mealInputItems.map(async mealItemInput => {
       /**
        * Raise error if food and recipe were provided or
@@ -296,7 +184,7 @@ export default class MealService {
       /**
        * Check and set the alternative meal items
        * */
-      if (mealItemInput.alternativeMealItems) {
+      if ('alternativeMealItems' in mealItemInput) {
         const mealItems = await this.validateMealItems(mealItemInput.alternativeMealItems as MealItemInput[])
         baseMealItem.alternativeMealItems = mealItems.map(mealItem => {
           if (!mealItem.id) mealItem.id = new ObjectId()
@@ -348,8 +236,119 @@ export default class MealService {
         } as MealItem
       }
 
-      throw new Errors.System('Something went wrong')
+      throw new Errors.System('No food or recipe')
     }))
+  }
+
+  async update(id: ObjectId, mealInput: MealInput, userId: string): Promise<Meal> {
+    let meal = await MealModel.findById(id)
+      .populate('author')
+      .exec()
+
+    if (!meal) throw new Errors.NotFound('meal not found')
+    const author = meal.author as Author
+    if (author.id !== userId) throw new Errors.Forbidden('Update failed. you only can update your own meals')
+
+    meal.name = mealInput.name
+    meal.description = mealInput.description
+    meal.nutrition = calculateMealNutrition(meal.items)
+    meal.items = await this.validateMealItems(mealInput.items)
+    let savedMeal = await meal.save()
+
+    return this.get(savedMeal._id)
+  }
+
+  private async _createMealPermutations(meal: Meal, me: User): Promise<Meal[]> {
+    let optionals: MealItem[] = []
+    let constants: MealItem[] = []
+
+    meal.items.map(mealItem => {
+      if (mealItem.isOptional) {
+        optionals.push(mealItem)
+      } else {
+        constants.push(mealItem)
+      }
+    })
+
+    let mealItemOptionalPermutations: MealItem[][] = []
+
+    /**
+     * create optional permutations
+     */
+    for (let i = 0; i < Math.pow(2, optionals.length); i++) {
+      let mealItemIncludes: MealItem[] = []
+      for (let j = 0; j < optionals.length; j++) {
+        if ((i >> j).toString(2)[(i >> j).toString(2).length - 1] === '1') {
+          mealItemIncludes.push(optionals[j])
+        }
+      }
+      mealItemOptionalPermutations.push([...constants, ...mealItemIncludes])
+    }
+
+    const optionalMeals = await Promise.all(mealItemOptionalPermutations.map(async mealItems => {
+      return new MealModel({
+        author: meal.author,
+        description: meal.description,
+        items: mealItems,
+        instanceOf: meal._id,
+        timing: calculateMealTiming(mealItems),
+        nutrition: calculateMealNutrition(mealItems),
+      } as Meal)
+    }))
+
+    let finalMeals: Meal[] = []
+    /**
+     * create meal alternative permutations
+     */
+    for (let meal of optionalMeals) {
+      const arrayOfArrayOfMealItemIds = generateAllCases(meal.items.map((mealItem, i) => ([meal.items[i], ...mealItem.alternativeMealItems].map(j => j.id.toString()!))))
+
+      for (let arrayOfMealItemIds of arrayOfArrayOfMealItemIds) {
+        const mealItems = meal.items.map((item, index) => {
+          let allMealItems = [item, ...item.alternativeMealItems]
+
+          const targetId = arrayOfMealItemIds[index]
+          const found = allMealItems.find(p => p.id.toString() === targetId)
+          if (!found) throw new Errors.System('Something went wrong')
+
+          allMealItems = allMealItems.filter(p => p.id !== found.id)
+
+          return {
+            ...found,
+            id: new ObjectId(),
+            alternativeMealItems: allMealItems.map(alternativeMealItem => ({
+              ...alternativeMealItem,
+              alternativeMealItems: undefined,
+            })),
+          } as MealItem
+        })
+
+        /**
+         * Create permutation but not the one that is like the masterMeal
+         * */
+        const isMaster = meal.items.map(mi => mi.item && String(mi.item.id)).join('_') === mealItems.map(mi => mi.item && String(mi.item.id)).join('_')
+        if (isMaster) continue
+
+        const createdMeal = await MealModel.create({
+          author: meal.author,
+          description: meal.description,
+          items: mealItems,
+          instanceOf: meal._id,
+          hasPermutations: true,
+          timing: calculateMealTiming(mealItems),
+          nutrition: calculateMealNutrition(mealItems),
+        } as Meal)
+
+        /**
+         * Transform without using this.get to make one less query
+         * */
+        createdMeal.author = me
+
+        finalMeals.push(transformMeal(createdMeal))
+      }
+    }
+
+    return finalMeals
   }
 
   async updateMealsByIngredient(ingredient: Food | Recipe) {

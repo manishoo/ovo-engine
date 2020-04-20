@@ -4,7 +4,7 @@
  */
 
 import MealSuggestionService from '@Services/meal/suggestion.service'
-import { Day, DayMeal } from '@Types/calendar'
+import { DayMeal } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
 import { MealItem } from '@Types/meal'
 import { NutritionProfileInput, UserMealInput } from '@Types/user'
@@ -42,15 +42,6 @@ export default class MealSuggestionResolver {
     @Ctx() ctx: Context,
   ): Promise<DayMeal> {
     return this.mealSuggestionService.suggestMeal(userMealId, date, ctx.user!.id)
-  }
-
-  @Authorized()
-  @Mutation(returns => Day)
-  async suggestDay(
-    @Arg('date') date: Date,
-    @Ctx() ctx: Context,
-  ): Promise<Day> {
-    return this.mealSuggestionService.suggestDay(date, ctx.user!.id)
   }
 
   @Mutation(returns => [DayMeal])

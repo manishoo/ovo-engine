@@ -25,11 +25,26 @@ registerEnumType(Gender, {
 })
 
 export enum MealSize {
-  tiny = '1',
-  small = '2',
-  normal = '3',
-  big = '5',
-  huge = '8',
+  tiny = 'tiny',
+  small = 'small',
+  normal = 'normal',
+  big = 'big',
+  huge = 'huge',
+}
+
+export function getMealSizeValue(size: MealSize) {
+  switch (size) {
+    case MealSize.tiny:
+      return 1
+    case MealSize.small:
+      return 2
+    case MealSize.normal:
+      return 3
+    case MealSize.big:
+      return 5
+    case MealSize.huge:
+      return 8
+  }
 }
 
 registerEnumType(MealSize, {
@@ -91,6 +106,12 @@ export class Membership {
   fromDate: Date
   @Field()
   toDate: Date
+}
+
+@ObjectType()
+export class Achievements {
+  @Field({ nullable: true })
+  finishedSetup?: boolean
 }
 
 @ObjectType()
@@ -184,7 +205,7 @@ export class SocialNetworksInput {
 @ObjectType()
 export class TargetNutrition {
   @Field({ nullable: true })
-  percentage?: number
+  percentage: number
 
   @Field()
   min: number
@@ -196,7 +217,7 @@ export class TargetNutrition {
 @InputType()
 export class TargetNutritionInput {
   @Field({ nullable: true })
-  percentage?: number
+  percentage: number
 
   @Field()
   min: number
@@ -218,6 +239,9 @@ registerEnumType(NutritionProfileMode, {
 @ObjectType()
 export class NutritionProfile {
   @Field()
+  id: ObjectId
+
+  @Field()
   calories: number
 
   @Field(type => TargetNutrition)
@@ -238,6 +262,9 @@ export class NutritionProfile {
 
 @InputType()
 export class NutritionProfileInput {
+  @Field({ nullable: true })
+  id?: ObjectId
+
   @Field()
   calories: number
 
@@ -285,7 +312,7 @@ export class Author extends BasicUser {
 @ObjectType()
 export class User extends BasicUser {
   password: PersistedPassword
-  @Field()
+  @Field({ nullable: true })
   session?: string
   @Field()
   @IsEmail()
@@ -323,6 +350,9 @@ export class User extends BasicUser {
   @Field(type => Membership, { nullable: true })
   membership?: Membership
   timeZone?: string
+
+  @Field(type => Achievements)
+  achievements: Achievements
 }
 
 @InputType()

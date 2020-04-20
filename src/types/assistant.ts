@@ -123,6 +123,7 @@ export enum GUEST_TEMP_FIELDS {
 }
 
 export enum MessageType {
+  ack = 'ack',
   text = 'text',
   number = 'number',
   email = 'email',

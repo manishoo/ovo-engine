@@ -52,7 +52,7 @@ export function normalizeTimes(meals: UserMeal[]) {
 
 export function getLastMessageData(messages: Message[]) {
   let data: MessageAdditionalData | null = null
-  for (let msg of messages) {
+  for (let msg of messages.filter(msg => msg.sender === MessageSender.assistant)) {
     if (msg && msg.data) {
       data = msg.data
     }

@@ -161,53 +161,14 @@ export default class UserService {
      * */
     user = await UserModel.findOne({
       $or: [
-        { userId: userId },
+        { _id: userId },
         { username },
       ]
     })
 
     if (!user) throw new Errors.NotFound('User not found')
 
-    let userInfo: User | BasicUser
-
-    if (userId && (userId.toString() === selfId)) {
-      userInfo = {
-        id: user.id,
-        username: user.username,
-        role: user.role,
-        email: user.email,
-        firstName: user.firstName,
-        middleName: user.middleName,
-        lastName: user.lastName,
-        bio: user.bio,
-        phoneNumber: user.phoneNumber,
-        avatar: user.avatar,
-        socialNetworks: user.socialNetworks,
-        height: user.height,
-        weight: user.weight,
-        age: user.age,
-        bodyFat: user.bodyFat,
-        gender: user.gender,
-        household: user.household,
-        activityLevel: user.activityLevel,
-        meals: user.meals,
-        nutritionProfile: user.nutritionProfile,
-      } as Omit<User, 'password'>
-    } else {
-      userInfo = {
-        id: user.id,
-        username: user.username,
-        firstName: user.firstName,
-        middleName: user.middleName,
-        lastName: user.lastName,
-        bio: user.bio,
-        avatar: user.avatar,
-        socialNetworks: user.socialNetworks,
-        role: user.role,
-      } as BasicUser
-    }
-
-    return userInfo
+    return user
   }
 
   async doesUsernameExist(username: string): Promise<boolean> {

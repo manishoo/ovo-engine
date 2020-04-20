@@ -4,12 +4,12 @@
  */
 
 import CalendarService from '@Services/calendar/calendar.service'
-import { BodyMeasurementInput, Day, DayMeal, LogActivityInput } from '@Types/calendar'
-import { LanguageCode, MealType, Role } from '@Types/common'
+import MealSuggestionService from '@Services/meal/suggestion.service'
+import { BodyMeasurementInput, Day, DayInput, LogActivityInput } from '@Types/calendar'
+import { LanguageCode, MealType, ObjectId, Role } from '@Types/common'
 import { Context } from '@Utils/context'
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { MealItemInput } from '@Types/meal'
 
 
 @Service()
@@ -17,7 +17,8 @@ import { MealItemInput } from '@Types/meal'
 export default class CalendarResolver {
   constructor(
     // service injection
-    private readonly calendarService: CalendarService
+    private readonly calendarService: CalendarService,
+    private readonly mealSuggestionService: MealSuggestionService,
   ) {
     // noop
   }
@@ -25,22 +26,33 @@ export default class CalendarResolver {
   @Authorized(Role.user)
   @Query(returns => [Day])
   async calendar(
-    @Arg('startDate') startDate: Date,
-    @Arg('endDate') endDate: Date,
+    @Arg('dates', type => [Date]) dates: Date[],
     @Ctx() ctx: Context,
-  ) {
-    return this.calendarService.listDays(ctx.user!.id, startDate, endDate)
+  ): Promise<Day[]> {
+    return this.calendarService.listDays(ctx.user!.id, dates)
   }
 
   @Authorized(Role.user)
-  @Mutation(returns => DayMeal)
-  async logMeal(
-    @Arg('date') date: Date,
-    @Arg('userMealId') userMealId: string,
-    @Arg('mealItems', type => [MealItemInput]) mealItemInputs: MealItemInput[],
+  @Mutation(returns => Day)
+  async newDay(
+    @Arg('day') dayInput: DayInput,
+    @Ctx() ctx: Context,
+    @Arg('generate', { nullable: true }) generate?: boolean,
+  ) {
+    if (generate) {
+      return this.mealSuggestionService.suggestDay(dayInput, ctx.user!.id)
+    }
+
+    return this.calendarService.createDay(dayInput, ctx.user!.id)
+  }
+
+  @Authorized(Role.user)
+  @Mutation(returns => ObjectId)
+  async clearDay(
+    @Arg('dayId') dayId: ObjectId,
     @Ctx() ctx: Context,
   ) {
-    return this.calendarService.logMeal(date, userMealId, mealItemInputs, ctx.user!.id)
+    return this.calendarService.deleteDay(dayId, ctx.user!.id)
   }
 
   @Authorized(Role.user)

@@ -13,13 +13,13 @@ import CalendarService from '@Services/calendar/calendar.service'
 import DietService from '@Services/diet/diet.service'
 import MealService from '@Services/meal/meal.service'
 import UserService from '@Services/user/user.service'
-import { Day, DayMeal } from '@Types/calendar'
+import { Day, DayInput, DayMeal } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
 import { Diet } from '@Types/diet'
 import { Ingredient } from '@Types/ingredient'
 import { Meal, MealItem } from '@Types/meal'
 import { RedisKeys } from '@Types/redis'
-import { NutritionProfile, NutritionProfileInput, UserMeal, UserMealInput } from '@Types/user'
+import { getMealSizeValue, NutritionProfile, NutritionProfileInput, UserMeal, UserMealInput } from '@Types/user'
 import Errors from '@Utils/errors'
 import addHours from 'date-fns/addHours'
 import setHours from 'date-fns/setHours'
@@ -80,9 +80,9 @@ export default class SuggestionService {
      * */
     let totalWeights = 0
     userMeals.map(userMeal => {
-      totalWeights += parseInt(userMeal.size)
+      totalWeights += getMealSizeValue(userMeal.size)
     })
-    const mealWeight = parseInt(userMeal.size) / totalWeights
+    const mealWeight = getMealSizeValue(userMeal.size) / totalWeights
 
     const targetCalories = nutritionProfile.calories * mealWeight
     if (nutritionProfile.isStrict) {
@@ -147,7 +147,7 @@ export default class SuggestionService {
       await redis.expireat(previousSuggestionsRedisKey, addHours(new Date(), mealConfig.mealSuggestionCycleHours).getTime())
     }
 
-    const finalMeal = this.mealService.get(meal._id)
+    const finalMeal = await this.mealService.get(meal._id)
     if (!finalMeal) throw new Errors.System('Something went wrong')
 
     return finalMeal
@@ -161,10 +161,11 @@ export default class SuggestionService {
     if (!userMeal) throw new Errors.NotFound('User meal not found')
 
     const day = await this.calendarService.findOrCreateDayByTime(userId, date)
+
     const foundMeal = day.meals.find(meal => meal.userMeal ? meal.userMeal.id === userMealId : false)
     if (!foundMeal) throw new Errors.NotFound('Meal not found')
 
-    let suggestedMealItem: MealItem | undefined
+    let suggestedMealItem: MealItem | undefined = undefined
 
     day.meals = await Promise.all(day.meals.map(async meal => {
       if (meal.userMeal && (meal.userMeal.id === userMealId)) {
@@ -181,6 +182,9 @@ export default class SuggestionService {
 
                 suggestedMealItem = {
                   ...selectedAlternative,
+                  /**
+                   * Keep the id
+                   * */
                   alternativeMealItems: [
                     ...mealItem.alternativeMealItems.filter(p => String(p.id) !== String(selectedAlternative.id)),
                     mealItem
@@ -262,26 +266,26 @@ export default class SuggestionService {
     return dayMeal
   }
 
-  async suggestDay(date: Date, userId: string): Promise<Day> {
+  async suggestDay(dayInput: DayInput, userId: string): Promise<Day> {
     const user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('User not found')
 
-    const day = await this.calendarService.findOrCreateDayByTime(userId, date)
+    const day = await this.calendarService.findOrCreateDayByTime(userId, dayInput.date)
     let dayMeals: DayMeal[] = []
-    for (let userMeal of user.meals) {
-      let time = day.date
-      time = setHours(time, Number(userMeal.time.split(':')[0]))
-      time = setMinutes(time, Number(userMeal.time.split(':')[1]))
-      const selectedMeal = await this.findBestMeal(userMeal, user.nutritionProfile, user.meals, user.diet, userId)
+
+    for (let dayMeal of dayInput.meals) {
+      const selectedMeal = await this.findBestMeal(dayMeal.userMeal, dayInput.nutritionProfile, dayInput.meals.map(dayMeal => dayMeal.userMeal), user.diet, userId)
 
       dayMeals.push({
         id: new ObjectId(),
-        userMeal,
+        userMeal: dayMeal.userMeal,
         mealId: selectedMeal._id,
         items: selectedMeal.items,
-        time,
+        time: dayMeal.time,
+        ate: dayMeal.ate,
       })
     }
+
     day.meals = dayMeals
 
     return day.save()

@@ -12,6 +12,7 @@ import { Image, LanguageCode, Ref, Role, Status } from '@Types/common'
 import { Diet } from '@Types/diet'
 import { Household } from '@Types/household'
 import {
+  Achievements,
   ActivityLevel,
   Gender,
   Goal,
@@ -152,6 +153,9 @@ export class UserSchema extends Typegoose implements User {
 
   @prop()
   membership?: Membership
+
+  @prop({ default: {} })
+  achievements: Achievements
 
   @prop()
   diet?: Diet

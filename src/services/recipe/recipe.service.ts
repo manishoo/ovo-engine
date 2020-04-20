@@ -353,6 +353,7 @@ export default class RecipeService {
     }
     if (data.ingredients) {
       recipe.ingredients = await Promise.all(data.ingredients.map(this._validateIngredients))
+      recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
     }
     if (data.instructions) {
       recipe.instructions = await Promise.all(data.instructions.map(async instructionInput => {
@@ -413,7 +414,6 @@ export default class RecipeService {
 
       recipe.tags = tags
     }
-    recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
 
     if (data.status) {
       switch (data.status) {
