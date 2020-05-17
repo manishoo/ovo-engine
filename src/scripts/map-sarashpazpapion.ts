@@ -26,15 +26,15 @@ export default async function main() {
 
   recipes.map(recipe => {
     recipe.ingredients.map(ingredient => {
-      if (ingredient.food) return
+      if (ingredient.item) return
 
       if (ingredient.name) {
         const foundIngredient = uniqueIngredients.find(p => p.text === ingredient.name![0].text)
         if (foundIngredient) {
           foundIngredient.count += 1
-          if (ingredient.customUnit && !foundIngredient.units!.find(p => p.text === ingredient.customUnit)) {
+          if (ingredient.customUnit && !foundIngredient.units!.find(p => !!ingredient.customUnit!.name.find(name => name.text === p.text))) {
             foundIngredient.units!.push({
-              text: ingredient.customUnit,
+              text: ingredient.customUnit.name[0].text,
             })
           }
         } else {
@@ -42,7 +42,7 @@ export default async function main() {
           const units = []
           if (ingredient.customUnit) {
             units.push({
-              text: ingredient.customUnit,
+              text: ingredient.customUnit.name[0].text,
             })
           }
           uniqueIngredients.push({

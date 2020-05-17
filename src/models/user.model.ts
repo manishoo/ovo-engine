@@ -5,17 +5,21 @@
 
 import mongoose from '@Config/connections/mongoose'
 import userConfig from '@Config/user-config'
-import { MealPlanSchema } from '@Models/meal-plan.model'
+import { PlanSchema } from '@Models/plan.model'
 import HouseholdService from '@Services/household/household.service'
+import PlanService from '@Services/meal-plan/meal-plan.service'
 import { PersistedPassword } from '@Types/auth'
-import { Image, Ref, Role, Status } from '@Types/common'
+import { Image, LanguageCode, Ref, Role, Status } from '@Types/common'
 import { Diet } from '@Types/diet'
 import { Household } from '@Types/household'
+import { Plan } from '@Types/plan'
 import {
+  Achievements,
   ActivityLevel,
   Gender,
   Goal,
   Height,
+  Membership,
   NutritionProfile,
   SocialNetworks,
   User,
@@ -29,7 +33,7 @@ import { plugin, pre, prop, Typegoose } from 'typegoose'
 import uuid from 'uuid/v1'
 
 
-export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument & User> {
 }
 
 @plugin(mongooseDelete, {
@@ -38,26 +42,34 @@ export interface UserSchema extends SoftDeleteModel<SoftDeleteDocument> {
   overrideMethods: true,
   deletedByType: String,
 })
-/**
- * Household middleware
- * */
 @pre<UserSchema>('save', function (next) {
-  if (!this.household) {
+  (async () => {
     /**
-     * Create and assign household
+     * Household middleware
      * */
-    const householdService = Container.get(HouseholdService)
-    return householdService.create(<Household>{
-      members: [this._id]
-    })
-      .then((household) => {
-        this.household = household._id
-
-        next()
+    if (!this.household) {
+      /**
+       * Create and assign household
+       * */
+      const householdService = Container.get(HouseholdService)
+      const household = await householdService.create(<Household>{
+        members: [this._id]
       })
-  }
 
-  next()
+      this.household = household._id
+    }
+
+    /**
+     * Plans middleware
+     * */
+    if (!this.plan) {
+      const planService = Container.get(PlanService)
+      const plan = await planService.create({}, this._id)
+      this.plan = plan._id
+    }
+  })()
+    .then(() => next())
+    .catch(e => next(e))
 })
 export class UserSchema extends Typegoose implements User {
   readonly id?: string
@@ -107,7 +119,7 @@ export class UserSchema extends Typegoose implements User {
   /**
    * physical attributes
    * */
-  @prop({ default: userConfig.defaultNutritionProfile })
+  @prop({ default: () => userConfig.defaultNutritionProfile })
   nutritionProfile: NutritionProfile
 
   @prop()
@@ -131,14 +143,14 @@ export class UserSchema extends Typegoose implements User {
   @prop({ required: true, enum: Status, default: Status.active })
   status: Status
 
-  @prop()
+  @prop({ default: () => userConfig.defaultUserMeals(LanguageCode.en) })
   meals: UserMeal[]
 
-  @prop({ ref: MealPlanSchema })
-  mealPlans?: Ref<MealPlanSchema>[]
+  @prop({ ref: PlanSchema })
+  plan: Ref<Plan>
 
   @prop({ ref: Household })
-  household?: Ref<Household>
+  household: Ref<Household>
 
   @prop()
   activityLevel?: ActivityLevel
@@ -150,7 +162,16 @@ export class UserSchema extends Typegoose implements User {
   timeZone?: string
 
   @prop()
+  membership?: Membership
+
+  @prop({ default: {} })
+  achievements: Achievements
+
+  @prop()
   diet?: Diet
+
+  @prop()
+  careGivers: Ref<User>[]
 }
 
 export const UserModel = new UserSchema().getModelForClass(UserSchema, {

@@ -3,43 +3,38 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import { UserModel } from '@Models/user.model'
 import DietService from '@Services/diet/diet.service'
+import FoodService from '@Services/food/food.service'
+import MealService from '@Services/meal/meal.service'
+import transformDbMealItem from '@Services/meal/transformers/meal-item.db-transformer'
+import populateIngredients from '@Services/meal/utils/populate-ingredients'
 import UploadService from '@Services/upload/upload.service'
 import { Image, LanguageCode, ObjectId, Role } from '@Types/common'
-import {
-  Ingredient,
-  Instruction,
-  ListRecipesArgs,
-  Recipe,
-  RecipeInput,
-  RecipesListResponse,
-  RecipeStatus
-} from '@Types/recipe'
-import { Author } from '@Types/user'
+import { Instruction, ListRecipesArgs, Recipe, RecipeInput, RecipesListResponse, RecipeStatus } from '@Types/recipe'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import shortid from 'shortid'
 import slug from 'slug'
-import { Service } from 'typedi'
+import { Inject, Service } from 'typedi'
 import { transformRecipe } from './transformers/recipe.transformer'
 import { calculateRecipeNutrition } from './utils/calculate-recipe-nutrition'
 
 
 @Service()
 export default class RecipeService {
-  constructor(
-    // service injection
-    private readonly uploadService: UploadService,
-    private readonly dietService: DietService,
-  ) {
-    // noop
-  }
+  @Inject(type => MealService)
+  private readonly mealService: MealService
+  @Inject(type => UploadService)
+  private readonly uploadService: UploadService
+  @Inject(type => DietService)
+  private readonly dietService: DietService
+  @Inject(type => FoodService)
+  private readonly foodService: FoodService
 
   async get(id?: ObjectId, slug?: string) {
     if (!id && !slug) throw new Errors.Validation('Recipe id or slug must be provided')
@@ -54,8 +49,6 @@ export default class RecipeService {
     }
 
     const recipe = await RecipeModel.findOne(query)
-      .populate('author')
-      .exec()
 
     if (!recipe) throw new Errors.NotFound('Recipe not found')
 
@@ -71,11 +64,29 @@ export default class RecipeService {
     }
 
     let query: any = {
-      status: args.status || RecipeStatus.public,
+      deleted: { $ne: true }, //TODO: get an arg to show archives
+    }
+    if (args.viewerUser && args.status) {
+      /**
+       * If the user is an operator and has selected a status
+       * */
+      query.$or = [{ status: args.status }]
+    } else {
+      /**
+       * If the user hadn't selected a status, show verified recipes
+       * */
+      query.$or = [{ status: RecipeStatus.verified }]
+      /**
+       * If the user had selected showMyRecipes argument,
+       * also include their recipes in the result
+       * */
+      if (args.showMyRecipes && args.viewerUser) {
+        query.$or.push({ author: new ObjectId(args.viewerUser.id) })
+      }
     }
 
     let sort: any = {
-      likes: -1
+      createdAt: -1
     }
 
     if (args.userId) {
@@ -90,15 +101,18 @@ export default class RecipeService {
     }
 
     if (args.nameSearchQuery) {
-      query['title.text'] = { $regex: args.nameSearchQuery }
+      query['title.text'] = {
+        $regex: args.nameSearchQuery,
+        $options: 'i',
+      }
     }
 
     if (args.ingredients) {
       query['ingredients.food._id'] = { $in: args.ingredients }
     }
 
-    if (args.latest) {
-      sort['createdAt'] = -1
+    if (args.sortByMostPopular) {
+      sort['likes'] = -1
     }
 
     if (args.diets) {
@@ -115,42 +129,18 @@ export default class RecipeService {
     }
 
     const totalCount = await RecipeModel.count(query)
-    const recipes = await RecipeModel.aggregate([
-      {
-        $match: query
-      },
-      {
-        $sort: sort,
-      },
-      {
-        $limit: args.size,
-      },
-      {
-        $skip: (args.page - 1) * args.size
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'author',
-          foreignField: '_id',
-          as: 'authors'
-        }
-      }
-    ])
-
-    recipes.map(recipe => {
-      recipe.author = recipe.authors[0] as Author
-      recipe.author.id = recipe.author._id
-    })
+    const recipes = await RecipeModel.find(query)
+      .sort(sort)
+      .limit(args.size)
+      .skip((args.page - 1) * args.size)
 
     return {
       recipes: recipes.map(recipe => transformRecipe(recipe, args.viewerUser ? args.viewerUser.id : undefined)),
-      pagination: createPagination(args.page, args.size, totalCount),
+      pagination: createPagination(args.page, args.size, totalCount, recipes),
     }
   }
 
   async create(data: RecipeInput, lang: LanguageCode, userId: string): Promise<Recipe> {
-
     const author = await UserModel.findById(userId)
     if (!author) throw new Errors.NotFound('author not found')
 
@@ -177,11 +167,13 @@ export default class RecipeService {
       }
     }
 
+    const ingredients = await populateIngredients(data.ingredients, this.foodService.get, this.get)
     const recipe: Partial<Recipe> = {
       image,
       thumbnail,
       title: data.title,
       serving: data.serving,
+      servingName: data.servingName,
       timing: {
         totalTime: data.timing.totalTime,
         cookTime: data.timing.cookTime,
@@ -195,45 +187,7 @@ export default class RecipeService {
         step: instructionInput.step,
       })),
       languages: data.title.map(name => name.locale),
-      ingredients: await Promise.all(data.ingredients.map(async ingredientInput => {
-        let ingredient: Partial<Ingredient> = {}
-
-        if (!ingredientInput.food) {
-          /**
-           * If the ingredient didn't have an associated food
-           * */
-          if (!ingredientInput.name) {
-            throw new Errors.UserInput('incomplete data', { 'name': 'either food or name should be entered' })
-          }
-          ingredient.name = ingredientInput.name
-        } else {
-          /**
-           * If the ingredient had an associated food
-           * */
-          if (!ObjectId.isValid(ingredientInput.food)) throw new Errors.Validation('invalid food id')
-          const food = await FoodModel.findById(ingredientInput.food)
-          if (!food) throw new Errors.NotFound('food not found')
-
-          ingredient.food = food
-          ingredient.thumbnail = food.thumbnail
-          ingredient.name = food.name
-
-          if (ingredientInput.weight) {
-            const foundWeight = food.weights.find(w => w.id!.toString() == ingredientInput.weight)
-            if (!foundWeight) throw new Errors.Validation('Weight is not valid')
-
-            ingredient.weight = foundWeight
-          } else {
-            ingredient.gramWeight = ingredientInput.gramWeight
-            ingredient.customUnit = ingredientInput.customUnit
-          }
-        }
-
-        ingredient.amount = ingredientInput.amount
-        ingredient.description = ingredientInput.description
-
-        return <Ingredient>ingredient
-      })),
+      ingredients: ingredients.map(transformDbMealItem),
     }
     if (data.tags) {
       let tags: any = []
@@ -247,9 +201,10 @@ export default class RecipeService {
       recipe.tags = tags
     }
     recipe.nutrition = calculateRecipeNutrition(recipe.ingredients!)
-
     let createdRecipe = await RecipeModel.create(recipe)
+    createdRecipe = createdRecipe.toObject()
     createdRecipe.author = author
+    createdRecipe.ingredients = ingredients
 
     return transformRecipe(createdRecipe, userId)
   }
@@ -283,8 +238,6 @@ export default class RecipeService {
     }
 
     const recipe = await RecipeModel.findOne(query)
-      .populate('author')
-      .exec()
 
     if (!recipe) throw new Errors.NotFound('recipe not found')
 
@@ -306,21 +259,9 @@ export default class RecipeService {
       recipe.difficulty = data.difficulty
     }
     if (data.ingredients) {
-      recipe.ingredients = await Promise.all(data.ingredients.map(async ingredient => {
-        let food = await FoodModel.findById(ingredient.food)
-        if (!food) throw new Errors.System('Something went wrong')
-
-        return {
-          name: ingredient.name,
-          amount: ingredient.amount,
-          customUnit: ingredient.customUnit,
-          gramWeight: ingredient.gramWeight,
-          thumbnail: ingredient.thumbnail || food.thumbnail,
-          description: ingredient.description,
-          food: food,
-          weight: food.weights.find(w => w.id == ingredient.weight),
-        }
-      }))
+      const ingredients = await populateIngredients(data.ingredients, this.foodService.get, this.get)
+      recipe.ingredients = ingredients.map(transformDbMealItem)
+      recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
     }
     if (data.instructions) {
       recipe.instructions = await Promise.all(data.instructions.map(async instructionInput => {
@@ -366,8 +307,13 @@ export default class RecipeService {
         prepTime: data.timing.prepTime
       }
     }
+
     if (data.serving) {
       recipe.serving = data.serving
+    }
+
+    if (data.servingName) {
+      recipe.servingName = data.servingName
     }
 
     if (data.tags) {
@@ -381,29 +327,29 @@ export default class RecipeService {
 
       recipe.tags = tags
     }
-    recipe.nutrition = calculateRecipeNutrition(recipe.ingredients)
 
     if (data.status) {
       switch (data.status) {
         /**
          * All users can do this
          * */
-        case RecipeStatus.private:
-        case RecipeStatus.review:
+        case RecipeStatus.unverified:
+        case RecipeStatus.reviewing:
           recipe.status = data.status
           break
         /**
-         * Only operators and admins can make a recipe public
+         * Only operators and admins can make a recipe verified
          * */
-        case RecipeStatus.public:
+        case RecipeStatus.verified:
           if (user.role === Role.operator || user.role === Role.admin) {
+            if (!recipe.nutrition) throw new Errors.Validation('Recipe nutrition cannot be calculated. Please map all ingredients')
             recipe.status = data.status
           }
           break
       }
     }
 
-    return transformRecipe(await recipe.save(), user && user.id)
+    return transformRecipe(await recipe.save(), user.id)
   }
 
   async tag(recipePublicId: ObjectId, tagSlugs: string[], user: ContextUser): Promise<Recipe> {

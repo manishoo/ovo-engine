@@ -13,12 +13,20 @@ const authChecker: AuthChecker<Context> = (
   roles,
 ) => {
   if (!context.user) return false
-  if (context.user.role === Role.admin) return true
 
-  if (roles.find(role => role === context.user!.role)) return true
-
-  return Role.user === context.user!.role ||
-    Role.operator === context.user!.role
+  return isAuthorized(roles as Role[], context.user.role)
 }
 
-export { authChecker }
+const isAuthorized = (roles: Role[], userRole: Role) => {
+  if (userRole === Role.admin) return true
+
+  if (roles.find(role => role === userRole)) return true
+
+  return Role.user === userRole ||
+    Role.operator === userRole
+}
+
+export {
+  authChecker,
+  isAuthorized,
+}

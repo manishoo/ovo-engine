@@ -18,25 +18,25 @@ export default {
     const baseBMR = 10 * weight + 6.25 * height - 5 * age
 
     if (gender === 'male') {
-      return baseBMR + 5
+      return Math.round(baseBMR + 5)
     } else {
       // Both female and other gender
-      return baseBMR - 161
+      return Math.round(baseBMR - 161)
     }
   },
 
   calculateTDEE(BMR: number, activity: string): number {
     switch (activity) {
       case 'sed':
-        return BMR * 1.2
+        return Math.round(BMR * 1.2)
       case 'light':
-        return BMR * 1.375
+        return Math.round(BMR * 1.375)
       case 'mod':
-        return BMR * 1.55
+        return Math.round(BMR * 1.55)
       case 'high':
-        return BMR * 1.725
+        return Math.round(BMR * 1.725)
       case 'extreme':
-        return BMR * 1.9
+        return Math.round(BMR * 1.9)
       default:
         throw Error('No activity provided')
     }
@@ -64,17 +64,17 @@ export default {
 
   calculateMacros(
     TDEE: number,
-    carb: number = config.constants.defaultMacroNutrientRatio.carb,
+    carbs: number = config.constants.defaultMacroNutrientRatio.carbs,
     fat: number = config.constants.defaultMacroNutrientRatio.fat,
     protein: number = config.constants.defaultMacroNutrientRatio.protein
   ) {
-    const sum = carb + fat + protein
+    const sum = carbs + fat + protein
     if (sum !== 100) {
       throw Error('Sum is not 100')
     }
 
     return {
-      carb: ((carb / 100) * TDEE) / 4,
+      carbs: ((carbs / 100) * TDEE) / 4,
       fat: ((fat / 100) * TDEE) / 9,
       protein: ((protein / 100) * TDEE) / 4,
     }

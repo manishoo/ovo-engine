@@ -49,6 +49,7 @@ export default {
   async extractGender(text: string): Promise<string> {
     let g
     Object.keys(Gender).map((key: any) => {
+      // @ts-ignore
       if (Gender[key] === text.replace(/[👱‍♀️‍♂️]/g, '')) {
         g = key
       }
@@ -102,9 +103,9 @@ export default {
       recipes: [],
     }
   },
-  extractMealPlanSettings(data: any): MacroNutrientDistribution {
-    if (data.mealPlanSettings) {
-      return data.mealPlanSettings
+  extractPlanSettings(data: any): MacroNutrientDistribution {
+    if (data.planSettings) {
+      return data.planSettings
     }
 
     throw Error()

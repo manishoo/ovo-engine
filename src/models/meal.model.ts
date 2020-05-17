@@ -8,22 +8,16 @@ import { ObjectId, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
 import { Meal, MealItem } from '@Types/meal'
 import { Author } from '@Types/user'
-import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
-import { arrayProp, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
+import { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { arrayProp, instanceMethod, prop, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model'
 
 
-export interface MealSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface MealSchema extends SoftDeleteModel<SoftDeleteDocument & Meal> {
 }
 
-@plugin(mongooseDelete, {
-  deletedAt: true,
-  deletedBy: true,
-  overrideMethods: true,
-  deletedByType: String,
-})
 export class MealSchema extends Typegoose implements Meal {
-  readonly id?: string
+  readonly id: string
 
   @prop()
   name?: Translation[]
@@ -35,15 +29,13 @@ export class MealSchema extends Typegoose implements Meal {
   items: MealItem[]
 
   @prop()
-  nutrition?: Nutrition
+  nutrition: Nutrition
 
   @prop({ ref: UserSchema })
   author: Ref<Author>
 
   @prop({ default: {} })
   timing: Timing
-
-  likedByUser?: boolean
 
   @arrayProp({ itemsRef: UserSchema, default: [] })
   likes: Ref<UserSchema>[]
@@ -55,6 +47,9 @@ export class MealSchema extends Typegoose implements Meal {
 
   @prop()
   instanceOf?: ObjectId
+
+  @prop()
+  hasPermutations?: boolean
 
   @prop()
   get likesCount(): number {

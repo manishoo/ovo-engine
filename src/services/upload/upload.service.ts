@@ -4,6 +4,7 @@
  */
 
 import config from '@Config'
+import Errors from '@Utils/errors'
 import fs from 'fs-extra'
 import { Service } from 'typedi'
 
@@ -20,7 +21,7 @@ export default class UploadService {
           stream
             .on('error', (error: any) => {
               if (stream.truncated)
-                // Delete the truncated file.
+              // Delete the truncated file.
                 fs.unlinkSync(path)
               reject(error)
             })
@@ -33,9 +34,13 @@ export default class UploadService {
   }
 
   async processUpload(upload: any, name: string, location: string): Promise<string> {
-    const { createReadStream, filename, mimetype } = await upload
-    const stream = createReadStream()
-    const { path } = await this.storeFS({ stream, filename, name, location })
-    return path.replace(`${config.uploadUrl}/`, '')
+    try {
+      const { createReadStream, filename, mimetype } = await upload
+      const stream = createReadStream()
+      const { path } = await this.storeFS({ stream, filename, name, location })
+      return path.replace(`${config.uploadUrl}/`, '')
+    } catch (e) {
+      throw new Errors.System()
+    }
   }
 }

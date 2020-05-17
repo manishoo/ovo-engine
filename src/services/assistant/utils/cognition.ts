@@ -17,6 +17,7 @@ import {
 } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
 import { Gender, User } from '@Types/user'
+import { ContextUser } from '@Utils/context'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
@@ -43,7 +44,7 @@ export default class Cognition {
     return ConversationContext.introduction
   }
 
-  static async replyToConversation(context: ConversationContext, messagePayload: MessagePayload, backgroundInfo: MessageBackgroundInformation, lang: LanguageCode): Promise<Message[]> {
+  static async replyToConversation(context: ConversationContext, messagePayload: MessagePayload, backgroundInfo: MessageBackgroundInformation, lang: LanguageCode, user?: ContextUser): Promise<Message[]> {
     const message = messagePayload.messages[0]
 
     const m = message ? message.text : undefined
@@ -134,7 +135,36 @@ export default class Cognition {
               const meals = message.data.meals
               await keepInMind(t, GUEST_TEMP_FIELDS.meals, meals)
 
-              return askForRegistration(lang)
+              const userService = Container.get(UserService)
+              const tempData = await userService.getTempData(t)
+
+              if (user) {
+                const userInstance = (await UserModel.findById(user.id))!
+
+                userInstance.firstName = tempData.nickname
+                // userInstance.planSettings = tempData.planSettings
+                // userInstance.caloriesPerDay = tempData.tdee // FIXME get in setup nutritionProfile
+                userInstance.nutritionProfile = {
+                  ...userInstance.nutritionProfile,
+                  calories: tempData.tdee
+                }
+                userInstance.height = tempData.height
+                userInstance.weight = tempData.weight
+                userInstance.age = tempData.age
+                userInstance.activityLevel = tempData.activity
+                userInstance.goal = tempData.goal
+                userInstance.gender = tempData.gender
+                userInstance.meals = tempData.meals
+                userInstance.achievements = {
+                  ...userInstance.achievements,
+                  finishedSetup: true,
+                }
+                await userInstance.save()
+
+                return askForPlan(lang, tempData.tdee, userInstance)
+              } else {
+                return askForRegistration(lang)
+              }
             }
             case AssistantExpectations.register: {
               const data = message.data
@@ -148,9 +178,12 @@ export default class Cognition {
                 email: validatedData.email,
                 timeZone: validatedData.timeZone,
                 firstName: tempData.nickname,
-                // bmr: tempData.bmr,
-                mealPlanSettings: tempData.mealPlanSettings,
-                caloriesPerDay: tempData.tdee,
+                // planSettings: tempData.planSettings,
+                // caloriesPerDay: tempData.tdee,
+                nutritionProfile: {
+                  ...userConfig.defaultNutritionProfile,
+                  calories: tempData.tdee,
+                },
                 height: tempData.height,
                 weight: tempData.weight,
                 age: tempData.age,
@@ -158,13 +191,17 @@ export default class Cognition {
                 goal: tempData.goal,
                 gender: tempData.gender,
                 meals: tempData.meals,
+                // bmr: tempData.bmr,
                 session: t,
+                achievements: {
+                  finishedSetup: true,
+                },
                 avatar: {
                   url: generateAvatarUrl(validatedData.username, tempData.gender)
                 }
               })
 
-              return askForMealPlan(lang, tempData.tdee, user)
+              return askForPlan(lang, tempData.tdee, user)
             }
           }
 
@@ -276,16 +313,15 @@ function askForRegistration(lang: LanguageCode,) {
   ]
 }
 
-function askForMealPlan(lang: LanguageCode, targetCalories: number, user: User) {
+function askForPlan(lang: LanguageCode, targetCalories: number, user?: User) {
   return [
-    createMessage(__({ phrase: 'assistantWhatHappensNext1', locale: lang })),
     createMessage(__({
-      phrase: 'assistantWhatHappensNext2',
+      phrase: 'assistantWhatHappensNext1',
       locale: lang
-    }, { cal: String(Math.ceil(targetCalories)) }), {
-      expect: AssistantExpectations.mealPlan,
-      type: MessageType.select,
-      items: [{ text: __({ phrase: 'ok', locale: lang }), value: 'ok' }],
+    }), {
+      expect: AssistantExpectations.plan,
+      type: MessageType.ack,
+      items: [],
       user,
     })
   ]

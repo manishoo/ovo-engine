@@ -5,18 +5,12 @@
 
 import { UserSchema } from '@Models/user.model'
 import { ObjectId, Pagination, Ref, Timing, Translation, TranslationInput } from '@Types/common'
-import { Food, Nutrition } from '@Types/food'
-import { Recipe } from '@Types/recipe'
+import { Nutrition } from '@Types/food'
+import { Ingredient, IngredientInput } from '@Types/ingredient'
+import { Author } from '@Types/user'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
-import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
-import { Author } from './user'
-import { Weight } from './weight'
+import { ArgsType, Field, FieldResolver, InputType, Int, ObjectType, Resolver, Root } from 'type-graphql'
 
-
-export enum MealItemType {
-  recipe = 'recipe',
-  food = 'food',
-}
 
 @ObjectType()
 export class MealListResponse {
@@ -27,11 +21,34 @@ export class MealListResponse {
 }
 
 @ObjectType()
+export class MealItem extends Ingredient {
+  @Field({ nullable: true })
+  hasAlternatives?: boolean
+
+  @Field(type => [Ingredient])
+  alternativeMealItems: Ingredient[]
+}
+
+@Resolver(of => MealItem)
+export class MealItemResolver {
+  @FieldResolver(returns => Boolean)
+  hasAlternatives(@Root() mealItem: MealItem) {
+    return mealItem.alternativeMealItems.length > 0
+  }
+}
+
+@InputType()
+export class MealItemInput extends IngredientInput {
+  @Field(type => [IngredientInput])
+  alternativeMealItems: IngredientInput[]
+}
+
+@ObjectType()
 export class Meal {
   _id?: ObjectId
 
   @Field()
-  id?: string
+  id: string
 
   @Field(type => [Translation], { nullable: true })
   name?: Translation[]
@@ -43,8 +60,8 @@ export class Meal {
   @ArrayNotEmpty()
   items: MealItem[]
 
-  @Field(type => Nutrition, { nullable: true })
-  nutrition?: Nutrition
+  @Field(type => Nutrition)
+  nutrition: Nutrition
 
   @Field(type => Author)
   author: Ref<Author>
@@ -66,8 +83,11 @@ export class Meal {
   @Field(type => Date)
   updatedAt?: Date
 
-  @Field()
+  @Field({ nullable: true })
   instanceOf?: ObjectId
+
+  @Field({ nullable: true })
+  hasPermutations?: boolean
 }
 
 @InputType()
@@ -81,72 +101,6 @@ export class MealInput {
   @Field(type => [MealItemInput])
   @ArrayNotEmpty()
   items: MealItemInput[]
-}
-
-@ObjectType()
-export class MealItemBase {
-  @Field()
-  id: ObjectId
-
-  @Field()
-  amount: number
-
-  @Field(type => Food, { nullable: true })
-  food?: Ref<Food>
-
-  @Field(type => Recipe, { nullable: true })
-  recipe?: Ref<Recipe>
-
-  @Field(type => Weight, { nullable: true })
-  weight?: Weight | string
-
-  @Field({ nullable: true })
-  customUnit?: string
-
-  @Field({ nullable: true })
-  gramWeight?: number
-
-  @Field(type => [Translation], { nullable: true })
-  description?: Translation[]
-}
-
-@ObjectType()
-export class MealItem extends MealItemBase {
-  @Field(type => [MealItemBase], { defaultValue: [] })
-  alternativeMealItems: MealItemBase[]
-}
-
-@InputType()
-export class MealItemInputBase {
-  @Field({ defaultValue: ObjectId, nullable: true })
-  readonly id?: ObjectId
-
-  @Field()
-  amount: number
-
-  @Field(type => String, { nullable: true })
-  food?: Ref<Food>
-
-  @Field(type => String, { nullable: true })
-  recipe?: Ref<Recipe>
-
-  @Field({ nullable: true })
-  weight?: string
-
-  @Field({ nullable: true })
-  customUnit?: string
-
-  @Field({ nullable: true })
-  gramWeight?: number
-
-  @Field(type => [TranslationInput], { nullable: true })
-  description?: TranslationInput[]
-}
-
-@InputType()
-export class MealItemInput extends MealItemInputBase {
-  @Field(type => [MealItemInputBase], { defaultValue: [] })
-  alternativeMealItems: MealItemInputBase[]
 }
 
 @ArgsType()
@@ -165,4 +119,7 @@ export class ListMealsArgs {
 
   @Field(type => ObjectId, { nullable: true })
   authorId?: ObjectId
+
+  @Field(type => ObjectId, { nullable: true })
+  ingredientId?: ObjectId
 }

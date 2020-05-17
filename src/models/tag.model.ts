@@ -11,7 +11,7 @@ import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-de
 import { plugin, prop, Typegoose } from 'typegoose'
 
 
-export interface TagSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface TagSchema extends SoftDeleteModel<SoftDeleteDocument & Tag> {
 }
 
 @plugin(mongooseDelete, {

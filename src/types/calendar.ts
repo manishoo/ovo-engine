@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { UserSchema } from '@Models/user.model'
 import { UserActivity } from '@Types/activity'
-import { MealType, ObjectId, Pagination, Ref } from '@Types/common'
+import { ObjectId, Ref } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
-import { User, UserMeal } from '@Types/user'
+import { Plan } from '@Types/plan'
+import { UserMeal, UserMealInput } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
@@ -17,31 +17,42 @@ export class DayMeal {
   @Field()
   id: ObjectId
 
-  @Field(type => UserMeal, { nullable: true })
-  userMeal?: UserMeal
+  @Field(type => UserMeal)
+  userMeal: UserMeal
 
   @Field({ nullable: true })
   time?: Date
 
-  @Field({ nullable: true })
+  @Field({
+    nullable: true,
+    description: 'if this DayMeal was associated with a Meal, this is its id',
+  })
   mealId?: ObjectId
 
   @Field(type => [MealItem])
   @ArrayNotEmpty()
   items: MealItem[]
+
+  @Field({ nullable: true })
+  ate?: boolean
 }
 
 @InputType()
 export class DayMealInput {
-  @Field(type => MealType)
-  type: MealType
+  @Field({ nullable: true })
+  id?: ObjectId
 
-  @Field(type => Date)
-  time: Date
+  @Field(type => UserMealInput)
+  userMeal: UserMealInput
 
-  @Field(type => [MealItemInput])
-  @ArrayNotEmpty()
-  items: MealItemInput[]
+  @Field({ nullable: true })
+  time?: Date
+
+  @Field(type => [MealItemInput], { nullable: true })
+  items?: MealItemInput[]
+
+  @Field({ nullable: true })
+  ate?: boolean
 }
 
 @ObjectType()
@@ -62,38 +73,40 @@ export class BodyMeasurementInput {
   weight: number
 }
 
-@ObjectType()
+@ObjectType({ simpleResolvers: true })
 export class Day {
-  _id?: ObjectId
   @Field()
-  id?: string
+  readonly id: ObjectId
+  readonly _id: ObjectId
 
-  @Field(type => Date)
-  date: Date
+  plan: Ref<Plan>
 
-  @Field(type => User)
-  user: Ref<UserSchema>
+  @Field(type => Date, { nullable: true })
+  date?: Date
 
-  @Field(type => [DayMeal], { defaultValue: [] })
+  @Field(type => [DayMeal])
   meals: DayMeal[]
 
   @Field(type => [UserActivity], { nullable: true })
   activities?: UserActivity[]
 
-  @Field()
+  @Field(type => BodyMeasurement)
   measurements?: BodyMeasurement
-
-  @Field()
-  totalBurnt?: number
 }
 
-@ObjectType()
-export class CalendarResponse {
-  @Field(type => [Day])
-  calendar: Day[]
+@InputType()
+export class DayInput {
+  @Field({ nullable: true })
+  id?: ObjectId
 
-  @Field(type => Pagination)
-  pagination: Pagination
+  @Field(type => Date, { nullable: true })
+  date?: Date
+
+  @Field()
+  planId: ObjectId
+
+  @Field(type => [DayMealInput])
+  meals: DayMealInput[]
 }
 
 @InputType()

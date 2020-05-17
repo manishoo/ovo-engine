@@ -11,7 +11,7 @@ import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-de
 import { index, instanceMethod, plugin, prop, Typegoose } from 'typegoose'
 
 
-export interface FoodClassSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface FoodClassSchema extends SoftDeleteModel<SoftDeleteDocument & FoodClass> {
 }
 
 @plugin(mongooseDelete, {

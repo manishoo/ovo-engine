@@ -9,14 +9,14 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-export default {
+const config = {
   appUrl: process.env.APP_URL || '127.0.0.1',
   appPort: Number(process.env.APP_PORT),
   panelUrl: process.env.PANEL_URL || '127.0.0.1',
   panelPort: Number(process.env.PANEL_PORT),
 
-  get appFullAddressForExternalUse() {
-    return process.env.CORE_APP_ADDRESS || `http://${this.appUrl}:${this.appPort}`
+  get fullAppAddress() {
+    return process.env.CORE_APP_ADDRESS || `http://${this.appUrl}:${this.appPort}${process.env.NODE_ENV === 'development' ? `/${this.uploadUrl}` : ''}`
   },
 
   supernovaUrl: process.env.SUPERNOVA_URL,
@@ -61,15 +61,15 @@ export default {
     password: process.env.REDIS_PASS,
   },
   times: {
-    sessionExpiration: 3000,
-    conversationExpiration: 3000,
-    userTempDataExpiration: 3000,
+    sessionExpiration: 7 * 24 * 60 * 60,
+    conversationExpiration: 1 * 24 * 60 * 60,
+    userTempDataExpiration: 1 * 24 * 60 * 60,
   },
   constants: {
     assistantConversationKey: 'assistant:conversation',
     userTempStorageKey: 'user:registerDataTemp',
     defaultMacroNutrientRatio: {
-      carb: 35,
+      carbs: 35,
       fat: 20,
       protein: 45,
     },
@@ -94,5 +94,10 @@ export default {
     LanguageCode.en,
     LanguageCode.fa,
   ],
+
+  rootUserId: process.env.ROOT_USER_ID || '',
+
+  cacheTTL: 60// application level caching with redis in minutes
 }
 
+export default config

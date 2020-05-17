@@ -4,22 +4,13 @@
  */
 
 import { Recipe } from '@Types/recipe'
+import { InstanceType } from 'typegoose'
 
 
-export function transformRecipe(recipe: Recipe, userId?: string) {
-  recipe.userLikedRecipe = !!recipe.likes.find(p => String(p) === userId)
-  recipe.likesCount = recipe.likes.length
-  recipe.id = recipe._id.toString()
-  /**
-   * Transform ingredients by attaching their _id to id field
-   * */
-  recipe.ingredients = recipe.ingredients.map(i => {
-    if (i.food) {
-      i.food.id = String(i.food._id)
-    }
-
-    return i
-  })
+export function transformRecipe(recipe: Recipe | InstanceType<Recipe>, userId?: string) {
+  if ('toObject' in recipe) {
+    return recipe.toObject()
+  }
 
   return recipe
 }

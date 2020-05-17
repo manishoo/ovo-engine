@@ -50,6 +50,7 @@
   "assistantAskNormalRoutine": "Do you have a normal breakfast-launch-dinner-snack meal routine? or is it different?",
   "assistantAskRoutine": "how many meals do you eat per day?",
   "assistantShowExample": "For example: Breakfast at 8, snack at 11, launch at 14...",
+  "assistantWhatHappensNext1": "You're all set! Now lets get to the actual meal planning",
 
   "assistant2": "OvoFood is an appropriate solution for healthy living",
   "assistant3": "Here, I assist you to worry less about where the food comes from, and more about how \"you\" like it to be",

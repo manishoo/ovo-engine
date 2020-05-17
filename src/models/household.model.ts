@@ -12,7 +12,7 @@ import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-de
 import { plugin, prop, Typegoose } from 'typegoose'
 
 
-export interface HouseholdSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface HouseholdSchema extends SoftDeleteModel<SoftDeleteDocument & Household> {
 }
 
 @plugin(mongooseDelete, {

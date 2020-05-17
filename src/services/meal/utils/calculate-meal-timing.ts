@@ -4,8 +4,9 @@
  */
 
 import { Timing } from '@Types/common'
+import { IngredientItemUnion } from '@Types/ingredient'
 import { MealItem } from '@Types/meal'
-import { Recipe } from '@Types/recipe'
+import { determineIfItsFood, determineIfItsRecipe } from '@Utils/determine-object'
 
 
 export default function calculateMealTiming(mealItems: MealItem[]): Timing {
@@ -16,18 +17,18 @@ export default function calculateMealTiming(mealItems: MealItem[]): Timing {
   }
 
   mealItems.map(mealItem => {
-    if (mealItem.food) {
+    const mealItemItem = mealItem.item as typeof IngredientItemUnion | undefined
+
+    if (mealItemItem && determineIfItsFood(mealItemItem)) {
       /**
        * We'll assume foods don't have any timing
        * */
     }
-    if (mealItem.recipe) {
-      const recipe = mealItem.recipe as Recipe
-
+    if (mealItemItem && determineIfItsRecipe(mealItemItem)) {
       timing = {
-        totalTime: timing.totalTime + recipe.timing.totalTime,
-        prepTime: timing.prepTime! + (recipe.timing.prepTime || 0),
-        cookTime: timing.cookTime! + (recipe.timing.cookTime || 0),
+        totalTime: (timing.totalTime || 0) + (mealItemItem.timing.totalTime || 0),
+        prepTime: (timing.prepTime || 0) + (mealItemItem.timing.prepTime || 0),
+        cookTime: (timing.cookTime || 0) + (mealItemItem.timing.cookTime || 0),
       }
     }
   })

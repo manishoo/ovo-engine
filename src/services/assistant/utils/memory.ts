@@ -46,7 +46,7 @@ export default <Memory>{
         }
       }
 
-      const userService = Container.get(UserService)
+      // const userService = Container.get(UserService)
       //const tempData = await userService.getTempData(token)
       //.catch(logError('UserService.getTempData'))
 
@@ -99,9 +99,9 @@ export default <Memory>{
     },
     async recordConversation(userId, messages) {
       // TODO: CHECK!
-      const conversationMessages = await this.recognizeTarget(userId)
+      const { conversationHistory } = await this.recognizeTarget(userId)
 
-      await redis.setex(`${config.constants.assistantConversationKey}:${userId}`, config.times.conversationExpiration, JSON.stringify([...conversationMessages, ...messages]))
+      await redis.setex(`${config.constants.assistantConversationKey}:${userId}`, config.times.conversationExpiration, JSON.stringify([...conversationHistory, ...messages]))
         .catch(logError('recordConversation->redis.setex'))
     },
   },

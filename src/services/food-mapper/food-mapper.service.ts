@@ -8,13 +8,13 @@ import { FoodMapModel } from '@Models/food-map.model'
 import { FoodModel } from '@Models/food.model'
 import { RecipeModel } from '@Models/recipe.model'
 import { calculateRecipeNutrition } from '@Services/recipe/utils/calculate-recipe-nutrition'
+import { ObjectId } from '@Types/common'
 import { IngredientFood } from '@Types/food'
 import { FoodMap, FoodMapInput, FoodMapList, FoodMapListArgs } from '@Types/food-map'
 import { RedisKeys } from '@Types/redis'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
 import { Service } from 'typedi'
-import { ObjectId } from '@Types/common'
 
 
 @Service()
@@ -42,7 +42,7 @@ export default class FoodMapperService {
 
     return {
       foodMaps,
-      pagination: createPagination(Math.abs(page), size, count)
+      pagination: createPagination(Math.abs(page), size, count, foodMaps)
     }
   }
 
@@ -57,7 +57,7 @@ export default class FoodMapperService {
     foodMap.units = foodMapInput.units.map(unit => ({
       text: unit.text,
       foodId: unit.foodId,
-      weight: food.weights.find(w => w.id == unit.weightId),
+      weight: food.weights.find(w => w.id.toString() == unit.weightId),
     }))
     foodMap.food = foodMapInput.food
 
@@ -82,7 +82,10 @@ export default class FoodMapperService {
    * link it to all recipes which have an ingredient
    * with the same name as the FoodMap.text
    * */
-  async mapFoodToRecipeIngredients(foodMap: FoodMap, food: IngredientFood) {
+  async mapFoodToRecipeIngredients(foodMap: FoodMap, ingredientFood: IngredientFood) {
+    const food = await FoodModel.findById(ingredientFood.id)
+    if (!food) throw new Errors.System()
+
     const recipes = await RecipeModel.find({ ingredients: { $elemMatch: { 'name.text': foodMap.text } } })
 
     /**
@@ -108,8 +111,7 @@ export default class FoodMapperService {
           if (ingredient.name) {
             ingredient.name.map(name => {
               if (name.text === foodMap.text) {
-                ingredient.food = food
-                ingredient.thumbnail = food.thumbnail
+                ingredient.item = food
               }
             })
           }

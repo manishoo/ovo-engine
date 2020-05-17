@@ -3,11 +3,13 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import MealSuggestionService from '@Services/meal/suggestion.service'
-import { Day, DayMeal } from '@Types/calendar'
+import MealSuggestionService, { SuggestMealInput, SuggestMealItemInput } from '@Services/meal/suggestion.service'
+import { DayMeal } from '@Types/calendar'
+import { ObjectId } from '@Types/common'
 import { MealItem } from '@Types/meal'
+import { NutritionProfileInput, UserMealInput } from '@Types/user'
 import { Context } from '@Utils/context'
-import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql'
+import { Arg, Args, Authorized, Ctx, Mutation, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 
 
@@ -24,30 +26,28 @@ export default class MealSuggestionResolver {
   @Authorized()
   @Mutation(returns => MealItem)
   async suggestMealItem(
-    @Arg('mealItemId') mealItemId: string,
-    @Arg('userMealId') userMealId: string,
-    @Arg('date') date: Date,
+    @Args() suggestMealItemInput: SuggestMealItemInput,
     @Ctx() ctx: Context,
   ): Promise<MealItem> {
-    return this.mealSuggestionService.suggestMealItem(mealItemId, userMealId, date, ctx.user!.id)
+    return this.mealSuggestionService.suggestMealItem(suggestMealItemInput, ctx.user!.id)
   }
 
   @Authorized()
   @Mutation(returns => DayMeal)
   async suggestMeal(
-    @Arg('userMealId') userMealId: string,
-    @Arg('date') date: Date,
+    @Args() suggestMealInput: SuggestMealInput,
     @Ctx() ctx: Context,
   ): Promise<DayMeal> {
-    return this.mealSuggestionService.suggestMeal(userMealId, date, ctx.user!.id)
+    return this.mealSuggestionService.suggestMeal(suggestMealInput, ctx.user!.id)
   }
 
-  @Authorized()
-  @Mutation(returns => Day)
-  async suggestDay(
-    @Arg('date') date: Date,
+  @Mutation(returns => [DayMeal])
+  async suggestDayGuest(
     @Ctx() ctx: Context,
-  ): Promise<Day> {
-    return this.mealSuggestionService.suggestDay(date, ctx.user!.id)
+    @Arg('nutritionProfile', type => NutritionProfileInput) nutritionProfile: NutritionProfileInput,
+    @Arg('userMeals', type => [UserMealInput]) userMeals: UserMealInput[],
+    @Arg('dietId', { nullable: true }) dietId?: ObjectId,
+  ): Promise<DayMeal[]> {
+    return this.mealSuggestionService.suggestDayMeals(userMeals, nutritionProfile, dietId)
   }
 }

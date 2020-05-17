@@ -6,3 +6,5 @@ uploads/
 build/
 **/*.log
 src/scripts/test.ts
+
+.DS_Store

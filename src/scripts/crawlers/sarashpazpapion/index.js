@@ -80,7 +80,6 @@ async function processPage(error, res, done) {
       })
       notes.shift() // remove recipe name
 
-      //console.log(tagsRaw.children());
       const tags = []
       tagsRaw.each((i, el) => {
         if ($(el).attr('property') !== 'article:tag') return

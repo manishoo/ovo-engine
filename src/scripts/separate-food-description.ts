@@ -48,7 +48,7 @@ export default async function main() {
   if (foodList && foodList.length != 0) {
 
     await Promise.all(foodList.map(async food => {
-      await separateDescription(food)
+      await separateDescription(food as any)
     }))
   }
 }

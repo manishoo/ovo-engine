@@ -1,9 +1,10 @@
-import { LanguageCode } from "@Types/common"
+import { LanguageCode } from '@Types/common'
+
 
 export function getRecoverTemplate(locale: LanguageCode) {
   if (!locale) locale = LanguageCode.en
 
-  let texts = {
+  let texts: any = {
     [LanguageCode.en]: {
       title: 'Password issues?',
       body: 'Dear %recipient.name%, it seems you have a problem with your password. You can change it right now.',

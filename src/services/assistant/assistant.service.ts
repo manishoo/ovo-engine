@@ -5,6 +5,7 @@
 
 import { MessageBackgroundInformation, MessagePayload } from '@Types/assistant'
 import { LanguageCode } from '@Types/common'
+import { ContextUser } from '@Utils/context'
 import { logError } from '@Utils/logger'
 import { Service } from 'typedi'
 import uuid from 'uuid/v1'
@@ -14,7 +15,7 @@ import Memory from './utils/memory'
 
 @Service()
 export default class AssistantService {
-  async conversation(messagePayload: MessagePayload, lang: LanguageCode): Promise<MessagePayload> {
+  async conversation(messagePayload: MessagePayload, lang: LanguageCode, user?: ContextUser): Promise<MessagePayload> {
     let { token, userId, messages } = messagePayload
 
     // currently, use messages have only one message. So only use the first one
@@ -36,27 +37,30 @@ export default class AssistantService {
      * 2. if the messagePayload didn't have a userId (in other words, it was a guest sending messages),
      *    load the backgroundInformation from short term memory (redis)
      * */
-    if (userId) {
-      backgroundInformation = await Memory.longTerm.recognizeTarget(userId)
+    if (user) {
+      // backgroundInformation = await Memory.longTerm.recognizeTarget(user.id)
+      backgroundInformation = await Memory.shortTerm.recognizeTarget(token)
     } else {
       backgroundInformation = await Memory.shortTerm.recognizeTarget(token)
     }
 
     // if you recently signed up and not a guest anymore, move short term to long term memory
-    if (userId && token && backgroundInformation.conversationHistory.length > 0) {
-      await Memory.shortTerm.offloadToLongTerm(token, userId)
+    if (user && token && backgroundInformation.conversationHistory.length > 0) {
+      await Memory.shortTerm.offloadToLongTerm(token, user.id)
     }
 
     // recognize the context of the speech based on background information, timing, user, etc...
     const context = await Cognition.recognizeContext(message, backgroundInformation)
 
     // reply to the messagePayload
-    const responses = await Cognition.replyToConversation(context, messagePayload, backgroundInformation, lang)
+    const responses = await Cognition.replyToConversation(context, messagePayload, backgroundInformation, lang, user)
 
     // remember what you said
-    if (userId) {
-      Memory.longTerm.recordConversation(userId, message ? [message, ...responses] : responses)
-        .catch(logError('Memory.longTerm.recordConversation'))
+    if (user) {
+      // Memory.longTerm.recordConversation(user.id, message ? [message, ...responses] : responses)
+      //   .catch(logError('Memory.longTerm.recordConversation'))
+      Memory.shortTerm.recordConversation(token, message ? [message, ...responses] : responses)
+        .catch(logError('Memory.shortTerm.recordConversation'))
     } else {
       Memory.shortTerm.recordConversation(token, message ? [message, ...responses] : responses)
         .catch(logError('Memory.shortTerm.recordConversation'))
@@ -65,7 +69,7 @@ export default class AssistantService {
     return {
       messages: responses,
       token,
-      userId
+      userId: user && user.id
     }
   }
 }

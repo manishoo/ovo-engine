@@ -7,13 +7,14 @@ import mongoose from '@Config/connections/mongoose'
 import { UserSchema } from '@Models/user.model'
 import { Image, LanguageCode, ObjectId, Ref, Timing, Translation } from '@Types/common'
 import { Nutrition } from '@Types/food'
-import { Ingredient, Instruction, Recipe, RecipeDifficulty, RecipeOrigin, RecipeStatus, Review } from '@Types/recipe'
+import { Ingredient } from '@Types/ingredient'
+import { Instruction, Recipe, RecipeDifficulty, RecipeOrigin, RecipeStatus, Review } from '@Types/recipe'
 import { Tag } from '@Types/tag'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { arrayProp, plugin, prop, Typegoose } from 'typegoose'
 
 
-export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument & Recipe> {
 }
 
 @plugin(mongooseDelete, {
@@ -32,6 +33,8 @@ export class RecipeSchema extends Typegoose implements Recipe {
   ingredients: Ingredient[]
   @prop({ required: true })
   serving: number
+  @prop()
+  servingName: Translation[]
   @prop({ required: true, unique: true })
   slug: string
   @prop()
@@ -55,7 +58,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
   @prop()
   origin?: RecipeOrigin
   @prop()
-  tags?: Ref<Tag>[]
+  tags: Ref<Tag>[]
   @prop()
   updatedAt?: Date
   @prop()
@@ -67,7 +70,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
 
   userLikedRecipe: boolean
 
-  @prop({ default: RecipeStatus.private, required: true })
+  @prop({ default: RecipeStatus.unverified, required: true })
   status: RecipeStatus
 
   @prop()

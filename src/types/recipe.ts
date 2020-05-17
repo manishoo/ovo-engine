@@ -16,10 +16,10 @@ import {
   Translation,
   TranslationInput,
 } from '@Types/common'
-import { IngredientFood, Nutrition } from '@Types/food'
+import { Nutrition } from '@Types/food'
+import { Ingredient, IngredientInput } from '@Types/ingredient'
 import { Tag, TagType } from '@Types/tag'
 import { Author } from '@Types/user'
-import { Weight } from '@Types/weight'
 import { ContextUser } from '@Utils/context'
 import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
@@ -27,9 +27,9 @@ import { ArgsType, Authorized, Field, InputType, Int, ObjectType, registerEnumTy
 
 
 export enum RecipeStatus {
-  private = 'private',
-  public = 'public',
-  review = 'review',
+  unverified = 'unverified',
+  verified = 'verified',
+  reviewing = 'reviewing',
 }
 
 registerEnumType(RecipeStatus, {
@@ -75,33 +75,6 @@ export class RecipeTagInput {
 
   @Field()
   type: TagType
-}
-
-@ObjectType()
-export class Ingredient {
-  @Field(type => [Translation], { nullable: true })
-  name?: Translation[]
-
-  @Field({ nullable: true })
-  amount?: number
-
-  @Field({ nullable: true })
-  customUnit?: string
-
-  @Field({ nullable: true })
-  gramWeight?: number
-
-  @Field(type => Image, { nullable: true })
-  thumbnail?: Image
-
-  @Field(type => [Translation], { nullable: true })
-  description?: Translation[]
-
-  @Field(type => IngredientFood, { nullable: true })
-  food?: IngredientFood
-
-  @Field(type => Weight, { nullable: true })
-  weight?: Ref<Weight>
 }
 
 @ObjectType()
@@ -190,6 +163,7 @@ export class RecipeOrigin {
 @ObjectType()
 export class Recipe {
   readonly _id: ObjectId
+
   @Field()
   id: string
 
@@ -201,6 +175,9 @@ export class Recipe {
 
   @Field(type => Int)
   serving: number
+
+  @Field(type => [Translation], { nullable: true })
+  servingName?: Translation[]
 
   @Field()
   slug: string
@@ -233,13 +210,13 @@ export class Recipe {
   timing: Timing
 
   @Field(type => Nutrition, { nullable: true })
-  nutrition: Nutrition
+  nutrition?: Nutrition
 
   @Field(type => RecipeOrigin, { nullable: true })
   origin?: RecipeOrigin
 
-  @Field(type => String, { nullable: true })
-  tags?: Ref<Tag>[]
+  @Field(type => [String])
+  tags: Ref<Tag>[]
 
   @Field(type => LanguageCode, { nullable: true })
   languages: LanguageCode[]
@@ -269,34 +246,6 @@ export class RecipesListResponse {
 }
 
 @InputType()
-export class IngredientInput {
-  @Field(type => String, { nullable: true })
-  food?: string
-
-  @Field()
-  amount: number
-
-  @Field({ nullable: true })
-  customUnit?: string
-
-  @Field({ nullable: true })
-  gramWeight?: number
-
-  @Field(type => [TranslationInput], { nullable: true })
-  @ArrayNotEmpty()
-  name?: TranslationInput[]
-
-  @Field({ nullable: true })
-  weight?: string
-
-  @Field(type => [TranslationInput], { nullable: true })
-  description?: TranslationInput[]
-
-  @Field(type => GraphQLUpload, { nullable: true })
-  thumbnail?: any
-}
-
-@InputType()
 export class InstructionInput {
   @Field()
   @Min(1)
@@ -309,7 +258,7 @@ export class InstructionInput {
   @Field(type => [TranslationInput], { nullable: true })
   note?: TranslationInput[]
 
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   image?: any
 }
 
@@ -329,6 +278,9 @@ export class RecipeInput {
   @Field(type => Int)
   serving: number
 
+  @Field(type => [TranslationInput], { nullable: true })
+  servingName?: TranslationInput[]
+
   @Field(type => TimingInput)
   timing: TimingInput
 
@@ -339,12 +291,12 @@ export class RecipeInput {
   slug?: string
 
   @Field(type => [TranslationInput], { nullable: true })
-  description: [TranslationInput]
+  description?: [TranslationInput]
 
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   image?: any
 
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   thumbnail?: any
 
   @Field(type => [String], { nullable: true })
@@ -356,7 +308,7 @@ export class RecipeInput {
 
 @ArgsType()
 export class ListRecipesArgs {
-  @Field({ nullable: true })
+  @Field(type => Int, { nullable: true })
   @Min(1)
   page?: number
 
@@ -378,7 +330,7 @@ export class ListRecipesArgs {
   tags?: string[]
 
   @Field({ nullable: true })
-  latest?: boolean
+  sortByMostPopular?: boolean
 
   @Field(type => [ObjectId], { nullable: true })
   ingredients?: ObjectId[]
@@ -389,6 +341,10 @@ export class ListRecipesArgs {
   @Field(type => RecipeStatus, { nullable: true })
   @Authorized(Role.operator)
   status?: RecipeStatus
+
+  @Field({ nullable: true })
+  @Authorized()
+  showMyRecipes?: boolean
 
   viewerUser?: ContextUser
 }

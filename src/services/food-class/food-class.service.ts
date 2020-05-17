@@ -4,7 +4,6 @@
  */
 
 import { FoodClassModel } from '@Models/food-class.model'
-import { FoodGroupModel } from '@Models/food-group.model'
 import { FoodModel } from '@Models/food.model'
 import UploadService from '@Services/upload/upload.service'
 import { LanguageCode, ObjectId, Translation } from '@Types/common'
@@ -142,11 +141,20 @@ export default class FoodClassService {
     }
   }
 
-  async getFoodClass(foodClassID: ObjectId): Promise<FoodClass> {
-    const foodClass = await FoodClassModel.findById(foodClassID)
-    if (!foodClass) throw new Errors.NotFound('food class not found')
+  async getFoodClass(foodClassID?: ObjectId, slug?: string): Promise<FoodClass> {
+    if (!foodClassID && !slug) throw new Errors.Validation('id or slug must be provided')
 
-    return foodClass
+    if (foodClassID) {
+      const foodClass = await FoodClassModel.findById(foodClassID)
+      if (!foodClass) throw new Errors.NotFound('food class not found')
+
+      return foodClass.toObject()
+    } else {
+      const foodClass = await FoodClassModel.findOne({ slug })
+      if (!foodClass) throw new Errors.NotFound('food class not found')
+
+      return foodClass.toObject()
+    }
   }
 
   async updateFoodClass(foodClassId: ObjectId, foodClassInput: FoodClassInput): Promise<FoodClass> {
@@ -246,8 +254,11 @@ export default class FoodClassService {
     const foodClass = await FoodClassModel.findById(foodClassId)
     if (!foodClass) throw new Errors.NotFound('food class not found')
 
-    const foodCount = await FoodModel.countDocuments({ foodClass: foodClass._id })
-    if (foodCount !== 0) throw new Errors.Validation('This food class has food associated with it! It can\'t be removed')
+    const foods = await FoodModel.find({ foodClass: foodClass._id })
+
+    for (let food of foods) {
+      await food.delete(DeleteBy.user(user))
+    }
 
     await foodClass.delete(DeleteBy.user(user))
 

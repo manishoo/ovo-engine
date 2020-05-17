@@ -3,37 +3,40 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from '@Config/connections/mongoose'
 import { FoodClassModel } from '@Models/food-class.model'
 import { FoodModel } from '@Models/food.model'
 import putDefaultFoodsOnTop from '@Services/food/utils/put-default-foods-on-top'
+import MealService from '@Services/meal/meal.service'
 import UploadService from '@Services/upload/upload.service'
 import { ObjectId } from '@Types/common'
 import { Food, FoodInput, FoodListArgs, FoodsListResponse } from '@Types/food'
-import { WeightInput } from '@Types/weight'
+import { Weight, WeightInput } from '@Types/weight'
 import { ContextUser } from '@Utils/context'
 import { DeleteBy } from '@Utils/delete-by'
 import Errors from '@Utils/errors'
 import { createPagination } from '@Utils/generate-pagination'
-import { Service } from 'typedi'
+import { Inject, Service } from 'typedi'
 
 
 @Service()
 export default class FoodService {
-  constructor(
-    // service injection
-    private readonly uploadService: UploadService
-  ) {
-    // noop
-  }
+  @Inject(type => UploadService)
+  private readonly uploadService: UploadService
+  @Inject(type => MealService)
+  private readonly mealService: MealService
 
-  async getFood(foodId: ObjectId) {
+  async get(foodId: ObjectId) {
     let food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('Food not found')
 
-    return food
+    return {
+      id: food.id,
+      ...food.toObject(),
+    } as Food
   }
 
-  async listFoods({ page, size, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
+  async list({ page = 1, size = 25, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
     if (foodClassId) {
       query['foodClass'] = new ObjectId(foodClassId)
@@ -73,73 +76,11 @@ export default class FoodService {
 
     return {
       foods: putDefaultFoodsOnTop(foods),
-      pagination: createPagination(page, size, count),
+      pagination: createPagination(page, size, count, foods),
     }
   }
 
-  async updateFood(foodId: ObjectId, foodInput: FoodInput): Promise<Food | null> {
-    const food = await FoodModel.findById(foodId)
-    if (!food) throw new Errors.NotFound('food not found')
-
-    let weights: WeightInput[] = []
-    foodInput.weights.map(weight => {
-      if (weight.id) {
-        weights.push(weight)
-      } else {
-        weight['id'] = String(new ObjectId())
-        weights.push(weight)
-      }
-    })
-
-    if (foodInput.image) {
-      food.image = {
-        url: await this.uploadService.processUpload(foodInput.image, 'full', `images/foods/${food.id}`)
-      }
-      if (!foodInput.thumbnail) {
-        food.thumbnail = {
-          url: await this.uploadService.processUpload(foodInput.image, 'thumb', `images/foods/${food.id}`)
-        }
-      }
-    }
-
-    if (foodInput.thumbnail) {
-      food.thumbnail = {
-        url: await this.uploadService.processUpload(foodInput.thumbnail, 'thumb', `images/foods/${food.id}`)
-      }
-    }
-
-    food.name = foodInput.name
-    food.description = foodInput.description
-    food.weights = weights
-
-    if (foodInput.nutrition) {
-      food.nutrition = {
-        ...foodInput.nutrition
-      }
-    }
-
-    if (foodInput.foodClassId) {
-      if (food.isDefault) throw new Error('The selected Food is the default food, please remove the default status and try again')
-      food.foodClass = foodInput.foodClassId
-    }
-
-    return food.save()
-  }
-
-  async deleteFood(foodID: ObjectId, user: ContextUser, restore?: boolean): Promise<Food> {
-    const food = await FoodModel.findOneWithDeleted({ _id: foodID })
-    if (!food) throw new Errors.NotFound('food not found')
-
-    if (restore) {
-      await food.restore()
-    } else {
-      await food.delete(DeleteBy.user(user))
-    }
-
-    return food
-  }
-
-  async createFood(foodClassID: ObjectId, foodInput: FoodInput): Promise<Food> {
+  async create(foodClassID: ObjectId, foodInput: FoodInput): Promise<Food> {
     if (!ObjectId.isValid(foodClassID)) throw new Errors.UserInput('invalid food class id', { 'foodClassId': 'invalid food class id' })
 
     const foodClass = await FoodClassModel.findById(foodClassID)
@@ -147,7 +88,7 @@ export default class FoodService {
 
     let weights: WeightInput[] = []
     foodInput.weights.map(weight => {
-      weight['id'] = String(new ObjectId())
+      weight.id = new ObjectId()
       weights.push(weight)
     })
 
@@ -184,7 +125,103 @@ export default class FoodService {
       }
     }
 
-    return food.save()
+    const savedFood = await food.save()
+
+    /**
+     * If foodClass didn't have a default food
+     * select this food as the default food
+     * */
+    if (!foodClass.defaultFood) {
+      foodClass.defaultFood = savedFood._id
+      await foodClass.save()
+    }
+
+    return savedFood
   }
 
+  async update(foodId: ObjectId, foodInput: FoodInput): Promise<Food | null> {
+    const food = await FoodModel.findById(foodId)
+    if (!food) throw new Errors.NotFound('food not found')
+
+    let weights: Weight[] = []
+    foodInput.weights.map(weight => {
+      weights.push({
+        id: weight.id || new ObjectId(),
+        ...weight,
+      })
+    })
+
+    if (foodInput.image) {
+      food.image = {
+        url: await this.uploadService.processUpload(foodInput.image, 'full', `images/foods/${food.id}`)
+      }
+      if (!foodInput.thumbnail) {
+        food.thumbnail = {
+          url: await this.uploadService.processUpload(foodInput.image, 'thumb', `images/foods/${food.id}`)
+        }
+      }
+    }
+
+    if (foodInput.thumbnail) {
+      food.thumbnail = {
+        url: await this.uploadService.processUpload(foodInput.thumbnail, 'thumb', `images/foods/${food.id}`)
+      }
+    }
+
+    food.name = foodInput.name
+    food.description = foodInput.description
+    food.weights = weights
+
+    if (foodInput.nutrition) {
+      food.nutrition = {
+        ...foodInput.nutrition
+      }
+    }
+
+    if (foodInput.foodClassId) {
+      if (food.isDefault) throw new Error('The selected Food is the default food, please remove the default status and try again')
+      food.foodClass = foodInput.foodClassId
+    }
+
+    let savedFood = await food.save()
+
+    return savedFood.toObject()
+  }
+
+  async delete(foodID: ObjectId, user: ContextUser, restore?: boolean): Promise<Food> {
+    const food = await FoodModel.findOneWithDeleted({ _id: foodID })
+    if (!food) throw new Errors.NotFound('food not found')
+
+    if (restore) {
+      await food.restore()
+    } else {
+      if (food.isDefault) {
+        mongoose.startSession()
+          .then(async (session) => {
+            session.startTransaction()
+            food.$session(session)
+
+            try {
+              food.isDefault = false
+              await food.save()
+
+              const foodClass = await FoodClassModel.findById(food.foodClass).session(session)
+              if (!foodClass) throw new Errors.System()
+
+              foodClass.defaultFood = undefined
+              await foodClass.save()
+
+              await session.commitTransaction()
+
+              await food.delete(DeleteBy.user(user))
+            } catch (e) {
+              await session.abortTransaction()
+              throw new Errors.System()
+            }
+          })
+      }
+    }
+
+    return food
+  }
 }

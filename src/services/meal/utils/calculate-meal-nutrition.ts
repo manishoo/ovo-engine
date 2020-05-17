@@ -3,13 +3,18 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { Food, Nutrition } from '@Types/food'
-import { MealItemBase } from '@Types/meal'
-import { Recipe } from '@Types/recipe'
+import { Nutrition } from '@Types/food'
+import { Ingredient, IngredientItemUnion } from '@Types/ingredient'
 import { calculateNutrition, scaleFoodNutrition, scaleRecipeNutrition } from '@Utils/calculate-nutrition'
+import {
+  determineIfItsCustomUnit,
+  determineIfItsFood,
+  determineIfItsRecipe,
+  determineIfItsWeightOrObject
+} from '@Utils/determine-object'
 
 
-export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
+export function calculateMealNutrition(items: Ingredient[]): Nutrition {
   let totalNutrition: Partial<Nutrition> = {}
 
   /**
@@ -17,25 +22,26 @@ export function calculateMealNutrition(items: MealItemBase[]): Nutrition {
    * and add to {totalNutrition}
    * */
   items.map(mealItem => {
-    if (mealItem.recipe) {
-      const recipe = mealItem.recipe as Recipe
-      if (recipe.nutrition) {
-        calculateNutrition(scaleRecipeNutrition(recipe, mealItem.amount), totalNutrition)
+    const mealItemItem = mealItem.item as typeof IngredientItemUnion | undefined
+
+    if (mealItemItem && determineIfItsRecipe(mealItemItem)) {
+      if (mealItemItem.nutrition && mealItem.amount) {
+        calculateNutrition(scaleRecipeNutrition(mealItemItem, mealItem.amount), totalNutrition)
       }
-    } else if (mealItem.food) {
-      const food = mealItem.food as Food
-      if (food.nutrition) {
+    } else if (mealItemItem && determineIfItsFood(mealItemItem)) {
+      if (mealItemItem.nutrition && mealItem.amount) {
+        if (!mealItem.amount || !mealItemItem) return
+
         let weightId
-        if (mealItem.weight) {
-          if (typeof mealItem.weight === 'string') {
-            weightId = mealItem.weight
-          } else {
-            weightId = mealItem.weight.id
-            weightId = weightId!.toString()
-          }
+        let gramWeight
+
+        if (mealItem.unit && determineIfItsWeightOrObject(mealItem.unit)) {
+          weightId = mealItem.unit.id!
+        } else if (mealItem.unit && determineIfItsCustomUnit(mealItemItem)) {
+          gramWeight = mealItem.unit.gramWeight
         }
 
-        calculateNutrition(scaleFoodNutrition(food, mealItem.amount, weightId), totalNutrition)
+        calculateNutrition(scaleFoodNutrition(mealItemItem, mealItem.amount, weightId, gramWeight), totalNutrition)
       }
     }
   })

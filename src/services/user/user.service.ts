@@ -6,29 +6,29 @@
 import config from '@Config'
 import redis from '@Config/connections/redis'
 import { UserModel } from '@Models/user.model'
+import DietService from '@Services/diet/diet.service'
+import MailingService from '@Services/mail/mail.service'
+import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
 import UploadService from '@Services/upload/upload.service'
-import { ObjectId, Role, Status, LanguageCode } from '@Types/common'
+import { LanguageCode, ObjectId, Role, Status } from '@Types/common'
 import { RedisKeys } from '@Types/redis'
 import {
   BasicUser,
+  DecodedUser,
   User,
   UserAuthResponse,
   UserLoginArgs,
   UserRegistrationInput,
   UserUpdateInput,
-  DecodedUser,
 } from '@Types/user'
 import { ContextUser, ContextUserType } from '@Utils/context'
+import decodeJwtToken from '@Utils/decode-jwt-token'
 import Errors from '@Utils/errors'
 import { generateAvatarUrl } from '@Utils/generate-avatar-url'
 import { logError } from '@Utils/logger'
 import { generateHashPassword, verifyPassword } from '@Utils/password-manager'
 import { Service } from 'typedi'
-import decodeJwtToken from '@Utils/decode-jwt-token'
-import MailingService from '@Services/mail/mail.service'
-import { getRecoverTemplate } from '@Services/mail/utils/mailTemplates'
 import generateRecoverLink from './utils/generate-recover-link'
-import DietService from '@Services/diet/diet.service'
 
 
 @Service()
@@ -59,7 +59,7 @@ export default class UserService {
       }
       let user: ContextUser = {
         id: dbUser._id,
-        status: dbUser.status,
+        status: dbUser.status!,
         role: dbUser.role,
         type: ContextUserType.user,
         session,
@@ -70,10 +70,11 @@ export default class UserService {
     }
   }
 
-  async getUserById(userId: string): Promise<User> {
+  async getUserById(userId: string | ObjectId, careGiver?: string | ObjectId): Promise<User> {
     const user = await UserModel.findById(userId)
 
     if (!user) throw new Errors.NotFound('User not found')
+    if (careGiver && !user.careGivers.find(ct => String((ct as ObjectId)) === String(careGiver))) throw new Errors.NotFound('Invalid care giver')
 
     return user
   }
@@ -125,7 +126,7 @@ export default class UserService {
 
     return {
       user: checkUser,
-      session: checkUser.session,
+      session: checkUser.session!,
     }
   }
 
@@ -161,50 +162,14 @@ export default class UserService {
      * */
     user = await UserModel.findOne({
       $or: [
-        { userId: userId },
+        { _id: userId },
         { username },
       ]
     })
 
     if (!user) throw new Errors.NotFound('User not found')
 
-    let userInfo: User | BasicUser
-
-    if (userId && (userId.toString() === selfId)) {
-      userInfo = {
-        id: user.id,
-        username: user.username,
-        role: user.role,
-        email: user.email,
-        firstName: user.firstName,
-        middleName: user.middleName,
-        lastName: user.lastName,
-        bio: user.bio,
-        phoneNumber: user.phoneNumber,
-        avatar: user.avatar,
-        socialNetworks: user.socialNetworks,
-        height: user.height,
-        weight: user.weight,
-        age: user.age,
-        bodyFat: user.bodyFat,
-        gender: user.gender,
-        household: user.household,
-        activityLevel: user.activityLevel,
-      } as User
-    } else {
-      userInfo = {
-        id: user.id,
-        username: user.username,
-        firstName: user.firstName,
-        middleName: user.middleName,
-        lastName: user.lastName,
-        bio: user.bio,
-        avatar: user.avatar,
-        socialNetworks: user.socialNetworks,
-      } as BasicUser
-    }
-
-    return userInfo
+    return user
   }
 
   async doesUsernameExist(username: string): Promise<boolean> {
@@ -216,7 +181,7 @@ export default class UserService {
   async requestRecoverPassword(email: string, locale: LanguageCode): Promise<Boolean> {
 
     const user = await UserModel.findOne({ email })
-    if (!user) throw new Errors.NotFound('User not found')
+    if (!user) return true
 
     let userFirstName: string = ''
     if (user.firstName) {
@@ -224,13 +189,16 @@ export default class UserService {
     } else {
       userFirstName = 'User'
     }
+
+    const recoverLink = generateRecoverLink(user.id)
+
     this.mailingService.sendMail([{
       name: userFirstName,
       email: user.email,
       senderAddress: 'recover',
       subject: `Password recover for ${user.firstName}`,
       template: getRecoverTemplate(locale),
-      recover: generateRecoverLink(user.id)
+      recover: recoverLink
     }])
     return true
   }
@@ -239,7 +207,7 @@ export default class UserService {
     const decoded = decodeJwtToken(token) as DecodedUser
 
     const user = await UserModel.findById(decoded.id!)
-    if (!user) throw new Errors.NotFound('User not found')
+    if (!user) throw new Errors.NotFound('Invalid token')
 
     user.password = await generateHashPassword(password)
     await user.save()

@@ -3,12 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { MealPlanSchema } from '@Models/meal-plan.model'
 import { PersistedPassword } from '@Types/auth'
 import { Image, ObjectId, Ref, Role, Status } from '@Types/common'
 import { Diet } from '@Types/diet'
-import { Event } from '@Types/event'
 import { Household } from '@Types/household'
+import { Plan } from '@Types/plan'
 import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, IsEmail, IsPhoneNumber } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
@@ -32,17 +31,32 @@ export enum MealSize {
   huge = 'huge',
 }
 
+export function getMealSizeValue(size: MealSize) {
+  switch (size) {
+    case MealSize.tiny:
+      return 1
+    case MealSize.small:
+      return 2
+    case MealSize.normal:
+      return 3
+    case MealSize.big:
+      return 5
+    case MealSize.huge:
+      return 8
+  }
+}
+
 registerEnumType(MealSize, {
   name: 'MealSize',
   description: 'Meal Size'
 })
 
 export enum MealAvailableTime {
-  noTime = '5',
-  littleTime = '15',
-  someTime = '30',
-  moreTime = '45',
-  lotsOfTime = '60',
+  noTime = 'noTime',
+  littleTime = 'littleTime',
+  someTime = 'someTime',
+  moreTime = 'moreTime',
+  lotsOfTime = 'lotsOfTime',
   noLimit = 'noLimit',
 }
 
@@ -76,6 +90,27 @@ export enum WeightUnits {
 
 export enum HeightUnits {
   cm = 'cm',
+}
+
+export enum MembershipType {
+  premium = 'premium',
+  pro = 'pro'
+}
+
+@ObjectType()
+export class Membership {
+  @Field()
+  type: MembershipType
+  @Field()
+  fromDate: Date
+  @Field()
+  toDate: Date
+}
+
+@ObjectType()
+export class Achievements {
+  @Field({ nullable: true })
+  finishedSetup?: boolean
 }
 
 @ObjectType()
@@ -118,10 +153,26 @@ export class UserMeal {
   name: string
   @Field()
   time: string
-  @Field(type => MealSize, { nullable: true })
-  size?: MealSize
-  @Field(type => MealAvailableTime, { nullable: true })
-  availableTime?: MealAvailableTime
+  @Field(type => MealSize)
+  size: MealSize
+  @Field(type => MealAvailableTime)
+  availableTime: MealAvailableTime
+  @Field(type => Boolean, { nullable: true })
+  cook?: boolean
+}
+
+@InputType()
+export class UserMealInput {
+  @Field()
+  id: string
+  @Field()
+  name: string
+  @Field()
+  time: string
+  @Field(type => MealSize)
+  size: MealSize
+  @Field(type => MealAvailableTime)
+  availableTime: MealAvailableTime
   @Field(type => Boolean, { nullable: true })
   cook?: boolean
 }
@@ -152,19 +203,21 @@ export class SocialNetworksInput {
 
 @ObjectType()
 export class TargetNutrition {
+  @Field({ nullable: true })
+  percentage: number
+
   @Field()
   min: number
 
   @Field()
   max: number
-
-  get average() {
-    return this.min + this.max / 2
-  }
 }
 
 @InputType()
 export class TargetNutritionInput {
+  @Field({ nullable: true })
+  percentage: number
+
   @Field()
   min: number
 
@@ -172,8 +225,21 @@ export class TargetNutritionInput {
   max: number
 }
 
+export enum NutritionProfileMode {
+  percentage = 'percentage',
+  range = 'range',
+}
+
+registerEnumType(NutritionProfileMode, {
+  name: 'NutritionProfileMode',
+  description: 'Nutrition Profile Mode'
+})
+
 @ObjectType()
 export class NutritionProfile {
+  @Field()
+  id: ObjectId
+
   @Field()
   calories: number
 
@@ -181,17 +247,23 @@ export class NutritionProfile {
   protein: TargetNutrition
 
   @Field(type => TargetNutrition)
-  carb: TargetNutrition
+  carbs: TargetNutrition
 
   @Field(type => TargetNutrition)
   fat: TargetNutrition
 
   @Field()
   isStrict: boolean
+
+  @Field(type => NutritionProfileMode)
+  mode: NutritionProfileMode
 }
 
 @InputType()
 export class NutritionProfileInput {
+  @Field({ nullable: true })
+  id?: ObjectId
+
   @Field()
   calories: number
 
@@ -199,22 +271,16 @@ export class NutritionProfileInput {
   protein: TargetNutritionInput
 
   @Field(type => TargetNutritionInput)
-  carb: TargetNutritionInput
+  carbs: TargetNutritionInput
 
   @Field(type => TargetNutritionInput)
   fat: TargetNutritionInput
 
   @Field()
   isStrict: boolean
-}
 
-@ObjectType()
-export class UpdateNutritionProfileResponse {
-  @Field()
-  userId: ObjectId
-
-  @Field()
-  nutritionProfile: NutritionProfile
+  @Field(type => NutritionProfileMode)
+  mode: NutritionProfileMode
 }
 
 @ObjectType()
@@ -226,8 +292,6 @@ export class BasicUser {
   username: string
   @Field({ nullable: true })
   firstName?: string
-  @Field({ nullable: true })
-  middleName?: string
   @Field({ nullable: true })
   lastName?: string
   @Field({ nullable: true })
@@ -247,42 +311,68 @@ export class Author extends BasicUser {
 @ObjectType()
 export class User extends BasicUser {
   password: PersistedPassword
-  @Field()
+
+  @Field({ nullable: true })
   session?: string
+
   @Field()
   @IsEmail()
   email: string
+
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
+
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
+
   @Field({ nullable: true })
   height?: Height
+
   @Field({ nullable: true })
   weight?: WeightUnit
+
   @Field({ nullable: true })
   age?: number
+
   @Field(type => Int, { nullable: true })
   bodyFat?: number
+
   @Field(type => Gender, { nullable: true })
   gender?: Gender
+
   @Field(type => NutritionProfile)
   nutritionProfile: NutritionProfile
+
   @Field(type => Diet, { nullable: true })
   diet?: Diet
+
   foodAllergies?: string[]
+
   status?: Status
+
   @ArrayNotEmpty()
   @Field(type => [UserMeal])
   meals: UserMeal[]
-  mealPlans?: Ref<MealPlanSchema>[]
-  household?: Ref<Household>
+
+  @Field(type => ObjectId)
+  plan: Ref<Plan>
+
+  household: Ref<Household>
+
   activityLevel?: ActivityLevel
+
   goal?: Goal
-  @Field(type => [Event], { nullable: true })
-  path?: Event[]
+
+  @Field(type => Membership, { nullable: true })
+  membership?: Membership
+
   timeZone?: string
+
+  @Field(type => Achievements)
+  achievements: Achievements
+
+  careGivers: Ref<User>[]
 }
 
 @InputType()
@@ -327,7 +417,7 @@ export class UserUpdateInput {
   lastName?: string
   @Field(type => Gender, { nullable: true })
   gender?: Gender
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   avatar?: any
   @Field(type => SocialNetworksInput)
   socialNetworks: SocialNetworksInput

@@ -7,8 +7,9 @@ import { RecipeModel } from '@Models/recipe.model'
 import { TagModel } from '@Models/tag.model'
 import TagService from '@Services/tag/tag.service'
 import UserService from '@Services/user/user.service'
-import { LanguageCode } from '@Types/common'
-import { Ingredient, Recipe, RecipeDifficulty } from '@Types/recipe'
+import { LanguageCode, ObjectId } from '@Types/common'
+import { Ingredient } from '@Types/ingredient'
+import { Recipe, RecipeDifficulty } from '@Types/recipe'
 import { TagType } from '@Types/tag'
 import shortid from 'shortid'
 import { Container } from 'typedi'
@@ -151,8 +152,11 @@ export default async function main(userPassword: string) {
         }
 
         return {
+          id: new ObjectId(),
           amount,
-          customUnit,
+          customUnit: {
+            name: [{text: customUnit, locale: LanguageCode.fa, verified: true}],
+          },
           name: [{ text: ingredient.name, locale: LanguageCode.fa, verified: true }],
         } as Ingredient
       }),
@@ -160,3 +164,6 @@ export default async function main(userPassword: string) {
     process.stdout.write('.')
   }
 }
+
+main('sarashpazpapion')
+  .then(() => console.log('finis'))

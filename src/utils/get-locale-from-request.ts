@@ -3,10 +3,9 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import config from '@Config'
 import { LanguageCode } from '@Types/common'
 import { Request } from 'express'
-import config from '@Config'
-import Errors from './errors'
 
 
 export default function getLocaleFromRequest(req: Request) {
@@ -15,7 +14,7 @@ export default function getLocaleFromRequest(req: Request) {
   const isLocaleSupported = !!config.supportedLanguages.find(p => p === locale)
 
   if (!isLocaleSupported) {
-    throw new Errors.NotFound('Language not supported')
+    return LanguageCode.en
   }
 
   return locale
