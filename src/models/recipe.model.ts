@@ -14,7 +14,7 @@ import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-de
 import { arrayProp, plugin, prop, Typegoose } from 'typegoose'
 
 
-export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface RecipeSchema extends SoftDeleteModel<SoftDeleteDocument & Recipe> {
 }
 
 @plugin(mongooseDelete, {
@@ -33,6 +33,8 @@ export class RecipeSchema extends Typegoose implements Recipe {
   ingredients: Ingredient[]
   @prop({ required: true })
   serving: number
+  @prop()
+  servingName: Translation[]
   @prop({ required: true, unique: true })
   slug: string
   @prop()
@@ -68,7 +70,7 @@ export class RecipeSchema extends Typegoose implements Recipe {
 
   userLikedRecipe: boolean
 
-  @prop({ default: RecipeStatus.private, required: true })
+  @prop({ default: RecipeStatus.unverified, required: true })
   status: RecipeStatus
 
   @prop()

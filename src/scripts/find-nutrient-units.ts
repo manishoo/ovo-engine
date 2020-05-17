@@ -4,10 +4,10 @@
  */
 
 import { FoodModel } from '@Models/food.model'
-const fs = require('fs').promises
-
 import 'reflect-metadata'
 
+
+const fs = require('fs').promises
 
 const argv = require('minimist')(process.argv.slice(2))
 
@@ -19,6 +19,8 @@ export default async function main() {
   const nutritionsAndUnits: {[k: string]: string[]} = {}
 
   foods.map(({ nutrition }) => {
+    if (!nutrition) return
+
     Object.keys(nutrition).map(nutrientKey => {
       const nutrient = nutrition[nutrientKey]!
       if (nutritionsAndUnits[nutrientKey]) {

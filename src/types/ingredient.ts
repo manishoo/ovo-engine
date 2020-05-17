@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { CustomUnit, CustomUnitInput, ObjectId, Translation, TranslationInput } from '@Types/common'
+import { CustomUnit, CustomUnitInput, ObjectId, Pagination, Translation, TranslationInput } from '@Types/common'
 import { Food } from '@Types/food'
 import { Recipe } from '@Types/recipe'
 import { Weight } from '@Types/weight'
-import { createUnionType, Field, InputType, ObjectType } from 'type-graphql'
 import { determineIfItsFood, determineIfItsWeightOrObject } from '@Utils/determine-object'
+import { ArgsType, createUnionType, Field, InputType, Int, ObjectType } from 'type-graphql'
 
 
 export const IngredientItemUnion = createUnionType({
@@ -61,7 +61,7 @@ export class Ingredient {
   customUnit?: CustomUnit
 
   @Field(type => IngredientItemUnion, { nullable: true })
-  item?: typeof IngredientItemUnion
+  item?: typeof IngredientItemUnion | { id: ObjectId, ref: 'recipe' | 'food' }
 
   @Field(type => [Translation], {
     nullable: true,
@@ -108,3 +108,20 @@ export class IngredientInput {
   description?: TranslationInput[]
 }
 
+@ObjectType()
+export class IngredientListResponse {
+  @Field(type => [Ingredient])
+  items: Ingredient[]
+  @Field(type => Pagination)
+  pagination: Pagination
+}
+
+@ArgsType()
+export class IngredientListArgs {
+  @Field(type => Int, { nullable: true, defaultValue: 1 })
+  page: number
+  @Field(type => Int, { nullable: true, defaultValue: 25 })
+  size: number
+  @Field({ nullable: true })
+  nameSearchQuery: string
+}

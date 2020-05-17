@@ -13,7 +13,7 @@ import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-de
 import { index, plugin, post, pre, prop, Typegoose } from 'typegoose'
 
 
-export interface FoodSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface FoodSchema extends SoftDeleteModel<SoftDeleteDocument & Food> {
 }
 
 @pre<Food>('find', function (next) { // or @pre(this: Car, 'save', ...

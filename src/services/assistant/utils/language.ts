@@ -103,9 +103,9 @@ export default {
       recipes: [],
     }
   },
-  extractMealPlanSettings(data: any): MacroNutrientDistribution {
-    if (data.mealPlanSettings) {
-      return data.mealPlanSettings
+  extractPlanSettings(data: any): MacroNutrientDistribution {
+    if (data.planSettings) {
+      return data.planSettings
     }
 
     throw Error()

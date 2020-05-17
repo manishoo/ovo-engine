@@ -12,7 +12,7 @@ import { instanceMethod, InstanceType, plugin, prop, Typegoose } from 'typegoose
 import uuid from 'uuid/v1'
 
 
-export interface OperatorSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface OperatorSchema extends SoftDeleteModel<SoftDeleteDocument & OperatorSchema> {
 }
 
 @plugin(mongooseDelete, {

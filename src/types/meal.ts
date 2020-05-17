@@ -10,13 +10,12 @@ import { Ingredient, IngredientInput } from '@Types/ingredient'
 import { Author } from '@Types/user'
 import { ArrayNotEmpty, Max, Min } from 'class-validator'
 import { ArgsType, Field, FieldResolver, InputType, Int, ObjectType, Resolver, Root } from 'type-graphql'
-import { InstanceType } from 'typegoose'
 
 
 @ObjectType()
 export class MealListResponse {
   @Field(type => [Meal])
-  meals: InstanceType<Meal>[]
+  meals: Meal[]
   @Field(type => Pagination)
   pagination: Pagination
 }

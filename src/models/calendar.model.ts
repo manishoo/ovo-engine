@@ -4,23 +4,25 @@
  */
 
 import mongoose from '@Config/connections/mongoose'
+import { PlanSchema } from '@Models/plan.model'
 import { UserActivity } from '@Types/activity'
 import { Day, DayMeal } from '@Types/calendar'
-import { Ref } from '@Types/common'
-import { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
+import { ObjectId, Ref } from '@Types/common'
+import { Plan } from '@Types/plan'
+import { Field } from 'type-graphql'
 import { prop, Typegoose } from 'typegoose'
-import { UserSchema } from './user.model'
 
-
-export interface DaySchema extends SoftDeleteModel<SoftDeleteDocument> {
-}
 
 export class DaySchema extends Typegoose implements Day {
+  @Field()
+  readonly id: ObjectId
+  readonly _id: ObjectId
+
   @prop()
   date: Date
 
-  @prop({ ref: UserSchema })
-  user: Ref<UserSchema>
+  @prop({ ref: PlanSchema })
+  plan: Ref<Plan>
 
   @prop()
   meals: DayMeal[]

@@ -8,7 +8,7 @@ import { Author, User } from '@Types/user'
 
 export function transformRecipeUser(user: User): Author {
   return {
-    id: String(user._id),
+    id: String(user.id || user._id),
     username: user.username,
     firstName: user.firstName,
     lastName: user.lastName,

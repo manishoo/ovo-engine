@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import mongoose from '@Config/connections/mongoose'
+import { ObjectId, Translation } from '@Types/common'
+import { Diet } from '@Types/diet'
 import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-delete'
 import { plugin, prop, Typegoose } from 'typegoose'
-import { Diet } from '@Types/diet'
-import mongoose from '@Config/connections/mongoose'
-import { Translation, ObjectId } from '@Types/common'
 
 
-export interface DietSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface DietSchema extends SoftDeleteModel<SoftDeleteDocument & Diet> {
 }
 
 @plugin(mongooseDelete, {

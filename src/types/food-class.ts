@@ -9,6 +9,7 @@ import { FoodGroup } from '@Types/food-group'
 import { GraphQLUpload } from 'apollo-server'
 import { Max, Min } from 'class-validator'
 import { ArgsType, Field, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
+import { Food } from './food'
 
 
 export enum FOOD_CLASS_TYPES {
@@ -52,6 +53,8 @@ export class FoodClass {
   thumbnail?: Image
   @Field(type => String, { nullable: true })
   defaultFood?: ObjectId
+  @Field(type => Food, { nullable: true })
+  food?: Food
 
   origId: number
   nameScientific?: string
@@ -78,9 +81,9 @@ export class FoodClassInput {
   @Field(type => String, { nullable: true })
   defaultFood?: string
 
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   image?: any
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   thumbnail?: any
 }
 

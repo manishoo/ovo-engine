@@ -36,7 +36,7 @@ export class MessageAdditionalData {
   @Field(type => [String], { nullable: true })
   foods?: string[]
   @Field(type => MacroNutrientDistribution, { nullable: true })
-  mealPlanSettings?: MacroNutrientDistribution
+  planSettings?: MacroNutrientDistribution
   @Field(type => [UserMeal], { nullable: true })
   meals?: UserMeal[]
   @Field(type => User, { nullable: true })
@@ -99,8 +99,8 @@ export enum AssistantExpectations {
   chooseDiet = 'chooseDiet',
   meal = 'meal',
   normalRoutine = 'normalRoutine',
-  mealPlanSettings = 'mealPlanSettings',
-  mealPlan = 'mealPlan',
+  planSettings = 'planSettings',
+  plan = 'plan',
 }
 
 registerEnumType(AssistantExpectations, {
@@ -133,8 +133,8 @@ export enum MessageType {
   food = 'food',
   weight = 'weight',
   height = 'height',
-  mealPlanSettings = 'mealPlanSettings',
-  mealPlan = 'mealPlan',
+  planSettings = 'planSettings',
+  plan = 'plan',
   meals = 'meals',
 }
 

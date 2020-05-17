@@ -214,11 +214,10 @@ async function migrateContents() {
 
     for (let i = 0; i < arrays.length; i++) {
       await mongoContentModel.create(arrays[i].map(({ id, name, ...compound }: compoundsAttribute) => (<Partial<Content>>{
+        ...compound,
         name: createTranslations(name),
         type: CONTENT_TYPE.Compound,
         origId: id,
-
-        ...compound,
       })))
     }
   }

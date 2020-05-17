@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { UserSchema } from '@Models/user.model'
 import { UserActivity } from '@Types/activity'
 import { ObjectId, Ref } from '@Types/common'
 import { MealItem, MealItemInput } from '@Types/meal'
-import { User, UserMeal, UserMealInput } from '@Types/user'
+import { Plan } from '@Types/plan'
+import { UserMeal, UserMealInput } from '@Types/user'
 import { ArrayNotEmpty } from 'class-validator'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
@@ -75,16 +75,14 @@ export class BodyMeasurementInput {
 
 @ObjectType({ simpleResolvers: true })
 export class Day {
-  _id?: ObjectId
-
   @Field()
-  id?: ObjectId
+  readonly id: ObjectId
+  readonly _id: ObjectId
 
-  @Field(type => Date)
-  date: Date
+  plan: Ref<Plan>
 
-  @Field(type => User)
-  user: Ref<UserSchema>
+  @Field(type => Date, { nullable: true })
+  date?: Date
 
   @Field(type => [DayMeal])
   meals: DayMeal[]
@@ -101,8 +99,11 @@ export class DayInput {
   @Field({ nullable: true })
   id?: ObjectId
 
-  @Field(type => Date)
-  date: Date
+  @Field(type => Date, { nullable: true })
+  date?: Date
+
+  @Field()
+  planId: ObjectId
 
   @Field(type => [DayMealInput])
   meals: DayMealInput[]

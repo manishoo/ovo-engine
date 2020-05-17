@@ -1,22 +1,21 @@
 FROM node:10-alpine
-MAINTAINER Ouranos Studio
+MAINTAINER Mehdi J. Shooshtari
 
-WORKDIR /home/solarys
+WORKDIR /service
 
+RUN apk add --no-cache git
+
+# Copy and extract yarn cache
+# ADD .yarn-cache.tgz /
+COPY ["package.json", "yarn.lock", "./"]
+
+# Install only production
+# RUN yarn --verbose --production
+# COPY ["build", "locales", "./"]
+
+# Full install and build
+RUN yarn --no-cache --frozen-lockfile
+ADD tsconfig.json gulpfile.js ./
 COPY src src
 COPY locales locales
-COPY package.json .
-COPY package-lock.json .
-COPY tsconfig.json .
-COPY gulpfile.js .
-
-RUN npm install
-RUN npm run build
-RUN ls build
-
-RUN rm -rf src
-RUN rm package.json
-RUN rm tsconfig.json
-RUN rm gulpfile.js
-
-RUN npm prune --production
+RUN yarn run build

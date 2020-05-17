@@ -13,7 +13,7 @@ import { arrayProp, instanceMethod, prop, Typegoose } from 'typegoose'
 import { UserSchema } from './user.model'
 
 
-export interface MealSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface MealSchema extends SoftDeleteModel<SoftDeleteDocument & Meal> {
 }
 
 export class MealSchema extends Typegoose implements Meal {

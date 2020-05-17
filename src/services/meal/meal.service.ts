@@ -6,14 +6,13 @@
 import { MealModel } from '@Models/meal.model'
 import { UserModel } from '@Models/user.model'
 import FoodService from '@Services/food/food.service'
+import transformDbMealItem from '@Services/meal/transformers/meal-item.db-transformer'
 import calculateMealTiming from '@Services/meal/utils/calculate-meal-timing'
+import populateIngredients from '@Services/meal/utils/populate-ingredients'
 import RecipeService from '@Services/recipe/recipe.service'
-import { ObjectId, Pagination, Role } from '@Types/common'
-import { Food } from '@Types/food'
-import { IngredientInput } from '@Types/ingredient'
-import { ListMealsArgs, Meal, MealInput, MealItem, MealItemInput, MealListResponse } from '@Types/meal'
-import { Recipe } from '@Types/recipe'
-import { Author, User } from '@Types/user'
+import { ObjectId, Role } from '@Types/common'
+import { ListMealsArgs, Meal, MealInput, MealItem, MealListResponse } from '@Types/meal'
+import { User } from '@Types/user'
 import { ContextUser } from '@Utils/context'
 import Errors from '@Utils/errors'
 import generateAllCases from '@Utils/generate-all-cases'
@@ -50,14 +49,14 @@ export default class MealService {
       masterMealData.description = mealInput.description
     }
 
-    const masterMealMealItems = await this.validateMealItems(mealInput.items)
+    const masterMealMealItems = await populateIngredients(mealInput.items, this.foodService.get, this.recipeService.get) as MealItem[]
 
     const masterMealTiming = calculateMealTiming(masterMealMealItems)
     const masterMealNutrition = calculateMealNutrition(masterMealMealItems)
 
     const masterMealToBeCreated = new MealModel({
       ...masterMealData,
-      items: masterMealMealItems,
+      items: masterMealMealItems.map(mealItem => transformDbMealItem(mealItem)),
       timing: masterMealTiming,
       nutrition: masterMealNutrition,
     })
@@ -104,8 +103,6 @@ export default class MealService {
       })
     }
     let meal = await MealModel.findOne(query)
-      .populate('author')
-      .exec()
     if (!meal) throw new Errors.NotFound('meal not found')
 
     return transformMeal(meal)
@@ -144,8 +141,6 @@ export default class MealService {
       })
       .limit(variables.size)
       .skip(variables.size * (variables.page - 1))
-      .populate('author')
-      .exec()
 
     return {
       meals: meals.map(meal => transformMeal(meal)),
@@ -153,106 +148,22 @@ export default class MealService {
     }
   }
 
-  async validateMealItems(mealInputItems: (MealItemInput | IngredientInput)[]): Promise<MealItem[]> {
-    return Promise.all(mealInputItems.map(async mealItemInput => {
-      /**
-       * Raise error if food and recipe were provided or
-       * none were provided
-       * */
-      if (mealItemInput.food && mealItemInput.recipe) {
-        throw new Errors.UserInput('Wrong input', {
-          'food': 'Only one of the following fields can be used',
-          'recipe': 'Only one of the following fields can be used'
-        })
-      }
-      if (!mealItemInput.food && !mealItemInput.recipe) {
-        throw new Errors.UserInput('Wrong input', {
-          'food': 'One of the items should be used',
-          'recipe': 'One of the items should be used'
-        })
-      }
-
-      const baseMealItem: Partial<MealItem> = {
-        id: mealItemInput.id || new ObjectId(),
-        amount: mealItemInput.amount,
-        isOptional: mealItemInput.isOptional,
-        customUnit: mealItemInput.customUnit,
-        description: mealItemInput.description,
-        name: mealItemInput.name,
-      }
-
-      /**
-       * Check and set the alternative meal items
-       * */
-      if ('alternativeMealItems' in mealItemInput) {
-        const mealItems = await this.validateMealItems(mealItemInput.alternativeMealItems as MealItemInput[])
-        baseMealItem.alternativeMealItems = mealItems.map(mealItem => {
-          if (!mealItem.id) mealItem.id = new ObjectId()
-
-          return mealItem
-        })
-      }
-
-      /**
-       * Check and select the unit: part 1
-       * */
-      switch (mealItemInput.unit) {
-        case 'customUnit':
-          baseMealItem.unit = mealItemInput.customUnit
-          break
-        case 'g':
-          baseMealItem.unit = undefined
-          break
-      }
-
-      if (mealItemInput.food) {
-        const food = await this.foodService.get(mealItemInput.food)
-        if (!food) throw new Errors.NotFound('food not found')
-
-        /**
-         * Check and select the unit: part 2
-         * */
-        if (mealItemInput.unit && ObjectId.isValid(mealItemInput.unit)) {
-          const foundWeight = food.weights.find(w => w.id!.toString() == mealItemInput.unit)
-          if (!foundWeight) throw new Errors.Validation('Unit is not valid')
-
-          baseMealItem.unit = foundWeight
-        }
-
-        return {
-          ...baseMealItem,
-          item: {
-            ...food.toObject(),
-            id: String(food._id),
-          },
-        } as MealItem
-      } else if (mealItemInput.recipe) {
-        const recipe = await this.recipeService.get(mealItemInput.recipe)
-        if (!recipe) throw new Errors.NotFound('recipe not found')
-
-        return {
-          ...baseMealItem,
-          item: recipe,
-        } as MealItem
-      }
-
-      throw new Errors.System('No food or recipe')
-    }))
-  }
-
   async update(id: ObjectId, mealInput: MealInput, userId: string): Promise<Meal> {
     let meal = await MealModel.findById(id)
-      .populate('author')
-      .exec()
 
     if (!meal) throw new Errors.NotFound('meal not found')
-    const author = meal.author as Author
-    if (author.id !== userId) throw new Errors.Forbidden('Update failed. you only can update your own meals')
+    if (String(meal.author as ObjectId) !== userId) throw new Errors.Forbidden('Update failed. you only can update your own meals')
 
     meal.name = mealInput.name
     meal.description = mealInput.description
     meal.nutrition = calculateMealNutrition(meal.items)
-    meal.items = await this.validateMealItems(mealInput.items)
+
+    const masterMealMealItems = await populateIngredients(mealInput.items, this.foodService.get, this.recipeService.get) as MealItem[]
+
+    meal.nutrition = calculateMealNutrition(masterMealMealItems)
+    meal.timing = calculateMealTiming(masterMealMealItems)
+
+    meal.items = masterMealMealItems.map(mealItem => transformDbMealItem(mealItem) as MealItem)
     let savedMeal = await meal.save()
 
     return this.get(savedMeal._id)
@@ -349,34 +260,5 @@ export default class MealService {
     }
 
     return finalMeals
-  }
-
-  async updateMealsByIngredient(ingredient: Food | Recipe) {
-    let paginationCursor: Partial<Pagination> = {
-      page: 1,
-      hasNext: true,
-      size: 100,
-    }
-
-    while (paginationCursor.hasNext) {
-      const { meals, pagination } = await this.list({
-        ingredientId: ingredient._id,
-        size: paginationCursor.size,
-        page: paginationCursor.page
-      })
-
-      await Promise.all(meals.map(async meal => {
-        meal.items = meal.items.map(mealItem => {
-          if (mealItem.item && (mealItem.item.id === ingredient.id)) {
-            mealItem.item = ingredient
-          }
-
-          return mealItem
-        })
-        return meal.save()
-      }))
-
-      paginationCursor = pagination
-    }
   }
 }

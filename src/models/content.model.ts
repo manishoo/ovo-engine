@@ -10,7 +10,7 @@ import mongooseDelete, { SoftDeleteDocument, SoftDeleteModel } from 'mongoose-de
 import { instanceMethod, plugin, prop, Typegoose } from 'typegoose'
 
 
-export interface ContentSchema extends SoftDeleteModel<SoftDeleteDocument> {
+export interface ContentSchema extends SoftDeleteModel<SoftDeleteDocument & Content> {
 }
 
 @plugin(mongooseDelete, {

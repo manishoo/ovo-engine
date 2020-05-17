@@ -59,7 +59,7 @@ export default class UserService {
       }
       let user: ContextUser = {
         id: dbUser._id,
-        status: dbUser.status,
+        status: dbUser.status!,
         role: dbUser.role,
         type: ContextUserType.user,
         session,
@@ -70,10 +70,11 @@ export default class UserService {
     }
   }
 
-  async getUserById(userId: string): Promise<User> {
+  async getUserById(userId: string | ObjectId, careGiver?: string | ObjectId): Promise<User> {
     const user = await UserModel.findById(userId)
 
     if (!user) throw new Errors.NotFound('User not found')
+    if (careGiver && !user.careGivers.find(ct => String((ct as ObjectId)) === String(careGiver))) throw new Errors.NotFound('Invalid care giver')
 
     return user
   }
@@ -125,7 +126,7 @@ export default class UserService {
 
     return {
       user: checkUser,
-      session: checkUser.session,
+      session: checkUser.session!,
     }
   }
 

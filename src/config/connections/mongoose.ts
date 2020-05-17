@@ -40,9 +40,7 @@ mongoose.connection.on('error', (error) => {
 mongoose.Promise = require('bluebird')
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-  mongoose.set('error', function (collectionName: any, method: any, query: any, doc: any, options: any) {
-    logger.info('mongo collection: %s method: %s', collectionName, method)
-  })
+  mongoose.set('debug', true)
 }
 
 export default mongoose

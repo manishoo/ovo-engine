@@ -3,12 +3,11 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { MealPlanSchema } from '@Models/meal-plan.model'
 import { PersistedPassword } from '@Types/auth'
 import { Image, ObjectId, Ref, Role, Status } from '@Types/common'
 import { Diet } from '@Types/diet'
-import { Event } from '@Types/event'
 import { Household } from '@Types/household'
+import { Plan } from '@Types/plan'
 import { GraphQLUpload } from 'apollo-server'
 import { ArrayNotEmpty, IsEmail, IsPhoneNumber } from 'class-validator'
 import { ArgsType, Field, Float, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
@@ -312,47 +311,68 @@ export class Author extends BasicUser {
 @ObjectType()
 export class User extends BasicUser {
   password: PersistedPassword
+
   @Field({ nullable: true })
   session?: string
+
   @Field()
   @IsEmail()
   email: string
+
   @Field({ nullable: true })
   @IsPhoneNumber('any')
   phoneNumber?: string
+
   @Field(type => Float, { nullable: true })
   caloriesPerDay?: number
+
   @Field({ nullable: true })
   height?: Height
+
   @Field({ nullable: true })
   weight?: WeightUnit
+
   @Field({ nullable: true })
   age?: number
+
   @Field(type => Int, { nullable: true })
   bodyFat?: number
+
   @Field(type => Gender, { nullable: true })
   gender?: Gender
+
   @Field(type => NutritionProfile)
   nutritionProfile: NutritionProfile
+
   @Field(type => Diet, { nullable: true })
   diet?: Diet
+
   foodAllergies?: string[]
+
   status?: Status
+
   @ArrayNotEmpty()
   @Field(type => [UserMeal])
   meals: UserMeal[]
-  mealPlans?: Ref<MealPlanSchema>[]
-  household?: Ref<Household>
+
+  @Field(type => ObjectId)
+  plan: Ref<Plan>
+
+  household: Ref<Household>
+
   activityLevel?: ActivityLevel
+
   goal?: Goal
-  @Field(type => [Event], { nullable: true })
-  path?: Event[]
+
   @Field(type => Membership, { nullable: true })
   membership?: Membership
+
   timeZone?: string
 
   @Field(type => Achievements)
   achievements: Achievements
+
+  careGivers: Ref<User>[]
 }
 
 @InputType()
@@ -397,7 +417,7 @@ export class UserUpdateInput {
   lastName?: string
   @Field(type => Gender, { nullable: true })
   gender?: Gender
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   avatar?: any
   @Field(type => SocialNetworksInput)
   socialNetworks: SocialNetworksInput

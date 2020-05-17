@@ -4,34 +4,67 @@
  */
 
 import { CalendarModel } from '@Models/calendar.model'
+import { PlanModel } from '@Models/plan.model'
 import { UserModel } from '@Models/user.model'
 import ActivityService from '@Services/activity/activity.service'
-import MealService from '@Services/meal/meal.service'
+import FoodService from '@Services/food/food.service'
+import transformDbMealItem from '@Services/meal/transformers/meal-item.db-transformer'
+import populateIngredients from '@Services/meal/utils/populate-ingredients'
+import RecipeService from '@Services/recipe/recipe.service'
+import UserService from '@Services/user/user.service'
 import { UserActivity } from '@Types/activity'
 import { Day, DayInput, DayMeal, LogActivityInput } from '@Types/calendar'
 import { ObjectId } from '@Types/common'
 import { IngredientInput } from '@Types/ingredient'
+import { MealItem } from '@Types/meal'
 import Errors from '@Utils/errors'
+
+import { parseFromTimeZone } from 'date-fns-timezone'
 import addDays from 'date-fns/addDays'
 import setHours from 'date-fns/setHours'
 import setMinutes from 'date-fns/setMinutes'
 import subDays from 'date-fns/subDays'
+import { ArgsType, Field } from 'type-graphql'
 import { Service } from 'typedi'
 import { InstanceType } from 'typegoose'
 
+
+@ArgsType()
+export class LogMealArgs {
+  @Field({ nullable: true })
+  date?: Date
+
+  @Field({ nullable: true })
+  dayId?: ObjectId
+
+  @Field()
+  planId: ObjectId
+
+  @Field()
+  dayMealId: ObjectId
+
+  @Field(type => [IngredientInput])
+  ingredientInputs: IngredientInput[]
+}
 
 @Service()
 export default class CalendarService {
   constructor(
     // service injection
-    private readonly mealService: MealService,
+    private readonly foodService: FoodService,
+    private readonly recipeService: RecipeService,
     private readonly activityService: ActivityService,
+    private readonly userService: UserService,
   ) {
     // noop
   }
 
-  async listDays(userId: string, dates: Date[]): Promise<Day[]> {
-    let query: any = {}
+  async listDays(planId: ObjectId, dates: Date[], userId: string): Promise<Day[]> {
+    await this._checkOwnPlan(planId, userId)
+
+    const query: any = {
+      plan: planId,
+    }
 
     query.$or = dates.map(d => {
       const nextDayOfTime = addDays(new Date(d), 1)
@@ -39,37 +72,48 @@ export default class CalendarService {
 
       return { date: { $gte: lastDayOfTime, $lte: nextDayOfTime } }
     })
-    query.user = new ObjectId(userId)
 
     return CalendarModel.find(query)
   }
 
   async createDay(dayInput: DayInput, userId: string): Promise<InstanceType<Day>> {
+    await this._checkOwnPlan(dayInput.planId, userId)
+
     return CalendarModel.create(<Day>{
       _id: dayInput.id,
       date: dayInput.date,
-      nutritionProfile: dayInput.nutritionProfile,
-      user: new ObjectId(userId),
+      plan: dayInput.planId,
       meals: await Promise.all(dayInput.meals.map(async dayMeal => ({
         ...dayMeal,
-        items: dayMeal.items ? await this.mealService.validateMealItems(dayMeal.items) : []
+        items: dayMeal.items ? (await populateIngredients(dayMeal.items, this.foodService.get, this.recipeService.get)).map(transformDbMealItem) : []
       })))
     })
   }
 
-  async deleteDay(dayId: ObjectId, userId: string): Promise<ObjectId> {
-    await CalendarModel.deleteOne({ _id: dayId, user: new ObjectId(userId) })
+  async deleteDay(dayId: ObjectId, planId: ObjectId, userId: string): Promise<ObjectId> {
+    await this._checkOwnPlan(planId, userId)
+
+    await CalendarModel.deleteOne({ _id: dayId })
 
     return dayId
   }
 
-  async logMeal(date: Date, userMealId: string, ingredientInputs: IngredientInput[], userId: string): Promise<DayMeal> {
-    let day = await this.findOrCreateDayByTime(userId, date!)
+  async logMeal({ date, dayId, planId, dayMealId, ingredientInputs }: LogMealArgs, userId: string): Promise<DayMeal> {
+    await this._checkOwnPlan(planId, userId)
+
+    let day
+    if (dayId) {
+      day = await this.get(dayId, planId, userId)
+    } else if (date) {
+      day = await this.findOrCreateDayByTime(planId, userId, date)
+    } else {
+      throw new Errors.Validation('Date or dayId must be provided')
+    }
 
     let loggedMeal = undefined
     day.meals = await Promise.all(day.meals.map(async meal => {
-      if (meal.userMeal && (meal.userMeal.id === userMealId)) {
-        const items = await this.mealService.validateMealItems(ingredientInputs)
+      if (String(meal.id) === String(dayMealId)) {
+        const items = await populateIngredients(ingredientInputs, this.foodService.get, this.recipeService.get)
 
         loggedMeal = {
           ...meal,
@@ -79,12 +123,14 @@ export default class CalendarService {
 
             return {
               ...ingredient,
-              // hasAlternatives: alternativeMealItems.length > 0,
               alternativeMealItems,
             }
           }),
         }
-        return loggedMeal
+        return {
+          ...loggedMeal,
+          items: loggedMeal.items.map(mealItem => transformDbMealItem(mealItem) as MealItem)
+        }
       }
 
       return meal
@@ -96,18 +142,20 @@ export default class CalendarService {
     return loggedMeal
   }
 
-  async get(dayId: ObjectId, userId: string): Promise<InstanceType<Day>> {
+  async get(dayId: ObjectId, planId: ObjectId, userId: string): Promise<InstanceType<Day>> {
+    await this._checkOwnPlan(planId, userId)
+
     const day = await CalendarModel.findOne({
       _id: dayId,
-      user: new ObjectId(userId),
+      plan: planId,
     })
     if (!day) throw new Errors.NotFound('Day not found')
 
     return day
   }
 
-  async eatMeal(eaten: boolean, dayId: ObjectId, userMealId: string, userId: string): Promise<boolean> {
-    const day = await this.get(dayId, userId)
+  async eatMeal(eaten: boolean, dayId: ObjectId, planId: ObjectId, userMealId: string, userId: string): Promise<boolean> {
+    const day = await this.get(dayId, planId, userId)
 
     day.meals = day.meals.map(meal => {
       if (meal.userMeal && (meal.userMeal.id === userMealId)) {
@@ -122,11 +170,11 @@ export default class CalendarService {
     return true
   }
 
-  async logActivity(activities: LogActivityInput[], userId: string): Promise<Day[]> {
+  async logActivity(activities: LogActivityInput[], planId: ObjectId, userId: string): Promise<Day[]> {
     let days = []
 
     for (let activity of activities) {
-      let day = await this.findOrCreateDayByTime(userId, activity.time)
+      let day = await this.findOrCreateDayByTime(planId, userId, activity.time)
 
       let dbActivity = await this.activityService.activity(activity.activityId)
 
@@ -150,14 +198,20 @@ export default class CalendarService {
     return days
   }
 
-  async findDayByDate(userId: string, date: Date): Promise<InstanceType<Day> | null> {
+  async findDayByDate(planId: ObjectId, userId: string, date: Date): Promise<InstanceType<Day> | null> {
+    const user = await this.userService.getUserById(userId)
+
+    if (user.timeZone) {
+      date = parseFromTimeZone(String(date.toUTCString()), { timeZone: user.timeZone })
+    }
+
     const nextDayOfTime = addDays(new Date(date), 1)
     const lastDayOfTime = subDays(new Date(date), 1)
 
     let userActiveDays = await CalendarModel.aggregate([
       {
         $match: {
-          user: new ObjectId(userId),
+          plan: planId,
           date: { $gte: lastDayOfTime, $lte: nextDayOfTime }
         }
       },
@@ -166,7 +220,10 @@ export default class CalendarService {
           _id: {
             month: { $month: '$date' },
             day: { $dayOfMonth: '$date' },
-            year: { $year: '$date' }
+            year: { $year: '$date' },
+            hour: { $hour: '$date' },
+            minute: { $minute: '$date' },
+            second: { $second: '$date' },
           },
           items: { $addToSet: '$_id' }
         }
@@ -175,10 +232,19 @@ export default class CalendarService {
 
     let dayId = null
     userActiveDays.map(activeDay => {
+      const {
+        month,
+        day,
+        year,
+        hour,
+        minute,
+        second,
+      } = activeDay._id
+      const activeDate = parseFromTimeZone(`${year}-${month}-${day}T${hour}:${minute}:${second}`, { timeZone: user.timeZone! })
       if (
-        (activeDay._id.year == date.getFullYear()) &&
-        (activeDay._id.month == date.getMonth() + 1) &&
-        (activeDay._id.day == date.getDate())) {
+        (activeDate.getFullYear() == date.getFullYear()) &&
+        (activeDate.getMonth() == date.getMonth()) &&
+        (activeDate.getDate() == date.getDate())) {
 
         dayId = activeDay.items[0]
       }
@@ -192,14 +258,17 @@ export default class CalendarService {
     return day
   }
 
-  async findOrCreateDayByTime(userId: string, date: Date): Promise<InstanceType<Day>> {
+  async findOrCreateDayByTime(planId: ObjectId, userId: string, date: Date): Promise<InstanceType<Day>> {
+    await this._checkOwnPlan(planId, userId)
+
     const user = await UserModel.findById(userId)
     if (!user) throw new Errors.System()
 
-    let day = await this.findDayByDate(userId, date)
+    let day = await this.findDayByDate(planId, userId, date)
 
     if (!day) {
       day = await this.createDay({
+        planId,
         meals: user.meals.map(userMeal => {
           let time = date
           time = setHours(time, Number(userMeal.time.split(':')[0]))
@@ -213,11 +282,17 @@ export default class CalendarService {
             ate: false,
           }
         }),
-        nutritionProfile: user.nutritionProfile,
         date: date,
       }, userId)
     }
 
     return day!
+  }
+
+  private async _checkOwnPlan(planId: ObjectId, userId: string) {
+    const plan = await PlanModel.findOne({ _id: planId, user: new ObjectId(userId) })
+    if (!plan) throw new Errors.Forbidden('Not your meal plan')
+
+    return true
   }
 }

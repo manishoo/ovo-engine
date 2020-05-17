@@ -11,6 +11,11 @@ import { prop } from 'typegoose'
 export enum LanguageCode {
   en = 'en',
   fa = 'fa',
+  ar = 'ar',
+  fr = 'fr',
+  it = 'it',
+  es = 'es',
+  de = 'de',
 }
 
 registerEnumType(LanguageCode, {

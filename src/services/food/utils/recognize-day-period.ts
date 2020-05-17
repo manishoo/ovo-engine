@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
-import { DAY_PERIOD } from '@Types/meal-plan'
+import { DAY_PERIOD } from '@Types/plan'
 
 
 export function recognizeDayPeriod(time: string): DAY_PERIOD {

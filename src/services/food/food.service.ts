@@ -30,10 +30,13 @@ export default class FoodService {
     let food = await FoodModel.findById(foodId)
     if (!food) throw new Errors.NotFound('Food not found')
 
-    return food
+    return {
+      id: food.id,
+      ...food.toObject(),
+    } as Food
   }
 
-  async list({ page, size, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
+  async list({ page = 1, size = 25, foodClassId, nameSearchQuery, withDeleted }: FoodListArgs): Promise<FoodsListResponse> {
     let query: any = {}
     if (foodClassId) {
       query['foodClass'] = new ObjectId(foodClassId)
@@ -182,12 +185,7 @@ export default class FoodService {
 
     let savedFood = await food.save()
 
-    /**
-     * Update all meals that have this food
-     * */
-    await this.mealService.updateMealsByIngredient(savedFood)
-
-    return savedFood
+    return savedFood.toObject()
   }
 
   async delete(foodID: ObjectId, user: ContextUser, restore?: boolean): Promise<Food> {

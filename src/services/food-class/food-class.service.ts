@@ -148,12 +148,12 @@ export default class FoodClassService {
       const foodClass = await FoodClassModel.findById(foodClassID)
       if (!foodClass) throw new Errors.NotFound('food class not found')
 
-      return foodClass
+      return foodClass.toObject()
     } else {
       const foodClass = await FoodClassModel.findOne({ slug })
       if (!foodClass) throw new Errors.NotFound('food class not found')
 
-      return foodClass
+      return foodClass.toObject()
     }
   }
 

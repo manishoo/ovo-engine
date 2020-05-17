@@ -26,10 +26,11 @@ export default class CalendarResolver {
   @Authorized(Role.user)
   @Query(returns => [Day])
   async calendar(
+    @Arg('planId') planId: ObjectId,
     @Arg('dates', type => [Date]) dates: Date[],
     @Ctx() ctx: Context,
   ): Promise<Day[]> {
-    return this.calendarService.listDays(ctx.user!.id, dates)
+    return this.calendarService.listDays(planId, dates, ctx.user!.id)
   }
 
   @Authorized(Role.user)
@@ -47,21 +48,32 @@ export default class CalendarResolver {
   }
 
   @Authorized(Role.user)
+  @Mutation(returns => [Day])
+  async generateDays(
+    @Arg('dates', type => [Date]) dates: Date[],
+    @Ctx() ctx: Context,
+  ) {
+    return this.mealSuggestionService.generateDays(dates, ctx.user!.id)
+  }
+
+  @Authorized(Role.user)
   @Mutation(returns => ObjectId)
   async clearDay(
     @Arg('dayId') dayId: ObjectId,
+    @Arg('planId') planId: ObjectId,
     @Ctx() ctx: Context,
   ) {
-    return this.calendarService.deleteDay(dayId, ctx.user!.id)
+    return this.calendarService.deleteDay(dayId, planId, ctx.user!.id)
   }
 
   @Authorized(Role.user)
   @Mutation(returns => [Day])
   async logActivities(
     @Arg('activities', type => [LogActivityInput]) activities: LogActivityInput[],
+    @Arg('planId') planId: ObjectId,
     @Ctx() ctx: Context,
   ) {
-    return this.calendarService.logActivity(activities, ctx.user!.id)
+    return this.calendarService.logActivity(activities, planId, ctx.user!.id)
   }
 
   @Authorized(Role.user)

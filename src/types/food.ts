@@ -585,9 +585,9 @@ export class FoodInput {
   weights: WeightInput[]
   @Field(type => NutritionInput)
   nutrition: NutritionInput
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   image?: any
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   thumbnail?: any
   @Field({ nullable: true })
   foodClassId?: ObjectId
@@ -596,14 +596,14 @@ export class FoodInput {
 @ArgsType()
 export class FoodListArgs {
   @Field(type => Int, { nullable: true, defaultValue: 1 })
-  page: number
+  page?: number
   @Field(type => Int, { nullable: true, defaultValue: 10 })
-  size: number
+  size?: number
   @Field({ nullable: true })
-  foodClassId: string
+  foodClassId?: string
   @Field({ nullable: true })
-  nameSearchQuery: string
+  nameSearchQuery?: string
   @Authorized(Role.operator)
   @Field({ nullable: true })
-  withDeleted: boolean
+  withDeleted?: boolean
 }

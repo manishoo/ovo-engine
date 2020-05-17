@@ -25,8 +25,30 @@ import addHours from 'date-fns/addHours'
 import setHours from 'date-fns/setHours'
 import setMinutes from 'date-fns/setMinutes'
 import subHours from 'date-fns/subHours'
+import { ArgsType, Field } from 'type-graphql'
 import { Service } from 'typedi'
 
+
+@ArgsType()
+export class SuggestMealInput {
+  @Field()
+  planId: ObjectId
+
+  @Field()
+  dayId: ObjectId
+
+  @Field()
+  dayMealId: ObjectId
+
+  @Field({ nullable: true })
+  careTaker?: ObjectId
+}
+
+@ArgsType()
+export class SuggestMealItemInput extends SuggestMealInput {
+  @Field()
+  mealItemId: ObjectId
+}
 
 async function selectAlternativeMealItem(userId: string, meal: DayMeal, mealItem: MealItem): Promise<Ingredient> {
   const previousMealItemSuggestionsRedisKey = RedisKeys.previousMealItemSuggestions(userId, String(meal.id))
@@ -58,7 +80,7 @@ export default class SuggestionService {
   }
 
   async findBestMeal(userMeal: UserMeal, nutritionProfile: NutritionProfile | NutritionProfileInput, userMeals: UserMeal[], diet?: Diet, userId?: string): Promise<Meal> {
-    /* TODO bias conditions: user excluded foods and food classes */
+    /* TODO bias conditions: user excluded foods and foo4d classes */
     const biasConditions: any = {}
 
     /**
@@ -153,26 +175,21 @@ export default class SuggestionService {
     return finalMeal
   }
 
-  async suggestMealItem(mealItemId: string, userMealId: string, date: Date, userId: string) {
-    const user = await UserModel.findById(userId)
-    if (!user) throw new Errors.NotFound('User not found')
+  async suggestMealItem({ planId, dayId, dayMealId, careTaker, mealItemId }: SuggestMealItemInput, userId: string) {
+    // const user = await this.userService.getUserById(careTaker || userId, careTaker ? userId : undefined)
+    const day = await this.calendarService.get(dayId, planId, userId)
 
-    const userMeal: UserMeal | undefined = user.meals.find(meal => meal.id === userMealId)
-    if (!userMeal) throw new Errors.NotFound('User meal not found')
-
-    const day = await this.calendarService.findOrCreateDayByTime(userId, date)
-
-    const foundMeal = day.meals.find(meal => meal.userMeal ? meal.userMeal.id === userMealId : false)
+    const foundMeal = day.meals.find(meal => String(meal.id) === String(dayMealId))
     if (!foundMeal) throw new Errors.NotFound('Meal not found')
 
     let suggestedMealItem: MealItem | undefined = undefined
 
     day.meals = await Promise.all(day.meals.map(async meal => {
-      if (meal.userMeal && (meal.userMeal.id === userMealId)) {
+      if (String(meal.id) === String(dayMealId)) {
         return {
           ...meal,
           items: await Promise.all(meal.items.map(async mealItem => {
-            if (String(mealItem.id) == mealItemId) {
+            if (String(mealItem.id) === String(mealItemId)) {
               /**
                * If the meal item had alternative meal items
                * use an alternative meal item
@@ -215,51 +232,48 @@ export default class SuggestionService {
     return suggestedMealItem
   }
 
-  async suggestMeal(userMealId: string, date: Date, userId: string): Promise<DayMeal> {
-    const user = await UserModel.findById(userId)
-    if (!user) throw new Errors.NotFound('User not found')
+  async suggestMeal({ planId, dayId, dayMealId, careTaker }: SuggestMealInput, userId: string): Promise<DayMeal> {
+    const day = await this.calendarService.get(dayId, planId, userId)
+    const foundMeal = day.meals.find(meal => String(meal.id) === String(dayMealId))
+    if (!foundMeal) throw new Errors.NotFound('Day meal not found')
 
-    const userMeal: UserMeal | undefined = user.meals.find(meal => meal.id === userMealId)
-    if (!userMeal) throw new Errors.NotFound('User meal not found')
-
-    const day = await this.calendarService.findOrCreateDayByTime(userId, date)
-    const foundMeal = day.meals.find(meal => meal.userMeal ? meal.userMeal.id === userMealId : false)
+    const user = await this.userService.getUserById(careTaker || userId, careTaker ? userId : undefined)
 
     let dayMeal: DayMeal | undefined = undefined
 
     /**
      * If meal exists
      * */
-    if (foundMeal) {
-      day.meals = await Promise.all(day.meals.map(async meal => {
-        if (meal.userMeal && (meal.userMeal.id === userMealId)) {
-          const bestMeal = await this.findBestMeal(meal.userMeal, user.nutritionProfile, user.meals, user.diet, userId)
+    // if (foundMeal) {
+    day.meals = await Promise.all(day.meals.map(async meal => {
+      if (String(meal.id) === String(dayMealId)) {
+        const bestMeal = await this.findBestMeal(meal.userMeal, user.nutritionProfile, day.meals.map(m => m.userMeal), user.diet, userId)
 
-          dayMeal = {
-            ...meal,
-            mealId: bestMeal._id,
-            items: bestMeal.items,
-          }
-          return dayMeal
+        dayMeal = {
+          ...meal,
+          mealId: bestMeal._id,
+          items: bestMeal.items,
         }
-
-        return meal
-      }))
-    } else {
-      const bestMeal = await this.findBestMeal(userMeal, user.nutritionProfile, user.meals, user.diet, userId)
-      let time = day.date
-      time = setHours(time, Number(userMeal.time.split(':')[0]))
-      time = setMinutes(time, Number(userMeal.time.split(':')[1]))
-
-      dayMeal = {
-        id: new ObjectId(),
-        userMeal,
-        mealId: bestMeal._id,
-        items: bestMeal.items,
-        time,
+        return dayMeal
       }
-      day.meals.push(dayMeal)
+
+      return meal
+    }))
+    // } else {
+    /*const bestMeal = await this.findBestMeal(userMeal, user.nutritionProfile, user.meals, user.diet, userId)
+    let time = day.date || new Date()
+    time = setHours(time, Number(userMeal.time.split(':')[0]))
+    time = setMinutes(time, Number(userMeal.time.split(':')[1]))
+
+    dayMeal = {
+      id: new ObjectId(),
+      userMeal,
+      mealId: bestMeal._id,
+      items: bestMeal.items,
+      time,
     }
+    day.meals.push(dayMeal)*/
+    // }
 
     await day.save()
     if (!dayMeal) throw new Errors.System('Something went wrong')
@@ -270,11 +284,16 @@ export default class SuggestionService {
     const user = await UserModel.findById(userId)
     if (!user) throw new Errors.NotFound('User not found')
 
-    const day = await this.calendarService.findOrCreateDayByTime(userId, dayInput.date)
+    let day
+    if (dayInput.date) {
+      day = await this.calendarService.findOrCreateDayByTime(dayInput.planId, userId, dayInput.date)
+    } else {
+      day = await this.calendarService.createDay(dayInput, userId)
+    }
     let dayMeals: DayMeal[] = []
 
     for (let dayMeal of dayInput.meals) {
-      const selectedMeal = await this.findBestMeal(dayMeal.userMeal, dayInput.nutritionProfile, dayInput.meals.map(dayMeal => dayMeal.userMeal), user.diet, userId)
+      const selectedMeal = await this.findBestMeal(dayMeal.userMeal, user.nutritionProfile, dayInput.meals.map(dayMeal => dayMeal.userMeal), user.diet, userId)
 
       dayMeals.push({
         id: new ObjectId(),
@@ -289,6 +308,29 @@ export default class SuggestionService {
     day.meals = dayMeals
 
     return day.save()
+  }
+
+  async generateDays(dates: Date[], userId: string): Promise<Day[]> {
+    const user = await this.userService.getUserById(userId)
+
+    // FIXME performance while doing promise all?
+    return Promise.all(dates.map(date => this.suggestDay({
+      meals: user.meals.map(userMeal => {
+        let time = date
+        time = setHours(time, Number(userMeal.time.split(':')[0]))
+        time = setMinutes(time, Number(userMeal.time.split(':')[1]))
+
+        return {
+          userMeal,
+          ate: false,
+          time,
+          items: [],
+        }
+      }),
+      date,
+      id: new ObjectId(),
+      planId: user.plan as ObjectId,
+    }, userId)))
   }
 
   async suggestDayMeals(userMeals: UserMealInput[], nutritionProfile: NutritionProfileInput, dietId?: ObjectId): Promise<DayMeal[]> {

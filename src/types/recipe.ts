@@ -27,9 +27,9 @@ import { ArgsType, Authorized, Field, InputType, Int, ObjectType, registerEnumTy
 
 
 export enum RecipeStatus {
-  private = 'private',
-  public = 'public',
-  review = 'review',
+  unverified = 'unverified',
+  verified = 'verified',
+  reviewing = 'reviewing',
 }
 
 registerEnumType(RecipeStatus, {
@@ -163,6 +163,7 @@ export class RecipeOrigin {
 @ObjectType()
 export class Recipe {
   readonly _id: ObjectId
+
   @Field()
   id: string
 
@@ -174,6 +175,9 @@ export class Recipe {
 
   @Field(type => Int)
   serving: number
+
+  @Field(type => [Translation], { nullable: true })
+  servingName?: Translation[]
 
   @Field()
   slug: string
@@ -254,7 +258,7 @@ export class InstructionInput {
   @Field(type => [TranslationInput], { nullable: true })
   note?: TranslationInput[]
 
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   image?: any
 }
 
@@ -274,6 +278,9 @@ export class RecipeInput {
   @Field(type => Int)
   serving: number
 
+  @Field(type => [TranslationInput], { nullable: true })
+  servingName?: TranslationInput[]
+
   @Field(type => TimingInput)
   timing: TimingInput
 
@@ -284,12 +291,12 @@ export class RecipeInput {
   slug?: string
 
   @Field(type => [TranslationInput], { nullable: true })
-  description: [TranslationInput]
+  description?: [TranslationInput]
 
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   image?: any
 
-  @Field(type => GraphQLUpload, { nullable: true })
+  @Field(type => GraphQLUpload!, { nullable: true })
   thumbnail?: any
 
   @Field(type => [String], { nullable: true })

@@ -142,7 +142,7 @@ export default class Cognition {
                 const userInstance = (await UserModel.findById(user.id))!
 
                 userInstance.firstName = tempData.nickname
-                // userInstance.mealPlanSettings = tempData.mealPlanSettings
+                // userInstance.planSettings = tempData.planSettings
                 // userInstance.caloriesPerDay = tempData.tdee // FIXME get in setup nutritionProfile
                 userInstance.nutritionProfile = {
                   ...userInstance.nutritionProfile,
@@ -161,7 +161,7 @@ export default class Cognition {
                 }
                 await userInstance.save()
 
-                return askForMealPlan(lang, tempData.tdee, userInstance)
+                return askForPlan(lang, tempData.tdee, userInstance)
               } else {
                 return askForRegistration(lang)
               }
@@ -178,7 +178,7 @@ export default class Cognition {
                 email: validatedData.email,
                 timeZone: validatedData.timeZone,
                 firstName: tempData.nickname,
-                // mealPlanSettings: tempData.mealPlanSettings,
+                // planSettings: tempData.planSettings,
                 // caloriesPerDay: tempData.tdee,
                 nutritionProfile: {
                   ...userConfig.defaultNutritionProfile,
@@ -201,7 +201,7 @@ export default class Cognition {
                 }
               })
 
-              return askForMealPlan(lang, tempData.tdee, user)
+              return askForPlan(lang, tempData.tdee, user)
             }
           }
 
@@ -313,14 +313,13 @@ function askForRegistration(lang: LanguageCode,) {
   ]
 }
 
-function askForMealPlan(lang: LanguageCode, targetCalories: number, user?: User) {
+function askForPlan(lang: LanguageCode, targetCalories: number, user?: User) {
   return [
-    createMessage(__({ phrase: 'assistantWhatHappensNext1', locale: lang })),
     createMessage(__({
-      phrase: 'assistantWhatHappensNext2',
+      phrase: 'assistantWhatHappensNext1',
       locale: lang
-    }, { cal: String(Math.ceil(targetCalories)) }), {
-      expect: AssistantExpectations.mealPlan,
+    }), {
+      expect: AssistantExpectations.plan,
       type: MessageType.ack,
       items: [],
       user,
