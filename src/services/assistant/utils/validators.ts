@@ -13,6 +13,7 @@ export default {
       email: Joi.string().email().required(),
       password: Joi.string().required(),
       timeZone: Joi.string().required(),
+      invitationCode: Joi.string().required(),
     }
 
     const { value, error } = Joi.validate(data, schema)

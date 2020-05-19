@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019. All rights reserved.
  */
 
+import config from '@Config'
 import userConfig from '@Config/user-config'
 import { UserModel } from '@Models/user.model'
 import {
@@ -171,6 +172,8 @@ export default class Cognition {
               const validatedData = Validators.validateRegistration(data)
               const userService = Container.get(UserService)
               const tempData = await userService.getTempData(t)
+
+              if (validatedData.invitationCode !== config.invitationCode) throw new Errors.Validation('Your invitation code is incorrect :(')
 
               const user = await UserModel.create(<Partial<User>>{
                 username: validatedData.username,

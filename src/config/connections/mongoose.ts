@@ -40,7 +40,7 @@ mongoose.connection.on('error', (error) => {
 mongoose.Promise = require('bluebird')
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-  mongoose.set('debug', true)
+  // mongoose.set('debug', true)
 }
 
 export default mongoose

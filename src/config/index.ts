@@ -97,7 +97,9 @@ const config = {
 
   rootUserId: process.env.ROOT_USER_ID || '',
 
-  cacheTTL: 60// application level caching with redis in minutes
+  cacheTTL: 60, // application level caching with redis in minutes
+
+  invitationCode: process.env.INVITATION_CODE || 'hiovoitsme'
 }
 
 export default config

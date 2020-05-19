@@ -7,6 +7,7 @@ import UserService from '@Services/user/user.service'
 import { ObjectId, Role } from '@Types/common'
 import { BasicUser, User, UserAuthResponse, UserLoginArgs, UserRegistrationInput, UserUpdateInput } from '@Types/user'
 import { Context } from '@Utils/context'
+import Errors from '@Utils/errors'
 import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 
@@ -26,7 +27,8 @@ export default class UserResolver {
     @Arg('user') user: UserRegistrationInput,
     @Ctx() ctx: Context,
   ) {
-    return this.userService.register(user)
+    throw new Errors.Forbidden('This method is currently unavailable')
+    // return this.userService.register(user)
   }
 
   @Mutation(returns => UserAuthResponse)

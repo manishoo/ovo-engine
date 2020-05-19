@@ -51,7 +51,7 @@ export class FoodClassSchema extends Typegoose implements FoodClass {
   category?: FOOD_CLASS_CATEGORY
   @prop()
   ncbiTaxonomyId?: number
-  @prop()
+  @prop({ select: false })
   taxonomies: FoodClassTaxonomy[]
   @prop()
   defaultFood?: ObjectId
