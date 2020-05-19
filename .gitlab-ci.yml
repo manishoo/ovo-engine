@@ -22,7 +22,9 @@ deploy to staging:
   image: docker:latest
   when: manual
   only:
-    - develop
+    - /.*-staging$/
+  except:
+    - branches
   services:
     - docker:dind
   variables:
@@ -49,7 +51,9 @@ deploy to production:
   image: docker:latest
   when: manual
   only:
-    - master
+    - tags
+  except:
+    - /.*-staging$/
   services:
     - docker:dind
   variables:
